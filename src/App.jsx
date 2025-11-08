@@ -68,6 +68,9 @@ console.log("✅ VendedorLogin importada:", !!VendedorLogin);
 import AdminCadastroVendedor from "./pages/AdminCadastroVendedor";
 console.log("✅ AdminCadastroVendedor importada:", !!AdminCadastroVendedor);
 
+import RelatorioPageVendedor from "./pages/RelatorioPageVendedor";
+console.log("✅ RelatorioPageVendedor importada:", !!RelatorioPageVendedor);
+
 // === ADMIN ===
 import AdminDashboard from "./pages/AdminDashboard";
 console.log("✅ AdminDashboard importada:", !!AdminDashboard);
