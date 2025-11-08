@@ -187,7 +187,7 @@ const renderPriceAlerts = () => (
 // --- ESTILOS COMPARTILHADOS (Minimalista) ---
 const PRIMARY_COLOR = "#007bff";
 
-const HomePanel = () => {
+const ConsultorDashboard = () => {
   const navigate = useNavigate(const PRIMARY_COLOR = "#007bff";
   // Usando localStorage para simular o nome do usuário logado
   const userName = localStorage.getItem("userName") || "Consultor(a)";
@@ -424,4 +424,4 @@ const styles = {
   },
 };
 
-export default HomePanel;
+export default ConsultorDashboard;
