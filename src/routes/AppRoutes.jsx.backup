@@ -4,11 +4,11 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 // 🚨 CORREÇÃO AQUI: Importamos HomePanel e o renomeamos como Dashboard
-import { ConsultorDashboard } from "../pages/ConsultorDashboard"; // Importa HomePanel.jsx
-import { ChatPanel } from "../pages/ConsultorDashboard";
+import HomePanel from "../components/HomePanel"; // Importa HomePanel.jsx
+import ChatPanel from "../components/ChatPanel";
 import TermsPage from "../pages/TermsPage";
-import { ConsultorRegister } from "../pages/ConsultorDashboard";
-import { ProfilePanel } from "../pages/ConsultorDashboard";
+import ConsultantRegisterPage from "../pages/ConsultantRegisterPage";
+import ProfilePanel from "../components/ProfilePanel";
 
 // Componentes temporários para as páginas que vamos criar
 
@@ -30,10 +30,10 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* 🚨 CORREÇÃO: Removida a rota /dashboard duplicada */}
-      <Route path="/" element={<ConsultorDashboard />} />
+      <Route path="/" element={<HomePanel />} />
       <Route path="/chat" element={<ChatPanel />} />
       <Route path="/terms" element={<TermsPage />} />
-      <Route path="/register" element={<ConsultorRegister />} />
+      <Route path="/register" element={<ConsultantRegisterPage />} />
       <Route path="/profile" element={<ProfilePanel />} />
       <Route path="/alerts" element={<AlertsPage />} />
       <Route path="/analytics" element={<AnalyticsPage />} />

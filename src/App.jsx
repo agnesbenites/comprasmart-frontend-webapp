@@ -161,6 +161,7 @@ function App() {
             path="/vendedor/cadastro"
             element={<AdminCadastroVendedor />}
           />
+	  <Route path="/relatorios" element={<RelatorioPageVendedor />} />
 
           {/* === ATENDIMENTO/VENDAS === */}
           <Route path="/atendimento" element={<ChatPanel />} />
