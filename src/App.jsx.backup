@@ -8,7 +8,7 @@ console.log("🔄 Iniciando App.jsx");
 import HomePage from "./pages/HomePage";
 console.log("✅ HomePage importada:", !!HomePage);
 
-import { LojistaEscolha } from "./pages/LojistaDashboard";
+import LojistaEscolha from "./pages/LojistaEscolha";
 console.log("✅ LojistaEscolha importada:", !!LojistaEscolha);
 
 // === CONSULTOR ===
@@ -28,31 +28,31 @@ import Dashboard from "./pages/Dashboard";
 console.log("✅ Dashboard importada:", !!Dashboard);
 
 // === LOJISTA ===
-import { AdminLogin } from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
 console.log("✅ AdminLogin importada:", !!AdminLogin);
 
-import { LojistaDashboard } from "./pages/LojistaDashboard";
+import LojistaDashboard from "./pages/LojistaDashboard";
 console.log("✅ LojistaDashboard importada:", !!LojistaDashboard);
 
-import { LojistaProducts } from "./pages/LojistaDashboard";
+import LojistaProducts from "./pages/LojistaProducts";
 console.log("✅ LojistaProducts importada:", !!LojistaProducts);
 
-import { LojistaUsuarios } from "./pages/LojistaDashboard";
+import LojistaUsuarios from "./pages/LojistaUsuarios";
 console.log("✅ LojistaUsuarios importada:", !!LojistaUsuarios);
 
-import { LojistaVendedores } from "./pages/LojistaDashboard";
+import LojistaVendedores from "./pages/LojistaVendedores";
 console.log("✅ LojistaVendedores importada:", !!LojistaVendedores);
 
-import { LojistaFiliais } from "./pages/LojistaDashboard";
+import LojistaFiliais from "./pages/LojistaFiliais";
 console.log("✅ LojistaFiliais importada:", !!LojistaFiliais);
 
-import { LojistaQRCode } from "./pages/LojistaDashboard";
+import LojistaQRCode from "./pages/LojistaQRCode";
 console.log("✅ LojistaQRCode importada:", !!LojistaQRCode);
 
-import { LojistaCadastro } from "./pages/LojistaDashboard";
+import LojistaCadastro from "./pages/LojistaCadastro";
 console.log("✅ LojistaCadastro importada:", !!LojistaCadastro);
 
-import { LojistaHomePanel } from "./pages/LojistaDashboard";
+import LojistaHomePanel from "./pages/LojistaHomePanel";
 console.log("✅ LojistaHomePanel importada:", !!LojistaHomePanel);
 
 // === VENDEDOR ===
@@ -65,17 +65,17 @@ console.log("✅ VendedorRegisterPage importada:", !!VendedorRegisterPage);
 import VendedorLogin from "./pages/VendedorLogin";
 console.log("✅ VendedorLogin importada:", !!VendedorLogin);
 
-import { AdminCadastroVendedor } from "./pages/AdminDashboard";
+import AdminCadastroVendedor from "./pages/AdminCadastroVendedor";
 console.log("✅ AdminCadastroVendedor importada:", !!AdminCadastroVendedor);
 
 import RelatorioPageVendedor from "./pages/RelatorioPageVendedor";
 console.log("✅ RelatorioPageVendedor importada:", !!RelatorioPageVendedor);
 
 // === ADMIN ===
-import { AdminDashboard } from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 console.log("✅ AdminDashboard importada:", !!AdminDashboard);
 
-import { AdminAprovacao } from "./pages/AdminDashboard";
+import AdminAprovacao from "./pages/AdminAprovacao";
 console.log("✅ AdminAprovacao importada:", !!AdminAprovacao);
 
 // === ATENDIMENTO/VENDAS ===
