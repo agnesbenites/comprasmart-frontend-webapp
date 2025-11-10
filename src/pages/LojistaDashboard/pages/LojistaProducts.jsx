@@ -868,7 +868,7 @@ const LojistaProdutos = () => {
           </p>
                    {" "}
           <a
-            href="https://vluxffbornrlxcepqmzr.supabase.co/storage/v1/object/public/planilha-produtos-modelo/planilha-produtos-modelo.csv"
+            href="https://vluxffbornrlxcepqmzr.supabase.co/storage/v1/object/public/planilha-produtos-modelo/PlanilhaProdutos.csv"
             target="_blank"
             rel="noopener noreferrer"
             style={{
