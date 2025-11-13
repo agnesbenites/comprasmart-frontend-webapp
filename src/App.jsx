@@ -146,6 +146,12 @@ function App() {
           <Route path="/aguardando-aprovacao" element={<AwaitingApproval />} />
           <Route path="/dashboard" element={<ConsultorDashboard />} />
           <Route path="/termos" element={<TermsPage />} />
+          
+          {/* SUB-ROTAS DO CONSULTOR */}
+          <Route path="/atendimento" element={<ChatPanel />} />
+          <Route path="/chat" element={<ChatPanel />} />
+          <Route path="/produtos" element={<ProductsPage />} />
+          <Route path="/clientes" element={<ClientsPage />} />
 
           {/* === LOJISTA === */}
           <Route path="/lojista/escolha" element={<LojistaEscolha />} />
@@ -170,12 +176,6 @@ function App() {
             element={<AdminCadastroVendedor />}
           />
           <Route path="/relatorios" element={<RelatorioPageVendedor />} />
-
-          {/* === ATENDIMENTO/VENDAS === */}
-          <Route path="/atendimento" element={<ChatPanel />} />
-          <Route path="/chat" element={<ChatPanel />} />
-          <Route path="/produtos" element={<ProductsPage />} />
-          <Route path="/clientes" element={<ClientsPage />} />
 
           {/* === ADMIN === */}
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
