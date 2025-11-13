@@ -16,7 +16,7 @@ import LoginPage from "./pages/LoginPage";
 console.log("✅ LoginPage importada:", !!LoginPage);
 
 import { ConsultorRegister } from "./pages/ConsultorDashboard";
-console.log("✅ ConsultantRegisterPage importada:", !!ConsultantRegisterPage);
+console.log("✅ ConsultorRegister importada:", !!ConsultorRegister);
 
 import TermsPage from "./pages/TermsPage";
 console.log("✅ TermsPage importada:", !!TermsPage);
@@ -25,7 +25,7 @@ import AwaitingApproval from "./pages/AwaitingApproval";
 console.log("✅ AwaitingApproval importada:", !!AwaitingApproval);
 
 import { ConsultorDashboard } from "./pages/ConsultorDashboard";
-console.log("✅ Dashboard importada:", !!Dashboard);
+console.log("✅ ConsultorDashboard importada:", !!ConsultorDashboard);
 
 // === LOJISTA ===
 import { AdminLogin } from "./pages/AdminDashboard";
@@ -54,6 +54,12 @@ console.log("✅ LojistaCadastro importada:", !!LojistaCadastro);
 
 import { LojistaHomePanel } from "./pages/LojistaDashboard";
 console.log("✅ LojistaHomePanel importada:", !!LojistaHomePanel);
+
+import { LojistaPagamentos } from "./pages/LojistaDashboard";
+console.log("✅ LojistaPagamentos importada:", !!LojistaPagamentos);
+
+import { LojistaRelatorios } from "./pages/LojistaDashboard";
+console.log("✅ LojistaRelatorios importada:", !!LojistaRelatorios);
 
 // === VENDEDOR ===
 import VendedorDashboard from "./pages/VendedorDashboard";
@@ -152,6 +158,8 @@ function App() {
           <Route path="/lojista/qrcode" element={<LojistaQRCode />} />
           <Route path="/lojista/cadastro" element={<LojistaCadastro />} />
           <Route path="/lojista/home" element={<LojistaHomePanel />} />
+          <Route path="/lojista/pagamentos" element={<LojistaPagamentos />} />
+          <Route path="/lojista/relatorios" element={<LojistaRelatorios />} />
 
           {/* === VENDEDOR === */}
           <Route path="/vendedor/login" element={<VendedorLogin />} />
@@ -161,7 +169,7 @@ function App() {
             path="/vendedor/cadastro"
             element={<AdminCadastroVendedor />}
           />
-	  <Route path="/relatorios" element={<RelatorioPageVendedor />} />
+          <Route path="/relatorios" element={<RelatorioPageVendedor />} />
 
           {/* === ATENDIMENTO/VENDAS === */}
           <Route path="/atendimento" element={<ChatPanel />} />

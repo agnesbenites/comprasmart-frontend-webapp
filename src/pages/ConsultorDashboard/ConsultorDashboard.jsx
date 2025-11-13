@@ -1,23 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
-// Importar componentes locais
 import RotatingBanner from "./components/RotatingBanner";
-// RotatingBanner agora é importado
-    style={{
-      backgroundColor: "#e9f7fe",
-      color: "#0056b3",
-      padding: "20px",
-      borderRadius: "8px",
-      marginBottom: "25px",
-      border: "1px solid #cceeff",
-      textAlign: "center",
-      fontWeight: "bold",
-    }}
-// Remove a definição inline
-    🌟 Banner Rotativo: Novas Metas de Vendas Lançadas! 🌟
-// --- ESTILOS COMPARTILHADOS (Minimalista) ---
-const PRIMARY_COLOR = "#007bff";
 
 // --- ESTILOS COMPARTILHADOS (Minimalista) ---
 const PRIMARY_COLOR = "#007bff";
@@ -109,12 +92,12 @@ const getStatusStyles = (status) => {
 };
 
 const renderAgenda = () => (
-// RotatingBanner agora é importado style={styles.card}>
+  <div style={styles.card}>
     <h3 style={styles.cardTitle}>📅 Agenda de Chamadas do Dia</h3>
     {agenda.map((item) => {
-      const statusStyle = getStatusStyles(item.statusconst PRIMARY_COLOR = "#007bff";
+      const statusStyle = getStatusStyles(item.status);
       return (
-      // RotatingBanner agora é importado key={item.id} style={styles.agendaItem}>
+        <div key={item.id} style={styles.agendaItem}>
           <span style={styles.agendaTime}>{item.time}</span>
           <span style={styles.agendaClient}>
             ID Cliente: <strong>{item.clientId}</strong>
@@ -123,15 +106,15 @@ const renderAgenda = () => (
           <span style={{ ...styles.agendaStatus, ...statusStyle }}>
             {item.status}
           </span>
-      // --- ESTILOS COMPARTILHADOS (Minimalista) ---
-      const PRIMARY_COLOR = "#007bff";
+        </div>
+      );
     })}
     <p style={styles.note}>Total de {agenda.length} compromissos agendados.</p>
-// --- ESTILOS COMPARTILHADOS (Minimalista) ---
-const PRIMARY_COLOR = "#007bff";
+  </div>
+);
 
 const renderPriceAlerts = () => (
-// RotatingBanner agora é importado style={styles.card}>
+  <div style={styles.card}>
     <h3 style={styles.cardTitle}>🚨 Alertas de Vendas e Preço</h3>
     {priceAlerts.map((alert) => {
       let icon = "🏷️";
@@ -155,19 +138,19 @@ const renderPriceAlerts = () => (
       }
 
       return (
-      // RotatingBanner agora é importado key={alert.id} style={styles.alertItem}>
+        <div key={alert.id} style={styles.alertItem}>
           <img
             src={alert.imageUrl}
             alt={alert.product}
             style={styles.alertImage}
           />
-        // RotatingBanner agora é importado style={{ flexGrow: 1 }}>
+          <div style={{ flexGrow: 1 }}>
             <p style={styles.alertProduct}>
               {icon} <strong>{alert.product}</strong> ({alert.segment})
             </p>
             <p style={{ ...styles.alertPrice, ...priceStyle }}>{priceInfo}</p>
             <span style={styles.alertStore}>Loja: {alert.store}</span>
-        // --- ESTILOS COMPARTILHADOS (Minimalista) ---
+          </div>
           <button
             style={styles.infoButton}
             onClick={() =>
@@ -175,38 +158,38 @@ const renderPriceAlerts = () => (
                 `Detalhes do Alerta: ${alert.product} - Tipo: ${alert.changeType}`
               )
             }
-        // Remove a definição inline
+          >
             + Informações
           </button>
-      // --- ESTILOS COMPARTILHADOS (Minimalista) ---
-      const PRIMARY_COLOR = "#007bff";
+        </div>
+      );
     })}
     <p style={styles.note}>
       Use esses alertas como argumentos de venda no chat!
     </p>
-// --- ESTILOS COMPARTILHADOS (Minimalista) ---
-const PRIMARY_COLOR = "#007bff";
+  </div>
+);
 
 const ConsultorDashboard = () => {
-  const navigate = useNavigate(const PRIMARY_COLOR = "#007bff";
+  const navigate = useNavigate();
   // Usando localStorage para simular o nome do usuário logado
   const userName = localStorage.getItem("userName") || "Consultor(a)";
 
   return (
-  // RotatingBanner agora é importado style={styles.appContainer}>
+    <div style={styles.appContainer}>
       {/* Menu Lateral Compacto (IDÊNTICO AO ANALYTICS) */}
       <nav style={styles.sidebar}>
-      // RotatingBanner agora é importado style={styles.sidebarContent}>
+        <div style={styles.sidebarContent}>
           {/* Botão Home (Ativo) */}
-        // RotatingBanner agora é importado style={{ ...styles.sidebarButton, backgroundColor: "#0056b3" }}>
+          <div style={{ ...styles.sidebarButton, backgroundColor: "#0056b3" }}>
             <span style={styles.sidebarIcon}>🏠</span>
             <span style={styles.sidebarText}>Home</span>
-        // --- ESTILOS COMPARTILHADOS (Minimalista) ---
+          </div>
           {/* Botão Chat */}
           <button
             onClick={() => navigate("/chat")}
             style={styles.sidebarButton}
-        // Remove a definição inline
+          >
             <span style={styles.sidebarIcon}>💬</span>
             <span style={styles.sidebarText}>Chat</span>
           </button>
@@ -214,7 +197,7 @@ const ConsultorDashboard = () => {
           <button
             onClick={() => navigate("/analytics")}
             style={styles.sidebarButton}
-        // Remove a definição inline
+          >
             <span style={styles.sidebarIcon}>📊</span>
             <span style={styles.sidebarText}>Analítico</span>
           </button>
@@ -222,11 +205,11 @@ const ConsultorDashboard = () => {
           <button
             onClick={() => navigate("/profile")}
             style={styles.sidebarButton}
-        // Remove a definição inline
+          >
             <span style={styles.sidebarIcon}>👤</span>
             <span style={styles.sidebarText}>Perfil</span>
           </button>
-      // --- ESTILOS COMPARTILHADOS (Minimalista) ---
+        </div>
       </nav>
 
       <main style={styles.mainContent}>
@@ -236,7 +219,7 @@ const ConsultorDashboard = () => {
           <button
             onClick={() => navigate("/profile")}
             style={styles.profileLink}
-        // Remove a definição inline
+          >
             <span style={styles.profileName}>{userName}</span>
             <img
               src="https://placehold.co/40x40/007bff/ffffff?text=C"
@@ -246,17 +229,17 @@ const ConsultorDashboard = () => {
           </button>
         </header>
 
-      // RotatingBanner agora é importado style={styles.container}>
+        <div style={styles.container}>
           <RotatingBanner />
 
-        // RotatingBanner agora é importado style={styles.contentGrid}>
+          <div style={styles.contentGrid}>
             {renderAgenda()}
             {renderPriceAlerts()}
-        // --- ESTILOS COMPARTILHADOS (Minimalista) ---
-      // --- ESTILOS COMPARTILHADOS (Minimalista) ---
+          </div>
+        </div>
       </main>
-  // --- ESTILOS COMPARTILHADOS (Minimalista) ---
-  const PRIMARY_COLOR = "#007bff";
+    </div>
+  );
 };
 
 const styles = {
