@@ -1,365 +1,634 @@
 // src/pages/LojistaHomePanel.jsx
-import React, { useState } from "react";
+
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// ESTE É O CONTEÚDO ORIGINAL DO SEU ANTIGO LOJISTADASHBOARD.JSX:
+
 const LojistaHomePanel = () => {
-  const navigate = useNavigate();
-  const [selectedPlan, setSelectedPlan] = useState(null);
+    const navigate = useNavigate();
 
-  const plans = [
-    {
-      id: "app-only",
-      name: "PLANO APENAS APP",
-      price: "R$ 97-197/mês",
-      trial: "7 dias grátis",
-      description: "Ideal para quem já tem sistema próprio",
-      features: [
-        "App para consultores",
-        "Chat integrado",
-        "Métricas básicas",
-        "Suporte por email",
-        "1 loja incluída",
-      ],
-      popular: false,
-      color: "#007bff",
-    },
-    {
-      id: "complete-online",
-      name: "PLANO COMPLETO ONLINE",
-      price: "R$ 297-497/mês",
-      trial: "15 dias grátis",
-      description: "Solução completa em nuvem",
-      features: [
-        "Tudo do Plano App +",
-        "ERP Odoo Online",
-        "Gestão de estoque",
-        "Vendas e financeiro",
-        "Até 3 lojas",
-        "Suporte prioritário",
-        "Backup automático",
-      ],
-      popular: true,
-      color: "#28a745",
-    },
-    {
-      id: "offline",
-      name: "PLANO OFFLINE",
-      price: "R$ 1.500-3.000 + mensalidade",
-      trial: "30 dias grátis",
-      description: "Máximo controle e flexibilidade",
-      features: [
-        "Tudo do Plano Completo +",
-        "Instalação local",
-        "Funciona sem internet",
-        "Sincronização cloud",
-        "Lojas ilimitadas",
-        "Suporte dedicado",
-        "Treinamento inclusivo",
-      ],
-      popular: false,
-      color: "#6f42c1",
-    },
-  ];
+    // Dados mockados do lojista
+    const lojistaInfo = {
+        nome: "João Silva",
+        empresa: "Loja do João LTDA",
+        plano: "Completo Online",
+        vencimento: "15/03/2024",
+        status: "ativo",
+    };
 
-  const handleStartTrial = (planId) => {
-    alert(
-      `Iniciando teste de ${
-        plans.find((p) => p.id === planId).trial
-      } para ${planId}`
-    );
-    navigate("/cadastro-lojista", { state: { plan: planId } });
-  };
+    // Estatísticas mockadas
+    const estatisticas = {
+        vendasMes: 15420.5,
+        vendasSemana: 3250.75,
+        clientesNovos: 47,
+        produtosAtivos: 128,
+        comissaoPaga: 2850.3,
+        metaAtingida: 85,
+    };
 
-  return (
-    <div style={styles.container}>
-            {/* Header Hero */}     {" "}
-      <div style={styles.hero}>
-               {" "}
-        <h1 style={styles.heroTitle}>
-                    Transforme sua Loja com Nossa Solução Completa        {" "}
-        </h1>
-               {" "}
-        <p style={styles.heroSubtitle}>
-                    Teste grátis nossa plataforma e veja os resultados em tempo
-          real        {" "}
-        </p>
-             {" "}
-      </div>
-            {/* Cards de Planos */}     {" "}
-      <div style={styles.plansGrid}>
-               {" "}
-        {plans.map((plan) => (
-          <div
-            key={plan.id}
-            style={{
-              ...styles.planCard,
-              borderColor: plan.popular ? plan.color : "#ddd",
-              transform: plan.popular ? "scale(1.05)" : "scale(1)",
-              zIndex: plan.popular ? 10 : 1, // Destaque para o card popular
-            }}
-          >
-                       {" "}
-            {plan.popular && (
-              <div
-                style={{ ...styles.popularBadge, backgroundColor: plan.color }}
-              >
-                                🏆 MAIS POPULAR              {" "}
-              </div>
-            )}
-                       {" "}
-            <h3 style={{ ...styles.planName, color: plan.color }}>
-                            {plan.name}           {" "}
-            </h3>
-                        <div style={styles.planPrice}>{plan.price}</div>       
-                <div style={styles.trialBadge}>🎁 {plan.trial}</div>           {" "}
-            <p style={styles.planDescription}>{plan.description}</p>           {" "}
-            <ul style={styles.featuresList}>
-                           {" "}
-              {plan.features.map((feature, index) => (
-                <li key={index} style={styles.featureItem}>
-                                    ✓ {feature}               {" "}
-                </li>
-              ))}
-                         {" "}
-            </ul>
-                       {" "}
-            <button
-              onClick={() => handleStartTrial(plan.id)}
-              style={{
-                ...styles.trialButton,
-                backgroundColor: plan.color,
-              }}
-            >
-                            Testar {plan.trial.split(" ")[0]} Dias Grátis      
-                   {" "}
-            </button>
-                     {" "}
-          </div>
-        ))}
-             {" "}
-      </div>
-            {/* Comparação de Planos */}     {" "}
-      <div style={styles.comparison}>
-                <h2 style={styles.comparisonTitle}>Compare os Planos</h2>       {" "}
-        <div style={styles.comparisonTable}>
-                   {" "}
-          <table style={styles.table}>
-                       {" "}
-            <thead>
-                           {" "}
-              <tr>
-                                <th style={styles.tableHeader}>Recurso</th>     
-                          <th style={styles.tableHeader}>Apenas App</th>       
-                        <th style={styles.tableHeader}>Completo Online</th>     
-                          <th style={styles.tableHeader}>Offline</th>           
-                 {" "}
-              </tr>
-                         {" "}
-            </thead>
-                       {" "}
-            <tbody>
-                           {" "}
-              <tr>
-                                <td style={styles.tableCell}>Dias de Teste</td> 
-                              <td style={styles.tableCell}>7 dias</td>         
-                      <td style={styles.tableCell}>15 dias</td>               {" "}
-                <td style={styles.tableCell}>30 dias</td>             {" "}
-              </tr>
-                           {" "}
-              <tr>
-                               {" "}
-                <td style={styles.tableCell}>App Consultores</td>               {" "}
-                <td style={styles.tableCell}>✅</td>               {" "}
-                <td style={styles.tableCell}>✅</td>               {" "}
-                <td style={styles.tableCell}>✅</td>             {" "}
-              </tr>
-                           {" "}
-              <tr>
-                                <td style={styles.tableCell}>ERP Completo</td> 
-                              <td style={styles.tableCell}>❌</td>             
-                  <td style={styles.tableCell}>✅</td>               {" "}
-                <td style={styles.tableCell}>✅</td>             {" "}
-              </tr>
-                           {" "}
-              <tr>
-                               {" "}
-                <td style={styles.tableCell}>Funciona Offline</td>             
-                  <td style={styles.tableCell}>❌</td>               {" "}
-                <td style={styles.tableCell}>❌</td>               {" "}
-                <td style={styles.tableCell}>✅</td>             {" "}
-              </tr>
-                           {" "}
-              <tr>
-                                <td style={styles.tableCell}>Suporte</td>       
-                        <td style={styles.tableCell}>Email</td>               {" "}
-                <td style={styles.tableCell}>Prioritário</td>               {" "}
-                <td style={styles.tableCell}>Dedicado</td>             {" "}
-              </tr>
-                         {" "}
-            </tbody>
-                     {" "}
-          </table>
-                 {" "}
+    // Módulos do sistema
+    const modules = [
+        {
+            id: "filiais",
+            title: "🏪 Filiais",
+            description: "Gerencie suas lojas físicas e virtuais",
+            color: "#007bff",
+            features: [
+                "Cadastrar filiais",
+                "Definir responsáveis",
+                "Limites por plano",
+            ],
+            estatistica: "3 filiais ativas",
+            rota: "/lojista/filiais",
+        },
+        {
+            id: "produtos",
+            title: "📦 Produtos",
+            description: "Cadastro e gestão de produtos",
+            color: "#28a745",
+            features: ["Categorias", "Estoque", "Preços", "Comissões"],
+            estatistica: "128 produtos ativos",
+            rota: "/lojista/produtos",
+        },
+        {
+            id: "qrcode",
+            title: "🔳 QR Codes",
+            description: "Gerar códigos para consultores",
+            color: "#6f42c1",
+            features: ["QR por seção", "Rastreamento", "Relatórios"],
+            estatistica: "15 QR Codes gerados",
+            rota: "/lojista/qrcode",
+        },
+        {
+            id: "usuarios",
+            title: "👥 Usuários",
+            description: "Controle de acesso da equipe",
+            color: "#fd7e14",
+            features: ["Permissões", "Visualizadores", "Gerentes"],
+            estatistica: "8 usuários ativos",
+            rota: "/lojista/usuarios",
+        },
+        {
+            id: "vendedores",
+            title: "💼 Vendedores",
+            description: "Sua equipe de vendas própria",
+            color: "#e83e8c",
+            features: ["Cadastro", "Matrículas", "Dashboard simples"],
+            estatistica: "5 vendedores ativos",
+            rota: "/lojista/vendedores",
+        },
+        {
+            id: "relatorios",
+            title: "📊 Relatórios",
+            description: "Relatórios e análises de performance",
+            color: "#20c997",
+            features: ["Vendas", "Comissões", "Performance", "Metas"],
+            estatistica: "12 relatórios disponíveis",
+            rota: "/lojista/relatorios",
+        },
+        {
+            id: "pagamentos",
+            title: "💳 Pagamentos",
+            description: "Gestão de faturas, boletos e dados de pagamento",
+            color: "#17a2b8",
+            features: [
+                "Faturas e notas fiscais",
+                "Boletos bancários",
+                "Cartões criptografados",
+                "Histórico de pagamentos"
+            ],
+            estatistica: "Próxima fatura: 15/03/2024",
+            rota: "/lojista/pagamentos",
+        },
+    ];
+
+    // Alertas e notificações
+    const alertas = [
+        {
+            id: 1,
+            tipo: "estoque",
+            mensagem: "5 produtos com estoque baixo",
+            cor: "#ffc107",
+            icone: "⚠️",
+        },
+        {
+            id: 2,
+            tipo: "vendas",
+            mensagem: "Meta da semana atingida em 85%",
+            cor: "#28a745",
+            icone: "🎯",
+        },
+        {
+            id: 3,
+            tipo: "comissao",
+            mensagem: "R$ 2.850,30 em comissões pagas este mês",
+            cor: "#17a2b8",
+            icone: "💰",
+        },
+    ];
+
+    return (
+        <div style={styles.container}>
+            {/* Header com informações do lojista */}
+            <div style={styles.header}>
+                <div style={styles.welcomeSection}>
+                    <h1 style={styles.title}>Bem-vindo, {lojistaInfo.nome}! 👋</h1>
+                    <p style={styles.subtitle}>
+                        {lojistaInfo.empresa} • Plano {lojistaInfo.plano}
+                    </p>
+                    <div style={styles.statusBar}>
+                        <span style={styles.statusAtivo}>✅ Conta Ativa</span>
+                        <span style={styles.vencimento}>
+                            📅 Vencimento: {lojistaInfo.vencimento}
+                        </span>
+                    </div>
+                </div>
+                <div style={styles.quickStats}>
+                    <div style={styles.statItem}>
+                        <div style={styles.statIcon}>💰</div>
+                        <div>
+                            <div style={styles.statValue}>
+                                R$ {estatisticas.vendasMes.toLocaleString("pt-BR")}
+                            </div>
+                            <div style={styles.statLabel}>Vendas do Mês</div>
+                        </div>
+                    </div>
+                    <div style={styles.statItem}>
+                        <div style={styles.statIcon}>👥</div>
+                        <div>
+                            <div style={styles.statValue}>{estatisticas.clientesNovos}</div>
+                            <div style={styles.statLabel}>Novos Clientes</div>
+                        </div>
+                    </div>
+                    <div style={styles.statItem}>
+                        <div style={styles.statIcon}>📦</div>
+                        <div>
+                            <div style={styles.statValue}>{estatisticas.produtosAtivos}</div>
+                            <div style={styles.statLabel}>Produtos Ativos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Alertas */}
+            <div style={styles.alertasSection}>
+                <h2 style={styles.sectionTitle}>📢 Alertas e Notificações</h2>
+                <div style={styles.alertasGrid}>
+                    {alertas.map((alerta) => (
+                        <div
+                            key={alerta.id}
+                            style={{
+                                ...styles.alertaCard,
+                                borderLeft: `4px solid ${alerta.cor}`,
+                            }}
+                        >
+                            <div style={styles.alertaIcon}>{alerta.icone}</div>
+                            <div style={styles.alertaContent}>
+                                <p style={styles.alertaMensagem}>{alerta.mensagem}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Módulos do Sistema */}
+            <div style={styles.modulesSection}>
+                <h2 style={styles.sectionTitle}>🎯 Módulos do Sistema</h2>
+                <div style={styles.modulesGrid}>
+                    {modules.map((module) => (
+                        <div
+                            key={module.id}
+                            style={{
+                                ...styles.moduleCard,
+                                borderLeft: `4px solid ${module.color}`,
+                                background: `linear-gradient(135deg, ${module.color}10, ${module.color}05)`,
+                            }}
+                            // AQUI É USADA A ROTA RELATIVA (ex: /lojista/qrcode)
+                            onClick={() => navigate(module.rota)} 
+                        >
+                            <div style={styles.moduleHeader}>
+                                <h3 style={{ ...styles.moduleTitle, color: module.color }}>
+                                    {module.title}
+                                </h3>
+                                <div style={styles.moduleEstatistica}>{module.estatistica}</div>
+                            </div>
+
+                            <p style={styles.moduleDescription}>{module.description}</p>
+
+                            <ul style={styles.featuresList}>
+                                {module.features.map((feature, index) => (
+                                    <li key={index} style={styles.feature}>
+                                        • {feature}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <button
+                                style={{
+                                    ...styles.accessButton,
+                                    backgroundColor: module.color,
+                                }}
+                            >
+                                Acessar Módulo →
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Performance Rápida */}
+            <div style={styles.performanceSection}>
+                <div style={styles.performanceCard}>
+                    <h3 style={styles.performanceTitle}>🎯 Performance do Mês</h3>
+                    <div style={styles.performanceContent}>
+                        <div style={styles.metaProgress}>
+                            <div style={styles.metaHeader}>
+                                <span>Meta de Vendas</span>
+                                <span style={styles.metaPercent}>
+                                    {estatisticas.metaAtingida}%
+                                </span>
+                            </div>
+                            <div style={styles.progressBar}>
+                                <div
+                                    style={{
+                                        ...styles.progressFill,
+                                        width: `${estatisticas.metaAtingida}%`,
+                                        backgroundColor:
+                                            estatisticas.metaAtingida >= 100
+                                                ? "#28a745"
+                                                : estatisticas.metaAtingida >= 70
+                                                    ? "#ffc107"
+                                                    : "#dc3545",
+                                    }}
+                                />
+                            </div>
+                            <div style={styles.metaValues}>
+                                <span>R$ {estatisticas.vendasMes.toLocaleString("pt-BR")}</span>
+                                <span>Meta: R$ 18.000,00</span>
+                            </div>
+                        </div>
+
+                        <div style={styles.comissaoInfo}>
+                            <div style={styles.comissaoItem}>
+                                <span style={styles.comissaoLabel}>Comissões Pagas:</span>
+                                <span style={styles.comissaoValue}>
+                                    R$ {estatisticas.comissaoPaga.toLocaleString("pt-BR")}
+                                </span>
+                            </div>
+                            <div style={styles.comissaoItem}>
+                                <span style={styles.comissaoLabel}>Vendas da Semana:</span>
+                                <span style={styles.comissaoValue}>
+                                    R$ {estatisticas.vendasSemana.toLocaleString("pt-BR")}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style={styles.quickActions}>
+                    <h3 style={styles.quickActionsTitle}>⚡ Ações Rápidas</h3>
+                    <div style={styles.actionsGrid}>
+                        <button
+                            style={styles.quickActionButton}
+                            onClick={() => navigate("/lojista/pagamentos")}
+                        >
+                            💳 Gerenciar Pagamentos
+                        </button>
+                        <button
+                            style={styles.quickActionButton}
+                            onClick={() => navigate("/lojista/produtos")}
+                        >
+                            ➕ Adicionar Produto
+                        </button>
+                        <button
+                            style={styles.quickActionButton}
+                            onClick={() => navigate("/lojista/qrcode")}
+                        >
+                            🔳 Gerar QR Code
+                        </button>
+                        <button
+                            style={styles.quickActionButton}
+                            onClick={() => navigate("/lojista/vendedores")}
+                        >
+                            💼 Cadastrar Vendedor
+                        </button>
+                        <button
+                            style={styles.quickActionButton}
+                            onClick={() => navigate("/lojista/relatorios")}
+                        >
+                            📊 Ver Relatórios
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-             {" "}
-      </div>
-         {" "}
-    </div>
-  );
+    );
 };
 
-// Estilos OTIMIZADOS PARA DESKTOP
+// Estilos profissionais
 const styles = {
-  container: {
-    padding: "60px 40px", // Aumento do padding para telas maiores
-    maxWidth: "1400px", // Aumento da largura máxima
-    margin: "0 auto",
-    fontFamily: "Inter, sans-serif",
-    minHeight: "100vh",
-    backgroundColor: "#f8f9fa",
-  },
-  hero: {
-    textAlign: "center",
-    marginBottom: "80px", // Mais espaço
-    padding: "20px",
-    backgroundColor: "white",
-    borderRadius: "15px",
-    boxShadow: "0 4px 15px rgba(0,0,0,0.05)",
-  },
-  heroTitle: {
-    fontSize: "3rem", // Fonte maior para destaque
-    color: "#1b3670", // Cor mais forte
-    marginBottom: "25px",
-    fontWeight: "800",
-  },
-  heroSubtitle: {
-    fontSize: "1.4rem", // Fonte maior
-    color: "#666",
-    maxWidth: "800px",
-    margin: "0 auto",
-  },
-  plansGrid: {
-    display: "grid", // Grid ajustado para garantir 3 colunas em telas grandes
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: "35px", // Mais espaçamento entre os cards
-    marginBottom: "80px",
-  },
-  planCard: {
-    backgroundColor: "white",
-    padding: "40px 30px", // Mais padding interno
-    borderRadius: "15px",
-    boxShadow: "0 8px 20px rgba(0,0,0,0.15)", // Sombra mais intensa
-    border: "3px solid #ddd", // Borda mais grossa
-    position: "relative",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease", // Adicionado hover para UX de desktop
-    cursor: "pointer",
-    ":hover": {
-      transform: "translateY(-5px) scale(1.02)",
-      boxShadow: "0 12px 25px rgba(0,0,0,0.2)",
+    container: {
+        padding: "30px 20px",
+        maxWidth: "1400px",
+        margin: "0 auto",
+        fontFamily: "Inter, sans-serif",
+        minHeight: "100vh",
+        backgroundColor: "#f8f9fa",
     },
-  },
-  popularBadge: {
-    position: "absolute",
-    top: "-15px", // Ajuste de posição
-    left: "50%",
-    transform: "translateX(-50%)",
-    padding: "8px 20px",
-    borderRadius: "25px",
-    color: "white",
-    fontSize: "14px", // Badge maior
-    fontWeight: "bold",
-    boxShadow: "0 3px 10px rgba(0,0,0,0.3)",
-  },
-  planName: {
-    fontSize: "1.6rem", // Título maior
-    fontWeight: "bold",
-    marginBottom: "15px",
-    textAlign: "center",
-    textTransform: "uppercase",
-  },
-  planPrice: {
-    fontSize: "2.5rem", // Preço principal em destaque
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    marginBottom: "10px",
-  },
-  trialBadge: {
-    textAlign: "center",
-    fontSize: "1.2rem", // Texto de trial maior
-    fontWeight: "bold",
-    color: "#28a745",
-    marginBottom: "25px",
-    borderBottom: "1px solid #eee",
-    paddingBottom: "15px",
-  },
-  planDescription: {
-    textAlign: "center",
-    color: "#555",
-    marginBottom: "30px",
-    fontSize: "1.1rem",
-    fontStyle: "italic",
-  },
-  featuresList: {
-    listStyle: "none",
-    padding: 0,
-    marginBottom: "40px", // Mais espaço antes do botão
-  },
-  featureItem: {
-    padding: "10px 0",
-    borderBottom: "1px solid #e9ecef",
-    fontSize: "1rem",
-    color: "#333",
-  },
-  trialButton: {
-    width: "100%",
-    padding: "18px", // Botão grande e chamativo
-    border: "none",
-    borderRadius: "10px",
-    color: "white",
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-    marginTop: "auto", // Garante que o botão fique na base do card
-  },
-  comparison: {
-    marginTop: "60px",
-    padding: "30px 0",
-    borderTop: "1px solid #ddd",
-  },
-  comparisonTitle: {
-    textAlign: "center",
-    marginBottom: "40px",
-    fontSize: "2rem",
-    color: "#1b3670",
-  },
-  table: {
-    width: "100%",
-    borderCollapse: "separate", // Usar separate para borderRadius
-    borderSpacing: 0,
-    backgroundColor: "white",
-    borderRadius: "15px",
-    overflow: "hidden",
-    boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
-  },
-  tableHeader: {
-    padding: "20px", // Mais padding
-    backgroundColor: "#e9ecef", // Fundo cinza claro
-    fontWeight: "bold",
-    textAlign: "left",
-    borderBottom: "2px solid #dee2e6",
-    fontSize: "1.1rem",
-    color: "#333",
-    ":first-child": { borderTopLeftRadius: "15px" },
-    ":last-child": { borderTopRightRadius: "15px" },
-  },
-  tableCell: {
-    padding: "15px 20px", // Mais padding
-    borderBottom: "1px solid #dee2e6",
-    fontSize: "1rem",
-    color: "#555",
-  },
+    header: {
+        display: "grid",
+        gridTemplateColumns: "1fr auto",
+        gap: "40px",
+        marginBottom: "40px",
+        alignItems: "start",
+    },
+    welcomeSection: {
+        flex: 1,
+    },
+    title: {
+        fontSize: "2.5rem",
+        color: "#333",
+        marginBottom: "8px",
+        fontWeight: "700",
+    },
+    subtitle: {
+        fontSize: "1.2rem",
+        color: "#666",
+        marginBottom: "15px",
+    },
+    statusBar: {
+        display: "flex",
+        gap: "20px",
+        alignItems: "center",
+    },
+    statusAtivo: {
+        backgroundColor: "#d4edda",
+        color: "#155724",
+        padding: "8px 16px",
+        borderRadius: "20px",
+        fontSize: "0.9rem",
+        fontWeight: "600",
+        border: "1px solid #c3e6cb",
+    },
+    vencimento: {
+        color: "#666",
+        fontSize: "0.9rem",
+    },
+    quickStats: {
+        display: "flex",
+        gap: "20px",
+    },
+    statItem: {
+        display: "flex",
+        alignItems: "center",
+        gap: "15px",
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "12px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+        minWidth: "180px",
+    },
+    statIcon: {
+        fontSize: "2rem",
+    },
+    statValue: {
+        fontSize: "1.5rem",
+        fontWeight: "bold",
+        color: "#333",
+        marginBottom: "4px",
+    },
+    statLabel: {
+        fontSize: "0.9rem",
+        color: "#666",
+        fontWeight: "500",
+    },
+    sectionTitle: {
+        fontSize: "1.8rem",
+        color: "#333",
+        marginBottom: "25px",
+        fontWeight: "600",
+    },
+    alertasSection: {
+        marginBottom: "40px",
+    },
+    alertasGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gap: "15px",
+    },
+    alertaCard: {
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "12px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+        display: "flex",
+        alignItems: "center",
+        gap: "15px",
+        border: "1px solid #e9ecef",
+    },
+    alertaIcon: {
+        fontSize: "1.5rem",
+    },
+    alertaContent: {
+        flex: 1,
+    },
+    alertaMensagem: {
+        margin: 0,
+        fontSize: "1rem",
+        color: "#333",
+        fontWeight: "500",
+    },
+    modulesSection: {
+        marginBottom: "40px",
+    },
+    modulesGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+        gap: "25px",
+    },
+    moduleCard: {
+        backgroundColor: "white",
+        padding: "25px",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        cursor: "pointer",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
+        border: "1px solid #e9ecef",
+    },
+    moduleHeader: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        marginBottom: "15px",
+    },
+    moduleTitle: {
+        fontSize: "1.4rem",
+        fontWeight: "700",
+        margin: 0,
+    },
+    moduleEstatistica: {
+        backgroundColor: "rgba(0,0,0,0.05)",
+        padding: "4px 8px",
+        borderRadius: "12px",
+        fontSize: "0.8rem",
+        fontWeight: "600",
+        color: "#666",
+    },
+    moduleDescription: {
+        color: "#666",
+        fontSize: "1rem",
+        marginBottom: "20px",
+        lineHeight: "1.5",
+    },
+    featuresList: {
+        listStyle: "none",
+        padding: 0,
+        marginBottom: "25px",
+    },
+    feature: {
+        padding: "6px 0",
+        color: "#555",
+        fontSize: "0.9rem",
+    },
+    accessButton: {
+        width: "100%",
+        padding: "12px",
+        border: "none",
+        borderRadius: "8px",
+        color: "white",
+        fontSize: "1rem",
+        fontWeight: "600",
+        cursor: "pointer",
+        transition: "opacity 0.3s ease",
+    },
+    performanceSection: {
+        display: "grid",
+        gridTemplateColumns: "1fr 300px",
+        gap: "30px",
+    },
+    performanceCard: {
+        backgroundColor: "white",
+        padding: "25px",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        border: "1px solid #e9ecef",
+    },
+    performanceTitle: {
+        fontSize: "1.3rem",
+        color: "#333",
+        marginBottom: "20px",
+        fontWeight: "600",
+    },
+    performanceContent: {
+        display: "grid",
+        gap: "25px",
+    },
+    metaProgress: {
+        marginBottom: "15px",
+    },
+    metaHeader: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "10px",
+        fontWeight: "600",
+    },
+    metaPercent: {
+        fontSize: "1.1rem",
+        fontWeight: "bold",
+    },
+    progressBar: {
+        width: "100%",
+        height: "10px",
+        backgroundColor: "#e9ecef",
+        borderRadius: "5px",
+        overflow: "hidden",
+        marginBottom: "8px",
+    },
+    progressFill: {
+        height: "100%",
+        borderRadius: "5px",
+        transition: "width 0.3s ease",
+    },
+    metaValues: {
+        display: "flex",
+        justifyContent: "space-between",
+        fontSize: "0.9rem",
+        color: "#666",
+    },
+    comissaoInfo: {
+        display: "grid",
+        gap: "12px",
+    },
+    comissaoItem: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "12px",
+        backgroundColor: "#f8f9fa",
+        borderRadius: "8px",
+    },
+    comissaoLabel: {
+        fontWeight: "500",
+        color: "#555",
+    },
+    comissaoValue: {
+        fontWeight: "600",
+        color: "#333",
+    },
+    quickActions: {
+        backgroundColor: "white",
+        padding: "25px",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        border: "1px solid #e9ecef",
+    },
+    quickActionsTitle: {
+        fontSize: "1.3rem",
+        color: "#333",
+        marginBottom: "20px",
+        fontWeight: "600",
+    },
+    actionsGrid: {
+        display: "grid",
+        gap: "12px",
+    },
+    quickActionButton: {
+        backgroundColor: "#007bff",
+        color: "white",
+        border: "none",
+        padding: "12px 16px",
+        borderRadius: "8px",
+        fontSize: "0.9rem",
+        fontWeight: "600",
+        cursor: "pointer",
+        transition: "background-color 0.3s ease",
+        textAlign: "left",
+    },
 };
+
+// Efeitos hover
+Object.assign(styles, {
+    moduleCard: {
+        ...styles.moduleCard,
+        ":hover": {
+            transform: "translateY(-5px)",
+            boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+        },
+    },
+    accessButton: {
+        ...styles.accessButton,
+        ":hover": {
+            opacity: 0.9,
+        },
+    },
+    quickActionButton: {
+        ...styles.quickActionButton,
+        ":hover": {
+            backgroundColor: "#0056b3",
+        },
+    },
+});
 
 export default LojistaHomePanel;

@@ -31,6 +31,7 @@ console.log("✅ ConsultorDashboard importada:", !!ConsultorDashboard);
 import { AdminLogin } from "./pages/AdminDashboard";
 console.log("✅ AdminLogin importada:", !!AdminLogin);
 
+// ATENÇÃO: LojistaDashboard agora é o LAYOUT
 import { LojistaDashboard } from "./pages/LojistaDashboard";
 console.log("✅ LojistaDashboard importada:", !!LojistaDashboard);
 
@@ -52,6 +53,7 @@ console.log("✅ LojistaQRCode importada:", !!LojistaQRCode);
 import { LojistaCadastro } from "./pages/LojistaDashboard";
 console.log("✅ LojistaCadastro importada:", !!LojistaCadastro);
 
+// LojistaHomePanel agora contém o Dashboard de Visão Geral
 import { LojistaHomePanel } from "./pages/LojistaDashboard";
 console.log("✅ LojistaHomePanel importada:", !!LojistaHomePanel);
 
@@ -153,19 +155,32 @@ function App() {
           <Route path="/produtos" element={<ProductsPage />} />
           <Route path="/clientes" element={<ClientsPage />} />
 
-          {/* === LOJISTA === */}
+          {/* === LOJISTA (REESCRITO COM ROTAS ANINHADAS) === */}
+          
+          {/* Rotas de Login e Escolha (FORA do layout principal) */}
           <Route path="/lojista/escolha" element={<LojistaEscolha />} />
           <Route path="/lojista/login" element={<AdminLogin />} />
-          <Route path="/lojista/dashboard" element={<LojistaDashboard />} />
-          <Route path="/lojista/produtos" element={<LojistaProducts />} />
-          <Route path="/lojista/usuarios" element={<LojistaUsuarios />} />
-          <Route path="/lojista/vendedores" element={<LojistaVendedores />} />
-          <Route path="/lojista/filiais" element={<LojistaFiliais />} />
-          <Route path="/lojista/qrcode" element={<LojistaQRCode />} />
-          <Route path="/lojista/cadastro" element={<LojistaCadastro />} />
-          <Route path="/lojista/home" element={<LojistaHomePanel />} />
-          <Route path="/lojista/pagamentos" element={<LojistaPagamentos />} />
-          <Route path="/lojista/relatorios" element={<LojistaRelatorios />} />
+
+          {/* ROTA PAI: LojistaDashboard é agora o layout/wrapper */}
+          <Route path="/lojista" element={<LojistaDashboard />}>
+            {/* Rota Padrão: /lojista (que deve mostrar o Home Panel) */}
+            <Route index element={<LojistaHomePanel />} />
+
+            {/* Sub-Rotas do Layout (path é relativo a /lojista) */}
+            <Route path="produtos" element={<LojistaProducts />} />
+            <Route path="usuarios" element={<LojistaUsuarios />} />
+            <Route path="vendedores" element={<LojistaVendedores />} />
+            <Route path="filiais" element={<LojistaFiliais />} />
+            <Route path="qrcode" element={<LojistaQRCode />} />
+            <Route path="cadastro" element={<LojistaCadastro />} />
+            {/* Mantive o /lojista/home, mas ele aponta para a mesma página principal */}
+            <Route path="home" element={<LojistaHomePanel />} /> 
+            <Route path="pagamentos" element={<LojistaPagamentos />} />
+            <Route path="relatorios" element={<LojistaRelatorios />} />
+          </Route>
+          
+          {/* ATENÇÃO: As rotas antigas 'lojista/dashboard' e outras foram substituídas pela estrutura acima. */}
+
 
           {/* === VENDEDOR === */}
           <Route path="/vendedor/login" element={<VendedorLogin />} />
