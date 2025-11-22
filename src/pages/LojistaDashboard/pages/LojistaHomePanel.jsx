@@ -1,9 +1,7 @@
 // src/pages/LojistaHomePanel.jsx
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
-
-// ESTE É O CONTEÚDO ORIGINAL DO SEU ANTIGO LOJISTADASHBOARD.JSX:
+import { useNavigate, Link } from "react-router-dom";
 
 const LojistaHomePanel = () => {
     const navigate = useNavigate();
@@ -138,10 +136,16 @@ const LojistaHomePanel = () => {
                         {lojistaInfo.empresa} • Plano {lojistaInfo.plano}
                     </p>
                     <div style={styles.statusBar}>
-                        <span style={styles.statusAtivo}>✅ Conta Ativa</span>
-                        <span style={styles.vencimento}>
-                            📅 Vencimento: {lojistaInfo.vencimento}
-                        </span>
+                        <Link to="/lojista/pagamentos" style={{textDecoration: 'none'}}>
+                            <div style={styles.statusAtivoClicavel}>
+                                ✅ Conta Ativa
+                            </div>
+                        </Link>
+                        <Link to="/lojista/pagamentos" style={{textDecoration: 'none'}}>
+                            <div style={styles.vencimentoClicavel}>
+                                📅 Vencimento: {lojistaInfo.vencimento}
+                            </div>
+                        </Link>
                     </div>
                 </div>
                 <div style={styles.quickStats}>
@@ -362,7 +366,7 @@ const styles = {
         gap: "20px",
         alignItems: "center",
     },
-    statusAtivo: {
+    statusAtivoClicavel: {
         backgroundColor: "#d4edda",
         color: "#155724",
         padding: "8px 16px",
@@ -370,10 +374,28 @@ const styles = {
         fontSize: "0.9rem",
         fontWeight: "600",
         border: "1px solid #c3e6cb",
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+        display: "inline-block",
+        ":hover": {
+            backgroundColor: "#c3e6cb",
+            transform: "scale(1.05)",
+            boxShadow: "0 2px 8px rgba(21, 87, 36, 0.2)"
+        }
     },
-    vencimento: {
+    vencimentoClicavel: {
         color: "#666",
         fontSize: "0.9rem",
+        cursor: "pointer",
+        padding: "8px 12px",
+        borderRadius: "8px",
+        transition: "all 0.3s ease",
+        display: "inline-block",
+        ":hover": {
+            backgroundColor: "#f8f9fa",
+            color: "#007bff",
+            transform: "scale(1.05)"
+        }
     },
     quickStats: {
         display: "flex",
