@@ -1,18 +1,17 @@
 {
   "version": 2,
-  "buildCommand": "npm run build", 
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "vite",
-  "routes": [
+  "regions": ["gru1"],
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
     {
-      "src": "/qr-code/.*",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/(.*)", 
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
