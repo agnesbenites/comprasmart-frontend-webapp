@@ -5,8 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 
-// === CONSULTOR ===
-import ConsultorDashboard from "./pages/ConsultorDashboard/ConsultorDashboard";
+// === CONSULTOR - IMPORT CORRIGIDO ===
+import ConsultorDashboard from "./pages/ConsultorDashboard/pages/ConsultorDashboard.jsx";
 
 // === LOJISTA ===
 import { LojistaDashboard } from "./pages/LojistaDashboard/pages/LojistaDashboard.jsx";
@@ -19,8 +19,8 @@ import LojistaQRCode from "./pages/LojistaDashboard/pages/LojistaQRCode.jsx";
 import LojistaPagamentos from "./pages/LojistaDashboard/pages/LojistaPagamentos.jsx";
 import LojistaRelatorios from "./pages/LojistaDashboard/pages/LojistaRelatorios.jsx";
 
-// === VENDEDOR ===
-import VendedorDashboard from "./pages/VendedorDashboard/pages/VendedorDashboard.jsx";
+// === VENDEDOR - IMPORT CORRIGIDO ===
+import VendedorDashboard from "./pages/VendedorDashboard.jsx";
 
 function App() {
   const getNavigationMenu = () => {
