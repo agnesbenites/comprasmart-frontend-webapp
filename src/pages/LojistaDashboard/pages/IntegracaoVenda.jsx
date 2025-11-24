@@ -1,38 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const IntegracaoVenda = () => {
   const { vendaId } = useParams();
-  const navigate = useNavigate();
+  // O hook 'useNavigate' foi removido para evitar o erro de contexto do Router.
   const [venda, setVenda] = useState(null);
   const [loading, setLoading] = useState(true);
   const [integrado, setIntegrado] = useState(false);
 
-  // NOVO: Bloco para injetar a animação CSS APÓS a montagem do componente
+  // Bloco de Correção: Garante que o keyframes 'spin' seja injetado APÓS a montagem do componente.
+  // E também unifica a chamada de 'carregarVenda()' aqui.
   useEffect(() => {
     // Verifica se estamos no navegador e se existe pelo menos uma folha de estilo
     if (typeof document !== 'undefined' && document.styleSheets.length > 0) {
       const styleSheet = document.styleSheets[0];
+      
       // Verifica se a regra de animação 'spin' já existe para evitar duplicatas
-      const spinRuleExists = Array.from(styleSheet.cssRules).some(
+      const spinRuleExists = Array.from(styleSheet.cssRules || []).some(
         (rule) => rule.name === 'spin'
       );
 
       if (!spinRuleExists) {
-        // Injeta a regra CSS para a animação do spinner
-        styleSheet.insertRule(`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `, styleSheet.cssRules.length);
+        try {
+          // Injeta a regra CSS para a animação do spinner
+          styleSheet.insertRule(`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `, styleSheet.cssRules.length);
+        } catch (e) {
+          console.warn("Aviso: Falha ao inserir keyframes 'spin' dinamicamente.");
+        }
       }
     }
-  }, []); // Executa apenas uma vez após a montagem do componente
-
-  useEffect(() => {
+    
+    // Chama a função principal de carregamento da venda
     carregarVenda();
-  }, [vendaId]);
+
+  }, [vendaId]); // Mantenha vendaId no array de dependências para recarregar se mudar
+
 
   const carregarVenda = async () => {
     try {
@@ -83,6 +90,7 @@ const IntegracaoVenda = () => {
           <div style={styles.spinner}></div>
           <h2>Carregando venda...</h2>
         </div>
+        {/* Fallback CSS para a animação do spinner */}
         <style dangerouslySetInnerHTML={{__html: `
           @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -92,17 +100,24 @@ const IntegracaoVenda = () => {
       </div>
     );
   }
-  // ... o restante do seu componente de erro e renderização principal permanece o mesmo
+
   if (!venda) {
     return (
       <div style={styles.container}>
         <div style={styles.error}>
           <h2>❌ Venda não encontrada</h2>
           <p>A venda {vendaId} não foi encontrada ou já expirou.</p>
-          <button onClick={() => navigate('/')} style={styles.button}>
+          {/* Navegação usando window.location.href, que é seguro */}
+          <button onClick={() => window.location.href = '/'} style={styles.button}>
             Voltar ao Início
           </button>
         </div>
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}} />
       </div>
     );
   }
@@ -385,6 +400,5 @@ const styles = {
     marginTop: '15px'
   }
 };
-
 
 export default IntegracaoVenda;

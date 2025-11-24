@@ -1,75 +1,65 @@
+/* ----------------------------------------------------
+ * PASSO 1: Reset CSS Moderno e Padronização
+ * Garante que todos os elementos comecem com o mesmo 'box model' (caixa de layout)
+ * ---------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ----------------------------------------------------
+ * PASSO 2: Configuração do Contêiner Principal
+ * Essencial para evitar a 'tela branca' ao garantir 100% de altura e largura
+ * ---------------------------------------------------- */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* Define a fonte padrão para todo o aplicativo */
+  font-family: 'Inter', sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+
+  /* Cores globais (exemplo) */
+  --primary-blue: #2c5aa0;
+  --secondary-gray: #6c757d;
+  --bg-light: #f8f9fa;
+
+  /* Scroll suave */
+  scroll-behavior: smooth;
+}
+
+/* Garante que o documento ocupe a altura total da viewport (tela visível) */
+html, body {
+  width: 100%;
+  /* Usa 'min-height' para que o corpo cresça, mas 'height' força 100% se não houver conteúdo */
+  min-height: 100vh; 
+  /* Cor de fundo padrão, se o body não tiver uma */
+  background-color: var(--bg-light);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
+/* ----------------------------------------------------
+ * PASSO 3: Contêiner do React (A classe .App)
+ * Deve estender-se para ocupar o espaço do body
+ * ---------------------------------------------------- */
+.App {
+  min-height: 100vh; 
+  display: flex; /* Garante que o conteúdo dentro do App se alinhe corretamente */
+  flex-direction: column;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  width: 100%;
+/* Remove estilos de lista padrão, se necessário */
+ul, ol {
+    list-style: none;
 }
 
-#root {
-  width: 100%;
-  min-height: 100vh;
-}
-
-/* Remove ou comenta estas seções se não forem necessárias */
-/*
+/* Estilos de links padrão */
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+    color: var(--primary-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
+
 a:hover {
-  color: #535bf2;
+    color: #1e3a67; /* Um azul mais escuro no hover */
 }
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
-*/
