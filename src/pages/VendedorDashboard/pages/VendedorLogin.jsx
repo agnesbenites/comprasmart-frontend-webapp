@@ -1,16 +1,17 @@
-// src/pages/AdminDashboard/pages/AdminLogin.jsx
+// src/pages/VendedorLogin.jsx
 import React from "react";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../../hooks/useAuth"; // ✅ CAMINHO CORRETO
 
-const AdminLogin = () => {
-  const { login, isAuthenticated, isLoading } = useAuth('admin');
+const VendedorLogin = () => {
+  const { login, isAuthenticated, isLoading } = useAuth('vendedor');
 
+  // Se já está autenticado, não mostra o login
   if (isAuthenticated) {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <p style={styles.successText}>✅ Acesso administrativo concedido!</p>
-          <p>Redirecionando para o painel de administração...</p>
+          <p style={styles.successText}>✅ Você já está autenticado!</p>
+          <p>Redirecionando para o dashboard...</p>
         </div>
       </div>
     );
@@ -21,13 +22,13 @@ const AdminLogin = () => {
       <div style={styles.card}>
         
         <h2 style={styles.title}>
-          ⚙️ Login Administrador
+          💼 Login Vendedor
         </h2>
 
-        <div style={styles.warningBox}>
-          <p style={styles.warningText}>
-            <strong>Acesso Restrito</strong><br />
-            Esta área é exclusiva para administradores do sistema.
+        <div style={styles.credenciaisBox}>
+          <p style={styles.credenciaisText}>
+            <strong>Autenticação via Auth0</strong><br />
+            Seu acesso foi criado pelo administrador da empresa.
           </p>
         </div>
 
@@ -36,11 +37,17 @@ const AdminLogin = () => {
           disabled={isLoading}
           style={{
             ...styles.loginButton,
-            backgroundColor: isLoading ? '#6c757d' : '#dc3545'
+            backgroundColor: isLoading ? '#6c757d' : '#fd7e14'
           }}
         >
-          {isLoading ? "⏳ Redirecionando..." : "🔐 Entrar como Admin"}
+          {isLoading ? "⏳ Redirecionando..." : "🔐 Entrar com Auth0"}
         </button>
+
+        <div style={styles.infoBox}>
+          <p style={styles.infoText}>
+            Entre com suas credenciais do Auth0
+          </p>
+        </div>
 
         <div style={styles.footer}>
           <a href="/" style={styles.backLink}>
@@ -83,17 +90,17 @@ const styles = {
     fontSize: "1.2rem",
     fontWeight: "bold"
   },
-  warningBox: {
-    backgroundColor: "#fff3cd",
+  credenciaisBox: {
+    backgroundColor: "#d1ecf1",
     padding: "15px",
     borderRadius: "8px",
     marginBottom: "20px",
-    border: "1px solid #ffeaa7",
+    border: "1px solid #bee5eb",
   },
-  warningText: {
+  credenciaisText: {
     margin: 0,
     fontSize: "14px",
-    color: "#856404",
+    color: "#0c5460",
     textAlign: "center",
     lineHeight: "1.5",
   },
@@ -107,6 +114,19 @@ const styles = {
     fontWeight: "600",
     cursor: "pointer",
     transition: "background-color 0.3s ease",
+    marginBottom: "15px",
+  },
+  infoBox: {
+    backgroundColor: "#f8f9fa",
+    padding: "15px",
+    borderRadius: "8px",
+    marginTop: "20px",
+  },
+  infoText: {
+    margin: 0,
+    color: "#666",
+    fontSize: "14px",
+    textAlign: "center",
   },
   footer: {
     textAlign: "center",
@@ -119,4 +139,4 @@ const styles = {
   },
 };
 
-export default AdminLogin;
+export default VendedorLogin;

@@ -1,61 +1,20 @@
+// app-frontend/src/pages/ConsultorDashboard/components/ChatPanel.jsx
+
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Message from '../../../shared/components/Message';
+import ProductCatalog from '../../../shared/components/ProductCatalog';
+import Cart from '../../../shared/components/Cart';
+import QRCodeGenerator from '../../../shared/components/QRCodeGenerator';
+import { formatarMoeda, formatarDataHora } from '../../../shared/utils/formatters';
+import { API_CONFIG, apiPost } from '../../../shared/utils/api';
 
-// --- Constantes de Estilo Compartilhadas (Minimalista) ---
 const PRIMARY_COLOR = "#007bff";
 const SECONDARY_COLOR = "#495057";
 const LIGHT_GREY = "#f8f9fa";
+const API_URL = 'https://plataforma-consultoria-mvp.onrender.com';
 
-// --- Componente Placeholder para Mensagem (Resolvendo o erro de importação) ---
-const Message = ({ user, content, type, timestamp }) => {
-  const isConsultor = type === "outbound";
-  // Estilos ajustados para minimalismo: cores suaves
-  const align = isConsultor ? "flex-end" : "flex-start";
-  const backgroundColor = isConsultor ? "#e9eff6" : "#ffffff"; // Cinza/Azul claro suave
-  const color = "#333";
-
-  const style = {
-    alignSelf: align,
-    maxWidth: "70%",
-    padding: "10px 15px",
-    margin: "5px 0",
-    borderRadius: "12px", // Cantos arredondados suaves
-    backgroundColor: backgroundColor,
-    color: color,
-    boxShadow: "0 1px 2px rgba(0,0,0,0.08)", // Sombra mais discreta
-    textAlign: "left",
-    display: "flex",
-    flexDirection: "column",
-  };
-
-  const userStyle = {
-    fontSize: "0.7rem",
-    color: isConsultor ? PRIMARY_COLOR : SECONDARY_COLOR, // Azul sutil para consultor, cinza escuro para cliente
-    marginBottom: "3px",
-    fontWeight: "600",
-    textAlign: "left",
-  };
-
-  const timestampStyle = {
-    fontSize: "0.65rem",
-    color: "#999",
-    marginTop: "5px",
-    display: "block",
-    textAlign: "right",
-    alignSelf: "flex-end",
-  };
-
-  return (
-    <div style={style}>
-      <span style={userStyle}>{user}</span>
-      <p style={{ margin: 0, overflowWrap: "break-word" }}>{content}</p>
-      <span style={timestampStyle}>{timestamp}</span>
-    </div>
-  );
-};
-// FIM do Componente Placeholder
-
-// --- Mock de Dados ---
+// Mock de dados iniciais
 const MOCK_PRODUCTS = [
   {
     id: "SKU001",
@@ -99,7 +58,6 @@ const MOCK_PRODUCTS = [
   },
 ];
 
-// --- Mock de Chat ---
 const initialMessages = [
   {
     id: 1,
@@ -111,8 +69,7 @@ const initialMessages = [
   {
     id: 2,
     user: "Consultor",
-    content:
-      "Olá! Com certeza posso ajudar. Qual é o tamanho ideal que você busca?",
+    content: "Olá! Com certeza posso ajudar. Qual é o tamanho ideal que você busca?",
     timestamp: "10:01",
     type: "outbound",
   },
@@ -122,28 +79,36 @@ const ChatPanel = () => {
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
   const userName = localStorage.getItem("userName") || "Consultor(a)";
-
+  const consultorId = localStorage.getItem("consultorId");
+  
   // Estados
   const [messages, setMessages] = useState(initialMessages);
   const [input, setInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [cart, setCart] = useState([]);
-  const [showDetails, setShowDetails] = useState(null); // Produto selecionado para detalhes
-  const [modalVisible, setModalVisible] = useState(false); // Modal de QR Code/Finalização
+  const [showQRCode, setShowQRCode] = useState(false);
+  const [vendaId, setVendaId] = useState(null);
+  
+  // Dados do cliente (vem do perfil ou do atendimento)
+  const [clienteData, setClienteData] = useState({
+    id: "CLI-001",
+    nome: "Cliente Exemplo",
+    email: "cliente@example.com", // ← Virá do cadastro do app mobile
+  });
 
-  // Lógica de Busca de Produtos
+  // Auto-scroll
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Filtro de produtos
   const filteredProducts = MOCK_PRODUCTS.filter(
     (p) =>
       p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Auto-scroll para a última mensagem
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  // --- Funções de Chat ---
+  // Enviar mensagem
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (input.trim() === "") return;
@@ -163,7 +128,7 @@ const ChatPanel = () => {
     setInput("");
   };
 
-  // --- Funções de Vendas ---
+  // Adicionar ao carrinho
   const handleAddToCart = (product) => {
     const existingItem = cart.find((item) => item.id === product.id);
     if (existingItem) {
@@ -179,306 +144,155 @@ const ChatPanel = () => {
     }
   };
 
-  const updateCartQuantity = (id, change) => {
-    setCart(
-      cart
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantity: Math.max(0, item.quantity + change) }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    ); // Remove se a quantidade for 0
-  };
-
-  const calculateTotal = () => {
-    return cart
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
-  };
-
-  const handleFinalizeSale = () => {
-    if (cart.length === 0) {
-      console.error("O carrinho está vazio.");
+  // Atualizar quantidade
+  const handleUpdateQuantity = (id, newQuantity) => {
+    if (newQuantity <= 0) {
+      handleRemoveFromCart(id);
       return;
     }
-    // Lógica para simular a geração de QR Code e envio de e-mail
-    setModalVisible(true);
-  };
-
-  // --- Renderização de Componentes Internos ---
-  const renderProductDetails = () => {
-    if (!showDetails) return null;
-    return (
-      <div style={styles.detailsModal}>
-        <h5 style={{ fontSize: "1.2rem", marginBottom: "10px" }}>
-          {showDetails.name}
-        </h5>
-        <p style={styles.specItem}>**SKU:** {showDetails.id}</p>
-        <p style={styles.specItem}>
-          **Preço:** R$ {showDetails.price.toFixed(2)}
-        </p>
-        <p style={styles.specItem}>
-          **Estoque:** {showDetails.available} unidades
-        </p>
-        <p style={styles.specItem}>**Especificações:** {showDetails.specs}</p>
-        <button
-          onClick={() => {
-            handleAddToCart(showDetails);
-            setShowDetails(null);
-          }}
-          style={{
-            ...styles.actionButton,
-            backgroundColor: PRIMARY_COLOR,
-            marginTop: "10px",
-          }}
-        >
-          Adicionar ao Carrinho ({showDetails.id})
-        </button>
-        <button
-          onClick={() => setShowDetails(null)}
-          style={{
-            ...styles.secondaryButton,
-            marginTop: "10px",
-            marginLeft: "10px",
-          }}
-        >
-          Fechar
-        </button>
-      </div>
+    
+    setCart(
+      cart.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
     );
   };
 
-  const renderCart = () => (
-    <div style={styles.cartContainer}>
-      <h4 style={styles.cartTitle}>🛒 Carrinho ({cart.length})</h4>
-      {cart.length === 0 ? (
-        <p style={{ fontSize: "0.9rem", color: "#6c757d" }}>
-          Nenhum produto adicionado.
-        </p>
-      ) : (
-        <>
-          {cart.map((item) => (
-            <div key={item.id} style={styles.cartItem}>
-              <span style={{ flex: 1, fontSize: "0.9rem" }}>{item.name}</span>
-              <div style={styles.cartQuantityControl}>
-                <button
-                  onClick={() => updateCartQuantity(item.id, -1)}
-                  style={styles.quantityButton}
-                >
-                  -
-                </button>
-                <span style={{ margin: "0 8px" }}>{item.quantity}</span>
-                <button
-                  onClick={() => updateCartQuantity(item.id, 1)}
-                  style={styles.quantityButton}
-                >
-                  +
-                </button>
-              </div>
-              <span
-                style={{
-                  width: "90px",
-                  textAlign: "right",
-                  fontWeight: "bold",
-                  color: "#dc3545",
-                }}
-              >
-                R$ {(item.price * item.quantity).toFixed(2)}
-              </span>
-            </div>
-          ))}
-          <div style={styles.cartTotal}>
-            <span>TOTAL:</span>
-            <span>R$ {calculateTotal()}</span>
-          </div>
-          <button
-            onClick={handleFinalizeSale}
-            style={{
-              ...styles.actionButton,
-              backgroundColor: PRIMARY_COLOR,
-              width: "100%",
-              marginTop: "15px",
-            }}
-          >
-            Finalizar Venda & Gerar QR Code
-          </button>
-        </>
-      )}
-    </div>
-  );
+  // Remover do carrinho
+  const handleRemoveFromCart = (id) => {
+    setCart(cart.filter((item) => item.id !== id));
+  };
 
-  const renderProductSearch = () => (
-    <>
-      <div style={styles.searchBox}>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setShowDetails(null); // Fecha detalhes ao buscar
-          }}
-          placeholder="Buscar produto (Nome, SKU, QR Code)"
-          style={styles.searchInput}
-        />
-        <button style={styles.searchButton}>🔍</button>
-      </div>
+  // Calcular total
+  const calculateTotal = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
 
-      {renderProductDetails()}
+  // Finalizar venda
+  const handleFinalizeSale = async () => {
+    if (cart.length === 0) {
+      alert("Carrinho vazio!");
+      return;
+    }
 
-      <div style={styles.productList}>
-        {filteredProducts.map((p) => (
-          <div key={p.id} style={styles.productCard}>
-            <div style={styles.productInfo}>
-              <strong style={{ fontSize: "0.95rem" }}>{p.name}</strong>
-              <span style={{ fontSize: "0.85rem", color: "#6c757d" }}>
-                SKU: {p.id}
-              </span>
-            </div>
-            <div style={styles.productActions}>
-              <span style={{ fontWeight: "bold", color: PRIMARY_COLOR }}>
-                R$ {p.price.toFixed(2)}
-              </span>
-              <button
-                onClick={() => setShowDetails(p)}
-                style={styles.detailsButton}
-              >
-                + Info
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </>
-  );
+    try {
+      console.log('🔄 Criando venda...');
+      
+      const response = await fetch(`${API_URL}/api/vendas/criar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          consultorId: consultorId,
+          lojistaId: localStorage.getItem('lojistaAtual') || "858f50c0-f472-4d1d-9e6e-21952f40c7e5", // ID do lojista de teste
+          clienteId: clienteData.id,
+          clienteEmail: clienteData.email,
+          clienteNome: clienteData.nome,
+          produtos: cart.map(item => ({
+            produtoId: item.id,
+            nome: item.name,
+            quantidade: item.quantity,
+            preco: item.price,
+            total: item.price * item.quantity,
+          })),
+          valorTotal: calculateTotal(),
+        }),
+      });
+
+      const data = await response.json();
+      console.log('📊 Resposta da API:', data);
+
+      if (data.success) {
+        console.log('✅ Venda criada:', data.vendaId);
+        setVendaId(data.vendaId);
+        setShowQRCode(true);
+      } else {
+        console.error('❌ Erro:', data.error);
+        alert("Erro ao criar venda: " + data.error);
+      }
+    } catch (error) {
+      console.error("❌ Erro ao finalizar venda:", error);
+      alert("Erro ao conectar com o servidor. Verifique sua conexão.");
+    }
+  };
 
   return (
     <div style={styles.appContainer}>
-      {/* 1. Modal de Finalização (Simulado) */}
-      {modalVisible && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modalContent}>
-            <h3>Venda Finalizada com Sucesso!</h3>
-            <p>O total da compra é de **R$ {calculateTotal()}**.</p>
-            <div style={styles.qrCodeContainer}>
-              {/* QR Code Simulado */}
-              <span style={{ fontSize: "3rem" }}>🔗</span>
-              <p>QR Code gerado para leitura no caixa.</p>
-            </div>
-            <p style={{ marginTop: "15px", color: "#dc3545" }}>
-              A lista de produtos também foi enviada por e-mail para o cliente.
-            </p>
-            <button
-              onClick={() => {
-                setModalVisible(false);
-                setCart([]);
-              }}
-              style={{
-                ...styles.actionButton,
-                backgroundColor: SECONDARY_COLOR,
-                width: "100%",
-                marginTop: "20px",
-              }}
-            >
-              Fechar e Limpar Carrinho
-            </button>
-          </div>
-        </div>
+      {/* Modal de QR Code */}
+      {showQRCode && (
+        <QRCodeGenerator
+          vendaId={vendaId}
+          totalValue={calculateTotal()}
+          items={cart}
+          clienteEmail={clienteData.email}
+          clienteNome={clienteData.nome}
+          onClose={() => setShowQRCode(false)}
+          onSuccess={() => {
+            setCart([]);
+            setShowQRCode(false);
+            alert("✅ Venda finalizada com sucesso!");
+          }}
+        />
       )}
 
-      {/* 2. Menu Lateral (Compacto) - CORRIGIDO */}
+      {/* Sidebar */}
       <nav style={styles.sidebar}>
         <div style={styles.sidebarContent}>
-          {/* Botão Home */}
-          <button
-            onClick={() => navigate("/dashboard")}
-            style={styles.sidebarButton}
-          >
+          <button onClick={() => navigate("/consultor/dashboard")} style={styles.sidebarButton}>
             <span style={styles.sidebarIcon}>🏠</span>
             <span style={styles.sidebarText}>Home</span>
           </button>
-          {/* Botão Chat (Ativo) */}
           <div style={{ ...styles.sidebarButton, backgroundColor: "#0056b3" }}>
             <span style={styles.sidebarIcon}>💬</span>
             <span style={styles.sidebarText}>Chat</span>
           </div>
-          {/* Botão Analytics */}
-          <button
-            onClick={() => navigate("/analytics")}
-            style={styles.sidebarButton}
-          >
+          <button onClick={() => navigate("/consultor/dashboard/analytics")} style={styles.sidebarButton}>
             <span style={styles.sidebarIcon}>📊</span>
             <span style={styles.sidebarText}>Analítico</span>
           </button>
-          {/* Botão Perfil */}
-          <button
-            onClick={() => navigate("/profile")}
-            style={styles.sidebarButton}
-          >
+          <button onClick={() => navigate("/consultor/dashboard/profile")} style={styles.sidebarButton}>
             <span style={styles.sidebarIcon}>👤</span>
             <span style={styles.sidebarText}>Perfil</span>
           </button>
         </div>
       </nav>
 
-      {/* 3. Conteúdo Principal (3 Colunas: Clientes | Chat | Vendas) */}
+      {/* Conteúdo Principal */}
       <main style={styles.mainContent}>
-        {/* Header Superior com Perfil (PADRÃO) - CORRIGIDO */}
+        {/* Header */}
         <header style={styles.header}>
           <h1 style={styles.headerTitle}>Atendimento ao Cliente</h1>
-          <button
-            onClick={() => navigate("/profile")}
-            style={styles.profileLink}
-          >
+          <button onClick={() => navigate("/consultor/dashboard/profile")} style={styles.profileLink}>
             <span style={styles.profileName}>{userName}</span>
             <img
               src="https://placehold.co/40x40/007bff/ffffff?text=C"
-              alt="Foto do Consultor"
+              alt="Foto"
               style={styles.profilePic}
             />
           </button>
         </header>
 
         <div style={styles.chatLayout}>
-          {/* Coluna 1: Lista de Clientes (Compacta) */}
+          {/* Coluna 1: Lista de Clientes */}
           <div style={styles.clientsColumn}>
             <h3 style={styles.clientsTitle}>Clientes</h3>
-            <div
-              style={{
-                ...styles.clientCard,
-                borderLeft: "4px solid " + PRIMARY_COLOR,
-              }}
-            >
-              <strong style={{ fontSize: "0.9rem" }}>CLI-001 (Ativo)</strong>
+            <div style={{ ...styles.clientCard, borderLeft: `4px solid ${PRIMARY_COLOR}` }}>
+              <strong style={{ fontSize: "0.9rem" }}>{clienteData.nome} (Ativo)</strong>
               <span style={{ fontSize: "0.8rem", color: "#6c757d" }}>
-                Em busca de TV
-              </span>
-            </div>
-            <div style={{ ...styles.clientCard, borderLeft: "4px solid #ddd" }}>
-              <strong style={{ fontSize: "0.9rem" }}>CLI-002</strong>
-              <span style={{ fontSize: "0.8rem", color: "#6c757d" }}>
-                Pendente
+                Em busca de produtos
               </span>
             </div>
           </div>
 
-          {/* Coluna 2: Área de Chat e Ações */}
+          {/* Coluna 2: Chat */}
           <div style={styles.chatColumn}>
             <div style={styles.chatHeader}>
               <h2 style={{ fontSize: "1.2rem", color: SECONDARY_COLOR }}>
-                Atendimento: CLI-001
+                Atendimento: {clienteData.nome}
               </h2>
               <div style={styles.callActions}>
-                {/* Botões de Ação de Chamada em estilo outline/sutil */}
                 <button style={styles.callButton}>📞 Áudio</button>
                 <button style={styles.callButton}>📹 Vídeo</button>
-                <button
-                  style={{
-                    ...styles.callButton,
-                    color: "#dc3545",
-                    border: "1px solid #dc3545",
-                  }}
-                >
+                <button style={{ ...styles.callButton, color: "#dc3545", border: "1px solid #dc3545" }}>
                   ❌ Encerrar
                 </button>
               </div>
@@ -494,7 +308,7 @@ const ChatPanel = () => {
                   timestamp={msg.timestamp}
                 />
               ))}
-              <div ref={messagesEndRef} /> {/* Ponto de rolagem */}
+              <div ref={messagesEndRef} />
             </div>
 
             <form onSubmit={handleSendMessage} style={styles.messageForm}>
@@ -502,7 +316,7 @@ const ChatPanel = () => {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Digite sua mensagem ou envie um produto..."
+                placeholder="Digite sua mensagem..."
                 style={styles.messageInput}
               />
               <button type="submit" style={styles.sendButton}>
@@ -511,11 +325,50 @@ const ChatPanel = () => {
             </form>
           </div>
 
-          {/* Coluna 3: Painel de Produtos e Vendas */}
+          {/* Coluna 3: Produtos e Carrinho */}
           <div style={styles.productsColumn}>
-            <h3 style={styles.productsTitle}>Assistente de Vendas</h3>
-            <div style={styles.productSalesArea}>{renderProductSearch()}</div>
-            {renderCart()}
+            <h3 style={styles.productsTitle}>Produtos</h3>
+            
+            {/* Busca */}
+            <div style={styles.searchBox}>
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Buscar produto..."
+                style={styles.searchInput}
+              />
+            </div>
+
+            {/* Lista de Produtos */}
+            <div style={styles.productList}>
+              {filteredProducts.map((p) => (
+                <div key={p.id} style={styles.productCard}>
+                  <div style={styles.productInfo}>
+                    <strong style={{ fontSize: "0.9rem" }}>{p.name}</strong>
+                    <span style={{ fontSize: "0.8rem", color: "#6c757d" }}>
+                      SKU: {p.id}
+                    </span>
+                    <span style={{ fontWeight: "bold", color: PRIMARY_COLOR, marginTop: "5px" }}>
+                      R$ {p.price.toFixed(2)}
+                    </span>
+                  </div>
+                  <button onClick={() => handleAddToCart(p)} style={styles.addButton}>
+                    + Adicionar
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Carrinho */}
+            <div style={{ marginTop: "20px" }}>
+              <Cart
+                items={cart}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemoveItem={handleRemoveFromCart}
+                onFinalize={handleFinalizeSale}
+              />
+            </div>
           </div>
         </div>
       </main>
@@ -523,25 +376,20 @@ const ChatPanel = () => {
   );
 };
 
-// --- Estilos Minimalistas ---
+// Estilos
 const styles = {
-  // LAYOUT ESTRUTURAL
   appContainer: {
     display: "flex",
     minHeight: "100vh",
     backgroundColor: LIGHT_GREY,
     fontFamily: "Inter, sans-serif",
   },
-  // 2. Menu Lateral (Compacto)
   sidebar: {
-    width: "80px", // Aumentado para 80px para padronização
+    width: "80px",
     backgroundColor: SECONDARY_COLOR,
     padding: "20px 0",
     flexShrink: 0,
     boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
   },
   sidebarContent: {
     display: "flex",
@@ -559,7 +407,6 @@ const styles = {
     alignItems: "center",
     gap: "5px",
     borderRadius: "8px",
-    transition: "background-color 0.2s",
   },
   sidebarIcon: { fontSize: "20px" },
   sidebarText: { fontSize: "11px" },
@@ -568,7 +415,6 @@ const styles = {
     display: "flex",
     flexDirection: "column",
   },
-  // HEADER (Padronizado com HomePanel/AnalyticsPanel)
   header: {
     backgroundColor: "white",
     padding: "15px 30px",
@@ -586,8 +432,6 @@ const styles = {
   profileLink: {
     display: "flex",
     alignItems: "center",
-    textDecoration: "none",
-    color: SECONDARY_COLOR,
     gap: "10px",
     background: "none",
     border: "none",
@@ -603,14 +447,12 @@ const styles = {
     borderRadius: "50%",
     border: `2px solid ${PRIMARY_COLOR}`,
   },
-  // CHAT LAYOUT
   chatLayout: {
     display: "grid",
-    gridTemplateColumns: "180px 1fr 350px", // Ajustado para corresponder ao padrão
-    height: "calc(100vh - 70px)", // Subtrai a altura do cabeçalho
+    gridTemplateColumns: "180px 1fr 350px",
+    height: "calc(100vh - 70px)",
     overflow: "hidden",
   },
-  // Coluna 1: Clientes
   clientsColumn: {
     backgroundColor: "#fff",
     padding: "15px",
@@ -629,15 +471,12 @@ const styles = {
     backgroundColor: "#fff",
     padding: "10px",
     borderRadius: "8px",
-    cursor: "pointer",
     marginBottom: "8px",
     display: "flex",
     flexDirection: "column",
     gap: "5px",
     border: "1px solid #eee",
-    transition: "border-color 0.2s",
   },
-  // Coluna 2: Chat
   chatColumn: {
     display: "flex",
     flexDirection: "column",
@@ -665,7 +504,6 @@ const styles = {
     fontWeight: "500",
     cursor: "pointer",
     fontSize: "0.8rem",
-    transition: "background-color 0.2s, border-color 0.2s",
   },
   messagesArea: {
     flex: 1,
@@ -689,7 +527,6 @@ const styles = {
     borderRadius: "20px",
     fontSize: "0.9rem",
     outline: "none",
-    transition: "border-color 0.2s",
   },
   sendButton: {
     padding: "10px 15px",
@@ -699,9 +536,7 @@ const styles = {
     borderRadius: "20px",
     cursor: "pointer",
     fontWeight: "bold",
-    transition: "background-color 0.2s",
   },
-  // Coluna 3: Produtos
   productsColumn: {
     backgroundColor: "#fff",
     padding: "20px 15px",
@@ -716,38 +551,24 @@ const styles = {
     paddingBottom: "10px",
     marginBottom: "15px",
   },
-  productSalesArea: {
-    flex: 1,
-    overflowY: "auto",
-    paddingBottom: "15px",
-  },
   searchBox: {
-    display: "flex",
-    gap: "5px",
     marginBottom: "15px",
   },
   searchInput: {
-    flex: 1,
+    width: "100%",
     padding: "10px",
     border: "1px solid #ddd",
     borderRadius: "8px",
     outline: "none",
   },
-  searchButton: {
-    backgroundColor: PRIMARY_COLOR,
-    color: "white",
-    border: "none",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  },
   productList: {
     display: "flex",
     flexDirection: "column",
     gap: "8px",
+    marginBottom: "15px",
   },
   productCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#f8f9fa",
     padding: "12px",
     borderRadius: "8px",
     display: "flex",
@@ -758,130 +579,17 @@ const styles = {
   productInfo: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    flex: 1,
   },
-  productActions: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-  },
-  detailsButton: {
-    backgroundColor: LIGHT_GREY,
-    color: SECONDARY_COLOR,
-    border: "1px solid #ddd",
-    padding: "6px 10px",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontWeight: "500",
-    fontSize: "0.8rem",
-  },
-  // Carrinho
-  cartContainer: {
-    padding: "15px",
-    borderTop: "1px solid #eee",
-    backgroundColor: LIGHT_GREY,
-    borderRadius: "8px",
-    marginTop: "15px",
-  },
-  cartTitle: {
-    color: SECONDARY_COLOR,
-    borderBottom: "1px solid #ddd",
-    paddingBottom: "10px",
-    marginBottom: "10px",
-    fontSize: "1rem",
-    fontWeight: "bold",
-  },
-  cartItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "8px 0",
-    borderBottom: "1px dotted #ddd",
-  },
-  cartQuantityControl: {
-    display: "flex",
-    alignItems: "center",
-  },
-  quantityButton: {
-    backgroundColor: "#fff",
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    padding: "2px 8px",
-    cursor: "pointer",
-    fontSize: "0.8rem",
-    color: SECONDARY_COLOR,
-  },
-  cartTotal: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "15px",
-    fontSize: "1.1rem",
-    fontWeight: "bold",
-    color: SECONDARY_COLOR,
-  },
-  actionButton: {
-    padding: "10px 15px",
-    border: "none",
-    borderRadius: "8px",
+  addButton: {
+    padding: "8px 12px",
+    backgroundColor: PRIMARY_COLOR,
     color: "white",
+    border: "none",
+    borderRadius: "6px",
     cursor: "pointer",
-    fontWeight: "bold",
-    transition: "background-color 0.2s",
-  },
-  secondaryButton: {
-    padding: "10px 15px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    color: SECONDARY_COLOR,
-    backgroundColor: "white",
-    cursor: "pointer",
-    fontWeight: "bold",
-    transition: "background-color 0.2s",
-  },
-  // Modal de Detalhes
-  detailsModal: {
-    padding: "15px",
-    marginBottom: "15px",
-    backgroundColor: "#fff",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-    textAlign: "left",
-    position: "relative",
-    zIndex: 10,
-  },
-  specItem: {
-    fontSize: "0.9rem",
-    margin: "3px 0",
-    color: "#6c757d",
-  },
-  // Modal de Finalização (QR Code)
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.4)", // Fundo mais claro
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-  modalContent: {
-    backgroundColor: "white",
-    padding: "40px",
-    borderRadius: "10px",
-    width: "450px",
-    textAlign: "center",
-    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)",
-  },
-  qrCodeContainer: {
-    marginTop: "20px",
-    padding: "20px",
-    backgroundColor: LIGHT_GREY,
-    borderRadius: "8px",
-    border: "1px solid #ddd",
+    fontSize: "0.85rem",
+    fontWeight: "600",
   },
 };
 

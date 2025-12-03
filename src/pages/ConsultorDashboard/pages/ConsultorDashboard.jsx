@@ -1,411 +1,420 @@
 import React from "react";
-// OBRIGATÓRIO: Importar Outlet e Link/useNavigate para rotas aninhadas
-import { Outlet, Link, useNavigate } from "react-router-dom";
-import RotatingBanner from "../components/RotatingBanner.jsx";
+import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 
-// --- ESTILOS COMPARTILHADOS (Minimalista) ---
-const PRIMARY_COLOR = "#007bff";
-const SECONDARY_COLOR = "#495057";
-const LIGHT_GREY = "#f8f9fa";
-
-// === DADOS E FUNÇÕES DE MOCK (CONTEÚDO DO HOME PANEL) ===
-
-// Dados Mockados da Agenda 
-const agenda = [
-    {
-        id: 1,
-        clientId: "CLI-A123",
-        time: "10:00",
-        type: "Vídeo Chamada",
-        status: "Agendado",
-    },
-    {
-        id: 2,
-        clientId: "CLI-B456",
-        time: "11:30",
-        type: "Chat Prioritário",
-        status: "Pendente",
-    },
-    {
-        id: 3,
-        clientId: "CLI-C789",
-        time: "14:00",
-        type: "Áudio",
-        status: "Concluído",
-    },
+// === DADOS DE NAVEGAÇÃO DO CONSULTOR (SIDEBAR) ===
+const CONSULTOR_MENU_ITEMS = [
+    { title: "🏠 Home", icon: "🏠", rota: "/consultor/dashboard" },
+    { title: "📞 Fila de Atendimento", icon: "📞", rota: "/consultor/dashboard/fila" },
+    { title: "💬 Atendimento Ativo", icon: "💬", rota: "/consultor/dashboard/chat" },
+    { title: "💰 Comissões", icon: "💰", rota: "/consultor/dashboard/analytics" }, // Foco em Comissões
+    { title: "🏪 Minhas Lojas", icon: "🏪", rota: "/consultor/dashboard/lojas" }, // Gerenciamento das Lojas que atende
+    { title: "👤 Perfil", icon: "👤", rota: "/consultor/dashboard/profile" },
 ];
 
-// Dados Mockados dos Alertas de Preço 
-const priceAlerts = [
-    {
-        id: 1,
-        product: "Geladeira Inverter",
-        oldPrice: 2800,
-        newPrice: 2499,
-        segment: "Eletrodomésticos",
-        changeType: "priceDrop", 
-        store: "Loja X",
-        imageUrl: "https://placehold.co/50x50/007bff/ffffff?text=GI",
-    },
-    {
-        id: 2,
-        product: 'Smart TV 55" 4K',
-        oldPrice: 3500,
-        newPrice: 3500,
-        segment: "Tecnologia",
-        changeType: "newPromotion", 
-        store: "Magazine Y",
-        imageUrl: "https://placehold.co/50x50/28a745/ffffff?text=TV",
-    },
-    {
-        id: 3,
-        product: "Notebook Gamer X1",
-        oldPrice: null,
-        newPrice: 6000,
-        segment: "Tecnologia",
-        changeType: "newProduct", 
-        store: "Loja X",
-        imageUrl: "https://placehold.co/50x50/ffc107/333333?text=NG",
-    },
-];
-
-const getStatusStyles = (status) => {
-    switch (status) {
-        case "Agendado":
-            return {
-                color: "#ffc107",
-                backgroundColor: "#fff3cd",
-                borderColor: "#ffc107",
-            };
-        case "Concluído":
-            return {
-                color: "#28a745",
-                backgroundColor: "#d4edda",
-                borderColor: "#28a745",
-            };
-        case "Pendente":
-            return {
-                color: SECONDARY_COLOR,
-                backgroundColor: "#f0f0f0",
-                borderColor: SECONDARY_COLOR,
-            };
-        default:
-            return {};
-    }
-};
-
-const renderAgenda = () => (
-    <div style={styles.card}>
-        <h3 style={styles.cardTitle}>📅 Agenda de Chamadas do Dia</h3>
-        {agenda.map((item) => {
-            const statusStyle = getStatusStyles(item.status);
-            return (
-                <div key={item.id} style={styles.agendaItem}>
-                    <span style={styles.agendaTime}>{item.time}</span>
-                    <span style={styles.agendaClient}>
-                        ID Cliente: <strong>{item.clientId}</strong>
-                    </span>
-                    <span style={styles.agendaType}>Tipo: {item.type}</span>
-                    <span style={{ ...styles.agendaStatus, ...statusStyle }}>
-                        {item.status}
-                    </span>
-                </div>
-            );
-        })}
-        <p style={styles.note}>Total de {agenda.length} compromissos agendados.</p>
-    </div>
-);
-
-const renderPriceAlerts = () => {
-    const navigate = useNavigate();
-    return (
-        <div style={styles.card}>
-            <h3 style={styles.cardTitle}>🚨 Alertas de Vendas e Preço</h3>
-            {priceAlerts.map((alert) => {
-                let icon = "🏷️";
-                let priceInfo;
-                let priceStyle = {};
-
-                if (alert.changeType === "priceDrop") {
-                    icon = "📉";
-                    priceInfo = `R$ ${
-                        alert.oldPrice?.toFixed(2) || "N/A"
-                    } ➝ R$ ${alert.newPrice.toFixed(2)}`;
-                    priceStyle = { color: "#28a745", fontWeight: "bold" };
-                } else if (alert.changeType === "newPromotion") {
-                    icon = "✨";
-                    priceInfo = `Promoção na Loja: R$ ${alert.newPrice.toFixed(2)}`;
-                    priceStyle = { color: PRIMARY_COLOR, fontWeight: "bold" };
-                } else if (alert.changeType === "newProduct") {
-                    icon = "🚀";
-                    priceInfo = `Novo Lançamento: R$ ${alert.newPrice.toFixed(2)}`;
-                    priceStyle = { color: SECONDARY_COLOR, fontWeight: "bold" };
-                }
-
-                return (
-                    <div key={alert.id} style={styles.alertItem}>
-                        <img
-                            src={alert.imageUrl}
-                            alt={alert.product}
-                            style={styles.alertImage}
-                        />
-                        <div style={{ flexGrow: 1 }}>
-                            <p style={styles.alertProduct}>
-                                {icon} <strong>{alert.product}</strong> ({alert.segment})
-                            </p>
-                            <p style={{ ...styles.alertPrice, ...priceStyle }}>{priceInfo}</p>
-                            <span style={styles.alertStore}>Loja: {alert.store}</span>
-                        </div>
-                        <button
-                            style={styles.infoButton}
-                            // CORREÇÃO: Removido alert() e substituído por navegação para rota de detalhes (mock)
-                            onClick={() => navigate(`/consultor/dashboard/detalhe-alerta/${alert.id}`)}
-                        >
-                            + Informações
-                        </button>
-                    </div>
-                );
-            })}
-            <p style={styles.note}>
-                Use esses alertas como argumentos de venda no chat!
-            </p>
-        </div>
-    );
-};
-
-
-// === COMPONENTE QUE VAI SER RENDERIZADO NA ROTA INDEX (PAINEL INICIAL) ===
+// === CONSULTOR HOME PANEL (CONTEÚDO PRINCIPAL DO USUÁRIO) ===
 export const ConsultorHomePanel = () => {
-    return (
-        <div style={styles.container}>
-            <RotatingBanner />
-            <div style={styles.contentGrid}>
-                {renderAgenda()}
-                {renderPriceAlerts()}
-            </div>
-        </div>
-    );
-}
-
-// === COMPONENTE LAYOUT DO CONSULTOR (WRAPPER COM SIDEBAR E OUTLET) ===
-const ConsultorDashboardLayout = () => {
     const navigate = useNavigate();
-    const userName = localStorage.getItem("userName") || "Consultor(a)";
-    
-    // === DADOS DE NAVEGAÇÃO DO CONSULTOR (SIDEBAR) ===
-    const menuItems = [
-        { title: "🏠 Home", icon: "🏠", rota: "/consultor/dashboard" }, 
-        { title: "💬 Chat", icon: "💬", rota: "/consultor/dashboard/chat" },
-        { title: "📊 Analítico", icon: "📊", rota: "/consultor/dashboard/analytics" },
-        { title: "👤 Perfil", icon: "👤", rota: "/consultor/dashboard/profile" },
+
+    // Dados do consultor (fictícios)
+    const consultorInfo = {
+        nome: "Agnes Consultora",
+        segmentos: ["Eletrodomésticos", "Tecnologia", "Móveis"],
+        lojasAtendidas: 7,
+        comissaoAcumulada: 12500.50,
+        atendimentosMes: 45,
+        ratingMedio: 4.8, 
+    };
+
+    const atalhos = [
+        {
+            titulo: "📞 Próximo da Fila",
+            descricao: "Iniciar um novo atendimento da fila prioritária",
+            cor: "#007bff",
+            rota: "/consultor/dashboard/fila" 
+        },
+        {
+            titulo: "🏪 Lojas Atendidas",
+            descricao: "Gerenciar minhas lojas e configurar categorias",
+            cor: "#28a745", 
+            rota: "/consultor/dashboard/lojas" 
+        },
+        {
+            titulo: "💰 Sacar Comissão",
+            descricao: "Ver detalhes de comissão e solicitar saque",
+            cor: "#ffc107",
+            rota: "/consultor/dashboard/analytics" 
+        },
+        {
+            titulo: "💬 Chat Ativo",
+            descricao: "Acessar atendimentos em andamento",
+            cor: "#17a2b8",
+            rota: "/consultor/dashboard/chat" 
+        }
     ];
 
+    return (
+        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+            {/* Cabeçalho Pessoal */}
+            <div style={consultorStyles.consultorHeaderCard}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                        <h1 style={{ color: "#2c5aa0", margin: "0 0 5px 0" }}>
+                            🎯 Olá, {consultorInfo.nome}!
+                        </h1>
+                        <p style={{ color: "#666", margin: "0 0 15px 0" }}>
+                            Segmentos de Atuação: {consultorInfo.segmentos.join(', ')}
+                        </p>
+                        
+                        {/* Informação de Múltiplas Lojas */}
+                        <div style={{ marginBottom: "15px" }}>
+                            <h3 style={consultorStyles.infoTitle}>
+                                🏪 Atendendo {consultorInfo.lojasAtendidas} Lojas no momento
+                            </h3>
+                            <button onClick={() => navigate("/consultor/dashboard/lojas")} style={consultorStyles.lojasButton}>
+                                Ver Detalhes das Lojas
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Comissionamento (Diferencial Consultor) */}
+                    <div style={consultorStyles.comissaoBox}>
+                        <div style={consultorStyles.comissaoLabel}>
+                            Comissão Acumulada
+                        </div>
+                        <div style={consultorStyles.comissaoValue}>
+                            R$ {consultorInfo.comissaoAcumulada.toFixed(2).replace('.', ',')}
+                        </div>
+                        <button onClick={() => navigate("/consultor/dashboard/analytics")} style={consultorStyles.sacarButton}>
+                            Sacar Agora
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-    return (
-        <div style={styles.appContainer}>
-            {/* Menu Lateral Compacto */}
-            <nav style={styles.sidebar}>
-                <div style={styles.sidebarContent}>
-                    {menuItems.map(item => (
-                        <button
-                            key={item.rota}
-                            onClick={() => navigate(item.rota)}
-                            style={styles.sidebarButton}
-                        >
-                            <span style={styles.sidebarIcon}>{item.icon}</span>
-                            <span style={styles.sidebarText}>{item.title}</span>
-                        </button>
-                    ))}
-                </div>
-            </nav>
+            {/* Atalhos Rápidos */}
+            <div style={{ marginBottom: "30px" }}>
+                <h2 style={consultorStyles.sectionTitle}>🚀 Ações de Atendimento</h2>
+                <div style={consultorStyles.fastAccessGrid}>
+                    {atalhos.map((atalho, index) => (
+                        <div
+                            key={index}
+                            onClick={() => navigate(atalho.rota)}
+                            style={{ ...consultorStyles.fastAccessCard, borderLeft: `4px solid ${atalho.cor}` }}
+                        >
+                            <h3 style={{ ...consultorStyles.fastAccessTitle, color: atalho.cor }}>
+                                {atalho.titulo}
+                            </h3>
+                            <p style={consultorStyles.fastAccessDescription}>
+                                {atalho.descricao}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-            <div style={styles.mainContent}>
-                {/* Header Superior com Perfil */}
-                <header style={styles.header}>
-                    <h1 style={styles.headerTitle}>Bem-vindo(a), {userName}!</h1>
-                    <button
-                        onClick={() => navigate("/consultor/dashboard/profile")}
-                        style={styles.profileLink}
-                    >
-                        <span style={styles.profileName}>{userName}</span>
-                        <img
-                            src="https://placehold.co/40x40/007bff/ffffff?text=C"
-                            alt="Foto do Consultor"
-                            style={styles.profilePic}
-                        />
-                    </button>
-                </header>
+            {/* Métricas Chave */}
+            <div style={consultorStyles.metricsGrid}>
+                {/* Métrica 1: Atendimentos */}
+                <div style={consultorStyles.metricCard("#e3f2fd", "#007bff")}>
+                    <h3 style={consultorStyles.metricTitle("#0d47a1")}>📞 Atendimentos (Mês)</h3>
+                    <p style={consultorStyles.metricValue("#0d47a1")}>
+                        {consultorInfo.atendimentosMes}
+                    </p>
+                </div>
 
-                {/* CONTEÚDO PRINCIPAL: OBRIGATÓRIO PARA ROTAS ANINHADAS */}
-                <Outlet />
-            </div>
-        </div>
-    );
+                {/* Métrica 2: Rating */}
+                <div style={consultorStyles.metricCard("#fff8e1", "#ffc107")}>
+                    <h3 style={consultorStyles.metricTitle("#856404")}>⭐ Rating Médio</h3>
+                    <p style={consultorStyles.metricValue("#856404")}>
+                        {consultorInfo.ratingMedio} / 5.0
+                    </p>
+                </div>
+
+                {/* Métrica 3: Lojas Ativas */}
+                <div style={consultorStyles.metricCard("#e6fffb", "#17a2b8")}>
+                    <h3 style={consultorStyles.metricTitle("#004d40")}>🏪 Lojas Ativas</h3>
+                    <p style={consultorStyles.metricValue("#004d40")}>
+                        {consultorInfo.lojasAtendidas}
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
 };
 
-const styles = {
-    // LAYOUT ESTRUTURAL
-    appContainer: {
-        display: "flex",
-        minHeight: "100vh",
-        backgroundColor: LIGHT_GREY,
-        fontFamily: "Inter, sans-serif",
+// === COMPONENTE LAYOUT DO CONSULTOR (WRAPER COM SIDEBAR E OUTLET) ===
+const ConsultorDashboardLayout = () => {
+    const location = useLocation();
+    const currentPath = location.pathname;
+    const userName = localStorage.getItem("userName") || "Agnes Consultora";
+
+    // Lógica de rota ativa
+    const getMenuItemStyle = (rota) => {
+        const isExactMatch = rota === currentPath;
+        const isPrefixMatch = currentPath.startsWith(rota + "/");
+
+        let isActive = false;
+
+        if (rota === "/consultor/dashboard") {
+            isActive = isExactMatch;
+        } else {
+            isActive = isExactMatch || isPrefixMatch;
+        }
+
+        return isActive
+            ? consultorStyles.menuItemActive
+            : consultorStyles.menuItem;
+    };
+
+    return (
+        <div style={consultorStyles.dashboardContainer}>
+            <div style={consultorStyles.sidebar}>
+                <h2 style={consultorStyles.logoTitle}>Consultor Autônomo</h2>
+
+                <nav>
+                    {CONSULTOR_MENU_ITEMS.map((item) => (
+                        <Link
+                            key={item.rota}
+                            to={item.rota}
+                            style={getMenuItemStyle(item.rota)}
+                        >
+                            {item.title}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
+
+            <main style={consultorStyles.mainContent}>
+                <header style={consultorStyles.header}>
+                    <div>
+                        <h1 style={consultorStyles.headerTitle}>Painel do Consultor</h1>
+                        <p style={consultorStyles.headerSubtitle}>
+                            Bem-vindo(a), {userName}
+                        </p>
+                    </div>
+                    <Link
+                        to="/consultor/dashboard/profile"
+                        style={consultorStyles.profileButton}
+                    >
+                        <span style={consultorStyles.profileName}>👤 Meu Perfil</span>
+                    </Link>
+                </header>
+
+                <div style={{ padding: '20px' }}>
+                    <Outlet />
+                </div>
+            </main>
+        </div>
+    );
+};
+
+// Estilos do Consultor
+const CONSULTOR_PRIMARY = "#2c5aa0"; // Azul corporativo
+const CONSULTOR_SECONDARY = "#f4f7f9"; // Fundo da área de trabalho
+
+const consultorStyles = {
+    dashboardContainer: {
+        display: "flex",
+        minHeight: "100vh",
+        backgroundColor: CONSULTOR_SECONDARY,
+    },
+    sidebar: {
+        width: "250px",
+        backgroundColor: "#FFFFFF",
+        color: "#333",
+        paddingTop: "20px",
+        flexShrink: 0,
+        boxShadow: "4px 0 10px rgba(0,0,0,0.05)",
+    },
+    logoTitle: {
+        fontSize: "1.5rem",
+        padding: "10px 20px 30px",
+        textAlign: "center",
+        borderBottom: "1px solid #eee",
+        fontWeight: "bold",
+        color: CONSULTOR_PRIMARY,
+    },
+    menuItem: {
+        display: "block",
+        padding: "12px 20px",
+        color: CONSULTOR_PRIMARY,
+        textDecoration: "none",
+        transition: "all 0.2s",
+        fontSize: "15px",
+        borderLeft: "3px solid transparent",
+        backgroundColor: "#eaf2ff", // Azul claro (padrão)
+        borderRadius: "0 50px 50px 0",
+        marginRight: "20px",
+        ":hover": {
+            backgroundColor: "#d0e4ff",
+            color: "#1c3d73",
+        },
+    },
+    menuItemActive: {
+        backgroundColor: "#FFFFFF",
+        color: CONSULTOR_PRIMARY,
+        fontWeight: "700",
+        borderLeft: `3px solid ${CONSULTOR_PRIMARY}`,
+        borderRadius: "0 50px 50px 0",
+        marginRight: "20px",
+        padding: "12px 20px", // Garantir o mesmo padding
+        display: "block", // Garantir que seja bloco
+    },
+    mainContent: {
+        flexGrow: 1,
+        width: "calc(100% - 250px)",
+        overflowY: "auto",
+    },
+    header: {
+        backgroundColor: "white",
+        padding: "20px 30px",
+        borderBottom: "1px solid #eee",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+    },
+    headerTitle: {
+        fontSize: "1.5rem",
+        color: CONSULTOR_PRIMARY,
+        margin: 0,
+        fontWeight: "600",
+    },
+    headerSubtitle: {
+        fontSize: "0.9rem",
+        color: "#6c757d",
+        margin: "5px 0 0 0",
+    },
+    profileButton: {
+        display: "flex",
+        alignItems: "center",
+        textDecoration: "none",
+        color: CONSULTOR_PRIMARY,
+        gap: "10px",
+        padding: "10px 15px",
+        borderRadius: "8px",
+        border: "2px solid #eaf2ff", // Borda sutil
+        backgroundColor: "white",
+        transition: "all 0.3s ease",
+        fontWeight: "600",
+        ":hover": {
+            backgroundColor: "#eaf2ff",
+            color: CONSULTOR_PRIMARY,
+        },
+    },
+    profileName: {
+        fontSize: "1rem",
+    },
+    // Estilos do Home Panel
+    consultorHeaderCard: { 
+        backgroundColor: "white", 
+        padding: "25px", 
+        borderRadius: "10px", 
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        marginBottom: "25px"
     },
-    sidebar: {
-        width: "80px",
-        backgroundColor: SECONDARY_COLOR,
-        padding: "20px 0",
-        flexShrink: 0,
-        boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
-        display: "flex",
-        flexDirection: "column",
+    infoTitle: {
+        color: "#666", 
+        margin: "0 0 10px 0", 
+        fontSize: "16px"
     },
-    sidebarContent: {
-        display: "flex",
-        flexDirection: "column",
-        gap: "25px",
-    },
-    sidebarButton: {
-        background: "none",
-        border: "none",
+    lojasButton: {
+        backgroundColor: "#17a2b8",
         color: "white",
-        padding: "12px 0",
-        cursor: "pointer",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "5px",
-        borderRadius: "8px",
-        transition: "background-color 0.2s",
-    },
-    sidebarIcon: { fontSize: "20px" },
-    sidebarText: { fontSize: "11px" },
-    mainContent: {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        overflowY: "auto",
-    },
-    // HEADER
-    header: {
-        backgroundColor: "white",
-        padding: "15px 30px",
-        borderBottom: "1px solid #eee",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-    },
-    headerTitle: {
-        fontSize: "1.5rem",
-        color: SECONDARY_COLOR,
-        margin: 0,
-    },
-    profileLink: {
-        display: "flex",
-        alignItems: "center",
-        textDecoration: "none",
-        color: SECONDARY_COLOR,
-        gap: "10px",
-        background: "none",
         border: "none",
+        padding: "10px 15px",
+        borderRadius: "8px",
+        fontSize: "0.9rem",
+        fontWeight: "600",
         cursor: "pointer",
+        transition: "background-color 0.2s"
     },
-    profileName: {
-        fontSize: "1rem",
-        fontWeight: "500",
+    comissaoBox: {
+        textAlign: "center",
+        backgroundColor: "#e8f5e8",
+        padding: "15px",
+        borderRadius: "10px",
+        minWidth: "180px",
+        border: "2px solid #28a745",
+        boxShadow: '0 4px 8px rgba(40, 167, 69, 0.1)'
     },
-    profilePic: {
-        width: "40px",
-        height: "40px",
-        borderRadius: "50%",
-        border: `2px solid ${PRIMARY_COLOR}`,
+    comissaoLabel: {
+        fontSize: "12px", 
+        color: "#155724", 
+        marginBottom: "5px"
     },
-    // CONTEÚDO PRINCIPAL
-    container: {
-        padding: "30px",
-        fontFamily: "Inter, sans-serif",
+    comissaoValue: {
+        fontSize: "26px", 
+        fontWeight: "bold", 
+        color: "#28a745",
+        margin: '0 0 10px 0'
     },
-    contentGrid: {
+    sacarButton: {
+        backgroundColor: "#28a745",
+        color: "white",
+        border: "none",
+        padding: "8px 15px",
+        borderRadius: "8px",
+        fontSize: "0.9rem",
+        fontWeight: "bold",
+        cursor: "pointer"
+    },
+    sectionTitle: { 
+        color: CONSULTOR_PRIMARY, 
+        marginBottom: "15px", 
+        fontSize: "1.5rem"
+    },
+    metricsGrid: {
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-        gap: "25px",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: "15px",
+        marginBottom: "30px"
     },
-    card: {
+    metricCard: (bg, border) => ({
+        backgroundColor: bg,
+        padding: "20px",
+        borderRadius: "10px",
+        textAlign: "center",
+        borderLeft: `4px solid ${border}`
+    }),
+    metricTitle: (color) => ({ 
+        margin: "0 0 10px 0", 
+        color: color, 
+        fontSize: "14px"
+    }),
+    metricValue: (color) => ({
+        fontSize: "24px", 
+        fontWeight: "bold", 
+        color: color, 
+        margin: 0 
+    }),
+    fastAccessGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        gap: "20px"
+    },
+    fastAccessCard: {
         backgroundColor: "white",
         padding: "25px",
-        borderRadius: "8px",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
-        border: "1px solid #eee",
-    },
-    cardTitle: {
-        fontSize: "1.2rem",
-        color: SECONDARY_COLOR,
-        borderBottom: "1px solid #eee",
-        paddingBottom: "10px",
-        marginBottom: "15px",
-        fontWeight: "600",
-    },
-    note: {
-        fontSize: "14px",
-        color: "#6c757d",
-        marginTop: "15px",
-        fontStyle: "italic",
-    },
-
-    // AGENDA
-    agendaItem: {
-        display: "flex",
-        justifyContent: "space-between",
-        padding: "12px 0",
-        borderBottom: "1px dotted #ddd",
-        alignItems: "center",
-    },
-    agendaTime: { fontWeight: "bold", color: SECONDARY_COLOR, width: "15%" },
-    agendaClient: { width: "40%", fontSize: "0.95rem" },
-    agendaType: { width: "20%", fontSize: "14px", color: "#6c757d" },
-    agendaStatus: {
-        padding: "5px 10px",
-        borderRadius: "15px",
-        fontSize: "12px",
-        textAlign: "center",
-        border: "1px solid",
-        fontWeight: "bold",
-    },
-
-    // ALERTAS
-    alertItem: {
-        display: "flex",
-        gap: "15px",
-        padding: "15px 0",
-        borderBottom: "1px solid #eee",
-        alignItems: "center",
-    },
-    alertImage: {
-        width: "50px",
-        height: "50px",
-        borderRadius: "6px",
-        objectFit: "cover",
-    },
-    alertProduct: {
-        margin: "0 0 5px 0",
-        fontWeight: "500",
-        color: SECONDARY_COLOR,
-        fontSize: "1rem",
-    },
-    alertPrice: { margin: "0", fontSize: "15px" },
-    alertStore: { fontSize: "12px", color: "#6c757d" },
-    infoButton: {
-        padding: "8px 15px",
-        backgroundColor: "white",
-        color: PRIMARY_COLOR,
-        border: `1px solid ${PRIMARY_COLOR}`,
-        borderRadius: "5px",
+        borderRadius: "10px",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
         cursor: "pointer",
-        fontWeight: "bold",
-        fontSize: "14px",
-        transition: "background-color 0.2s, color 0.2s",
+        transition: "all 0.3s ease",
+        textAlign: "center",
+        ":hover": {
+            transform: "translateY(-5px)",
+            boxShadow: "0 5px 20px rgba(0,0,0,0.15)"
+        }
     },
+    fastAccessTitle: {
+        margin: "0 0 10px 0",
+        fontSize: "20px"
+    },
+    fastAccessDescription: {
+        color: "#666", 
+        margin: 0,
+        fontSize: "14px"
+    }
 };
 
 export default ConsultorDashboardLayout;

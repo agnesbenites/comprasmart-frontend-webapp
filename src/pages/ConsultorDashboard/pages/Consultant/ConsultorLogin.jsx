@@ -1,16 +1,16 @@
-// src/pages/AdminDashboard/pages/AdminLogin.jsx
+// src/pages/ConsultorDashboard/pages/Consultant/ConsultorLogin.jsx
 import React from "react";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../../../hooks/useAuth"; // ✅ CAMINHO CORRETO
 
-const AdminLogin = () => {
-  const { login, isAuthenticated, isLoading } = useAuth('admin');
+const ConsultorLogin = () => {
+  const { login, isAuthenticated, isLoading } = useAuth('consultor');
 
   if (isAuthenticated) {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <p style={styles.successText}>✅ Acesso administrativo concedido!</p>
-          <p>Redirecionando para o painel de administração...</p>
+          <p style={styles.successText}>✅ Autenticado com sucesso!</p>
+          <p>Redirecionando para o dashboard do consultor...</p>
         </div>
       </div>
     );
@@ -21,13 +21,12 @@ const AdminLogin = () => {
       <div style={styles.card}>
         
         <h2 style={styles.title}>
-          ⚙️ Login Administrador
+          🔍 Login Consultor
         </h2>
 
-        <div style={styles.warningBox}>
-          <p style={styles.warningText}>
-            <strong>Acesso Restrito</strong><br />
-            Esta área é exclusiva para administradores do sistema.
+        <div style={styles.infoBox}>
+          <p style={styles.infoText}>
+            Acesse o sistema de consultoria com suas credenciais Auth0
           </p>
         </div>
 
@@ -36,11 +35,26 @@ const AdminLogin = () => {
           disabled={isLoading}
           style={{
             ...styles.loginButton,
-            backgroundColor: isLoading ? '#6c757d' : '#dc3545'
+            backgroundColor: isLoading ? '#6c757d' : '#17a2b8'
           }}
         >
-          {isLoading ? "⏳ Redirecionando..." : "🔐 Entrar como Admin"}
+          {isLoading ? "⏳ Redirecionando..." : "🔐 Entrar com Auth0"}
         </button>
+
+        <div style={styles.features}>
+          <div style={styles.feature}>
+            <span style={styles.featureIcon}>📊</span>
+            <span>Relatórios de Desempenho</span>
+          </div>
+          <div style={styles.feature}>
+            <span style={styles.featureIcon}>💼</span>
+            <span>Gestão de Consultoria</span>
+          </div>
+          <div style={styles.feature}>
+            <span style={styles.featureIcon}>🔒</span>
+            <span>Dados Protegidos</span>
+          </div>
+        </div>
 
         <div style={styles.footer}>
           <a href="/" style={styles.backLink}>
@@ -83,19 +97,18 @@ const styles = {
     fontSize: "1.2rem",
     fontWeight: "bold"
   },
-  warningBox: {
-    backgroundColor: "#fff3cd",
+  infoBox: {
+    backgroundColor: "#e3f2fd",
     padding: "15px",
     borderRadius: "8px",
     marginBottom: "20px",
-    border: "1px solid #ffeaa7",
+    border: "1px solid #bbdefb",
   },
-  warningText: {
+  infoText: {
     margin: 0,
     fontSize: "14px",
-    color: "#856404",
+    color: "#1565c0",
     textAlign: "center",
-    lineHeight: "1.5",
   },
   loginButton: {
     width: "100%",
@@ -107,10 +120,28 @@ const styles = {
     fontWeight: "600",
     cursor: "pointer",
     transition: "background-color 0.3s ease",
+    marginBottom: "20px",
+  },
+  features: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    marginBottom: "20px",
+  },
+  feature: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    padding: "10px",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "6px",
+    fontSize: "14px",
+  },
+  featureIcon: {
+    fontSize: "16px",
   },
   footer: {
     textAlign: "center",
-    marginTop: "20px",
   },
   backLink: {
     color: "#2c5aa0",
@@ -119,4 +150,4 @@ const styles = {
   },
 };
 
-export default AdminLogin;
+export default ConsultorLogin;

@@ -73,7 +73,8 @@ const AplicativoConfirmacao = () => {
       setVendaProcessando(qrData);
 
       // Confirmar pagamento no backend
-      const response = await fetch('/api/vendas/confirmar-pagamento', {
+      const API_URL = 'https://plataforma-consultoria-mvp.onrender.com';
+    const response = await fetch(`${API_URL}/api/vendas/confirmar-pagamento`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
