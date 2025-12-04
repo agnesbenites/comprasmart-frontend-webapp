@@ -1,23 +1,16 @@
-// vite.config.js
-
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path'; // Mantido para o uso dos aliases de path
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
   
-  // 🚨 CORREÇÕES CRÍTICAS PARA VERCEL/PRODUÇÃO:
-  // 1. Base Path: Garante que todos os assets (JS/CSS) sejam carregados a partir da raiz ('/').
-  //    Isso corrige o erro de MIME type ("text/html" em vez de "text/javascript").
-  base: '/', 
+  base: '/',
   
-  // 2. Otimização de Dependência: Força o Vite/Rollup a pré-processar o uuid.
   optimizeDeps: {
-    include: ['uuid'],
+    include: ['uuid']
   },
 
-  // === ALIASES DE PATHS (MANTIDOS) ===
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -28,9 +21,47 @@ export default defineConfig({
   },
 
   build: {
-    // Garante que a saída seja na pasta 'dist', conforme esperado pelo vercel.json
     outDir: 'dist',
-    // Mantido para compatibilidade, se necessário
-    rollupOptions: {},
+    rollupOptions: {
+      output: {
+        // ✅ VERSÃO CORRIGIDA - segura para todos os assets
+        assetFileNames: (assetInfo) => {
+          if (!assetInfo.name) {
+            return 'assets/[name]-[hash][extname]';
+          }
+          
+          const extType = assetInfo.name.split('.').pop();
+          
+          // Classifica por tipo de arquivo
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+            return 'assets/images/[name]-[hash][extname]';
+          }
+          if (/woff2?|eot|ttf|otf/i.test(extType)) {
+            return 'assets/fonts/[name]-[hash][extname]';
+          }
+          if (/css/i.test(extType)) {
+            return 'assets/css/[name]-[hash][extname]';
+          }
+          
+          // Padrão para outros assets
+          return 'assets/[name]-[hash][extname]';
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+      }
+    },
+    sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
+
+  server: {
+    port: 3000,
+    open: true
+  }
 });

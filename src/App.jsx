@@ -19,8 +19,8 @@ import AdminCadastroVendedor from "./pages/AdminDashboard/pages/AdminCadastroVen
 // === CONSULTOR ===
 import ConsultorDashboardLayout, { ConsultorHomePanel } from "./pages/ConsultorDashboard/pages/ConsultorDashboard.jsx";
 import ConsultorRegister from "./pages/ConsultorDashboard/pages/ConsultorRegister.jsx";
-// RENOMEADO para evitar conflito de cache no Vercel
-import ConsultorLoginComponente from "./pages/ConsultorDashboard/pages/Consultant/ConsultorLogin.jsx"; 
+// RENOMEADO para evitar conflito de cache no Vercel (mantemos o nome original na importação)
+import ConsultantLoginPage from "./pages/ConsultorDashboard/pages/Consultant/ConsultorLogin.jsx"; 
 
 // CONSULTOR - Componentes
 import QueuePanel from "./pages/ConsultorDashboard/components/QueuePanel.jsx";
@@ -58,9 +58,11 @@ import VendedorProfile from "./pages/VendedorDashboard/pages/VendedorProfile.jsx
 import AplicativoConfirmacao from "./pages/AplicativoConfirmacao.jsx";
 import ApprovalsPage from "./pages/ApprovalsPage.jsx";
 import AwaitingApproval from "./pages/AwaitingApproval.jsx";
-import ClientsPage from "./pages/ClientsPage.jsx";
-import ProductsPage from "./pages/ProductsPage.jsx";
 import TermsPage from "./pages/TermsPage";
+
+// Componente Wrapper para a Rota do Lojista (Força a resolução de módulo)
+const LojistaLoginWrapper = () => <LojistaLogin />;
+
 
 // ✅ Componente para proteger rotas - CORRIGIDO
 const ProtectedRoute = ({ component: Component, redirectTo }) => {
@@ -226,7 +228,7 @@ function App() {
                     
                     {/* === CONSULTOR === */}
                     {/* Alterado para usar o nome de importação ajustado */}
-                    <Route path="/consultor/login" element={<ConsultorLoginComponente />} />
+                    <Route path="/consultor/login" element={<ConsultantLoginPage />} />
                     <Route path="/consultor/register" element={<ConsultorRegister />} />
                     <Route path="/consultor/cadastro" element={<ConsultorRegister />} />
                     
@@ -242,7 +244,8 @@ function App() {
                     
                     {/* === LOJISTA === */}
                     <Route path="/lojista/escolha" element={<LojistaEscolha />} />
-                    <Route path="/lojista/login" element={<LojistaLogin />} /> 
+                    {/* Rota ajustada para usar o Wrapper e forçar o carregamento correto do módulo */}
+                    <Route path="/lojista/login" element={<LojistaLoginWrapper />} /> 
                     
                     <Route path="/lojista/dashboard" element={<ProtectedRoute component={LojistaDashboardLayout} redirectTo="/lojista/dashboard" />}>
                         <Route index element={<LojistaHomePanel />} /> 
@@ -266,8 +269,6 @@ function App() {
                     <Route path="/vendedor/dashboard" element={<ProtectedRoute component={VendedorDashboardLayout} redirectTo="/vendedor/dashboard" />}>
                         <Route index element={<VendedorHomePanel />} /> 
                         <Route path="relatorio" element={<RelatorioPageVendedor />} />
-                        <Route path="clientes" element={<ClientsPage />} /> 
-                        <Route path="produtos" element={<ProductsPage />} /> 
                         <Route path="atendimento" element={<VendedorAtendimentoPage />} />
                         <Route path="profile" element={<VendedorProfile />} />
                     </Route>

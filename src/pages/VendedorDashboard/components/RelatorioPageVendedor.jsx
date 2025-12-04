@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from "../../../components/Layout";
-import { formatarMoeda, formatarData } from "../../../shared/utils/formatters";
-import { supabase } from '../../../shared/utils/supabase'; // Certifique-se de ter esse arquivo configurado
+import { formatarMoeda, formatarData } from '../../../shared/utils/formatters';
+import { API_CONFIG, apiGet } from '../../../shared/utils/api';
+import { supabase } from '../../../shared/utils/supabase'; // se estiver usando
 
 const RelatorioPageVendedor = () => {
   const navigate = useNavigate();
