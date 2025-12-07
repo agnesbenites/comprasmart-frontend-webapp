@@ -1,595 +1,577 @@
-// app-frontend/src/pages/ConsultorDashboard/components/ChatPanel.jsx
+import React, { useState, useEffect } from "react";
+import QRCode from "react-qr-code";
+import { FaUserCircle, FaShoppingCart, FaWhatsapp, FaTimes } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import Message from '../../../shared/components/Message';
-import ProductCatalog from '../../../shared/components/ProductCatalog';
-import Cart from '../../../shared/components/Cart';
-import QRCodeGenerator from '../../../shared/components/QRCodeGenerator';
-import { formatarMoeda, formatarDataHora } from '../../../shared/utils/formatters';
-import { API_CONFIG, apiPost } from '../../../shared/utils/api';
-
-const PRIMARY_COLOR = "#007bff";
-const SECONDARY_COLOR = "#495057";
-const LIGHT_GREY = "#f8f9fa";
+// URL da API
 const API_URL = 'https://plataforma-consultoria-mvp.onrender.com';
 
-// Mock de dados iniciais
-const MOCK_PRODUCTS = [
-  {
-    id: "SKU001",
-    name: "Geladeira Inverter 400L",
-    price: 3499.0,
-    available: 5,
-    specs: "Tecnologia No Frost, Inverter, A+++",
-    category: "Eletrodomésticos",
-  },
-  {
-    id: "SKU002",
-    name: 'Smart TV 55" OLED 4K',
-    price: 4899.0,
-    available: 2,
-    specs: "Painel OLED, 120Hz, HDMI 2.1",
-    category: "Tecnologia",
-  },
-  {
-    id: "SKU003",
-    name: "Notebook Gamer Pro",
-    price: 8200.0,
-    available: 10,
-    specs: "i7, 16GB RAM, RTX 4060",
-    category: "Tecnologia",
-  },
-  {
-    id: "SKU004",
-    name: "Máquina de Lavar 12Kg",
-    price: 1950.0,
-    available: 8,
-    specs: "Ciclo rápido, 12 programas, Cesto Inox",
-    category: "Eletrodomésticos",
-  },
-  {
-    id: "SKU005",
-    name: "Fritadeira AirFryer 5L",
-    price: 450.0,
-    available: 20,
-    specs: "Display digital, 8 predefinições",
-    category: "Eletrodomésticos",
-  },
-];
+// Dados de Cliente de Teste
+const clienteData = {
+  id: "c123456",
+  nome: "Cliente Exemplo",
+  nomeVisivel: false, // Cliente optou por não mostrar nome
+  email: "cliente.exemplo@email.com",
+  status: "Ativo",
+  descricao: "Em busca de produtos",
+};
 
-const initialMessages = [
-  {
-    id: 1,
-    user: "CLI-001",
-    content: "Olá, preciso de ajuda para escolher uma TV para minha sala.",
-    timestamp: "10:00",
-    type: "inbound",
-  },
-  {
-    id: 2,
-    user: "Consultor",
-    content: "Olá! Com certeza posso ajudar. Qual é o tamanho ideal que você busca?",
-    timestamp: "10:01",
-    type: "outbound",
-  },
-];
+// Dados de Consultor de Teste
+const consultorId = "cons7890";
 
 const ChatPanel = () => {
   const navigate = useNavigate();
-  const messagesEndRef = useRef(null);
-  const userName = localStorage.getItem("userName") || "Consultor(a)";
-  const consultorId = localStorage.getItem("consultorId");
-  
-  // Estados
-  const [messages, setMessages] = useState(initialMessages);
-  const [input, setInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
   const [cart, setCart] = useState([]);
   const [showQRCode, setShowQRCode] = useState(false);
   const [vendaId, setVendaId] = useState(null);
-  
-  // Dados do cliente (vem do perfil ou do atendimento)
-  const [clienteData, setClienteData] = useState({
-    id: "CLI-001",
-    nome: "Cliente Exemplo",
-    email: "cliente@example.com", // ← Virá do cadastro do app mobile
-  });
+  const [saleStatus, setSaleStatus] = useState('idle');
 
-  // Auto-scroll
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  // Filtro de produtos
-  const filteredProducts = MOCK_PRODUCTS.filter(
-    (p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.id.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  // Enviar mensagem
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (input.trim() === "") return;
-
-    const newMessage = {
-      id: messages.length + 1,
-      user: "Consultor",
-      content: input,
-      timestamp: new Date().toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      type: "outbound",
-    };
-
-    setMessages([...messages, newMessage]);
-    setInput("");
-  };
-
-  // Adicionar ao carrinho
-  const handleAddToCart = (product) => {
-    const existingItem = cart.find((item) => item.id === product.id);
-    if (existingItem) {
-      setCart(
-        cart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
+  const getClienteDisplay = () => {
+    if (clienteData.nomeVisivel) {
+      return clienteData.nome;
     }
+    return `Cliente #${clienteData.id.substring(1, 7)}`;
   };
 
-  // Atualizar quantidade
-  const handleUpdateQuantity = (id, newQuantity) => {
-    if (newQuantity <= 0) {
-      handleRemoveFromCart(id);
-      return;
-    }
-    
-    setCart(
-      cart.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-
-  // Remover do carrinho
-  const handleRemoveFromCart = (id) => {
-    setCart(cart.filter((item) => item.id !== id));
-  };
-
-  // Calcular total
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
-  // Finalizar venda
+  const addToCart = (product) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prevCart, { ...product, quantity: 1 }];
+    });
+  };
+
+  const removeFromCart = (productId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+  };
+  
+  const simulatedProducts = [
+    { id: 'prod1', name: 'Smartwatch X', price: 350.00 },
+    { id: 'prod2', name: 'Fone Bluetooth', price: 120.00 },
+    { id: 'prod3', name: 'Capa Protetora', price: 45.00 },
+  ];
+
   const handleFinalizeSale = async () => {
     if (cart.length === 0) {
-      alert("Carrinho vazio!");
+      alert("Carrinho vazio! Adicione produtos para finalizar a venda.");
       return;
     }
 
+    setSaleStatus('idle');
+    
     try {
-      console.log('🔄 Criando venda...');
+      console.log('📄 Tentando finalizar venda...');
       
+      const salePayload = {
+        consultorId: consultorId,
+        lojistaId: localStorage.getItem('lojistaAtual') || "858f50c0-f472-4d1d-9e6e-21952f40c7e5",
+        clienteId: clienteData.id,
+        clienteEmail: clienteData.email,
+        clienteNome: clienteData.nome,
+        produtos: cart.map(item => ({
+          produtoId: item.id,
+          nome: item.name,
+          quantidade: item.quantity,
+          preco: item.price,
+          total: item.price * item.quantity,
+        })),
+        valorTotal: calculateTotal(),
+      };
+
       const response = await fetch(`${API_URL}/api/vendas/criar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          consultorId: consultorId,
-          lojistaId: localStorage.getItem('lojistaAtual') || "858f50c0-f472-4d1d-9e6e-21952f40c7e5", // ID do lojista de teste
-          clienteId: clienteData.id,
-          clienteEmail: clienteData.email,
-          clienteNome: clienteData.nome,
-          produtos: cart.map(item => ({
-            produtoId: item.id,
-            nome: item.name,
-            quantidade: item.quantity,
-            preco: item.price,
-            total: item.price * item.quantity,
-          })),
-          valorTotal: calculateTotal(),
-        }),
+        body: JSON.stringify(salePayload),
       });
 
-      const data = await response.json();
-      console.log('📊 Resposta da API:', data);
+      const responseBody = await response.json().catch(() => ({})); 
 
-      if (data.success) {
-        console.log('✅ Venda criada:', data.vendaId);
-        setVendaId(data.vendaId);
-        setShowQRCode(true);
-      } else {
-        console.error('❌ Erro:', data.error);
-        alert("Erro ao criar venda: " + data.error);
+      if (!response.ok) {
+        const errorMessage = responseBody.error || response.statusText || 'Erro desconhecido';
+        
+        if (errorMessage.includes("Estoque insuficiente") || response.status === 409) {
+          setSaleStatus('stock_error');
+          console.error('❌ Erro de Estoque Concorrente:', errorMessage);
+        } else {
+          setSaleStatus('generic_error');
+          console.error(`❌ Erro HTTP ${response.status}:`, errorMessage);
+        }
+        return;
       }
+      
+      if (responseBody.success) {
+        console.log('✅ Venda criada:', responseBody.vendaId);
+        setVendaId(responseBody.vendaId);
+        setShowQRCode(true);
+        setSaleStatus('success');
+      } else {
+        setSaleStatus('generic_error');
+        console.error('❌ Erro na lógica do servidor:', responseBody.error);
+      }
+      
     } catch (error) {
-      console.error("❌ Erro ao finalizar venda:", error);
-      alert("Erro ao conectar com o servidor. Verifique sua conexão.");
+      console.error("❌ Erro de Conexão/Rede:", error);
+      setSaleStatus('generic_error');
     }
   };
 
+  const navigateToSummary = () => {
+    navigate(`/consultor/resumo-venda/${vendaId || 'novo'}`, { state: { saleStatus, cart, clienteData } });
+  };
+
   return (
-    <div style={styles.appContainer}>
-      {/* Modal de QR Code */}
-      {showQRCode && (
-        <QRCodeGenerator
-          vendaId={vendaId}
-          totalValue={calculateTotal()}
-          items={cart}
-          clienteEmail={clienteData.email}
-          clienteNome={clienteData.nome}
-          onClose={() => setShowQRCode(false)}
-          onSuccess={() => {
-            setCart([]);
-            setShowQRCode(false);
-            alert("✅ Venda finalizada com sucesso!");
-          }}
-        />
-      )}
-
-      {/* Sidebar */}
-      <nav style={styles.sidebar}>
-        <div style={styles.sidebarContent}>
-          <button onClick={() => navigate("/consultor/dashboard")} style={styles.sidebarButton}>
-            <span style={styles.sidebarIcon}>🏠</span>
-            <span style={styles.sidebarText}>Home</span>
-          </button>
-          <div style={{ ...styles.sidebarButton, backgroundColor: "#0056b3" }}>
-            <span style={styles.sidebarIcon}>💬</span>
-            <span style={styles.sidebarText}>Chat</span>
+    <div style={styles.container}>
+      {/* Header do Atendimento */}
+      <div style={styles.headerAtendimento}>
+        <h1 style={styles.pageTitle}>Atendimento Ativo</h1>
+        <div style={styles.clienteInfo}>
+          <FaUserCircle size={32} color="#2c5aa0" />
+          <div style={styles.clienteDetails}>
+            <h2 style={styles.clienteNome}>{getClienteDisplay()} ({clienteData.status})</h2>
+            <p style={styles.clienteDescricao}>{clienteData.descricao}</p>
           </div>
-          <button onClick={() => navigate("/consultor/dashboard/analytics")} style={styles.sidebarButton}>
-            <span style={styles.sidebarIcon}>📊</span>
-            <span style={styles.sidebarText}>Analítico</span>
-          </button>
-          <button onClick={() => navigate("/consultor/dashboard/profile")} style={styles.sidebarButton}>
-            <span style={styles.sidebarIcon}>👤</span>
-            <span style={styles.sidebarText}>Perfil</span>
-          </button>
         </div>
-      </nav>
+      </div>
 
-      {/* Conteúdo Principal */}
-      <main style={styles.mainContent}>
-        {/* Header */}
-        <header style={styles.header}>
-          <h1 style={styles.headerTitle}>Atendimento ao Cliente</h1>
-          <button onClick={() => navigate("/consultor/dashboard/profile")} style={styles.profileLink}>
-            <span style={styles.profileName}>{userName}</span>
-            <img
-              src="https://placehold.co/40x40/007bff/ffffff?text=C"
-              alt="Foto"
-              style={styles.profilePic}
-            />
-          </button>
-        </header>
+      {/* Layout Principal (Chat + Carrinho) */}
+      <div style={styles.mainContent}>
+        
+        {/* Área do Chat */}
+        <div style={styles.chatArea}>
+          <h3 style={styles.sectionTitle}>💬 Simulação de Chat</h3>
+          <div style={styles.chatMessages}>
+            <div style={styles.consultorMessage}>Olá! Em que posso ajudar?</div>
+            <div style={styles.clientMessage}>Gostaria do Smartwatch X e de um fone Bluetooth.</div>
+          </div>
+          <input 
+            type="text" 
+            placeholder="Digite sua mensagem..." 
+            style={styles.chatInput}
+          />
+        </div>
 
-        <div style={styles.chatLayout}>
-          {/* Coluna 1: Lista de Clientes */}
-          <div style={styles.clientsColumn}>
-            <h3 style={styles.clientsTitle}>Clientes</h3>
-            <div style={{ ...styles.clientCard, borderLeft: `4px solid ${PRIMARY_COLOR}` }}>
-              <strong style={{ fontSize: "0.9rem" }}>{clienteData.nome} (Ativo)</strong>
-              <span style={{ fontSize: "0.8rem", color: "#6c757d" }}>
-                Em busca de produtos
-              </span>
+        {/* Sidebar de Vendas */}
+        <div style={styles.salesSidebar}>
+          
+          {/* Carrinho */}
+          <div style={styles.cartSection}>
+            <h3 style={styles.cartTitle}><FaShoppingCart /> Carrinho de Vendas</h3>
+            <ul style={styles.cartList}>
+              {cart.map((item) => (
+                <li key={item.id} style={styles.cartItem}>
+                  <span style={styles.cartItemInfo}>
+                    {item.name} ({item.quantity}x) - R$ {(item.price * item.quantity).toFixed(2)}
+                  </span>
+                  <button 
+                    onClick={() => removeFromCart(item.id)}
+                    style={styles.removeButton}
+                  >
+                    <FaTimes size={12} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {cart.length === 0 && (
+              <p style={styles.emptyCart}>Carrinho vazio</p>
+            )}
+            <p style={styles.cartTotal}>Total: R$ {calculateTotal()}</p>
+          </div>
+          
+          {/* Simulação de Adição */}
+          <div style={styles.productTest}>
+            <h4 style={styles.testTitle}>Adicionar (Teste)</h4>
+            <div style={styles.testButtons}>
+              {simulatedProducts.map(p => (
+                <button 
+                  key={p.id} 
+                  onClick={() => addToCart(p)}
+                  style={styles.addButton}
+                >
+                  + {p.name}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Coluna 2: Chat */}
-          <div style={styles.chatColumn}>
-            <div style={styles.chatHeader}>
-              <h2 style={{ fontSize: "1.2rem", color: SECONDARY_COLOR }}>
-                Atendimento: {clienteData.nome}
-              </h2>
-              <div style={styles.callActions}>
-                <button style={styles.callButton}>📞 Áudio</button>
-                <button style={styles.callButton}>📹 Vídeo</button>
-                <button style={{ ...styles.callButton, color: "#dc3545", border: "1px solid #dc3545" }}>
-                  ❌ Encerrar
+          <div style={styles.divider}></div>
+
+          {/* Seção de Finalização */}
+          <div style={styles.finalizeSection}>
+            
+            {saleStatus === 'idle' && (
+              <button 
+                style={styles.finalizeButton} 
+                onClick={handleFinalizeSale}
+              >
+                Finalizar Venda e Gerar QR Code
+              </button>
+            )}
+
+            {saleStatus === 'success' && (
+              <div style={styles.successFeedback}>
+                <p style={styles.successTitle}>✅ Venda Criada com Sucesso!</p>
+                <p style={styles.successText}>O QR Code foi gerado e enviado ao cliente.</p>
+                <div style={styles.qrContainer}>
+                  <QRCode value={vendaId || 'erro'} size={128} level="H" />
+                  <p style={styles.vendaIdLabel}>ID da Venda: {vendaId}</p>
+                </div>
+                <button 
+                  onClick={navigateToSummary} 
+                  style={styles.summaryButton}
+                >
+                  Ver Resumo e Encerrar Atendimento
                 </button>
               </div>
-            </div>
+            )}
 
-            <div style={styles.messagesArea}>
-              {messages.map((msg) => (
-                <Message
-                  key={msg.id}
-                  content={msg.content}
-                  user={msg.user}
-                  type={msg.type}
-                  timestamp={msg.timestamp}
-                />
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
+            {saleStatus === 'stock_error' && (
+              <div style={styles.errorFeedback}>
+                <p style={styles.errorTitle}>⚠️ Estoque Esgotado!</p>
+                <p style={styles.errorText}>
+                  Outro consultor finalizou a venda do produto antes. Venda não concluída.
+                </p>
+                <button 
+                  onClick={() => setSaleStatus('idle')} 
+                  style={styles.retryButton}
+                >
+                  Ajustar Carrinho e Tentar Novamente
+                </button>
+              </div>
+            )}
 
-            <form onSubmit={handleSendMessage} style={styles.messageForm}>
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Digite sua mensagem..."
-                style={styles.messageInput}
-              />
-              <button type="submit" style={styles.sendButton}>
-                Enviar 💬
-              </button>
-            </form>
+            {saleStatus === 'generic_error' && (
+              <div style={styles.errorFeedback}>
+                <p style={styles.errorTitle}>❌ Falha na Venda!</p>
+                <p style={styles.errorText}>
+                  Ocorreu um erro ao conectar ou processar. Tente novamente.
+                </p>
+                <button 
+                  onClick={() => setSaleStatus('idle')} 
+                  style={styles.retryButton}
+                >
+                  Tentar Novamente
+                </button>
+              </div>
+            )}
           </div>
-
-          {/* Coluna 3: Produtos e Carrinho */}
-          <div style={styles.productsColumn}>
-            <h3 style={styles.productsTitle}>Produtos</h3>
-            
-            {/* Busca */}
-            <div style={styles.searchBox}>
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Buscar produto..."
-                style={styles.searchInput}
-              />
-            </div>
-
-            {/* Lista de Produtos */}
-            <div style={styles.productList}>
-              {filteredProducts.map((p) => (
-                <div key={p.id} style={styles.productCard}>
-                  <div style={styles.productInfo}>
-                    <strong style={{ fontSize: "0.9rem" }}>{p.name}</strong>
-                    <span style={{ fontSize: "0.8rem", color: "#6c757d" }}>
-                      SKU: {p.id}
-                    </span>
-                    <span style={{ fontWeight: "bold", color: PRIMARY_COLOR, marginTop: "5px" }}>
-                      R$ {p.price.toFixed(2)}
-                    </span>
-                  </div>
-                  <button onClick={() => handleAddToCart(p)} style={styles.addButton}>
-                    + Adicionar
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {/* Carrinho */}
-            <div style={{ marginTop: "20px" }}>
-              <Cart
-                items={cart}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemoveItem={handleRemoveFromCart}
-                onFinalize={handleFinalizeSale}
-              />
-            </div>
+          
+          {/* Ações Adicionais */}
+          <div style={styles.actions}>
+            <button style={styles.whatsappButton}>
+              <FaWhatsapp /> Enviar no WhatsApp
+            </button>
+            <button 
+              style={styles.endButton} 
+              onClick={() => navigateToSummary()}
+            >
+              Encerrar Atendimento (Sem Venda)
+            </button>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
 
-// Estilos
 const styles = {
-  appContainer: {
-    display: "flex",
-    minHeight: "100vh",
-    backgroundColor: LIGHT_GREY,
-    fontFamily: "Inter, sans-serif",
+  container: {
+    backgroundColor: '#f8f9fa',
+    minHeight: '100vh',
+    padding: '20px',
   },
-  sidebar: {
-    width: "80px",
-    backgroundColor: SECONDARY_COLOR,
-    padding: "20px 0",
-    flexShrink: 0,
-    boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
+  headerAtendimento: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '25px',
+    marginBottom: '20px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
   },
-  sidebarContent: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "25px",
+  pageTitle: {
+    fontSize: '1.8rem',
+    fontWeight: 'bold',
+    color: '#2c5aa0',
+    margin: '0 0 20px 0',
   },
-  sidebarButton: {
-    background: "none",
-    border: "none",
-    color: "white",
-    padding: "12px 0",
-    cursor: "pointer",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "5px",
-    borderRadius: "8px",
+  clienteInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
   },
-  sidebarIcon: { fontSize: "20px" },
-  sidebarText: { fontSize: "11px" },
-  mainContent: {
+  clienteDetails: {
     flex: 1,
-    display: "flex",
-    flexDirection: "column",
   },
-  header: {
-    backgroundColor: "white",
-    padding: "15px 30px",
-    borderBottom: "1px solid #eee",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+  clienteNome: {
+    fontSize: '1.2rem',
+    fontWeight: '600',
+    color: '#333',
+    margin: '0 0 5px 0',
   },
-  headerTitle: {
-    fontSize: "1.5rem",
-    color: SECONDARY_COLOR,
+  clienteDescricao: {
+    fontSize: '0.95rem',
+    color: '#666',
     margin: 0,
   },
-  profileLink: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
+  mainContent: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 400px',
+    gap: '20px',
   },
-  profileName: {
-    fontSize: "1rem",
-    fontWeight: "500",
+  chatArea: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '25px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+    display: 'flex',
+    flexDirection: 'column',
+    height: 'calc(100vh - 250px)',
   },
-  profilePic: {
-    width: "40px",
-    height: "40px",
-    borderRadius: "50%",
-    border: `2px solid ${PRIMARY_COLOR}`,
+  sectionTitle: {
+    fontSize: '1.2rem',
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: '15px',
   },
-  chatLayout: {
-    display: "grid",
-    gridTemplateColumns: "180px 1fr 350px",
-    height: "calc(100vh - 70px)",
-    overflow: "hidden",
-  },
-  clientsColumn: {
-    backgroundColor: "#fff",
-    padding: "15px",
-    borderRight: "1px solid #f0f0f0",
-    overflowY: "auto",
-  },
-  clientsTitle: {
-    fontSize: "1rem",
-    color: SECONDARY_COLOR,
-    borderBottom: "1px solid #f0f0f0",
-    paddingBottom: "10px",
-    marginBottom: "10px",
-    fontWeight: "bold",
-  },
-  clientCard: {
-    backgroundColor: "#fff",
-    padding: "10px",
-    borderRadius: "8px",
-    marginBottom: "8px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-    border: "1px solid #eee",
-  },
-  chatColumn: {
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "white",
-    borderRight: "1px solid #f0f0f0",
-  },
-  chatHeader: {
-    padding: "15px 20px",
-    borderBottom: "1px solid #eee",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: LIGHT_GREY,
-  },
-  callActions: {
-    display: "flex",
-    gap: "10px",
-  },
-  callButton: {
-    padding: "6px 10px",
-    background: "none",
-    border: "1px solid #ccc",
-    borderRadius: "20px",
-    color: SECONDARY_COLOR,
-    fontWeight: "500",
-    cursor: "pointer",
-    fontSize: "0.8rem",
-  },
-  messagesArea: {
+  chatMessages: {
     flex: 1,
-    padding: "20px",
-    overflowY: "auto",
-    backgroundColor: "#fcfcfc",
-    display: "flex",
-    flexDirection: "column",
+    overflowY: 'auto',
+    marginBottom: '15px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
   },
-  messageForm: {
-    padding: "10px 20px",
-    borderTop: "1px solid #eee",
-    display: "flex",
-    gap: "10px",
-    backgroundColor: "white",
+  consultorMessage: {
+    backgroundColor: '#eaf2ff',
+    padding: '10px 15px',
+    borderRadius: '12px',
+    alignSelf: 'flex-start',
+    maxWidth: '70%',
   },
-  messageInput: {
+  clientMessage: {
+    backgroundColor: '#e8f5e9',
+    padding: '10px 15px',
+    borderRadius: '12px',
+    alignSelf: 'flex-end',
+    maxWidth: '70%',
+  },
+  chatInput: {
+    padding: '12px',
+    border: '1px solid #ddd',
+    borderRadius: '8px',
+    fontSize: '14px',
+    outline: 'none',
+  },
+  salesSidebar: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '25px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+    height: 'fit-content',
+  },
+  cartSection: {
+    borderBottom: '1px solid #e9ecef',
+    paddingBottom: '15px',
+  },
+  cartTitle: {
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: '15px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  cartList: {
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px',
+  },
+  cartItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '8px',
+    backgroundColor: '#f8f9fa',
+    borderRadius: '6px',
+    fontSize: '14px',
+  },
+  cartItemInfo: {
     flex: 1,
-    padding: "10px 15px",
-    border: "1px solid #ddd",
-    borderRadius: "20px",
-    fontSize: "0.9rem",
-    outline: "none",
   },
-  sendButton: {
-    padding: "10px 15px",
-    backgroundColor: PRIMARY_COLOR,
-    color: "white",
-    border: "none",
-    borderRadius: "20px",
-    cursor: "pointer",
-    fontWeight: "bold",
+  removeButton: {
+    backgroundColor: '#dc3545',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    padding: '4px 8px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
   },
-  productsColumn: {
-    backgroundColor: "#fff",
-    padding: "20px 15px",
-    display: "flex",
-    flexDirection: "column",
-    overflowY: "auto",
+  emptyCart: {
+    textAlign: 'center',
+    color: '#999',
+    fontSize: '14px',
+    padding: '20px 0',
   },
-  productsTitle: {
-    fontSize: "1.2rem",
-    color: SECONDARY_COLOR,
-    borderBottom: "1px solid #eee",
-    paddingBottom: "10px",
-    marginBottom: "15px",
+  cartTotal: {
+    fontSize: '1.1rem',
+    fontWeight: 'bold',
+    color: '#28a745',
+    marginTop: '10px',
+    textAlign: 'right',
   },
-  searchBox: {
-    marginBottom: "15px",
+  productTest: {
+    borderBottom: '1px solid #e9ecef',
+    paddingBottom: '15px',
   },
-  searchInput: {
-    width: "100%",
-    padding: "10px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    outline: "none",
+  testTitle: {
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: '10px',
   },
-  productList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-    marginBottom: "15px",
-  },
-  productCard: {
-    backgroundColor: "#f8f9fa",
-    padding: "12px",
-    borderRadius: "8px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    border: "1px solid #eee",
-  },
-  productInfo: {
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
+  testButtons: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '6px',
   },
   addButton: {
-    padding: "8px 12px",
-    backgroundColor: PRIMARY_COLOR,
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontSize: "0.85rem",
-    fontWeight: "600",
+    backgroundColor: '#2c5aa0',
+    color: 'white',
+    border: 'none',
+    padding: '8px 12px',
+    borderRadius: '6px',
+    fontSize: '13px',
+    cursor: 'pointer',
+    textAlign: 'left',
+  },
+  divider: {
+    height: '1px',
+    backgroundColor: '#e9ecef',
+  },
+  finalizeSection: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+  },
+  finalizeButton: {
+    backgroundColor: '#28a745',
+    color: 'white',
+    border: 'none',
+    padding: '14px 20px',
+    borderRadius: '8px',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s',
+  },
+  successFeedback: {
+    backgroundColor: '#e8f5e9',
+    padding: '15px',
+    borderRadius: '8px',
+    textAlign: 'center',
+  },
+  successTitle: {
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    color: '#28a745',
+    marginBottom: '8px',
+  },
+  successText: {
+    fontSize: '14px',
+    color: '#666',
+    marginBottom: '15px',
+  },
+  qrContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '10px',
+    marginBottom: '15px',
+  },
+  vendaIdLabel: {
+    fontSize: '12px',
+    color: '#666',
+  },
+  summaryButton: {
+    backgroundColor: '#2c5aa0',
+    color: 'white',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  errorFeedback: {
+    backgroundColor: '#fff5f5',
+    padding: '15px',
+    borderRadius: '8px',
+    textAlign: 'center',
+  },
+  errorTitle: {
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    color: '#dc3545',
+    marginBottom: '8px',
+  },
+  errorText: {
+    fontSize: '14px',
+    color: '#666',
+    marginBottom: '15px',
+  },
+  retryButton: {
+    backgroundColor: '#ffc107',
+    color: '#333',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  actions: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  whatsappButton: {
+    backgroundColor: '#25D366',
+    color: 'white',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '8px',
+  },
+  endButton: {
+    backgroundColor: '#6c757d',
+    color: 'white',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
   },
 };
 

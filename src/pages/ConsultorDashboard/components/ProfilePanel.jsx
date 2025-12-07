@@ -1,468 +1,579 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// app-frontend/src/pages/ConsultorDashboard/components/ProfilePanel.jsx
 
-// --- CONSTANTES DE ESTILO COMPARTILHADAS ---
-const PRIMARY_COLOR = "#007bff";
-const SECONDARY_COLOR = "#495057";
-const LIGHT_GREY = "#f8f9fa";
+import React, { useState, useRef } from 'react';
+import { FaUserCircle, FaUpload, FaFileAlt, FaSignOutAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-// Mock data - substitua pelos dados reais do seu backend
-const mockProfile = {
-  name: "João Consultor",
-  email: "joao@consultor.com",
-  profilePhoto: "/images/profile.jpg",
-  stores: ["Magazine X (Eletrônicos)", "Loja Y (Decoração)"],
-  segments: ["Eletrodomésticos", "Móveis"],
-  bankData: "Banco 341 - Ag. 1234 - C/C 56789-0",
-  cvStatus: "Completo",
-};
+const CONSULTOR_PRIMARY = "#2c5aa0";
+const CONSULTOR_LIGHT_BG = "#eaf2ff";
 
-const ProfilePanel = () => {
+const ProfilePanel = ({ consultorId }) => {
   const navigate = useNavigate();
-  const [showBankModal, setShowBankModal] = useState(false);
-  const [showCVModal, setShowCVModal] = useState(false);
-  const [password, setPassword] = useState("");
-  const userName = localStorage.getItem("userName") || mockProfile.name;
+  const fileInputRef = useRef(null);
+  
+  // Estado do perfil
+  const [perfil, setPerfil] = useState({
+    nome: 'Carlos Mendes',
+    email: 'carlos.mendes@email.com',
+    telefone: '(11) 98765-4321',
+    cpf: '123.456.789-00',
+    dataNascimento: '15/03/1990',
+    cidade: 'São Paulo',
+    estado: 'SP',
+    bio: 'Consultor especializado em eletrônicos e tecnologia. 5 anos de experiência em vendas.',
+    curriculoUrl: '/curriculos/carlos_mendes_cv.pdf',
+    curriculoNome: 'carlos_mendes_cv.pdf',
+    dataUploadCurriculo: '2024-01-10',
+  });
 
-  const handleBankUpdate = (e) => {
-    e.preventDefault();
-    // Lógica para atualizar dados bancários
-    console.log("Atualizando dados bancários com senha:", password);
-    setShowBankModal(false);
-    setPassword("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedPerfil, setEditedPerfil] = useState(perfil);
+  const [uploadingCurriculo, setUploadingCurriculo] = useState(false);
+
+  const handleLogout = () => {
+    if (window.confirm('Tem certeza que deseja sair?')) {
+      // Limpar dados de autenticação
+      localStorage.removeItem('consultorToken');
+      localStorage.removeItem('consultorId');
+      localStorage.removeItem('consultorData');
+      
+      // Redirecionar para login
+      navigate('/login');
+    }
   };
 
-  const handleCVUpdate = (e) => {
-    e.preventDefault();
-    // Lógica para atualizar currículo
-    console.log("Atualizando currículo com senha:", password);
-    setShowCVModal(false);
-    setPassword("");
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Validar tipo de arquivo
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('❌ Formato não permitido. Envie apenas PDF ou DOC/DOCX');
+      return;
+    }
+
+    // Validar tamanho (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('❌ Arquivo muito grande. Tamanho máximo: 5MB');
+      return;
+    }
+
+    setUploadingCurriculo(true);
+
+    try {
+      // Simular upload
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // TODO: Implementar upload real para API
+      // const formData = new FormData();
+      // formData.append('curriculo', file);
+      // const response = await fetch(`${API_URL}/api/consultores/${consultorId}/curriculo`, {
+      //   method: 'POST',
+      //   body: formData
+      // });
+
+      setPerfil({
+        ...perfil,
+        curriculoUrl: URL.createObjectURL(file),
+        curriculoNome: file.name,
+        dataUploadCurriculo: new Date().toISOString().split('T')[0],
+      });
+
+      alert('✅ Currículo atualizado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao fazer upload:', error);
+      alert('❌ Erro ao atualizar currículo. Tente novamente.');
+    } finally {
+      setUploadingCurriculo(false);
+    }
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    setEditedPerfil(perfil);
+  };
+
+  const handleSave = async () => {
+    try {
+      // TODO: Salvar na API
+      // await fetch(`${API_URL}/api/consultores/${consultorId}`, {
+      //   method: 'PUT',
+      //   body: JSON.stringify(editedPerfil)
+      // });
+
+      setPerfil(editedPerfil);
+      setIsEditing(false);
+      alert('✅ Perfil atualizado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar:', error);
+      alert('❌ Erro ao salvar perfil');
+    }
+  };
+
+  const handleCancel = () => {
+    setEditedPerfil(perfil);
+    setIsEditing(false);
   };
 
   return (
-    <div style={styles.appContainer}>
-      {/* Menu Lateral */}
-      <nav style={styles.sidebar}>
-        <div style={styles.sidebarContent}>
-          <button
-            onClick={() => navigate("/dashboard")}
-            style={styles.sidebarButton}
-          >
-            <span style={styles.sidebarIcon}>🏠</span>
-            <span style={styles.sidebarText}>Home</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/chat")}
-            style={styles.sidebarButton}
-          >
-            <span style={styles.sidebarIcon}>💬</span>
-            <span style={styles.sidebarText}>Chat</span>
-          </button>
-
-          <button
-            onClick={() => navigate("/analytics")}
-            style={styles.sidebarButton}
-          >
-            <span style={styles.sidebarIcon}>📊</span>
-            <span style={styles.sidebarText}>Analítico</span>
-          </button>
-
-          <div style={{ ...styles.sidebarButton, backgroundColor: "#0056b3" }}>
-            <span style={styles.sidebarIcon}>👤</span>
-            <span style={styles.sidebarText}>Perfil</span>
+    <div style={styles.container}>
+      {/* Header */}
+      <div style={styles.header}>
+        <div style={styles.headerLeft}>
+          <FaUserCircle size={60} color={CONSULTOR_PRIMARY} />
+          <div>
+            <h2 style={styles.nome}>{perfil.nome}</h2>
+            <p style={styles.email}>{perfil.email}</p>
           </div>
         </div>
-      </nav>
+        
+        <div style={styles.headerActions}>
+          {!isEditing ? (
+            <>
+              <button onClick={handleEdit} style={styles.editButton}>
+                <FaEdit /> Editar Perfil
+              </button>
+              <button onClick={handleLogout} style={styles.logoutButton}>
+                <FaSignOutAlt /> Sair
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={handleSave} style={styles.saveButton}>
+                <FaSave /> Salvar
+              </button>
+              <button onClick={handleCancel} style={styles.cancelButton}>
+                <FaTimes /> Cancelar
+              </button>
+            </>
+          )}
+        </div>
+      </div>
 
-      <main style={styles.mainContent}>
-        {/* Header */}
-        <header style={styles.header}>
-          <h1 style={styles.headerTitle}>Meu Perfil</h1>
-          <div style={styles.profileLink}>
-            <span style={styles.profileName}>{userName}</span>
-            <img
-              src="https://placehold.co/40x40/007bff/ffffff?text=C"
-              alt="Foto do Consultor"
-              style={styles.profilePic}
-            />
-          </div>
-        </header>
-
-        <div style={styles.container}>
-          {/* Cabeçalho com foto de perfil */}
-          <div style={styles.profileHeader}>
-            <div style={styles.profilePhotoContainer}>
-              <img
-                src={mockProfile.profilePhoto}
-                alt="Foto do perfil"
-                style={styles.profilePhoto}
-                onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/120x120/007bff/ffffff?text=U";
-                }}
+      <div style={styles.content}>
+        {/* Coluna Esquerda - Informações Pessoais */}
+        <div style={styles.leftColumn}>
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>📋 Informações Pessoais</h3>
+            
+            <div style={styles.infoGrid}>
+              <InfoField 
+                label="Nome Completo"
+                value={isEditing ? editedPerfil.nome : perfil.nome}
+                isEditing={isEditing}
+                onChange={(value) => setEditedPerfil({...editedPerfil, nome: value})}
+              />
+              
+              <InfoField 
+                label="Email"
+                value={isEditing ? editedPerfil.email : perfil.email}
+                isEditing={isEditing}
+                onChange={(value) => setEditedPerfil({...editedPerfil, email: value})}
+              />
+              
+              <InfoField 
+                label="Telefone"
+                value={isEditing ? editedPerfil.telefone : perfil.telefone}
+                isEditing={isEditing}
+                onChange={(value) => setEditedPerfil({...editedPerfil, telefone: value})}
+              />
+              
+              <InfoField 
+                label="CPF"
+                value={perfil.cpf}
+                isEditing={false}
+              />
+              
+              <InfoField 
+                label="Data de Nascimento"
+                value={perfil.dataNascimento}
+                isEditing={false}
+              />
+              
+              <InfoField 
+                label="Cidade"
+                value={isEditing ? editedPerfil.cidade : perfil.cidade}
+                isEditing={isEditing}
+                onChange={(value) => setEditedPerfil({...editedPerfil, cidade: value})}
+              />
+              
+              <InfoField 
+                label="Estado"
+                value={isEditing ? editedPerfil.estado : perfil.estado}
+                isEditing={isEditing}
+                onChange={(value) => setEditedPerfil({...editedPerfil, estado: value})}
               />
             </div>
-            <div style={styles.profileInfo}>
-              <h1 style={styles.name}>{mockProfile.name}</h1>
-              <p style={styles.email}>{mockProfile.email}</p>
-            </div>
           </div>
 
-          {/* Lojas e Segmentos */}
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Lojas e Segmentos Associados</h3>
-            <div style={styles.infoGrid}>
-              <div style={styles.infoItem}>
-                <strong>Lojas:</strong>
-                <div style={styles.tags}>
-                  {mockProfile.stores.map((store, index) => (
-                    <span key={index} style={styles.tag}>
-                      {store}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div style={styles.infoItem}>
-                <strong>Segmentos:</strong>
-                <div style={styles.tags}>
-                  {mockProfile.segments.map((segment, index) => (
-                    <span key={index} style={styles.tag}>
-                      {segment}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
+            <h3 style={styles.sectionTitle}>💬 Biografia</h3>
+            {isEditing ? (
+              <textarea
+                value={editedPerfil.bio}
+                onChange={(e) => setEditedPerfil({...editedPerfil, bio: e.target.value})}
+                style={styles.bioTextarea}
+                rows={4}
+              />
+            ) : (
+              <p style={styles.bioText}>{perfil.bio}</p>
+            )}
           </div>
-
-          {/* Dados Bancários */}
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Dados Bancários</h3>
-            <div style={styles.secureInfo}>
-              <span style={styles.secureText}>•••• •••• •••• ••••</span>
-              <button
-                style={styles.editButton}
-                onClick={() => setShowBankModal(true)}
-              >
-                Visualizar/Atualizar
-              </button>
-            </div>
-          </div>
-
-          {/* Currículo */}
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>Currículo</h3>
-            <div style={styles.secureInfo}>
-              <span>
-                Status: <strong>{mockProfile.cvStatus}</strong>
-              </span>
-              <button
-                style={styles.editButton}
-                onClick={() => setShowCVModal(true)}
-              >
-                Visualizar/Atualizar
-              </button>
-            </div>
-          </div>
-
-          {/* Modal para Dados Bancários */}
-          {showBankModal && (
-            <div style={styles.modalOverlay}>
-              <div style={styles.modal}>
-                <h3>Atualizar Dados Bancários</h3>
-                <form onSubmit={handleBankUpdate}>
-                  <div style={styles.formGroup}>
-                    <label>Confirme sua senha para continuar:</label>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      style={styles.input}
-                      placeholder="Digite sua senha"
-                      required
-                    />
-                  </div>
-                  <div style={styles.modalActions}>
-                    <button
-                      type="button"
-                      style={styles.cancelButton}
-                      onClick={() => {
-                        setShowBankModal(false);
-                        setPassword("");
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                    <button type="submit" style={styles.confirmButton}>
-                      Confirmar
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
-
-          {/* Modal para Currículo */}
-          {showCVModal && (
-            <div style={styles.modalOverlay}>
-              <div style={styles.modal}>
-                <h3>Atualizar Currículo</h3>
-                <form onSubmit={handleCVUpdate}>
-                  <div style={styles.formGroup}>
-                    <label>Confirme sua senha para continuar:</label>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      style={styles.input}
-                      placeholder="Digite sua senha"
-                      required
-                    />
-                  </div>
-                  <div style={styles.modalActions}>
-                    <button
-                      type="button"
-                      style={styles.cancelButton}
-                      onClick={() => {
-                        setShowCVModal(false);
-                        setPassword("");
-                      }}
-                    >
-                      Cancelar
-                    </button>
-                    <button type="submit" style={styles.confirmButton}>
-                      Confirmar
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
         </div>
-      </main>
+
+        {/* Coluna Direita - Currículo e Documentos */}
+        <div style={styles.rightColumn}>
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>📄 Currículo</h3>
+            
+            {perfil.curriculoUrl ? (
+              <div style={styles.curriculoCard}>
+                <div style={styles.curriculoIcon}>
+                  <FaFileAlt size={40} color={CONSULTOR_PRIMARY} />
+                </div>
+                <div style={styles.curriculoInfo}>
+                  <p style={styles.curriculoNome}>{perfil.curriculoNome}</p>
+                  <p style={styles.curriculoData}>
+                    Enviado em: {new Date(perfil.dataUploadCurriculo).toLocaleDateString('pt-BR')}
+                  </p>
+                </div>
+                <a 
+                  href={perfil.curriculoUrl} 
+                  download 
+                  style={styles.downloadLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  📥 Baixar
+                </a>
+              </div>
+            ) : (
+              <div style={styles.noCurriculoCard}>
+                <FaFileAlt size={40} color="#ccc" />
+                <p style={styles.noCurriculoText}>Nenhum currículo enviado</p>
+              </div>
+            )}
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileUpload}
+              style={styles.fileInput}
+            />
+
+            <button
+              onClick={() => fileInputRef.current.click()}
+              disabled={uploadingCurriculo}
+              style={styles.uploadButton}
+            >
+              <FaUpload />
+              {uploadingCurriculo ? 'Enviando...' : 'Substituir Currículo'}
+            </button>
+
+            <p style={styles.uploadHint}>
+              Formatos aceitos: PDF, DOC, DOCX (máx. 5MB)
+            </p>
+          </div>
+
+          <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>📊 Estatísticas Rápidas</h3>
+            <div style={styles.statsGrid}>
+              <StatCard icon="🛒" label="Vendas no Mês" value="156" />
+              <StatCard icon="💰" label="Comissão Acumulada" value="R$ 6.240" />
+              <StatCard icon="⭐" label="Avaliação Média" value="4.8" />
+              <StatCard icon="🏪" label="Lojas Ativas" value="3" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
+// Componente auxiliar para campos de informação
+const InfoField = ({ label, value, isEditing, onChange }) => (
+  <div style={styles.infoField}>
+    <label style={styles.infoLabel}>{label}</label>
+    {isEditing ? (
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange && onChange(e.target.value)}
+        style={styles.infoInput}
+      />
+    ) : (
+      <p style={styles.infoValue}>{value}</p>
+    )}
+  </div>
+);
+
+// Componente auxiliar para cards de estatística
+const StatCard = ({ icon, label, value }) => (
+  <div style={styles.statCard}>
+    <span style={styles.statIcon}>{icon}</span>
+    <p style={styles.statLabel}>{label}</p>
+    <p style={styles.statValue}>{value}</p>
+  </div>
+);
+
 const styles = {
-  // LAYOUT ESTRUTURAL PADRÃO
-  appContainer: {
-    display: "flex",
-    minHeight: "100vh",
-    backgroundColor: LIGHT_GREY,
-    fontFamily: "Inter, sans-serif",
-  },
-  sidebar: {
-    width: "80px",
-    backgroundColor: SECONDARY_COLOR,
-    padding: "20px 0",
-    flexShrink: 0,
-    boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
-  },
-  sidebarContent: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "25px",
-  },
-  sidebarButton: {
-    background: "none",
-    border: "none",
-    color: "white",
-    padding: "12px 0",
-    cursor: "pointer",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "5px",
-    borderRadius: "8px",
-    transition: "background-color 0.2s",
-  },
-  sidebarIcon: { fontSize: "20px" },
-  sidebarText: { fontSize: "11px" },
-  mainContent: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
+  container: {
+    backgroundColor: '#f8f9fa',
+    minHeight: '100vh',
+    padding: '25px',
   },
   header: {
-    backgroundColor: "white",
-    padding: "15px 30px",
-    borderBottom: "1px solid #eee",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '25px',
+    marginBottom: '25px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '20px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
   },
-  headerTitle: {
-    fontSize: "1.5rem",
-    color: SECONDARY_COLOR,
-    margin: 0,
+  headerLeft: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px',
   },
-  profileLink: {
-    display: "flex",
-    alignItems: "center",
-    textDecoration: "none",
-    color: SECONDARY_COLOR,
-    gap: "10px",
-  },
-  profileName: {
-    fontSize: "1rem",
-    fontWeight: "500",
-  },
-  profilePic: {
-    width: "40px",
-    height: "40px",
-    borderRadius: "50%",
-    border: `2px solid ${PRIMARY_COLOR}`,
-  },
-  container: {
-    padding: "30px",
-    backgroundColor: "white",
-    flex: 1,
-    maxWidth: "800px",
-    margin: "0 auto",
-    width: "100%",
-  },
-  profileHeader: {
-    display: "flex",
-    alignItems: "center",
-    marginBottom: "40px",
-    paddingBottom: "20px",
-    borderBottom: "2px solid #eee",
-  },
-  profilePhotoContainer: {
-    marginRight: "20px",
-  },
-  profilePhoto: {
-    width: "120px",
-    height: "120px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    border: `4px solid ${PRIMARY_COLOR}`,
-  },
-  profileInfo: {
-    flex: 1,
-  },
-  name: {
-    fontSize: "28px",
-    margin: "0 0 5px 0",
-    color: "#343a40",
+  nome: {
+    fontSize: '1.8rem',
+    fontWeight: 'bold',
+    color: '#333',
+    margin: '0 0 5px 0',
   },
   email: {
-    fontSize: "16px",
-    color: "#666",
+    fontSize: '1rem',
+    color: '#666',
     margin: 0,
   },
-  section: {
-    marginBottom: "30px",
-    padding: "20px",
-    border: "1px solid #e9ecef",
-    borderRadius: "8px",
-    backgroundColor: "#f8f9fa",
-  },
-  sectionTitle: {
-    margin: "0 0 15px 0",
-    color: PRIMARY_COLOR,
-    fontSize: "18px",
-    fontWeight: "600",
-  },
-  infoGrid: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-  },
-  infoItem: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-  },
-  tags: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "8px",
-  },
-  tag: {
-    backgroundColor: PRIMARY_COLOR,
-    color: "white",
-    padding: "5px 12px",
-    borderRadius: "20px",
-    fontSize: "14px",
-  },
-  secureInfo: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  secureText: {
-    fontSize: "18px",
-    letterSpacing: "2px",
-    color: "#666",
+  headerActions: {
+    display: 'flex',
+    gap: '10px',
   },
   editButton: {
-    padding: "10px 20px",
-    backgroundColor: PRIMARY_COLOR,
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontSize: "14px",
-    fontWeight: "500",
-    transition: "background-color 0.2s",
+    backgroundColor: CONSULTOR_PRIMARY,
+    color: 'white',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14px',
   },
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
+  logoutButton: {
+    backgroundColor: '#dc3545',
+    color: 'white',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14px',
   },
-  modal: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "8px",
-    width: "400px",
-    maxWidth: "90%",
-    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-  },
-  formGroup: {
-    marginBottom: "20px",
-  },
-  input: {
-    width: "100%",
-    padding: "12px",
-    border: "1px solid #ddd",
-    borderRadius: "6px",
-    fontSize: "16px",
-    marginTop: "8px",
-    boxSizing: "border-box",
-  },
-  modalActions: {
-    display: "flex",
-    gap: "10px",
-    justifyContent: "flex-end",
+  saveButton: {
+    backgroundColor: '#28a745',
+    color: 'white',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14px',
   },
   cancelButton: {
-    padding: "10px 20px",
-    backgroundColor: "#6c757d",
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
+    backgroundColor: '#6c757d',
+    color: 'white',
+    border: 'none',
+    padding: '12px 20px',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14px',
   },
-  confirmButton: {
-    padding: "10px 20px",
-    backgroundColor: PRIMARY_COLOR,
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
+  content: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 400px',
+    gap: '25px',
+  },
+  leftColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '25px',
+  },
+  rightColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '25px',
+  },
+  section: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '25px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+  },
+  sectionTitle: {
+    fontSize: '1.2rem',
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: '20px',
+  },
+  infoGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '20px',
+  },
+  infoField: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '5px',
+  },
+  infoLabel: {
+    fontSize: '13px',
+    fontWeight: '600',
+    color: '#666',
+  },
+  infoValue: {
+    fontSize: '15px',
+    color: '#333',
+    margin: 0,
+  },
+  infoInput: {
+    padding: '10px',
+    border: '1px solid #ddd',
+    borderRadius: '6px',
+    fontSize: '14px',
+    outline: 'none',
+  },
+  bioText: {
+    fontSize: '15px',
+    color: '#666',
+    lineHeight: '1.6',
+  },
+  bioTextarea: {
+    width: '100%',
+    padding: '12px',
+    border: '1px solid #ddd',
+    borderRadius: '6px',
+    fontSize: '14px',
+    outline: 'none',
+    fontFamily: 'inherit',
+    resize: 'vertical',
+  },
+  curriculoCard: {
+    backgroundColor: CONSULTOR_LIGHT_BG,
+    borderRadius: '10px',
+    padding: '20px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
+    marginBottom: '15px',
+  },
+  curriculoIcon: {
+    flexShrink: 0,
+  },
+  curriculoInfo: {
+    flex: 1,
+  },
+  curriculoNome: {
+    fontSize: '14px',
+    fontWeight: '600',
+    color: '#333',
+    margin: '0 0 5px 0',
+  },
+  curriculoData: {
+    fontSize: '12px',
+    color: '#666',
+    margin: 0,
+  },
+  downloadLink: {
+    color: CONSULTOR_PRIMARY,
+    textDecoration: 'none',
+    fontWeight: '600',
+    fontSize: '14px',
+  },
+  noCurriculoCard: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: '10px',
+    padding: '30px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '10px',
+    marginBottom: '15px',
+  },
+  noCurriculoText: {
+    fontSize: '14px',
+    color: '#999',
+    margin: 0,
+  },
+  fileInput: {
+    display: 'none',
+  },
+  uploadButton: {
+    backgroundColor: CONSULTOR_PRIMARY,
+    color: 'white',
+    border: 'none',
+    padding: '14px 20px',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    fontSize: '15px',
+    width: '100%',
+  },
+  uploadHint: {
+    fontSize: '12px',
+    color: '#999',
+    textAlign: 'center',
+    marginTop: '10px',
+  },
+  statsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: '15px',
+  },
+  statCard: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: '10px',
+    padding: '15px',
+    textAlign: 'center',
+  },
+  statIcon: {
+    fontSize: '24px',
+    display: 'block',
+    marginBottom: '8px',
+  },
+  statLabel: {
+    fontSize: '12px',
+    color: '#666',
+    margin: '0 0 5px 0',
+  },
+  statValue: {
+    fontSize: '1.3rem',
+    fontWeight: 'bold',
+    color: CONSULTOR_PRIMARY,
+    margin: 0,
   },
 };
 

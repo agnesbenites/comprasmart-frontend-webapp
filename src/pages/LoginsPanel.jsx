@@ -1,5 +1,5 @@
 // app-frontend/src/App.jsx
-// VERSÃO FINAL COMPLETA - Inline components + Todas as rotas
+// VERSÃO COMPLETA - Mantendo todos os componentes inline + novas rotas
 
 import React, { useState, useEffect } from "react";
 import {
@@ -10,12 +10,19 @@ import {
   useNavigate,
   useLocation,
   Navigate,
-  useParams,
 } from "react-router-dom";
 
 // --- IMPORTANDO COMPONENTES EXTERNOS ---
 import Landingpage from "./pages/Landingpage";
 import LoginPage from "./pages/LoginPage";
+import TermsPage from "./pages/TermsPage";
+
+// --- CONSULTOR COMPONENTES (se existirem como arquivos separados) ---
+// Descomente conforme você for criando os arquivos
+// import ConsultorDashboard from "./pages/ConsultorDashboard/pages/ConsultorDashboard";
+// import QueuePanel from "./pages/ConsultorDashboard/components/QueuePanel";
+// import ChatPanel from "./pages/ConsultorDashboard/components/ChatPanel";
+// ... etc
 
 // --- CONSTANTES GLOBAIS ---
 const API_URL = "https://plataforma-consultoria-mvp.onrender.com";
@@ -31,39 +38,8 @@ const MOCK_CONSULTOR_INFO = {
   ratingMedio: 4.8,
 };
 
-const MOCK_CLIENTE_DATA = {
-  id: "c123456",
-  nome: "Cliente Exemplo",
-  email: "cliente.exemplo@email.com",
-  status: "Ativo",
-  descricao: "Em busca de produtos",
-};
-
-const SIMULATED_PRODUCTS = [
-  { id: "prod1", name: "Smartwatch X", price: 350.0 },
-  { id: "prod2", name: "Fone Bluetooth", price: 120.0 },
-  { id: "prod3", name: "Capa Protetora", price: 45.0 },
-];
-
 // =======================================================================
-// === MENU DO CONSULTOR (COMPLETO) =====================================
-// =======================================================================
-const CONSULTOR_MENU_ITEMS = [
-  { title: "🏠 Home", icon: "🏠", rota: "/consultor/dashboard" },
-  { title: "📞 Fila de Atendimento", icon: "📞", rota: "/consultor/dashboard/fila" },
-  { title: "💬 Atendimento Ativo", icon: "💬", rota: "/consultor/dashboard/chat" },
-  { title: "📖 Histórico", icon: "📖", rota: "/consultor/dashboard/historico" },
-  { title: "💰 Comissões", icon: "💰", rota: "/consultor/dashboard/analytics" },
-  { title: "🏪 Minhas Lojas", icon: "🏪", rota: "/consultor/dashboard/lojas" },
-  { title: "⭐ Avaliações", icon: "⭐", rota: "/consultor/dashboard/reviews" },
-  { title: "🎓 Treinamentos", icon: "🎓", rota: "/consultor/dashboard/treinamentos" },
-  { title: "🤝 Indicações", icon: "🤝", rota: "/consultor/dashboard/indicacoes" },
-  { title: "📊 Minhas Vendas", icon: "📊", rota: "/consultor/dashboard/vendas" },
-  { title: "👤 Perfil", icon: "👤", rota: "/consultor/dashboard/profile" },
-];
-
-// =======================================================================
-// === PLACEHOLDERS ======================================================
+// === PLACEHOLDERS E UTILITÁRIOS =======================================
 // =======================================================================
 const PlaceholderPage = ({ title, children }) => (
   <div className="p-8 bg-white rounded-xl shadow-lg m-4">
@@ -78,61 +54,97 @@ const ProtectedRoute = ({ component: Component, redirectTo = "/login" }) => {
 };
 
 // =======================================================================
-// === LOGINSPANEL =======================================================
+// === LOGINSPANEL (não LoginsPage!) =====================================
 // =======================================================================
 const LoginsPanel = () => {
   const navigate = useNavigate();
 
+  const containerStyle = {
+    minHeight: "100vh",
+    backgroundColor: "#f8f9fa",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "40px 20px",
+    margin: 0,
+    fontFamily: "Inter, sans-serif",
+    width: "100%",
+    boxSizing: "border-box",
+  };
+
+  const contentWrapperStyle = {
+    textAlign: "center",
+    width: "100%",
+    maxWidth: "1000px",
+    padding: "50px",
+    borderRadius: "15px",
+    backgroundColor: "white",
+    boxShadow: "0 5px 20px rgba(0,0,0,0.1)",
+    boxSizing: "border-box",
+  };
+
+  const cardBaseStyle = {
+    padding: "40px 30px",
+    backgroundColor: "#f8f9fa",
+    borderRadius: "15px",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+    cursor: "pointer",
+    flex: "1 1 350px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "all 0.3s ease",
+    border: "4px solid transparent",
+  };
+
   return (
-    <div style={{
-      minHeight: "100vh",
-      backgroundColor: "#f8f9fa",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "40px 20px",
-    }}>
-      <div style={{
-        textAlign: "center",
-        maxWidth: "1000px",
-        padding: "50px",
-        borderRadius: "15px",
-        backgroundColor: "white",
-        boxShadow: "0 5px 20px rgba(0,0,0,0.1)",
-      }}>
-        <h1 style={{ color: "#2c5aa0", fontSize: "2.5rem" }}>Compra Smart</h1>
+    <div style={containerStyle}>
+      <div style={contentWrapperStyle}>
+        <img
+          src="/img/logo.png"
+          alt="Compra Smart"
+          style={{ width: 150, margin: "0 auto 20px" }}
+          onError={(e) => {
+            e.target.style.display = "none";
+          }}
+        />
+        <h1 style={{ color: "#2c5aa0", fontSize: "2.5rem", margin: 0 }}>
+          Compra Smart
+        </h1>
         <p style={{ color: "#666", marginTop: 8 }}>Sistema Inteligente de Consultoria</p>
 
         <div style={{ display: "flex", gap: 30, justifyContent: "center", marginTop: 40, flexWrap: "wrap" }}>
           <div
+            style={cardBaseStyle}
             onClick={() => navigate("/consultor/login")}
-            style={{
-              padding: "40px 30px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "15px",
-              cursor: "pointer",
-              flex: "1 1 350px",
-            }}
+            role="button"
+            tabIndex={0}
           >
             <div style={{ fontSize: 60, marginBottom: 20 }}>👨‍💼</div>
-            <h2 style={{ fontSize: "1.5rem", color: "#007bff" }}>Consultor</h2>
+            <h2 style={{ fontSize: "1.5rem", marginBottom: 8, color: "#007bff" }}>Consultor</h2>
             <p style={{ color: "#666" }}>Acesso ao sistema de consultoria de compras</p>
           </div>
 
           <div
+            style={cardBaseStyle}
             onClick={() => navigate("/lojista/escolha")}
-            style={{
-              padding: "40px 30px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "15px",
-              cursor: "pointer",
-              flex: "1 1 350px",
-            }}
+            role="button"
+            tabIndex={0}
           >
             <div style={{ fontSize: 60, marginBottom: 20 }}>🏪</div>
-            <h2 style={{ fontSize: "1.5rem", color: "#28a745" }}>Lojista</h2>
+            <h2 style={{ fontSize: "1.5rem", marginBottom: 8, color: "#28a745" }}>Lojista</h2>
             <p style={{ color: "#666" }}>Área administrativa e de vendas</p>
           </div>
+        </div>
+
+        <div style={{ marginTop: 30 }}>
+          <a
+            onClick={() => navigate("/vendedor/login")}
+            style={{ color: "#2c5aa0", textDecoration: "underline", cursor: "pointer", fontSize: "1.05rem" }}
+          >
+            Acesso Direto Vendedor
+          </a>
         </div>
       </div>
     </div>
@@ -142,6 +154,18 @@ const LoginsPanel = () => {
 // =======================================================================
 // === LAYOUT DO DASHBOARD (SIDEBAR) =====================================
 // =======================================================================
+const CONSULTOR_MENU_ITEMS = [
+  { title: "🏠 Home", icon: "🏠", rota: "/consultor/dashboard" },
+  { title: "📞 Fila de Atendimento", icon: "📞", rota: "/consultor/dashboard/fila" },
+  { title: "💬 Atendimento Ativo", icon: "💬", rota: "/consultor/dashboard/chat" },
+  { title: "📖 Histórico", icon: "📖", rota: "/consultor/dashboard/historico" },
+  { title: "💰 Comissões", icon: "💰", rota: "/consultor/dashboard/analytics" },
+  { title: "🏪 Minhas Lojas", icon: "🏪", rota: "/consultor/dashboard/lojas" },
+  { title: "⭐ Avaliações", icon: "⭐", rota: "/consultor/dashboard/reviews" },
+  { title: "🎓 Treinamentos", icon: "🎓", rota: "/consultor/dashboard/treinamentos" },
+  { title: "👤 Perfil", icon: "👤", rota: "/consultor/dashboard/profile" },
+];
+
 const DashboardLayout = () => {
   const location = useLocation();
   const currentPath = location.pathname;
@@ -150,18 +174,14 @@ const DashboardLayout = () => {
   const getMenuItemStyle = (rota) => {
     const isActive = currentPath === rota || (rota !== "/consultor/dashboard" && currentPath.startsWith(rota));
     return `flex items-center p-3 my-1 rounded-l-full mr-4 transition-all duration-200 text-sm ${
-      isActive
-        ? "bg-blue-100 font-bold text-blue-800 border-l-4 border-blue-800"
-        : "text-gray-600 hover:bg-blue-50 hover:text-blue-700"
+      isActive ? "bg-blue-100 font-bold text-blue-800 border-l-4 border-blue-800" : "text-gray-600 hover:bg-blue-50 hover:text-blue-700"
     }`;
   };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <aside className="w-64 bg-white shadow-xl flex-shrink-0">
-        <h2 className="text-2xl font-extrabold text-blue-800 p-6 text-center border-b border-gray-100">
-          Autônomo
-        </h2>
+        <h2 className="text-2xl font-extrabold text-blue-800 p-6 text-center border-b border-gray-100">Autônomo</h2>
         <nav className="mt-4">
           {CONSULTOR_MENU_ITEMS.map((item) => (
             <Link key={item.rota} to={item.rota} className={getMenuItemStyle(item.rota)}>
@@ -178,10 +198,7 @@ const DashboardLayout = () => {
             <h1 className="text-xl font-semibold text-blue-800">Painel do Consultor</h1>
             <p className="text-sm text-gray-500">Bem-vindo(a), {userName}</p>
           </div>
-          <Link
-            to="/consultor/dashboard/profile"
-            className="flex items-center gap-2 p-2 px-4 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
-          >
+          <Link to="/consultor/dashboard/profile" className="flex items-center gap-2 p-2 px-4 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors">
             👤 <span className="text-sm font-medium">Meu Perfil</span>
           </Link>
         </header>
@@ -195,10 +212,8 @@ const DashboardLayout = () => {
 };
 
 // =======================================================================
-// === COMPONENTES DO CONSULTOR ==========================================
+// === COMPONENTES DO CONSULTOR (HOME, FILA, CHAT) ========================
 // =======================================================================
-
-// --- MetricCard ---
 const MetricCard = ({ title, value, icon, color = "blue" }) => {
   const colorClasses = {
     blue: { bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-500" },
@@ -218,7 +233,6 @@ const MetricCard = ({ title, value, icon, color = "blue" }) => {
   );
 };
 
-// --- ConsultorHomePanel ---
 const ConsultorHomePanel = () => {
   const navigate = useNavigate();
   const consultorInfo = MOCK_CONSULTOR_INFO;
@@ -260,13 +274,7 @@ const ConsultorHomePanel = () => {
       <h2 className="text-2xl font-semibold text-blue-800 mb-4">🚀 Ações de Atendimento</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {atalhos.map((atalho, index) => (
-          <div
-            key={index}
-            onClick={() => navigate(atalho.rota)}
-            className={`bg-white p-6 rounded-xl shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-[1.02] border-l-4 ${
-              atalho.cor.includes("blue") ? "border-blue-500" : atalho.cor.includes("green") ? "border-green-500" : atalho.cor.includes("yellow") ? "border-yellow-500" : "border-teal-500"
-            }`}
-          >
+          <div key={index} onClick={() => navigate(atalho.rota)} className={`bg-white p-6 rounded-xl shadow-lg cursor-pointer transition-all duration-300 transform hover:scale-[1.02] border-l-4 ${atalho.cor.includes("blue") ? "border-blue-500" : atalho.cor.includes("green") ? "border-green-500" : atalho.cor.includes("yellow") ? "border-yellow-500" : "border-teal-500"}`}>
             <h3 className={`text-xl font-bold ${atalho.cor.includes("blue") ? "text-blue-700" : atalho.cor.includes("green") ? "text-green-700" : atalho.cor.includes("yellow") ? "text-yellow-700" : "text-teal-700"}`}>
               {atalho.titulo}
             </h3>
@@ -285,7 +293,6 @@ const ConsultorHomePanel = () => {
   );
 };
 
-// --- FilaPanel ---
 const FilaPanel = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState("disponivel");
@@ -351,13 +358,7 @@ const FilaPanel = () => {
         <h2 className="text-2xl font-bold text-blue-800 mb-4 md:mb-0">📞 Fila de Atendimento</h2>
 
         <div className="flex flex-wrap gap-3 items-center">
-          <button
-            onClick={toggleDisponibilidade}
-            className={`text-white font-semibold px-5 py-2 rounded-full text-sm transition-colors ${
-              status === "disponivel" ? "bg-green-600 hover:bg-green-700" : status === "ocupado" ? "bg-yellow-500 hover:bg-yellow-600 text-gray-900" : "bg-gray-500 hover:bg-gray-600"
-            }`}
-            disabled={atendimentosAtivos.length > 0}
-          >
+          <button onClick={toggleDisponibilidade} className={`text-white font-semibold px-5 py-2 rounded-full text-sm transition-colors ${status === "disponivel" ? "bg-green-600 hover:bg-green-700" : status === "ocupado" ? "bg-yellow-500 hover:bg-yellow-600 text-gray-900" : "bg-gray-500 hover:bg-gray-600"}`} disabled={atendimentosAtivos.length > 0}>
             {status === "disponivel" ? "✅ Disponível" : status === "ocupado" ? "⏳ Em Atendimento" : "📴 Offline"}
           </button>
 
@@ -372,6 +373,11 @@ const FilaPanel = () => {
         </div>
       </div>
 
+      <div className="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg mb-6 shadow-sm">
+        <p className="font-semibold text-sm mb-1">Aviso Importante:</p>
+        <p className="text-xs">Todas as interações podem ser gravadas para fins de qualidade e segurança.</p>
+      </div>
+
       {atendimentosAtivos.length > 0 && (
         <div className="mb-8">
           <h3 className="text-lg font-bold text-gray-700 mb-3">💬 Atendimentos em Andamento:</h3>
@@ -382,13 +388,9 @@ const FilaPanel = () => {
                   <p className="text-md font-bold text-blue-800">
                     {atendimento.tipo === "video" ? "📹" : atendimento.tipo === "voz" ? "📞" : "💬"} {atendimento.nomeVisivel ? atendimento.clienteNome : "Cliente Anônimo"}
                   </p>
-                  <p className="text-sm text-gray-600">
-                    {atendimento.loja} - {atendimento.setor}
-                  </p>
+                  <p className="text-sm text-gray-600">{atendimento.loja} - {atendimento.setor}</p>
                 </div>
-                <Link to={`/consultor/dashboard/chat?atendimentoId=${atendimento.id}`} className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition-colors">
-                  Abrir Chat
-                </Link>
+                <Link to={`/consultor/dashboard/chat?atendimentoId=${atendimento.id}`} className="bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-blue-700 transition-colors">Abrir Chat</Link>
               </div>
             ))}
           </div>
@@ -416,12 +418,8 @@ const FilaPanel = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <button onClick={() => aceitarChamada(chamada)} className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-green-700 transition-colors">
-                    ✅ Aceitar
-                  </button>
-                  <button onClick={() => recusarChamada(chamada.id)} className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-red-600 transition-colors">
-                    ❌ Recusar
-                  </button>
+                  <button onClick={() => aceitarChamada(chamada)} className="bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-green-700 transition-colors">✅ Aceitar</button>
+                  <button onClick={() => recusarChamada(chamada.id)} className="bg-red-500 text-white font-semibold py-2 px-4 rounded-lg text-sm hover:bg-red-600 transition-colors">❌ Recusar</button>
                 </div>
               </div>
             </div>
@@ -436,7 +434,6 @@ const FilaPanel = () => {
   );
 };
 
-// --- ChatPanel ---
 const ChatPanel = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
@@ -476,12 +473,8 @@ const ChatPanel = () => {
         <div className="md:col-span-2 bg-gray-50 p-4 rounded-xl">
           <p className="text-gray-600">Área de chat (simulada).</p>
           <div className="mt-4">
-            <button onClick={() => addToCart({ id: "prod1", name: "Smartwatch X", price: 350 })} className="bg-blue-600 text-white px-4 py-2 rounded mr-2">
-              Adicionar Smartwatch
-            </button>
-            <button onClick={() => addToCart({ id: "prod2", name: "Fone Bluetooth", price: 120 })} className="bg-green-600 text-white px-4 py-2 rounded">
-              Adicionar Fone
-            </button>
+            <button onClick={() => addToCart({ id: "prod1", name: "Smartwatch X", price: 350 })} className="bg-blue-600 text-white px-4 py-2 rounded mr-2">Adicionar Smartwatch</button>
+            <button onClick={() => addToCart({ id: "prod2", name: "Fone Bluetooth", price: 120 })} className="bg-green-600 text-white px-4 py-2 rounded">Adicionar Fone</button>
           </div>
         </div>
 
@@ -499,9 +492,7 @@ const ChatPanel = () => {
                   </div>
                   <div className="text-right">
                     <div>R$ {(item.price * item.quantity).toFixed(2)}</div>
-                    <button onClick={() => removeFromCart(item.id)} className="text-xs text-red-500 mt-1">
-                      Remover
-                    </button>
+                    <button onClick={() => removeFromCart(item.id)} className="text-xs text-red-500 mt-1">Remover</button>
                   </div>
                 </div>
               ))}
@@ -510,9 +501,7 @@ const ChatPanel = () => {
                   <span>Total</span>
                   <span>R$ {calculateTotal()}</span>
                 </div>
-                <button onClick={handleFinalizeSale} className="w-full mt-3 bg-indigo-600 text-white py-2 rounded">
-                  {saleStatus === "processing" ? "Processando..." : "Finalizar Venda"}
-                </button>
+                <button onClick={handleFinalizeSale} className="w-full mt-3 bg-indigo-600 text-white py-2 rounded">{saleStatus === "processing" ? "Processando..." : "Finalizar Venda"}</button>
               </div>
             </div>
           )}
@@ -522,78 +511,35 @@ const ChatPanel = () => {
   );
 };
 
-// --- AttendanceSummaryPanel ---
-const AttendanceSummaryPanel = () => {
-  const { vendaId } = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const { saleStatus, cart, clienteData } = location.state || {};
-
-  const isSaleSuccessful = saleStatus === "success" && vendaId && vendaId !== "novo";
-
-  return (
-    <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
-      <h1 className="text-3xl font-extrabold text-gray-800 mb-6">Resumo do Atendimento</h1>
-
-      <div className={`p-5 rounded-lg mb-8 ${isSaleSuccessful ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`}>
-        <h2 className="text-2xl font-bold mb-2">{isSaleSuccessful ? "✅ Venda Concluída" : "💬 Atendimento Encerrado"}</h2>
-        <p>{isSaleSuccessful ? `Venda ID: ${vendaId}` : "Sem venda registrada"}</p>
-      </div>
-
-      <div className="mb-8 p-4 bg-gray-50 rounded-lg">
-        <h3 className="text-xl font-semibold text-gray-700 mb-3">Detalhes do Cliente</h3>
-        <p>
-          <strong>Nome:</strong> {clienteData?.nome || "N/A"}
-        </p>
-        <p>
-          <strong>Email:</strong> {clienteData?.email || "N/A"}
-        </p>
-      </div>
-
-      <button onClick={() => navigate("/consultor/dashboard")} className="w-full bg-blue-600 text-white font-bold py-4 rounded-lg text-lg hover:bg-blue-700">
-        Voltar ao Dashboard
-      </button>
-    </div>
-  );
-};
-
-// --- Outros Panels (Placeholders) ---
-const ProfilePanel = () => <PlaceholderPage title="👤 Meu Perfil" />;
-const AnalyticsPanel = () => <PlaceholderPage title="💰 Comissões e Analytics" />;
-const StoresPanel = () => <PlaceholderPage title="🏪 Minhas Lojas" />;
-const HistoryPanel = () => <PlaceholderPage title="📖 Histórico" />;
-const ReviewsPanel = () => <PlaceholderPage title="⭐ Avaliações" />;
-const TrainingPanel = () => <PlaceholderPage title="🎓 Treinamentos" />;
-const ReferralPanel = () => <PlaceholderPage title="🤝 Indicações" />;
-const SalesTable = () => <PlaceholderPage title="📊 Minhas Vendas" />;
-
 // =======================================================================
 // === APP ROOT E ROTAS ==================================================
 // =======================================================================
 function App() {
   return (
     <Routes>
-      {/* Rotas públicas */}
+      {/* Rota pública principal */}
       <Route path="/" element={<Landingpage />} />
+
+      {/* Login / seleção */}
       <Route path="/entrar" element={<LoginsPanel />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/termos" element={<TermsPage />} />
 
-      {/* Consultor */}
+      {/* Consultor area (protegida) */}
       <Route path="/consultor" element={<ProtectedRoute component={ConsultorRoutes} />} />
 
-      {/* Placeholders */}
+      {/* Lojista / Vendedor / Admin placeholders */}
       <Route path="/lojista/*" element={<PlaceholderPage title="Lojista - Em desenvolvimento" />} />
       <Route path="/vendedor/*" element={<PlaceholderPage title="Vendedor - Em desenvolvimento" />} />
       <Route path="/admin/*" element={<PlaceholderPage title="Admin - Em desenvolvimento" />} />
 
-      {/* 404 */}
+      {/* Fallback */}
       <Route path="*" element={<PlaceholderPage title="404 - Página não encontrada" />} />
     </Routes>
   );
 }
 
-// --- Rotas do Consultor ---
+// --- Rotas compostas ---
 const ConsultorRoutes = () => (
   <DashboardLayout>
     <Routes>
@@ -602,15 +548,12 @@ const ConsultorRoutes = () => (
         <Route index element={<ConsultorHomePanel />} />
         <Route path="fila" element={<FilaPanel />} />
         <Route path="chat" element={<ChatPanel />} />
-        <Route path="historico" element={<HistoryPanel />} />
-        <Route path="analytics" element={<AnalyticsPanel />} />
-        <Route path="lojas" element={<StoresPanel />} />
-        <Route path="profile" element={<ProfilePanel />} />
-        <Route path="reviews" element={<ReviewsPanel />} />
-        <Route path="treinamentos" element={<TrainingPanel />} />
-        <Route path="indicacoes" element={<ReferralPanel />} />
-        <Route path="vendas" element={<SalesTable />} />
-        <Route path="resumo-venda/:vendaId" element={<AttendanceSummaryPanel />} />
+        <Route path="lojas" element={<PlaceholderPage title="Minhas Lojas" />} />
+        <Route path="analytics" element={<PlaceholderPage title="Comissões e Analytics" />} />
+        <Route path="historico" element={<PlaceholderPage title="Histórico de Atendimentos" />} />
+        <Route path="profile" element={<PlaceholderPage title="Perfil do Consultor" />} />
+        <Route path="reviews" element={<PlaceholderPage title="Avaliações" />} />
+        <Route path="treinamentos" element={<PlaceholderPage title="Treinamentos" />} />
       </Route>
     </Routes>
   </DashboardLayout>

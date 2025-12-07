@@ -17,6 +17,7 @@ const QueuePanel = ({ consultorId }) => {
       {
         id: 1,
         clienteNome: 'Maria Silva',
+        nomeVisivel: false, // Cliente optou por não mostrar nome
         loja: 'Loja Eletrônicos Center',
         setor: 'Smartphones',
         tempoEspera: '2 min',
@@ -25,6 +26,7 @@ const QueuePanel = ({ consultorId }) => {
       {
         id: 2,
         clienteNome: 'João Santos',
+        nomeVisivel: true, // Cliente optou por mostrar nome
         loja: 'Tech Store',
         setor: 'Notebooks',
         tempoEspera: '5 min',
@@ -36,6 +38,13 @@ const QueuePanel = ({ consultorId }) => {
       setFilaAtendimento(mockCalls);
     }
   }, [status]);
+
+  const getClienteDisplay = (chamada) => {
+    if (chamada.nomeVisivel) {
+      return chamada.clienteNome;
+    }
+    return `Cliente #${chamada.id.toString().padStart(4, '0')}`;
+  };
 
   const aceitarChamada = (chamada) => {
     setAtendimentoAtual(chamada);
@@ -71,7 +80,7 @@ const QueuePanel = ({ consultorId }) => {
   const getStatusText = () => {
     if (status === 'disponivel') return '✅ Disponível';
     if (status === 'ocupado') return '⏳ Em Atendimento';
-    return '📴 Offline';
+    return '🔴 Offline';
   };
 
   return (
@@ -102,9 +111,9 @@ const QueuePanel = ({ consultorId }) => {
         <div style={styles.atendimentoAtual}>
           <div style={styles.atendimentoInfo}>
             <p style={styles.atendimentoLabel}>🎯 Atendendo agora:</p>
-            <p style={styles.atendimentoNome}>{atendimentoAtual.clienteNome}</p>
+            <p style={styles.atendimentoNome}>{getClienteDisplay(atendimentoAtual)}</p>
             <p style={styles.atendimentoDetalhe}>
-              📍 {atendimentoAtual.loja} - {atendimentoAtual.setor}
+              🏪 {atendimentoAtual.loja} - {atendimentoAtual.setor}
             </p>
           </div>
           <div style={styles.atendimentoActions}>
@@ -127,7 +136,7 @@ const QueuePanel = ({ consultorId }) => {
       {/* Mensagem quando offline */}
       {status === 'offline' && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>📴</div>
+          <div style={styles.emptyIcon}>🔴</div>
           <p style={styles.emptyTitle}>Você está offline</p>
           <p style={styles.emptySubtitle}>
             Clique em "Offline" acima para começar a receber chamadas
@@ -171,7 +180,7 @@ const QueuePanel = ({ consultorId }) => {
                 <div style={styles.chamadaInfo}>
                   <div style={styles.chamadaHeader}>
                     <span style={styles.chamadaNome}>
-                      📞 {chamada.clienteNome}
+                      📞 {getClienteDisplay(chamada)}
                     </span>
                     {chamada.prioridade === 'urgente' && (
                       <span style={styles.urgenteBadge}>🔥 URGENTE</span>
@@ -179,7 +188,7 @@ const QueuePanel = ({ consultorId }) => {
                   </div>
 
                   <div style={styles.chamadaDetalhes}>
-                    <p style={styles.detalheItem}>📍 {chamada.loja}</p>
+                    <p style={styles.detalheItem}>🏪 {chamada.loja}</p>
                     <p style={styles.detalheItem}>🏷️ Setor: {chamada.setor}</p>
                     <p style={styles.detalheItem}>⏱️ Aguardando há {chamada.tempoEspera}</p>
                   </div>

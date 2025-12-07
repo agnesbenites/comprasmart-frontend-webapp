@@ -2,14 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { formatarMoeda, formatarData, formatarPorcentagem } from '../../../shared/utils/formatters';
-import { API_CONFIG, apiGet } from '../../../shared/utils/api';
 
 const PRIMARY_COLOR = "#007bff";
 const SECONDARY_COLOR = "#495057";
 
 const AnalyticsPanel_Updated = () => {
-  const [periodo, setPeriodo] = useState('mes'); // mes, semana, ano
+  const [periodo, setPeriodo] = useState('mes');
   const [metricas, setMetricas] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -20,11 +18,6 @@ const AnalyticsPanel_Updated = () => {
   const carregarMetricas = async () => {
     setLoading(true);
     try {
-      // TODO: Chamar API real
-      // const API_URL = process.env.REACT_APP_API_URL || 'https://sua-api.onrender.com';
-      // const response = await fetch(`${API_URL}/api/consultores/metricas/${consultorId}?periodo=${periodo}`);
-      
-      // Mock de dados
       setTimeout(() => {
         setMetricas(mockMetricas);
         setLoading(false);
@@ -35,7 +28,6 @@ const AnalyticsPanel_Updated = () => {
     }
   };
 
-  // Dados mockados
   const mockMetricas = {
     resumo: {
       vendasHoje: 12,
@@ -63,11 +55,41 @@ const AnalyticsPanel_Updated = () => {
       { categoria: 'Decoração', valor: 600, quantidade: 5 },
     ],
     top5Produtos: [
-      { nome: 'Smart TV 55"', vendas: 8, comissao: 384 },
-      { nome: 'Geladeira Inverter', vendas: 6, comissao: 280 },
-      { nome: 'Notebook Gamer', vendas: 5, comissao: 492 },
-      { nome: 'Sofá 3 Lugares', vendas: 4, comissao: 220 },
-      { nome: 'Air Fryer', vendas: 12, comissao: 54 },
+      { 
+        nome: 'Smart TV 55"', 
+        sku: 'TV-SMART-55-001',
+        loja: 'Eletrônicos Center',
+        vendas: 8, 
+        comissao: 384 
+      },
+      { 
+        nome: 'Geladeira Inverter', 
+        sku: 'GEL-INV-450-002',
+        loja: 'Tech Store',
+        vendas: 6, 
+        comissao: 280 
+      },
+      { 
+        nome: 'Notebook Gamer', 
+        sku: 'NB-GAME-i7-003',
+        loja: 'Eletrônicos Center',
+        vendas: 5, 
+        comissao: 492 
+      },
+      { 
+        nome: 'Sofá 3 Lugares', 
+        sku: 'SOF-3L-BEG-004',
+        loja: 'Casa & Decoração',
+        vendas: 4, 
+        comissao: 220 
+      },
+      { 
+        nome: 'Air Fryer', 
+        sku: 'AIR-FRY-5L-005',
+        loja: 'Tech Store',
+        vendas: 12, 
+        comissao: 54 
+      },
     ],
   };
 
@@ -227,7 +249,7 @@ const AnalyticsPanel_Updated = () => {
         </div>
       </div>
 
-      {/* Top 5 Produtos */}
+      {/* Top 5 Produtos - ATUALIZADO COM SKU E LOJA */}
       <div style={styles.chartCard}>
         <h3 style={styles.chartTitle}>🏆 Top 5 Produtos Mais Vendidos</h3>
         <div style={styles.topProductsList}>
@@ -236,6 +258,11 @@ const AnalyticsPanel_Updated = () => {
               <div style={styles.topProductRank}>#{index + 1}</div>
               <div style={styles.topProductInfo}>
                 <span style={styles.topProductName}>{produto.nome}</span>
+                <div style={styles.topProductDetails}>
+                  <span style={styles.topProductSku}>SKU: {produto.sku}</span>
+                  <span style={styles.topProductDivider}>•</span>
+                  <span style={styles.topProductLoja}>🏪 {produto.loja}</span>
+                </div>
                 <span style={styles.topProductSales}>{produto.vendas} vendas</span>
               </div>
               <div style={styles.topProductComission}>
@@ -377,20 +404,20 @@ const styles = {
   topProductsList: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '15px',
   },
   topProductItem: {
     display: 'flex',
     alignItems: 'center',
     gap: '15px',
-    padding: '15px',
+    padding: '18px',
     backgroundColor: '#f8f9fa',
-    borderRadius: '8px',
+    borderRadius: '10px',
     border: '1px solid #e9ecef',
   },
   topProductRank: {
-    width: '40px',
-    height: '40px',
+    width: '45px',
+    height: '45px',
     borderRadius: '50%',
     backgroundColor: PRIMARY_COLOR,
     color: 'white',
@@ -398,27 +425,48 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 'bold',
-    fontSize: '1rem',
+    fontSize: '1.1rem',
+    flexShrink: 0,
   },
   topProductInfo: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    gap: '4px',
+    gap: '6px',
   },
   topProductName: {
-    fontSize: '1rem',
+    fontSize: '1.05rem',
     fontWeight: '600',
     color: SECONDARY_COLOR,
+  },
+  topProductDetails: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '0.85rem',
+    color: '#6c757d',
+  },
+  topProductSku: {
+    fontFamily: 'monospace',
+    backgroundColor: '#e9ecef',
+    padding: '2px 8px',
+    borderRadius: '4px',
+  },
+  topProductDivider: {
+    color: '#dee2e6',
+  },
+  topProductLoja: {
+    fontStyle: 'italic',
   },
   topProductSales: {
     fontSize: '0.85rem',
     color: '#6c757d',
   },
   topProductComission: {
-    fontSize: '1.1rem',
+    fontSize: '1.15rem',
     fontWeight: 'bold',
     color: '#28a745',
+    flexShrink: 0,
   },
 };
 

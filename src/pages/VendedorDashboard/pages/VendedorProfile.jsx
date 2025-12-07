@@ -1,6 +1,7 @@
 // src/pages/VendedorDashboard/pages/VendedorProfile.jsx
 import React, { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 // Cores do Vendedor (mesmo padrão do dashboard)
 const VENDOR_PRIMARY = "#4a6fa5";
@@ -9,6 +10,7 @@ const VENDOR_LIGHT_BG = "#eaf2ff";
 
 const VendedorProfile = () => {
     const { user } = useAuth0();
+    const navigate = useNavigate();
     
     // Estados para os campos editáveis
     const [nome, setNome] = useState(user?.name || "Ana Vendedora");
@@ -128,9 +130,29 @@ const VendedorProfile = () => {
         }
     };
 
+    // FUNÇÃO DE LOGOUT
+    const handleLogout = () => {
+        if (window.confirm("Tem certeza que deseja sair?")) {
+            // Limpar dados do localStorage
+            localStorage.removeItem('token');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('vendedorId');
+            
+            // Redirecionar para a página de login
+            navigate('/entrar');
+        }
+    };
+
     return (
         <div style={styles.container}>
-            <h1 style={styles.title}>👤 Meu Perfil</h1>
+            {/* HEADER COM LOGOUT */}
+            <div style={styles.header}>
+                <h1 style={styles.title}>👤 Meu Perfil</h1>
+                <button onClick={handleLogout} style={styles.logoutButton}>
+                    🚪 Sair
+                </button>
+            </div>
             
             {/* Mensagem de feedback */}
             {mensagem.texto && (
@@ -350,11 +372,31 @@ const styles = {
         margin: "0 auto",
         padding: "20px",
     },
+    header: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "25px",
+        flexWrap: "wrap",
+        gap: "15px",
+    },
     title: {
         color: VENDOR_PRIMARY,
         fontSize: "1.8rem",
-        marginBottom: "25px",
+        marginBottom: "0",
         fontWeight: "600",
+    },
+    logoutButton: {
+        backgroundColor: "#dc3545",
+        color: "white",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "8px",
+        fontSize: "0.95rem",
+        fontWeight: "600",
+        cursor: "pointer",
+        transition: "background-color 0.3s ease",
+        boxShadow: "0 2px 8px rgba(220, 53, 69, 0.3)",
     },
     mensagem: {
         padding: "12px 20px",

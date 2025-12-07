@@ -32,8 +32,7 @@ const StoresPanel = ({ consultorId }) => {
         comissaoMin: 5,
         comissaoMax: 12,
         avaliacaoLoja: 4.5,
-        totalConsultores: 15,
-        vagasDisponiveis: 3,
+        aceitaCandidaturas: true,
       },
       {
         id: 2,
@@ -45,8 +44,7 @@ const StoresPanel = ({ consultorId }) => {
         comissaoMin: 8,
         comissaoMax: 15,
         avaliacaoLoja: 4.8,
-        totalConsultores: 8,
-        vagasDisponiveis: 5,
+        aceitaCandidaturas: true,
       },
       {
         id: 3,
@@ -58,8 +56,7 @@ const StoresPanel = ({ consultorId }) => {
         comissaoMin: 10,
         comissaoMax: 18,
         avaliacaoLoja: 4.2,
-        totalConsultores: 5,
-        vagasDisponiveis: 2,
+        aceitaCandidaturas: false, // Não aceita candidaturas no momento
       },
     ];
     setLojas(mockLojas);
@@ -91,13 +88,16 @@ const StoresPanel = ({ consultorId }) => {
     }
   };
 
-  const getStatusCandidatura = (lojaId) => {
+  const getStatusCandidatura = (lojaId, aceitaCandidaturas) => {
     if (lojasAprovadas.includes(lojaId)) {
       return { status: 'aprovado', label: '✅ Aprovado', cor: '#28a745' };
     }
     const candidatura = minhasCandidaturas.find(c => c.lojaId === lojaId);
     if (candidatura) {
-      return { status: 'pendente', label: '⏳ Aguardando', cor: '#ffc107' };
+      return { status: 'pendente', label: '⏳ Aguardando Aprovação', cor: '#ffc107' };
+    }
+    if (!aceitaCandidaturas) {
+      return { status: 'sem_vagas', label: '📩 Enviar Convite', cor: '#6c757d' };
     }
     return { status: 'nao_candidatado', label: '📝 Candidatar-se', cor: CONSULTOR_PRIMARY };
   };
@@ -203,7 +203,7 @@ const StoresPanel = ({ consultorId }) => {
       {/* Lista de Lojas */}
       <div style={styles.lojasGrid}>
         {lojasFiltradas.map(loja => {
-          const statusCandidatura = getStatusCandidatura(loja.id);
+          const statusCandidatura = getStatusCandidatura(loja.id, loja.aceitaCandidaturas);
           
           return (
             <div key={loja.id} style={styles.lojaCard}>
@@ -252,33 +252,43 @@ const StoresPanel = ({ consultorId }) => {
                 </div>
               </div>
 
-              {/* Info adicional */}
-              <div style={styles.infoAdicional}>
-                <span>👥 {loja.totalConsultores} consultores ativos</span>
-                <span style={styles.vagasText}>🟢 {loja.vagasDisponiveis} vagas</span>
-              </div>
-
               {/* Botão de Ação */}
               <button
-                onClick={() => statusCandidatura.status === 'nao_candidatado' && candidatarSe(loja.id)}
-                disabled={statusCandidatura.status !== 'nao_candidatado'}
+                onClick={() => {
+                  if (statusCandidatura.status === 'nao_candidatado' || 
+                      statusCandidatura.status === 'sem_vagas') {
+                    candidatarSe(loja.id);
+                  }
+                }}
+                disabled={statusCandidatura.status === 'pendente' || 
+                         statusCandidatura.status === 'aprovado'}
                 style={{
                   ...styles.actionButton,
-                  backgroundColor: statusCandidatura.status === 'nao_candidatado' 
-                    ? CONSULTOR_PRIMARY 
-                    : statusCandidatura.status === 'aprovado'
-                    ? '#e8f5e9'
-                    : '#fff3cd',
-                  color: statusCandidatura.status === 'nao_candidatado' 
-                    ? 'white' 
-                    : statusCandidatura.status === 'aprovado'
-                    ? '#28a745'
-                    : '#856404',
-                  cursor: statusCandidatura.status === 'nao_candidatado' ? 'pointer' : 'default',
+                  backgroundColor: 
+                    statusCandidatura.status === 'aprovado' ? '#e8f5e9' :
+                    statusCandidatura.status === 'pendente' ? '#fff3cd' :
+                    statusCandidatura.status === 'sem_vagas' ? '#f8f9fa' :
+                    CONSULTOR_PRIMARY,
+                  color: 
+                    statusCandidatura.status === 'aprovado' ? '#28a745' :
+                    statusCandidatura.status === 'pendente' ? '#856404' :
+                    statusCandidatura.status === 'sem_vagas' ? '#6c757d' :
+                    'white',
+                  cursor: 
+                    (statusCandidatura.status === 'pendente' || 
+                     statusCandidatura.status === 'aprovado') ? 'default' : 'pointer',
+                  border: statusCandidatura.status === 'sem_vagas' ? '2px dashed #6c757d' : 'none',
                 }}
               >
                 {statusCandidatura.label}
               </button>
+              
+              {!loja.aceitaCandidaturas && statusCandidatura.status !== 'aprovado' && 
+               statusCandidatura.status !== 'pendente' && (
+                <p style={styles.infoText}>
+                  💡 Esta loja receberá seu convite e poderá te aprovar posteriormente
+                </p>
+              )}
             </div>
           );
         })}
@@ -497,25 +507,21 @@ const styles = {
     fontSize: '12px',
     color: '#666',
   },
-  infoAdicional: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    fontSize: '13px',
-    color: '#666',
-    marginBottom: '15px',
-  },
-  vagasText: {
-    color: '#28a745',
-    fontWeight: '600',
-  },
   actionButton: {
     width: '100%',
     padding: '12px',
     borderRadius: '8px',
-    border: 'none',
     fontWeight: '600',
     fontSize: '14px',
     transition: 'all 0.2s',
+    marginBottom: '8px',
+  },
+  infoText: {
+    fontSize: '12px',
+    color: '#6c757d',
+    fontStyle: 'italic',
+    textAlign: 'center',
+    margin: 0,
   },
   emptyState: {
     textAlign: 'center',

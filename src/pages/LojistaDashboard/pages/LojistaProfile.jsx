@@ -1,7 +1,10 @@
 // src/pages/LojistaProfile.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LojistaProfile = () => {
+  const navigate = useNavigate();
+  
   const [empresa, setEmpresa] = useState({
     nome: "Empresa Teste Compra Smart",
     cnpj: "12.345.678/0001-95",
@@ -93,10 +96,32 @@ const LojistaProfile = () => {
     alert("Link copiado para a área de transferência!");
   };
 
+  // FUNÇÃO DE LOGOUT
+  const handleLogout = () => {
+    if (window.confirm("Tem certeza que deseja sair?")) {
+      // Limpar dados do localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('lojistaId');
+      
+      // Redirecionar para a página de login
+      navigate('/entrar');
+    }
+  };
+
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>👤 Perfil do Administrador</h1>
-      <p style={styles.subtitle}>Gerencie suas informações e configurações da empresa</p>
+      {/* HEADER COM LOGOUT */}
+      <div style={styles.header}>
+        <div>
+          <h1 style={styles.title}>👤 Perfil do Administrador</h1>
+          <p style={styles.subtitle}>Gerencie suas informações e configurações da empresa</p>
+        </div>
+        <button onClick={handleLogout} style={styles.logoutButton}>
+          🚪 Sair
+        </button>
+      </div>
 
       <div style={styles.grid}>
         {/* Dados da Empresa */}
@@ -177,8 +202,6 @@ const LojistaProfile = () => {
               </div>
             </div>
           ))}
-
-          {/* REMOVIDO O BOTÃO "Adicionar Novo Cartão" conforme solicitado */}
         </div>
 
         {/* Configurações de Comissão */}
@@ -341,6 +364,14 @@ const styles = {
     backgroundColor: "#f8f9fa",
     minHeight: "100vh"
   },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: "30px",
+    flexWrap: "wrap",
+    gap: "20px"
+  },
   title: {
     color: "#2c5aa0",
     fontSize: "2rem",
@@ -349,7 +380,19 @@ const styles = {
   subtitle: {
     color: "#666",
     fontSize: "1.1rem",
-    marginBottom: "30px",
+    marginBottom: "0",
+  },
+  logoutButton: {
+    backgroundColor: "#dc3545",
+    color: "white",
+    border: "none",
+    padding: "12px 24px",
+    borderRadius: "8px",
+    fontSize: "1rem",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+    boxShadow: "0 2px 8px rgba(220, 53, 69, 0.3)",
   },
   grid: {
     display: "grid",
@@ -448,7 +491,7 @@ const styles = {
     transition: "background-color 0.3s ease",
     width: "100%",
   },
-  // CARTÕES - Estilo conforme sua imagem
+  // CARTÕES
   cartaoItem: {
     display: "flex",
     alignItems: "flex-start",
