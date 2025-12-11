@@ -159,7 +159,7 @@ const ChatPanel = () => {
       
     } catch (error) {
       console.error('Erro ao acessar microfone:', error);
-      alert('Não foi possível acessar o microfone.');
+      alert('NÀo foi possível acessar o microfone.');
     }
   };
   
@@ -197,7 +197,7 @@ const ChatPanel = () => {
         
       } catch (error) {
         console.error('Erro ao acessar câmera:', error);
-        alert('Não foi possível acessar a câmera.');
+        alert('NÀo foi possível acessar a câmera.');
       }
     }
   };
@@ -400,7 +400,7 @@ const ChatPanel = () => {
           
           {/* Header do Chat */}
           <div style={styles.chatHeader}>
-            <h3 style={styles.chatTitle}>Simulação de Chat</h3>
+            <h3 style={styles.chatTitle}>SimulaçÀo de Chat</h3>
             <div style={styles.chatControls}>
               <button
                 style={isOnCall ? styles.controlButtonActive : styles.controlButton}

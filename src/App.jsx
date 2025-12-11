@@ -1,4 +1,4 @@
-﻿// src/App.jsx - VERSÃO CORRIGIDA SEM CARACTERES ESPECIAIS
+// src/App.jsx - VERSÀO CORRIGIDA SEM CARACTERES ESPECIAIS
 import React, { useEffect, useState } from "react";
 import {
   Routes,

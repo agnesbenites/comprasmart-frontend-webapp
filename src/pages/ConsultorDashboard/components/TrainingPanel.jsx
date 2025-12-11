@@ -58,8 +58,8 @@ const TrainingPanel = ({ consultorId }) => {
   const mockTreinamentosPlataforma = [
     {
       id: 'PLAT-001',
-      titulo: 'Conduta e Comunicação na Plataforma',
-      descricao: 'O que você pode ou não perguntar e falar nas chamadas, mensagens de áudio e texto',
+      titulo: 'Conduta e ComunicaçÀo na Plataforma',
+      descricao: 'O que você pode ou nÀo perguntar e falar nas chamadas, mensagens de áudio e texto',
       tipo: 'video',
       duracao: '15 min',
       obrigatorio: true,
@@ -74,8 +74,8 @@ const TrainingPanel = ({ consultorId }) => {
           'Política de dados pessoais (LGPD)',
         ],
         pontosPrincipais: [
-          '❌ NUNCA pergunte: CPF, número do cartão, senhas bancárias',
-          '❌ NUNCA fale sobre: política, religião, questões pessoais íntimas',
+          '❌ NUNCA pergunte: CPF, número do cartÀo, senhas bancárias',
+          '❌ NUNCA fale sobre: política, religiÀo, questões pessoais íntimas',
           '✅ SEMPRE mantenha: profissionalismo, respeito, foco no produto',
           '✅ SEMPRE ofereça: informações técnicas, comparações, suporte na escolha',
         ]
@@ -94,9 +94,9 @@ const TrainingPanel = ({ consultorId }) => {
         topicos: [
           'Uso de filtros avançados',
           'Palavras-chave eficientes',
-          'Comparação de especificações',
-          'Verificação de estoque em tempo real',
-          'Identificação de melhores ofertas',
+          'ComparaçÀo de especificações',
+          'VerificaçÀo de estoque em tempo real',
+          'IdentificaçÀo de melhores ofertas',
         ],
         pontosPrincipais: [
           '🔍 Use filtros por categoria, faixa de preço e marca',
@@ -109,7 +109,7 @@ const TrainingPanel = ({ consultorId }) => {
     {
       id: 'PLAT-003',
       titulo: 'Boas Práticas na Plataforma',
-      descricao: 'Diretrizes para atuação profissional e ética',
+      descricao: 'Diretrizes para atuaçÀo profissional e ética',
       tipo: 'video',
       duracao: '20 min',
       obrigatorio: true,
@@ -119,8 +119,8 @@ const TrainingPanel = ({ consultorId }) => {
         topicos: [
           'Pontualidade e disponibilidade',
           'Qualidade no atendimento',
-          'Gestão de múltiplas chamadas',
-          'Resolução de conflitos',
+          'GestÀo de múltiplas chamadas',
+          'ResoluçÀo de conflitos',
           'Ética profissional',
         ],
         pontosPrincipais: [
@@ -133,7 +133,7 @@ const TrainingPanel = ({ consultorId }) => {
     },
     {
       id: 'PLAT-004',
-      titulo: 'Compliance e Gravação de Chamadas',
+      titulo: 'Compliance e GravaçÀo de Chamadas',
       descricao: 'Política de monitoramento e privacidade',
       tipo: 'documento',
       duracao: '8 min',
@@ -142,7 +142,7 @@ const TrainingPanel = ({ consultorId }) => {
       visualizado: false,
       conteudo: {
         topicos: [
-          'Política de gravação de chamadas',
+          'Política de gravaçÀo de chamadas',
           'Monitoramento de mensagens',
           'Finalidade do compliance',
           'Seus direitos e deveres',
@@ -152,9 +152,9 @@ const TrainingPanel = ({ consultorId }) => {
           '🎥 A plataforma pode gravar chamadas aleatoriamente SEM AVISO PRÉVIO',
           '💬 Mensagens podem ser auditadas para fins de compliance',
           '⚖️ Objetivo: manter integridade e compromisso com usuários',
-          '🚫 Violações graves podem resultar em suspensão ou banimento',
+          '🚫 Violações graves podem resultar em suspensÀo ou banimento',
         ],
-        avisoImportante: 'ATENÇÃO: Todas as interações na plataforma podem ser monitoradas para garantir a qualidade e segurança de todos os usuários. Ao aceitar os termos, você concorda com esta política.'
+        avisoImportante: 'ATENÇÀO: Todas as interações na plataforma podem ser monitoradas para garantir a qualidade e segurança de todos os usuários. Ao aceitar os termos, você concorda com esta política.'
       }
     },
     {
@@ -172,16 +172,16 @@ const TrainingPanel = ({ consultorId }) => {
           'Tipos de problemas reportáveis',
           'Como documentar evidências',
           'Prazos de resposta',
-          'O que NÃO fazer',
+          'O que NÀO fazer',
         ],
         pontosPrincipais: [
           '❌ NUNCA acione diretamente as lojas sobre problemas',
           '✅ SEMPRE use o sistema de reports da plataforma',
           '📸 Anexe prints e evidências quando possível',
           '⏳ Aguarde até 30 dias para retorno oficial',
-          '🚫 Não tente resolver problemas por fora da plataforma',
+          '🚫 NÀo tente resolver problemas por fora da plataforma',
         ],
-        avisoImportante: 'IMPORTANTE: O consultor NÃO pode contatar lojas diretamente. Qualquer problema deve ser reportado através da plataforma para análise adequada.'
+        avisoImportante: 'IMPORTANTE: O consultor NÀO pode contatar lojas diretamente. Qualquer problema deve ser reportado através da plataforma para análise adequada.'
       }
     },
   ];
@@ -201,7 +201,7 @@ const TrainingPanel = ({ consultorId }) => {
       conteudo: {
         topicos: [
           'Especificações técnicas completas',
-          'Comparação com modelo anterior',
+          'ComparaçÀo com modelo anterior',
           'Diferenciais de câmera e IA',
           'Preços e condições especiais',
         ]
@@ -229,7 +229,7 @@ const TrainingPanel = ({ consultorId }) => {
     },
     {
       id: 'LOJ-003',
-      titulo: 'Promoção Black Friday - Eletrônicos',
+      titulo: 'PromoçÀo Black Friday - Eletrônicos',
       descricao: 'Produtos em destaque e condições especiais',
       loja: 'Eletrônicos Center',
       segmento: 'Eletrônicos',
@@ -243,7 +243,7 @@ const TrainingPanel = ({ consultorId }) => {
           'Produtos com maior desconto',
           'Condições de pagamento',
           'Estoque limitado - prioridades',
-          'Comissão diferenciada',
+          'ComissÀo diferenciada',
         ]
       }
     },
@@ -347,7 +347,7 @@ const TrainingPanel = ({ consultorId }) => {
     );
   }
 
-  // Visualização Detalhada do Treinamento
+  // VisualizaçÀo Detalhada do Treinamento
   if (treinamentoSelecionado) {
     return (
       <div style={styles.container}>
@@ -424,12 +424,12 @@ const TrainingPanel = ({ consultorId }) => {
     );
   }
 
-  // Visualização em Lista
+  // VisualizaçÀo em Lista
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>🎓 Treinamentos e Capacitação</h2>
+          <h2 style={styles.title}>🎓 Treinamentos e CapacitaçÀo</h2>
           <p style={styles.subtitle}>Complete os treinamentos obrigatórios para ficar 100% habilitado</p>
         </div>
 
@@ -476,7 +476,7 @@ const TrainingPanel = ({ consultorId }) => {
             <h3 style={styles.columnTitle}>Treinamentos da Plataforma</h3>
           </div>
           <p style={styles.columnDescription}>
-            Políticas, diretrizes e boas práticas para atuação profissional
+            Políticas, diretrizes e boas práticas para atuaçÀo profissional
           </p>
 
           <div style={styles.treinamentosList}>
@@ -547,7 +547,7 @@ const TrainCard = ({ treinamento, isConcluido, isNovo, onIniciar, isLojista = fa
               <span style={styles.novoBadge}>🆕 NOVO</span>
             )}
             {!isConcluido && !treinamento.visualizado && !isNovo && (
-              <span style={styles.naoVistoBadge}>👁️ NÃO VISUALIZADO</span>
+              <span style={styles.naoVistoBadge}>👁️ NÀO VISUALIZADO</span>
             )}
             {!isConcluido && treinamento.visualizado && (
               <span style={styles.naoConcluidoBadge}>📚 PENDENTE</span>
