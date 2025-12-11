@@ -1,16 +1,52 @@
 // src/pages/ConsultorDashboard/pages/Consultant/ConsultorLogin.jsx
-import React from "react";
-import { useAuth } from "../../../../hooks/useAuth"; // ✅ CAMINHO CORRETO
+
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 const ConsultorLogin = () => {
-  const { login, isAuthenticated, isLoading } = useAuth('consultor');
+  const navigate = useNavigate();
+  const { login, isAuthenticated, loading: authLoading } = useAuth();
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  if (isAuthenticated) {
+  // Se ja esta autenticado, redireciona para o dashboard
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/consultor/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Funcao de login
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const result = await login(email, password);
+      
+      if (result.success) {
+        navigate('/consultor/dashboard', { replace: true });
+      } else {
+        setError(result.error || "Erro ao fazer login");
+      }
+    } catch (error) {
+      setError("Erro inesperado. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Estado de loading do contexto
+  if (authLoading) {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <p style={styles.successText}>✅ Autenticado com sucesso!</p>
-          <p>Redirecionando para o dashboard do consultor...</p>
+          <p style={styles.loadingText}>Carregando...</p>
         </div>
       </div>
     );
@@ -19,46 +55,87 @@ const ConsultorLogin = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        
-        <h2 style={styles.title}>
-          🔍 Login Consultor
-        </h2>
+        <h2 style={styles.title}>Login Consultor</h2>
 
         <div style={styles.infoBox}>
           <p style={styles.infoText}>
-            Acesse o sistema de consultoria com suas credenciais Auth0
+            Acesse o sistema de consultoria com suas credenciais
           </p>
         </div>
 
-        <button
-          onClick={login}
-          disabled={isLoading}
-          style={{
-            ...styles.loginButton,
-            backgroundColor: isLoading ? '#6c757d' : '#17a2b8'
-          }}
-        >
-          {isLoading ? "⏳ Redirecionando..." : "🔐 Entrar com Auth0"}
-        </button>
+        <form onSubmit={handleLogin}>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>E-mail:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="seu@email.com"
+              style={styles.input}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Senha:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="********"
+              style={styles.input}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          {error && (
+            <div style={styles.errorBox}>
+              <p style={styles.errorText}>{error}</p>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            style={{
+              ...styles.loginButton,
+              backgroundColor: loading ? '#6c757d' : '#17a2b8',
+              cursor: loading ? 'not-allowed' : 'pointer'
+            }}
+            disabled={loading}
+          >
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
+
+        <div style={styles.links}>
+          <a href="/consultor/cadastro" style={styles.link}>
+            Nao tem conta? Cadastre-se
+          </a>
+          <a href="/recuperar-senha" style={styles.link}>
+            Esqueceu a senha?
+          </a>
+        </div>
 
         <div style={styles.features}>
           <div style={styles.feature}>
-            <span style={styles.featureIcon}>📊</span>
-            <span>Relatórios de Desempenho</span>
+            <span style={styles.featureIcon}>&#128202;</span>
+            <span>Relatorios de Desempenho</span>
           </div>
           <div style={styles.feature}>
-            <span style={styles.featureIcon}>💼</span>
-            <span>Gestão de Consultoria</span>
+            <span style={styles.featureIcon}>&#128188;</span>
+            <span>Gestao de Consultoria</span>
           </div>
           <div style={styles.feature}>
-            <span style={styles.featureIcon}>🔒</span>
+            <span style={styles.featureIcon}>&#128274;</span>
             <span>Dados Protegidos</span>
           </div>
         </div>
 
         <div style={styles.footer}>
-          <a href="/" style={styles.backLink}>
-            ← Voltar para Home
+          <a href="/entrar" style={styles.backLink}>
+            Voltar para Escolha de Perfil
           </a>
         </div>
       </div>
@@ -86,16 +163,15 @@ const styles = {
   },
   title: {
     textAlign: "center",
-    color: "#2c5aa0",
+    color: "#17a2b8",
     marginBottom: "20px",
     fontSize: "1.8rem",
     fontWeight: "700",
   },
-  successText: {
+  loadingText: {
     textAlign: "center",
-    color: "#28a745",
-    fontSize: "1.2rem",
-    fontWeight: "bold"
+    color: "#666",
+    fontSize: "1.1rem",
   },
   infoBox: {
     backgroundColor: "#e3f2fd",
@@ -110,6 +186,38 @@ const styles = {
     color: "#1565c0",
     textAlign: "center",
   },
+  inputGroup: {
+    marginBottom: "20px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "8px",
+    fontWeight: "600",
+    color: "#333",
+    fontSize: "0.9rem",
+  },
+  input: {
+    width: "100%",
+    padding: "12px 15px",
+    border: "2px solid #e9ecef",
+    borderRadius: "8px",
+    fontSize: "1rem",
+    transition: "border-color 0.3s ease",
+    boxSizing: "border-box",
+  },
+  errorBox: {
+    backgroundColor: "#f8d7da",
+    padding: "12px",
+    borderRadius: "8px",
+    marginBottom: "20px",
+    border: "1px solid #f5c6cb",
+  },
+  errorText: {
+    margin: 0,
+    fontSize: "14px",
+    color: "#721c24",
+    textAlign: "center",
+  },
   loginButton: {
     width: "100%",
     padding: "15px",
@@ -118,9 +226,21 @@ const styles = {
     borderRadius: "8px",
     fontSize: "1rem",
     fontWeight: "600",
-    cursor: "pointer",
     transition: "background-color 0.3s ease",
     marginBottom: "20px",
+  },
+  links: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    marginBottom: "20px",
+  },
+  link: {
+    color: "#17a2b8",
+    textDecoration: "none",
+    fontSize: "14px",
+    textAlign: "center",
+    transition: "color 0.3s ease",
   },
   features: {
     display: "flex",

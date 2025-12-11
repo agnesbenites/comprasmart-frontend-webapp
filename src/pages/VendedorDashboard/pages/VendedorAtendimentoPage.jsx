@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-// CORREÇÃO DOS CAMINHOS (5 níveis)
+// CORRECAO DOS CAMINHOS (5 niveis)
 import ProductCatalog from '../../../shared/components/ProductCatalog';
 import Cart from '../../../shared/components/Cart';
 import QRCodeGenerator from '../../../shared/components/QRCodeGenerator';
@@ -69,7 +69,7 @@ const MOCK_PRODUCTS = [
         price: 3499.0,
         available: 5,
         specs: "Tecnologia No Frost, Inverter, A+++",
-        category: "Eletrodomésticos",
+        category: "Eletrodomesticos",
     },
     {
         id: "SKU002",
@@ -89,19 +89,19 @@ const MOCK_PRODUCTS = [
     },
     {
         id: "SKU004",
-        name: "Máquina de Lavar 12Kg",
+        name: "Maquina de Lavar 12Kg",
         price: 1950.0,
         available: 8,
-        specs: "Ciclo rápido, 12 programas, Cesto Inox",
-        category: "Eletrodomésticos",
+        specs: "Ciclo rapido, 12 programas, Cesto Inox",
+        category: "Eletrodomesticos",
     },
     {
         id: "SKU005",
         name: "Fritadeira AirFryer 5L",
         price: 450.0,
         available: 20,
-        specs: "Display digital, 8 predefinições",
-        category: "Eletrodomésticos",
+        specs: "Display digital, 8 predefinicoes",
+        category: "Eletrodomesticos",
     },
 ];
 
@@ -110,7 +110,7 @@ const initialMessages = [
     {
         id: 1,
         user: "CLI-001",
-        content: "Olá, preciso de ajuda para escolher uma TV para minha sala.",
+        content: "Ola, preciso de ajuda para escolher uma TV para minha sala.",
         timestamp: "10:00",
         type: "inbound",
     },
@@ -118,7 +118,7 @@ const initialMessages = [
         id: 2,
         user: "Consultor",
         content:
-            "Olá! Com certeza posso ajudar. Qual é o tamanho ideal que você busca?",
+            "Ola! Com certeza posso ajudar. Qual e o tamanho ideal que voca busca?",
         timestamp: "10:01",
         type: "outbound",
     },
@@ -135,21 +135,21 @@ const VendedorAtendimentoPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [cart, setCart] = useState([]);
     const [showDetails, setShowDetails] = useState(null); // Produto selecionado para detalhes
-    const [modalVisible, setModalVisible] = useState(false); // Modal de QR Code/Finalização
+    const [modalVisible, setModalVisible] = useState(false); // Modal de QR Code/Finalizacao
 
-    // Lógica de Busca de Produtos
+    // Logica de Busca de Produtos
     const filteredProducts = MOCK_PRODUCTS.filter(
         (p) =>
             p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             p.id.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Auto-scroll para a última mensagem
+    // Auto-scroll para a ultima mensagem
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    // --- Funções de Chat ---
+    // --- Funcoes de Chat ---
     const handleSendMessage = (e) => {
         e.preventDefault();
         if (input.trim() === "") return;
@@ -170,7 +170,7 @@ const VendedorAtendimentoPage = () => {
         setInput("");
     };
 
-    // --- Funções de Vendas ---
+    // --- Funcoes de Vendas ---
     const handleAddToCart = (product) => {
         const existingItem = cart.find((item) => item.id === product.id);
         if (existingItem) {
@@ -205,14 +205,14 @@ const VendedorAtendimentoPage = () => {
 
     const handleFinalizeSale = () => {
         if (cart.length === 0) {
-            console.error("O carrinho está vazio.");
+            console.error("O carrinho esta vazio.");
             return;
         }
-        // Lógica para simular a geração de QR Code e envio de e-mail
+        // Logica para simular a geracao de QR Code e envio de e-mail
         setModalVisible(true);
     };
 
-    // --- Renderização de Componentes Internos ---
+    // --- Renderizacao de Componentes Internos ---
     const renderProductDetails = () => {
         if (!showDetails) return null;
         return (
@@ -222,12 +222,12 @@ const VendedorAtendimentoPage = () => {
                 </h5>
                 <p style={styles.specItem}>**SKU:** {showDetails.id}</p>
                 <p style={styles.specItem}>
-                    **Preço:** {formatarMoeda(showDetails.price)} {/* Usando formatador */}
+                    **Preco:** {formatarMoeda(showDetails.price)} {/* Usando formatador */}
                 </p>
                 <p style={styles.specItem}>
                     **Estoque:** {showDetails.available} unidades
                 </p>
-                <p style={styles.specItem}>**Especificações:** {showDetails.specs}</p>
+                <p style={styles.specItem}>**Especificacoes:** {showDetails.specs}</p>
                 <button
                     onClick={() => {
                         handleAddToCart(showDetails);
@@ -257,7 +257,7 @@ const VendedorAtendimentoPage = () => {
 
     const renderCart = () => (
         <div style={styles.cartContainer}>
-            <h4 style={styles.cartTitle}>🛒 Carrinho ({cart.length})</h4>
+            <h4 style={styles.cartTitle}> Carrinho ({cart.length})</h4>
             {cart.length === 0 ? (
                 <p style={{ fontSize: "0.9rem", color: "#6c757d" }}>
                     Nenhum produto adicionado.
@@ -327,7 +327,7 @@ const VendedorAtendimentoPage = () => {
                     placeholder="Buscar produto (Nome, SKU, QR Code)"
                     style={styles.searchInput}
                 />
-                <button style={styles.searchButton}>🔍</button>
+                <button style={styles.searchButton}></button>
             </div>
 
             {renderProductDetails()}
@@ -358,23 +358,23 @@ const VendedorAtendimentoPage = () => {
         </>
     );
 
-    // Renderização do painel (sem sidebar e header, pois o Layout Pai cuida disso)
+    // Renderizacao do painel (sem sidebar e header, pois o Layout Pai cuida disso)
     return (
-        // O container principal não usa mais a altura calculada, pois está dentro do Layout
+        // O container principal nao usa mais a altura calculada, pois esta dentro do Layout
         <div style={styles.chatContainerWrapper}> 
-            {/* 1. Modal de Finalização (Simulado) */}
+            {/* 1. Modal de Finalizacao (Simulado) */}
             {modalVisible && (
                 <div style={styles.modalOverlay}>
                     <div style={styles.modalContent}>
                         <h3>Venda Finalizada com Sucesso!</h3>
-                        <p>O total da compra é de **{formatarMoeda(calculateTotal())}**.</p>
+                        <p>O total da compra e de **{formatarMoeda(calculateTotal())}**.</p>
                         <div style={styles.qrCodeContainer}>
-                            {/* QR Code Simulado (QRCodeGenerator importado mas não renderizado aqui, apenas simulado com emoji) */}
-                            <span style={{ fontSize: "3rem" }}>🔗</span>
+                            {/* QR Code Simulado (QRCodeGenerator importado mas nao renderizado aqui, apenas simulado com emoji) */}
+                            <span style={{ fontSize: "3rem" }}></span>
                             <p>QR Code gerado para leitura no caixa.</p>
                         </div>
                         <p style={{ marginTop: "15px", color: "#dc3545" }}>
-                            A lista de produtos também foi enviada por e-mail para o cliente.
+                            A lista de produtos tambem foi enviada por e-mail para o cliente.
                         </p>
                         <button
                             onClick={() => {
@@ -394,7 +394,7 @@ const VendedorAtendimentoPage = () => {
                 </div>
             )}
             
-            {/* O CHAT LAYOUT É O ÚNICO ITEM RENDERIZADO */}
+            {/* O CHAT LAYOUT ‰ O NICO ITEM RENDERIZADO */}
             <div style={styles.chatLayout}>
                 {/* Coluna 1: Lista de Clientes (Compacta) */}
                 <div style={styles.clientsColumn}>
@@ -418,16 +418,16 @@ const VendedorAtendimentoPage = () => {
                     </div>
                 </div>
 
-                {/* Coluna 2: Área de Chat e Ações */}
+                {/* Coluna 2: rea de Chat e Acoes */}
                 <div style={styles.chatColumn}>
                     <div style={styles.chatHeader}>
                         <h2 style={{ fontSize: "1.2rem", color: SECONDARY_COLOR }}>
                             Atendimento: CLI-001
                         </h2>
                         <div style={styles.callActions}>
-                            {/* Botões de Ação de Chamada em estilo outline/sutil */}
-                            <button style={styles.callButton}>📞 Áudio</button>
-                            <button style={styles.callButton}>📹 Vídeo</button>
+                            {/* Botoes de Acao de Chamada em estilo outline/sutil */}
+                            <button style={styles.callButton}> udio</button>
+                            <button style={styles.callButton}> Video</button>
                             <button
                                 style={{
                                     ...styles.callButton,
@@ -435,7 +435,7 @@ const VendedorAtendimentoPage = () => {
                                     border: "1px solid #dc3545",
                                 }}
                             >
-                                ❌ Encerrar
+                                 Encerrar
                             </button>
                         </div>
                     </div>
@@ -462,7 +462,7 @@ const VendedorAtendimentoPage = () => {
                             style={styles.messageInput}
                         />
                         <button type="submit" style={styles.sendButton}>
-                            Enviar 💬
+                            Enviar 
                         </button>
                     </form>
                 </div>
@@ -478,19 +478,19 @@ const VendedorAtendimentoPage = () => {
     );
 };
 
-// --- Estilos Minimalistas (Não alterados) ---
+// --- Estilos Minimalistas (Nao alterados) ---
 const styles = {
-    // Container ajustado para o espaço do Outlet
+    // Container ajustado para o espaco do Outlet
     chatContainerWrapper: {
         width: '100%',
         height: '100%',
     },
-    // CHAT LAYOUT - Altura ajustada para ocupar o espaço do Layout Principal
+    // CHAT LAYOUT - Altura ajustada para ocupar o espaco do Layout Principal
     chatLayout: {
         display: "grid",
-        gridTemplateColumns: "180px 1fr 350px", // Ajustado para corresponder ao padrão
+        gridTemplateColumns: "180px 1fr 350px", // Ajustado para corresponder ao padrao
         // Altura calculada para ocupar o restante da tela
-        height: "calc(100vh - 40px)", // 40px é o padding vertical do mainContent no Layout
+        height: "calc(100vh - 40px)", // 40px e o padding vertical do mainContent no Layout
         overflow: "hidden",
         backgroundColor: LIGHT_GREY, // Define a cor de fundo aqui
         borderRadius: '8px',
@@ -746,7 +746,7 @@ const styles = {
         margin: "3px 0",
         color: "#6c757d",
     },
-    // Modal de Finalização (QR Code)
+    // Modal de Finalizacao (QR Code)
     modalOverlay: {
         position: "fixed",
         top: 0,

@@ -6,19 +6,19 @@ const ComponenteFallback = () => {
   const pagina = location.pathname.split('/').pop();
   
   const nomesPaginas = {
-    'usuarios': '👥 Gestão de Usuários',
-    'vendedores': '💼 Gestão de Vendedores', 
-    'filiais': '🏪 Gestão de Filiais',
-    'pagamentos': '💳 Pagamentos',
-    'cadastro': '⚙️ Cadastro',
-    'relatorios': '📊 Relatórios',
-    'qrcode': '🔳 QR Codes'
+    'usuarios': ' Gestao de Usuarios',
+    'vendedores': ' Gestao de Vendedores', 
+    'filiais': ' Gestao de Filiais',
+    'pagamentos': ' Pagamentos',
+    'cadastro': ' Cadastro',
+    'relatorios': ' Relatorios',
+    'qrcode': ' QR Codes'
   };
 
   return (
     <div style={{ padding: "30px" }}>
-      <h1>{nomesPaginas[pagina] || `Página ${pagina}`}</h1>
-      <p>Página em desenvolvimento - Funcionalidade chegando em breve!</p>
+      <h1>{nomesPaginas[pagina] || `Pagina ${pagina}`}</h1>
+      <p>Pagina em desenvolvimento - Funcionalidade chegando em breve!</p>
     </div>
   );
 };

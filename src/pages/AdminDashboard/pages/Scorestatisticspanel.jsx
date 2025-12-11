@@ -24,7 +24,7 @@ const ScoreStatisticsPanel = () => {
         }
       });
 
-      if (!response.ok) throw new Error('Erro ao carregar estatísticas');
+      if (!response.ok) throw new Error('Erro ao carregar estatisticas');
 
       const data = await response.json();
       setEstatisticas(data.estatisticas);
@@ -73,9 +73,9 @@ const ScoreStatisticsPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao recalcular');
 
-      alert('✅ Recálculo iniciado! Os scores serão atualizados em alguns minutos.');
+      alert(' Recalculo iniciado! Os scores serao atualizados em alguns minutos.');
       
-      // Recarregar após 5 segundos
+      // Recarregar apos 5 segundos
       setTimeout(() => {
         carregarEstatisticas();
         carregarTop10();
@@ -83,22 +83,22 @@ const ScoreStatisticsPanel = () => {
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao recalcular scores');
+      alert(' Erro ao recalcular scores');
     } finally {
       setRecalculando(false);
     }
   };
 
   if (loading) {
-    return <div style={styles.loading}>Carregando estatísticas...</div>;
+    return <div style={styles.loading}>Carregando estatisticas...</div>;
   }
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>📊 Estatísticas de Scores</h2>
-          <p style={styles.subtitle}>Visão geral do desempenho dos consultores</p>
+          <h2 style={styles.title}> Estatisticas de Scores</h2>
+          <p style={styles.subtitle}>Visao geral do desempenho dos consultores</p>
         </div>
         <button 
           onClick={handleRecalcularTodos}
@@ -112,7 +112,7 @@ const ScoreStatisticsPanel = () => {
       {/* Cards de Resumo */}
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={styles.cardIcon}>👥</div>
+          <div style={styles.cardIcon}></div>
           <div>
             <p style={styles.cardLabel}>Total de Consultores</p>
             <p style={styles.cardValue}>{estatisticas.totalConsultores}</p>
@@ -120,15 +120,15 @@ const ScoreStatisticsPanel = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={styles.cardIcon}>⭐</div>
+          <div style={styles.cardIcon}>i</div>
           <div>
-            <p style={styles.cardLabel}>Score Médio</p>
+            <p style={styles.cardLabel}>Score Medio</p>
             <p style={styles.cardValue}>{estatisticas.scoreMedia}</p>
           </div>
         </div>
 
         <div style={styles.card}>
-          <div style={styles.cardIcon}>📈</div>
+          <div style={styles.cardIcon}></div>
           <div>
             <p style={styles.cardLabel}>Score Mediano</p>
             <p style={styles.cardValue}>{estatisticas.scoreMediano}</p>
@@ -136,32 +136,32 @@ const ScoreStatisticsPanel = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={styles.cardIcon}>🏆</div>
+          <div style={styles.cardIcon}></div>
           <div>
-            <p style={styles.cardLabel}>Score Máximo</p>
+            <p style={styles.cardLabel}>Score Maximo</p>
             <p style={styles.cardValue}>{estatisticas.scoreMaximo}</p>
           </div>
         </div>
       </div>
 
-      {/* Distribuição por Nível */}
+      {/* Distribuicao por Nivel */}
       <div style={styles.section}>
-        <h3 style={styles.sectionTitle}>Distribuição por Nível</h3>
+        <h3 style={styles.sectionTitle}>Distribuicao por Nivel</h3>
         <div style={styles.distribuicaoGrid}>
-          <NivelCard nivel="Diamante" icon="💎" count={estatisticas.totalDiamante} />
-          <NivelCard nivel="Ouro" icon="🥇" count={estatisticas.totalOuro} />
-          <NivelCard nivel="Prata" icon="🥈" count={estatisticas.totalPrata} />
-          <NivelCard nivel="Bronze" icon="🥉" count={estatisticas.totalBronze} />
-          <NivelCard nivel="Iniciante" icon="🌱" count={estatisticas.totalIniciante} />
+          <NivelCard nivel="Diamante" icon="" count={estatisticas.totalDiamante} />
+          <NivelCard nivel="Ouro" icon="" count={estatisticas.totalOuro} />
+          <NivelCard nivel="Prata" icon="" count={estatisticas.totalPrata} />
+          <NivelCard nivel="Bronze" icon="" count={estatisticas.totalBronze} />
+          <NivelCard nivel="Iniciante" icon="" count={estatisticas.totalIniciante} />
         </div>
       </div>
 
-      {/* Média por Componente */}
+      {/* Media por Componente */}
       <div style={styles.section}>
-        <h3 style={styles.sectionTitle}>Média por Componente</h3>
+        <h3 style={styles.sectionTitle}>Media por Componente</h3>
         <div style={styles.componentesGrid}>
           <ComponenteCard 
-            titulo="Avaliações" 
+            titulo="Avaliacoes" 
             nota={estatisticas.mediaAvaliacoes} 
             peso={40}
             color="#ffc107"
@@ -183,7 +183,7 @@ const ScoreStatisticsPanel = () => {
 
       {/* Top 10 Consultores */}
       <div style={styles.section}>
-        <h3 style={styles.sectionTitle}>🏆 Top 10 Consultores</h3>
+        <h3 style={styles.sectionTitle}> Top 10 Consultores</h3>
         <div style={styles.top10List}>
           {top10.map((consultor, index) => (
             <div key={consultor.consultorId} style={styles.top10Item}>
@@ -252,15 +252,15 @@ const mockEstatisticas = {
 };
 
 const mockTop10 = [
-  { consultorId: 1, nome: 'Carlos Mendes', cidade: 'São Paulo', estado: 'SP', scoreTotal: 9.8, nivel: 'Diamante' },
+  { consultorId: 1, nome: 'Carlos Mendes', cidade: 'Sao Paulo', estado: 'SP', scoreTotal: 9.8, nivel: 'Diamante' },
   { consultorId: 2, nome: 'Ana Silva', cidade: 'Rio de Janeiro', estado: 'RJ', scoreTotal: 9.5, nivel: 'Diamante' },
-  { consultorId: 3, nome: 'João Santos', cidade: 'Belo Horizonte', estado: 'MG', scoreTotal: 9.2, nivel: 'Diamante' },
+  { consultorId: 3, nome: 'Joao Santos', cidade: 'Belo Horizonte', estado: 'MG', scoreTotal: 9.2, nivel: 'Diamante' },
   { consultorId: 4, nome: 'Maria Oliveira', cidade: 'Curitiba', estado: 'PR', scoreTotal: 9.0, nivel: 'Diamante' },
   { consultorId: 5, nome: 'Pedro Costa', cidade: 'Porto Alegre', estado: 'RS', scoreTotal: 8.8, nivel: 'Ouro' },
   { consultorId: 6, nome: 'Julia Lima', cidade: 'Recife', estado: 'PE', scoreTotal: 8.6, nivel: 'Ouro' },
   { consultorId: 7, nome: 'Lucas Alves', cidade: 'Fortaleza', estado: 'CE', scoreTotal: 8.4, nivel: 'Ouro' },
   { consultorId: 8, nome: 'Camila Rocha', cidade: 'Salvador', estado: 'BA', scoreTotal: 8.2, nivel: 'Ouro' },
-  { consultorId: 9, nome: 'Felipe Souza', cidade: 'Brasília', estado: 'DF', scoreTotal: 8.0, nivel: 'Ouro' },
+  { consultorId: 9, nome: 'Felipe Souza', cidade: 'Brasilia', estado: 'DF', scoreTotal: 8.0, nivel: 'Ouro' },
   { consultorId: 10, nome: 'Beatriz Martins', cidade: 'Manaus', estado: 'AM', scoreTotal: 7.9, nivel: 'Ouro' },
 ];
 

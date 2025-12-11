@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import LojistaDashboardLayout from '../pages/LojistaDashboardLayout';
 import LojistaProfile from '../pages/LojistaProfile';
 
-// Importe todos os componentes que estão no mesmo arquivo
+// Importe todos os componentes que estao no mesmo arquivo
 import { 
   LojistaFiliais, 
   LojistaVendedores, 
@@ -15,7 +15,7 @@ import {
   LojistaUsuarios 
 } from '../pages/LojistaDashboardLayout';
 
-// Se você tiver componentes em arquivos separados, importe assim:
+// Se voca tiver componentes em arquivos separados, importe assim:
 // import LojistaProdutos from '../pages/LojistaProdutos';
 // import LojistaConsultorConfig from '../pages/LojistaConsultorConfig';
 
@@ -23,7 +23,7 @@ const LojistaRoutes = () => {
   return (
     <Routes>
       <Route path="/lojista/dashboard" element={<LojistaDashboardLayout />}>
-        <Route index element={<div style={{padding: "30px"}}>🏠 Dashboard Principal - Conteúdo aqui</div>} />
+        <Route index element={<div style={{padding: "30px"}}>  Dashboard Principal - Conteudo aqui</div>} />
         <Route path="filiais" element={<LojistaFiliais />} />
         <Route path="vendedores" element={<LojistaVendedores />} />
         <Route path="cadastro" element={<LojistaCadastro />} />
@@ -32,7 +32,7 @@ const LojistaRoutes = () => {
         <Route path="qrcode" element={<LojistaQRCode />} />
         <Route path="usuarios" element={<LojistaUsuarios />} />
         <Route path="profile" element={<LojistaProfile />} />
-        {/* Adicione outras rotas conforme necessário */}
+        {/* Adicione outras rotas conforme necessario */}
       </Route>
     </Routes>
   );

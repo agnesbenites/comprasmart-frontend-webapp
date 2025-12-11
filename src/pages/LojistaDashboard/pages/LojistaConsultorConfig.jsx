@@ -1,8 +1,8 @@
 // app-frontend/src/pages/LojistaDashboard/pages/LojistaConsultorConfig.jsx
-// VERSÃO ATUALIZADA COM SISTEMA DE SCORE
+// VERSAO ATUALIZADA COM SISTEMA DE SCORE
 
 import React, { useState, useEffect } from 'react';
-import ConsultorCandidatoCard from '../components/ConsultorCandidatoCard';
+import ConsultorCandidatoCard from '../../ConsultorDashboard/components/ConsultorCandidatoCard';
 
 const LojistaConsultorConfig = () => {
   const [candidaturas, setCandidaturas] = useState([]);
@@ -53,12 +53,12 @@ const LojistaConsultorConfig = () => {
 
       if (!response.ok) throw new Error('Erro ao aprovar consultor');
 
-      alert('✅ Consultor aprovado com sucesso!');
+      alert(' Consultor aprovado com sucesso!');
       carregarCandidaturas(); // Recarregar lista
       
     } catch (error) {
       console.error('Erro ao aprovar:', error);
-      alert('❌ Erro ao aprovar consultor');
+      alert(' Erro ao aprovar consultor');
     }
   };
 
@@ -79,19 +79,19 @@ const LojistaConsultorConfig = () => {
 
       if (!response.ok) throw new Error('Erro ao recusar consultor');
 
-      alert('✅ Consultor recusado');
+      alert(' Consultor recusado');
       carregarCandidaturas(); // Recarregar lista
       
     } catch (error) {
       console.error('Erro ao recusar:', error);
-      alert('❌ Erro ao recusar consultor');
+      alert(' Erro ao recusar consultor');
     }
   };
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>👥 Gestão de Consultores</h1>
+        <h1 style={styles.title}> Gestao de Consultores</h1>
         <p style={styles.subtitle}>Avalie e aprove consultores para sua loja</p>
       </div>
 
@@ -104,7 +104,7 @@ const LojistaConsultorConfig = () => {
             ...(activeTab === 'pendentes' ? styles.tabActive : {})
           }}
         >
-          ⏳ Pendentes {candidaturas.length > 0 && `(${candidaturas.length})`}
+          o Pendentes {candidaturas.length > 0 && `(${candidaturas.length})`}
         </button>
         <button
           onClick={() => setActiveTab('aprovados')}
@@ -113,7 +113,7 @@ const LojistaConsultorConfig = () => {
             ...(activeTab === 'aprovados' ? styles.tabActive : {})
           }}
         >
-          ✅ Aprovados
+           Aprovados
         </button>
         <button
           onClick={() => setActiveTab('recusados')}
@@ -122,11 +122,11 @@ const LojistaConsultorConfig = () => {
             ...(activeTab === 'recusados' ? styles.tabActive : {})
           }}
         >
-          ❌ Recusados
+           Recusados
         </button>
       </div>
 
-      {/* Conteúdo */}
+      {/* Conteudo */}
       <div style={styles.content}>
         {loading ? (
           <div style={styles.loading}>
@@ -135,7 +135,7 @@ const LojistaConsultorConfig = () => {
           </div>
         ) : candidaturas.length === 0 ? (
           <div style={styles.empty}>
-            <p style={styles.emptyIcon}>📭</p>
+            <p style={styles.emptyIcon}></p>
             <p style={styles.emptyText}>
               {activeTab === 'pendentes' && 'Nenhuma candidatura pendente no momento'}
               {activeTab === 'aprovados' && 'Nenhum consultor aprovado ainda'}
@@ -168,7 +168,7 @@ const mockCandidaturas = [
       id: 'cons123',
       nome: 'Carlos Mendes',
       email: 'carlos@email.com',
-      cidade: 'São Paulo',
+      cidade: 'Sao Paulo',
       estado: 'SP',
       tempoPlataforma: '6 meses',
       lojasAtivas: 3,
@@ -333,7 +333,7 @@ const styles = {
   },
 };
 
-// Adicionar animação do spinner
+// Adicionar animacao do spinner
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   @keyframes spin {

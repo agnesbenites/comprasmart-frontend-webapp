@@ -1,4 +1,4 @@
-// Exportações do LojistaDashboard - NAMED EXPORTS
+// Exportacoes do LojistaDashboard - NAMED EXPORTS
 export { LojistaDashboard } from './pages/LojistaDashboard.jsx';
 export { LojistaEscolha } from './pages/LojistaDashboard.jsx';
 export { LojistaProducts } from './pages/LojistaDashboard.jsx';

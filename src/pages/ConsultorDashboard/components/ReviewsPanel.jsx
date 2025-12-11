@@ -28,7 +28,7 @@ const ReviewsPanel = ({ consultorId }) => {
         setLoading(false);
       }, 500);
     } catch (error) {
-      console.error('Erro ao carregar avaliações:', error);
+      console.error('Erro ao carregar avaliacoes:', error);
       setLoading(false);
     }
   };
@@ -39,7 +39,7 @@ const ReviewsPanel = ({ consultorId }) => {
       chamadaId: 'CH-2024-001',
       estrelas: 5,
       comentario: 'Excelente atendimento! O consultor foi muito atencioso e me ajudou a escolher o produto perfeito. Recomendo!',
-      loja: 'Eletrônicos Center',
+      loja: 'Eletr´nicos Center',
       produtos: ['Smart TV 55"', 'Soundbar Premium'],
       data: '2024-12-05',
       horario: '14:30',
@@ -49,7 +49,7 @@ const ReviewsPanel = ({ consultorId }) => {
       id: 2,
       chamadaId: 'CH-2024-002',
       estrelas: 4,
-      comentario: 'Bom atendimento, apenas demorou um pouco para responder minhas dúvidas.',
+      comentario: 'Bom atendimento, apenas demorou um pouco para responder minhas duvidas.',
       loja: 'Tech Store',
       produtos: ['Notebook Gamer'],
       data: '2024-12-03',
@@ -60,8 +60,8 @@ const ReviewsPanel = ({ consultorId }) => {
       id: 3,
       chamadaId: 'CH-2024-003',
       estrelas: 5,
-      comentario: 'Profissional muito competente! Tirou todas as minhas dúvidas e me passou muita confiança na compra.',
-      loja: 'Eletrônicos Center',
+      comentario: 'Profissional muito competente! Tirou todas as minhas duvidas e me passou muita confianca na compra.',
+      loja: 'Eletr´nicos Center',
       produtos: ['Geladeira Inverter', 'Micro-ondas'],
       data: '2024-12-01',
       horario: '16:45',
@@ -72,8 +72,8 @@ const ReviewsPanel = ({ consultorId }) => {
       chamadaId: 'CH-2024-004',
       estrelas: 3,
       comentario: 'Atendimento ok, mas esperava mais detalhes sobre o produto.',
-      loja: 'Casa & Decoração',
-      produtos: ['Sofá 3 Lugares'],
+      loja: 'Casa & Decoracao',
+      produtos: ['Sofa 3 Lugares'],
       data: '2024-11-28',
       horario: '11:20',
       duracao: '12 min',
@@ -131,22 +131,22 @@ const ReviewsPanel = ({ consultorId }) => {
     return (
       <div style={styles.loadingContainer}>
         <div style={styles.spinner}></div>
-        <p>Carregando avaliações...</p>
+        <p>Carregando avaliacoes...</p>
       </div>
     );
   }
 
   return (
     <div style={styles.container}>
-      {/* Header com Estatísticas */}
+      {/* Header com Estatisticas */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>⭐ Minhas Avaliações</h2>
+          <h2 style={styles.title}>i Minhas Avaliacoes</h2>
           <p style={styles.subtitle}>Veja o feedback dos seus clientes</p>
         </div>
       </div>
 
-      {/* Card de Estatísticas Gerais */}
+      {/* Card de Estatisticas Gerais */}
       <div style={styles.statsCard}>
         <div style={styles.statsLeft}>
           <div style={styles.mediaContainer}>
@@ -154,7 +154,7 @@ const ReviewsPanel = ({ consultorId }) => {
             <div style={styles.mediaEstrelas}>
               {renderStars(parseFloat(stats.media))}
             </div>
-            <span style={styles.mediaTotalAvaliacoes}>{stats.total} avaliações</span>
+            <span style={styles.mediaTotalAvaliacoes}>{stats.total} avaliacoes</span>
           </div>
         </div>
 
@@ -165,7 +165,7 @@ const ReviewsPanel = ({ consultorId }) => {
             
             return (
               <div key={estrela} style={styles.barraRow}>
-                <span style={styles.barraLabel}>{estrela} ⭐</span>
+                <span style={styles.barraLabel}>{estrela} i</span>
                 <div style={styles.barraContainer}>
                   <div 
                     style={{
@@ -181,7 +181,7 @@ const ReviewsPanel = ({ consultorId }) => {
         </div>
       </div>
 
-      {/* Filtros e Ordenação */}
+      {/* Filtros e Ordenacao */}
       <div style={styles.filtrosContainer}>
         <div style={styles.filtrosLeft}>
           <FaFilter color="#666" />
@@ -190,7 +190,7 @@ const ReviewsPanel = ({ consultorId }) => {
             onChange={(e) => setFiltroEstrelas(e.target.value)}
             style={styles.select}
           >
-            <option value="todas">Todas as avaliações</option>
+            <option value="todas">Todas as avaliacoes</option>
             <option value="5">5 estrelas</option>
             <option value="4">4 estrelas</option>
             <option value="3">3 estrelas</option>
@@ -214,24 +214,24 @@ const ReviewsPanel = ({ consultorId }) => {
         </div>
       </div>
 
-      {/* Lista de Avaliações */}
+      {/* Lista de Avaliacoes */}
       <div style={styles.avaliacoesList}>
         {avaliacoesFiltradas.map(avaliacao => (
           <div key={avaliacao.id} style={styles.avaliacaoCard}>
             <div style={styles.avaliacaoHeader}>
               <div style={styles.chamadaInfo}>
                 <div style={styles.chamadaIdBadge}>
-                  📞 {avaliacao.chamadaId}
+                   {avaliacao.chamadaId}
                 </div>
                 <div style={styles.dataHoraInfo}>
                   <span style={styles.dataText}>
-                    📅 {new Date(avaliacao.data).toLocaleDateString('pt-BR')}
+                     {new Date(avaliacao.data).toLocaleDateString('pt-BR')}
                   </span>
                   <span style={styles.horarioText}>
-                    🕐 {avaliacao.horario}
+                     {avaliacao.horario}
                   </span>
                   <span style={styles.duracaoText}>
-                    ⏱️ {avaliacao.duracao}
+                    ± {avaliacao.duracao}
                   </span>
                 </div>
               </div>
@@ -246,11 +246,11 @@ const ReviewsPanel = ({ consultorId }) => {
 
             <div style={styles.avaliacaoFooter}>
               <div style={styles.footerRow}>
-                <span style={styles.footerLabel}>🏪 Loja:</span>
+                <span style={styles.footerLabel}> Loja:</span>
                 <span style={styles.footerValue}>{avaliacao.loja}</span>
               </div>
               <div style={styles.footerRow}>
-                <span style={styles.footerLabel}>📦 Produtos:</span>
+                <span style={styles.footerLabel}> Produtos:</span>
                 <span style={styles.footerValue}>
                   {avaliacao.produtos.join(', ')}
                 </span>
@@ -260,15 +260,15 @@ const ReviewsPanel = ({ consultorId }) => {
         ))}
       </div>
 
-      {/* Mensagem quando não há avaliações */}
+      {/* Mensagem quando nao ha avaliacoes */}
       {avaliacoesFiltradas.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>⭐</div>
-          <p style={styles.emptyTitle}>Nenhuma avaliação encontrada</p>
+          <div style={styles.emptyIcon}>i</div>
+          <p style={styles.emptyTitle}>Nenhuma avaliacao encontrada</p>
           <p style={styles.emptySubtitle}>
             {filtroEstrelas !== 'todas' 
               ? 'Tente ajustar os filtros de busca'
-              : 'Você ainda não recebeu avaliações dos clientes'}
+              : 'Voca ainda nao recebeu avaliacoes dos clientes'}
           </p>
         </div>
       )}
@@ -276,7 +276,7 @@ const ReviewsPanel = ({ consultorId }) => {
   );
 };
 
-// Função auxiliar para renderizar estrelas
+// Funcao auxiliar para renderizar estrelas
 const renderStars = (rating) => {
   const stars = [];
   for (let i = 1; i <= 5; i++) {

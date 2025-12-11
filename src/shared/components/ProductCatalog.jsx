@@ -13,74 +13,74 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
     {
       id: 'prod_001',
       nome: 'Smartphone Galaxy S23',
-      descricao: 'Tela 6.1", 128GB, 8GB RAM, Câmera 50MP',
+      descricao: 'Tela 6.1", 128GB, 8GB RAM, C¢mera 50MP',
       preco: 2500.00,
-      categoria: 'Eletrônicos',
+      categoria: 'Eletr´nicos',
       estoque: 15,
-      imagem: '📱',
+      imagem: '',
     },
     {
       id: 'prod_002',
       nome: 'Notebook Dell Inspiron',
       descricao: 'Intel i5, 8GB RAM, SSD 256GB, Tela 15.6"',
       preco: 3200.00,
-      categoria: 'Informática',
+      categoria: 'Informatica',
       estoque: 8,
-      imagem: '💻',
+      imagem: '',
     },
     {
       id: 'prod_003',
       nome: 'Smart TV Samsung 55"',
       descricao: '4K UHD, HDR, Smart Tizen, 3 HDMI',
       preco: 2800.00,
-      categoria: 'TV e Áudio',
+      categoria: 'TV e udio',
       estoque: 12,
-      imagem: '📺',
+      imagem: '',
     },
     {
       id: 'prod_004',
       nome: 'Geladeira Brastemp Frost Free',
       descricao: 'Duplex, 375L, Inox, Classe A',
       preco: 2900.00,
-      categoria: 'Eletrodomésticos',
+      categoria: 'Eletrodomesticos',
       estoque: 5,
-      imagem: '🧊',
+      imagem: '',
     },
     {
       id: 'prod_005',
-      nome: 'Fogão Consul 5 Bocas',
-      descricao: 'Mesa de vidro, Acendimento automático',
+      nome: 'Fogao Consul 5 Bocas',
+      descricao: 'Mesa de vidro, Acendimento automatico',
       preco: 890.00,
-      categoria: 'Eletrodomésticos',
+      categoria: 'Eletrodomesticos',
       estoque: 10,
-      imagem: '🔥',
+      imagem: '',
     },
     {
       id: 'prod_006',
       nome: 'Micro-ondas Electrolux 30L',
-      descricao: 'Função tostex, 10 receitas pré-programadas',
+      descricao: 'Funcao tostex, 10 receitas pre-programadas',
       preco: 550.00,
-      categoria: 'Eletrodomésticos',
+      categoria: 'Eletrodomesticos',
       estoque: 20,
-      imagem: '📦',
+      imagem: '',
     },
     {
       id: 'prod_007',
       nome: 'Fone Bluetooth JBL',
-      descricao: 'Cancelamento de ruído, 20h bateria',
+      descricao: 'Cancelamento de ruido, 20h bateria',
       preco: 299.00,
-      categoria: 'Eletrônicos',
+      categoria: 'Eletr´nicos',
       estoque: 35,
-      imagem: '🎧',
+      imagem: '',
     },
     {
       id: 'prod_008',
       nome: 'Smartwatch Apple Watch SE',
-      descricao: 'GPS, Monitor cardíaco, À prova d\'água',
+      descricao: 'GPS, Monitor cardiaco, € prova d\'agua',
       preco: 2400.00,
       categoria: 'Wearables',
       estoque: 7,
-      imagem: '⌚',
+      imagem: '',
     },
   ];
 
@@ -221,7 +221,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
         name: produto.nome,
         price: produto.preco,
         quantity: 1,
-        percentualComissao: 8, // 8% padrão
+        percentualComissao: 8, // 8% padrao
         valorComissao: produto.preco * 0.08,
       });
     }
@@ -231,7 +231,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
     return (
       <div style={styles.container}>
         <div style={styles.loading}>
-          <div style={{ fontSize: '2rem', marginBottom: '10px' }}>⏳</div>
+          <div style={{ fontSize: '2rem', marginBottom: '10px' }}>o</div>
           Carregando produtos...
         </div>
       </div>
@@ -241,12 +241,12 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h3 style={styles.title}>📦 Catálogo de Produtos</h3>
+        <h3 style={styles.title}> Catalogo de Produtos</h3>
 
         <div style={styles.filters}>
           <input
             type="text"
-            placeholder="🔍 Buscar produto..."
+            placeholder=" Buscar produto..."
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
             style={styles.searchInput}
@@ -259,7 +259,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
           >
             {categorias.map((cat) => (
               <option key={cat} value={cat}>
-                {cat === 'todos' ? '📋 Todas Categorias' : `📁 ${cat}`}
+                {cat === 'todos' ? ' Todas Categorias' : ` ${cat}`}
               </option>
             ))}
           </select>
@@ -268,7 +268,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
 
       {produtosFiltrados.length === 0 ? (
         <div style={styles.emptyState}>
-          <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔍</div>
+          <div style={{ fontSize: '3rem', marginBottom: '10px' }}></div>
           <p>Nenhum produto encontrado</p>
         </div>
       ) : (
@@ -298,10 +298,10 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
               <div style={styles.productStock}>
                 {produto.estoque > 0 ? (
                   <span style={{ color: '#28a745' }}>
-                    ✅ {produto.estoque} em estoque
+                     {produto.estoque} em estoque
                   </span>
                 ) : (
-                  <span style={{ color: '#dc3545' }}>❌ Sem estoque</span>
+                  <span style={{ color: '#dc3545' }}> Sem estoque</span>
                 )}
               </div>
               <button
@@ -319,7 +319,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
                   }
                 }}
               >
-                {produto.estoque > 0 ? '➕ Adicionar' : 'Indisponível'}
+                {produto.estoque > 0 ? 'O Adicionar' : 'Indisponivel'}
               </button>
             </div>
           ))}

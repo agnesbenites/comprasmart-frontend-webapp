@@ -1,35 +1,62 @@
+// src/pages/VendedorDashboard/pages/VendedorDashboard.jsx
+// VERSAO CORRIGIDA - Com Integracao de Venda
+
 import React from "react";
-import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 
-// CORES HARMONIOSAS PARA O VENDEDOR (sem vermelho!) - MOVIDO PARA O TOPO
-const VENDOR_PRIMARY = "#4a6fa5"; // Azul suave
-const VENDOR_PRIMARY_DARK = "#2c3e50"; // Azul escuro
+// =============================================================
+// === IMPORTACOES DOS COMPONENTES/PAGINAS REAIS ===
+// =============================================================
+import VendedorAtendimentoPage from "./VendedorAtendimentoPage";
+import VendedorProfile from "./VendedorProfile";
+
+// Importar o RelatorioPageVendedor da pasta components
+import RelatorioPageVendedor from "../components/RelatorioPageVendedor";
+
+// Importar o TrainingPanel do Consultor (igual)
+import TrainingPanel from "../../ConsultorDashboard/components/TrainingPanel";
+
+// Importar o ReportPanel da pasta components do Vendedor
+import ReportPanel from "../components/ReportPanel";
+
+// Importar a pagina de Integracao de Venda do Lojista (compartilhada)
+import IntegracaoVenda from "../../LojistaDashboard/pages/IntegracaoVenda";
+
+// =============================================================
+// === CORES E CONSTANTES ===
+// =============================================================
+const VENDOR_PRIMARY = "#4a6fa5";
+const VENDOR_PRIMARY_DARK = "#2c3e50";
 const VENDOR_SECONDARY = "#f8f9fa";
-const VENDOR_LIGHT_BG = "#eaf2ff"; // Azul claro bem suave
+const VENDOR_LIGHT_BG = "#eaf2ff";
 
-// === DADOS DE NAVEGAÇÃO DO VENDEDOR (SIDEBAR) ===
+// === DADOS DE NAVEGACAO DO VENDEDOR (SIDEBAR) ===
 const VENDEDOR_MENU_ITEMS = [
-    { title: "🏠 Dashboard", rota: "/vendedor/dashboard" },
-    { title: "📞 Atendimento", rota: "/vendedor/dashboard/atendimento" },
-    { title: "👥 Meus Clientes", rota: "/vendedor/dashboard/clientes" },
-    { title: "📦 Catálogo", rota: "/vendedor/dashboard/produtos" },
-    { title: "📊 Relatórios", rota: "/vendedor/dashboard/relatorio" },
+    { title: "Dashboard", rota: "/vendedor/dashboard", icon: "&#127968;" },
+    { title: "Atendimento", rota: "/vendedor/dashboard/atendimento", icon: "&#128172;" },
+    { title: "Integrar Venda", rota: "/vendedor/dashboard/integracao", icon: "&#128179;" },
+    { title: "Meus Clientes", rota: "/vendedor/dashboard/clientes", icon: "&#128101;" },
+    { title: "Catalogo", rota: "/vendedor/dashboard/produtos", icon: "&#128230;" },
+    { title: "Relatorios", rota: "/vendedor/dashboard/relatorio", icon: "&#128202;" },
+    { title: "Treinamentos", rota: "/vendedor/dashboard/treinamentos", icon: "&#127891;" },
+    { title: "Report", rota: "/vendedor/dashboard/report", icon: "&#128221;" },
 ];
 
 // === DADOS MOCKADOS DE CAMPANHAS ===
 const MOCK_CAMPAIGNS_VENDEDOR = [
-    { id: 1, loja: "Loja Central - Shopping Ibirapuera", nome: "Black Friday Antecipada", validade: "Até 30/11", destaque: true, cor: VENDOR_PRIMARY },
-    { id: 2, loja: "Loja Central - Shopping Ibirapuera", nome: "Cashback em Eletros", validade: "Até 15/12", destaque: false, cor: "#17a2b8" },
+    { id: 1, loja: "Loja Central - Shopping Ibirapuera", nome: "Black Friday Antecipada", validade: "Ate 30/11", destaque: true, cor: VENDOR_PRIMARY },
+    { id: 2, loja: "Loja Central - Shopping Ibirapuera", nome: "Cashback em Eletros", validade: "Ate 15/12", destaque: false, cor: "#17a2b8" },
 ];
 
+// =============================================================
 // === VENDEDOR HOME PANEL ===
+// =============================================================
 export const VendedorHomePanel = () => {
     const navigate = useNavigate();
 
-    // Dados do vendedor
     const vendedorInfo = {
         nome: "Ana Vendedora",
-        setores: ["Móveis", "Brinquedos", "Eletrodomésticos"],
+        setores: ["Moveis", "Brinquedos", "Eletrodomesticos"],
         loja: "Loja Central - Shopping Ibirapuera",
         metaMensal: 50,
         vendasRealizadas: 32,
@@ -38,53 +65,55 @@ export const VendedorHomePanel = () => {
         comissaoAcumulada: 4200.75,
     };
 
-    // Campanhas apenas da PRÓPRIA loja
     const campanhasAtivas = MOCK_CAMPAIGNS_VENDEDOR;
 
     const atalhos = [
         {
-            titulo: "📞 Novo Atendimento",
+            titulo: "Novo Atendimento",
             descricao: "Atender cliente na minha loja",
             cor: VENDOR_PRIMARY,
-            rota: "/vendedor/dashboard/atendimento"
+            rota: "/vendedor/dashboard/atendimento",
+            icon: "&#128172;"
         },
         {
-            titulo: "📦 Catálogo da Loja",
-            descricao: "Ver produtos disponíveis na minha loja",
+            titulo: "Integrar Venda",
+            descricao: "Finalizar venda no caixa",
+            cor: "#28a745",
+            rota: "/vendedor/dashboard/integracao",
+            icon: "&#128179;"
+        },
+        {
+            titulo: "Catalogo da Loja",
+            descricao: "Ver produtos disponiveis",
             cor: "#17a2b8",
-            rota: "/vendedor/dashboard/produtos"
+            rota: "/vendedor/dashboard/produtos",
+            icon: "&#128230;"
         },
         {
-            titulo: "👥 Meus Clientes",
-            descricao: "Rever histórico de clientes atendidos",
-            cor: "#6f42c1",
-            rota: "/vendedor/dashboard/clientes"
-        },
-        {
-            titulo: "📈 Performance",
-            descricao: "Acompanhar meu desempenho e metas",
+            titulo: "Performance",
+            descricao: "Acompanhar desempenho e metas",
             cor: "#fd7e14",
-            rota: "/vendedor/dashboard/relatorio"
+            rota: "/vendedor/dashboard/relatorio",
+            icon: "&#128202;"
         }
     ];
 
     return (
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-            {/* Cabeçalho Pessoal - FOCO EM UMA LOJA */}
+            {/* Cabecalho Pessoal */}
             <div style={vendedorStyles.vendedorHeaderCard}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
                     <div>
                         <h1 style={{ color: VENDOR_PRIMARY, margin: "0 0 5px 0" }}>
-                            🛍️ Olá, {vendedorInfo.nome}!
+                            Ola, {vendedorInfo.nome}!
                         </h1>
                         <p style={{ color: "#666", margin: "0 0 15px 0" }}>
                             <strong>Vendedor Vinculado</strong> - {vendedorInfo.loja}
                         </p>
-                        
-                        {/* Setores da Loja */}
+
                         <div style={{ marginBottom: "15px" }}>
                             <h3 style={vendedorStyles.setoresTitle}>
-                                🎯 Setores da Minha Loja:
+                                Setores da Minha Loja:
                             </h3>
                             <div style={vendedorStyles.setoresContainer}>
                                 {vendedorInfo.setores.map((setor, index) => (
@@ -94,12 +123,11 @@ export const VendedorHomePanel = () => {
                                 ))}
                             </div>
                             <div style={{ marginTop: "10px", color: "#666", fontSize: "0.9rem" }}>
-                                ⚠️ Atendo apenas esta loja
+                                Atendo apenas esta loja
                             </div>
                         </div>
                     </div>
-                    
-                    {/* Performance */}
+
                     <div style={vendedorStyles.performanceBox(vendedorInfo.performance)}>
                         <div style={vendedorStyles.performanceLabel}>
                             Performance da Loja
@@ -108,16 +136,16 @@ export const VendedorHomePanel = () => {
                             {vendedorInfo.performance}%
                         </div>
                         <div style={vendedorStyles.comissaoPequena}>
-                            Comissão: R$ {vendedorInfo.comissaoAcumulada.toFixed(2).replace('.', ',')}
+                            Comissao: R$ {vendedorInfo.comissaoAcumulada.toFixed(2).replace('.', ',')}
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Campanhas da PRÓPRIA Loja */}
+            {/* Campanhas da Loja */}
             <div style={{ marginBottom: "30px" }}>
                 <h2 style={vendedorStyles.sectionTitle}>
-                    📢 Campanhas da {vendedorInfo.loja.split(' - ')[0]}
+                    Campanhas da {vendedorInfo.loja.split(' - ')[0]}
                 </h2>
                 <div style={vendedorStyles.campaignsGrid}>
                     {campanhasAtivas.map(campanha => (
@@ -139,54 +167,58 @@ export const VendedorHomePanel = () => {
                                 </span>
                             </div>
                             {campanha.destaque && (
-                                <span style={vendedorStyles.campaignTag}>🔥 Destaque</span>
+                                <span style={vendedorStyles.campaignTag}>Destaque</span>
                             )}
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Métricas Rápidas */}
+            {/* Metricas Rapidas */}
             <div style={vendedorStyles.metricsGrid}>
                 <div style={vendedorStyles.metricCard("#e8f5e8", "#28a745")}>
-                    <h3 style={vendedorStyles.metricTitle("#155724")}>🤑 Vendas do Mês</h3>
+                    <h3 style={vendedorStyles.metricTitle("#155724")}>Vendas do Mes</h3>
                     <p style={vendedorStyles.metricValue("#155724")}>
                         {vendedorInfo.vendasRealizadas}/{vendedorInfo.metaMensal}
                     </p>
                 </div>
 
                 <div style={vendedorStyles.metricCard("#e3f2fd", "#2196f3")}>
-                    <h3 style={vendedorStyles.metricTitle("#0d47a1")}>👥 Clientes Atendidos</h3>
+                    <h3 style={vendedorStyles.metricTitle("#0d47a1")}>Clientes Atendidos</h3>
                     <p style={vendedorStyles.metricValue("#0d47a1")}>
                         {vendedorInfo.clientesAtendidos}
                     </p>
                 </div>
 
                 <div style={vendedorStyles.metricCard("#fff3cd", "#ffc107")}>
-                    <h3 style={vendedorStyles.metricTitle("#856404")}>📊 Faltam para Meta</h3>
+                    <h3 style={vendedorStyles.metricTitle("#856404")}>Faltam para Meta</h3>
                     <p style={vendedorStyles.metricValue("#856404")}>
                         {vendedorInfo.metaMensal - vendedorInfo.vendasRealizadas} Vendas
                     </p>
                 </div>
 
                 <div style={vendedorStyles.metricCard("#eaf2ff", VENDOR_PRIMARY)}>
-                    <h3 style={vendedorStyles.metricTitle(VENDOR_PRIMARY_DARK)}>⚡ Performance</h3>
+                    <h3 style={vendedorStyles.metricTitle(VENDOR_PRIMARY_DARK)}>Performance</h3>
                     <p style={vendedorStyles.metricValue(VENDOR_PRIMARY_DARK)}>
                         {vendedorInfo.performance}%
                     </p>
                 </div>
             </div>
 
-            {/* Atalhos Rápidos */}
+            {/* Atalhos Rapidos */}
             <div style={{ marginBottom: "30px" }}>
-                <h2 style={vendedorStyles.sectionTitle}>🚀 Acesso Rápido</h2>
+                <h2 style={vendedorStyles.sectionTitle}>Acesso Rapido</h2>
                 <div style={vendedorStyles.fastAccessGrid}>
                     {atalhos.map((atalho, index) => (
                         <div
                             key={index}
                             onClick={() => navigate(atalho.rota)}
-                            style={{ ...vendedorStyles.fastAccessCard, borderLeft: `4px solid ${atalho.cor}` }}
+                            style={{ ...vendedorStyles.fastAccessCard, borderLeft: `4px solid ${atalho.cor}`, cursor: 'pointer' }}
                         >
+                            <div 
+                                style={{ fontSize: "2rem", marginBottom: "10px" }}
+                                dangerouslySetInnerHTML={{ __html: atalho.icon }}
+                            />
                             <h3 style={{ ...vendedorStyles.fastAccessTitle, color: atalho.cor }}>
                                 {atalho.titulo}
                             </h3>
@@ -201,7 +233,26 @@ export const VendedorHomePanel = () => {
     );
 };
 
+// =============================================================
+// === PAGINAS PLACEHOLDER (para as que nao existem ainda) ===
+// =============================================================
+const VendedorClientesPage = () => (
+    <div style={{ padding: "30px", backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0 5px 20px rgba(0,0,0,0.08)' }}>
+        <h1 style={{ color: VENDOR_PRIMARY, fontSize: '2rem', marginBottom: '10px' }}>Meus Clientes</h1>
+        <p style={{ color: '#6c757d' }}>Lista de clientes atendidos.</p>
+    </div>
+);
+
+const VendedorProdutosPage = () => (
+    <div style={{ padding: "30px", backgroundColor: '#ffffff', borderRadius: '10px', boxShadow: '0 5px 20px rgba(0,0,0,0.08)' }}>
+        <h1 style={{ color: VENDOR_PRIMARY, fontSize: '2rem', marginBottom: '10px' }}>Catalogo de Produtos</h1>
+        <p style={{ color: '#6c757d' }}>Produtos disponiveis na loja.</p>
+    </div>
+);
+
+// =============================================================
 // === COMPONENTE LAYOUT DO VENDEDOR ===
+// =============================================================
 const VendedorDashboardLayout = () => {
     const location = useLocation();
     const currentPath = location.pathname;
@@ -219,9 +270,7 @@ const VendedorDashboardLayout = () => {
             isActive = isExactMatch || isPrefixMatch;
         }
 
-        return isActive
-            ? vendedorStyles.menuItemActive
-            : vendedorStyles.menuItem;
+        return isActive ? vendedorStyles.menuItemActive : vendedorStyles.menuItem;
     };
 
     return (
@@ -236,9 +285,20 @@ const VendedorDashboardLayout = () => {
                             to={item.rota}
                             style={getMenuItemStyle(item.rota)}
                         >
+                            <span 
+                                style={{ marginRight: "8px" }}
+                                dangerouslySetInnerHTML={{ __html: item.icon }}
+                            />
                             {item.title}
                         </Link>
                     ))}
+                    <Link
+                        to="/vendedor/dashboard/profile"
+                        style={getMenuItemStyle("/vendedor/dashboard/profile")}
+                    >
+                        <span style={{ marginRight: "8px" }}>&#128100;</span>
+                        Meu Perfil
+                    </Link>
                 </nav>
             </div>
 
@@ -254,7 +314,7 @@ const VendedorDashboardLayout = () => {
                         to="/vendedor/dashboard/profile"
                         style={vendedorStyles.profileButton}
                     >
-                        <span style={vendedorStyles.profileName}>👤 Meu Perfil</span>
+                        <span style={vendedorStyles.profileName}>Meu Perfil</span>
                     </Link>
                 </header>
 
@@ -266,7 +326,9 @@ const VendedorDashboardLayout = () => {
     );
 };
 
-// Estilos do Vendedor
+// =============================================================
+// === ESTILOS DO VENDEDOR ===
+// =============================================================
 const vendedorStyles = {
     dashboardContainer: {
         display: "flex",
@@ -290,7 +352,8 @@ const vendedorStyles = {
         color: VENDOR_PRIMARY,
     },
     menuItem: {
-        display: "block",
+        display: "flex",
+        alignItems: "center",
         padding: "12px 20px",
         color: VENDOR_PRIMARY,
         textDecoration: "none",
@@ -300,19 +363,20 @@ const vendedorStyles = {
         backgroundColor: VENDOR_LIGHT_BG,
         borderRadius: "0 50px 50px 0",
         marginRight: "20px",
-        ":hover": {
-            backgroundColor: "#d0e4ff",
-        },
+        marginBottom: "5px",
     },
     menuItemActive: {
+        display: "flex",
+        alignItems: "center",
+        padding: "12px 20px",
         backgroundColor: "#FFFFFF",
         color: VENDOR_PRIMARY,
         fontWeight: "700",
         borderLeft: `3px solid ${VENDOR_PRIMARY}`,
         borderRadius: "0 50px 50px 0",
         marginRight: "20px",
-        padding: "12px 20px",
-        display: "block",
+        marginBottom: "5px",
+        textDecoration: "none",
     },
     mainContent: {
         flexGrow: 1,
@@ -351,14 +415,10 @@ const vendedorStyles = {
         backgroundColor: "white",
         transition: "all 0.3s ease",
         fontWeight: "600",
-        ":hover": {
-            backgroundColor: VENDOR_LIGHT_BG,
-        },
     },
     profileName: {
         fontSize: "1rem",
     },
-    // Estilos do Home Panel
     vendedorHeaderCard: {
         backgroundColor: "white",
         padding: "25px",
@@ -383,7 +443,7 @@ const vendedorStyles = {
         borderRadius: "20px",
         fontSize: "14px",
         fontWeight: "500",
-        border: `1px solid ${VENDOR_PRIMARY}33` // 33 = 20% opacity
+        border: `1px solid ${VENDOR_PRIMARY}33`
     },
     performanceBox: (performance) => ({
         textAlign: "center",
@@ -464,7 +524,7 @@ const vendedorStyles = {
     }),
     fastAccessGrid: {
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
         gap: "20px"
     },
     fastAccessCard: {
@@ -475,14 +535,10 @@ const vendedorStyles = {
         cursor: "pointer",
         transition: "all 0.3s ease",
         textAlign: "center",
-        ":hover": {
-            transform: "translateY(-5px)",
-            boxShadow: "0 5px 20px rgba(0,0,0,0.15)"
-        }
     },
     fastAccessTitle: {
         margin: "0 0 10px 0",
-        fontSize: "20px"
+        fontSize: "18px"
     },
     fastAccessDescription: {
         color: "#666",
@@ -491,4 +547,29 @@ const vendedorStyles = {
     }
 };
 
-export default VendedorDashboardLayout;
+// =============================================================
+// === COMPONENTE PRINCIPAL COM ROTAS ===
+// =============================================================
+export default function VendedorDashboard() {
+    return (
+        <Routes>
+            <Route path="/" element={<VendedorDashboardLayout />}>
+                {/* Rota index */}
+                <Route index element={<VendedorHomePanel />} />
+                
+                {/* Rota /vendedor/dashboard */}
+                <Route path="dashboard" element={<VendedorHomePanel />} />
+                
+                {/* Sub-rotas */}
+                <Route path="dashboard/atendimento" element={<VendedorAtendimentoPage />} />
+                <Route path="dashboard/integracao" element={<IntegracaoVenda />} />
+                <Route path="dashboard/clientes" element={<VendedorClientesPage />} />
+                <Route path="dashboard/produtos" element={<VendedorProdutosPage />} />
+                <Route path="dashboard/relatorio" element={<RelatorioPageVendedor />} />
+                <Route path="dashboard/treinamentos" element={<TrainingPanel />} />
+                <Route path="dashboard/report" element={<ReportPanel />} />
+                <Route path="dashboard/profile" element={<VendedorProfile />} />
+            </Route>
+        </Routes>
+    );
+}

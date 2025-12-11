@@ -3,7 +3,7 @@
 /**
  * Valida email
  * @param {string} email - Email a ser validado
- * @returns {boolean} - true se válido
+ * @returns {boolean} - true se valido
  */
 export const validarEmail = (email) => {
   if (!email) return false;
@@ -15,21 +15,21 @@ export const validarEmail = (email) => {
 /**
  * Valida CPF
  * @param {string} cpf - CPF a ser validado
- * @returns {boolean} - true se válido
+ * @returns {boolean} - true se valido
  */
 export const validarCPF = (cpf) => {
   if (!cpf) return false;
   
-  // Remove caracteres não numéricos
+  // Remove caracteres nao numericos
   const apenasNumeros = cpf.replace(/\D/g, '');
   
-  // Verifica se tem 11 dígitos
+  // Verifica se tem 11 digitos
   if (apenasNumeros.length !== 11) return false;
   
-  // Verifica se todos os dígitos são iguais
+  // Verifica se todos os digitos sao iguais
   if (/^(\d)\1{10}$/.test(apenasNumeros)) return false;
   
-  // Validação do primeiro dígito verificador
+  // Validacao do primeiro digito verificador
   let soma = 0;
   for (let i = 0; i < 9; i++) {
     soma += parseInt(apenasNumeros.charAt(i)) * (10 - i);
@@ -38,7 +38,7 @@ export const validarCPF = (cpf) => {
   if (resto === 10 || resto === 11) resto = 0;
   if (resto !== parseInt(apenasNumeros.charAt(9))) return false;
   
-  // Validação do segundo dígito verificador
+  // Validacao do segundo digito verificador
   soma = 0;
   for (let i = 0; i < 10; i++) {
     soma += parseInt(apenasNumeros.charAt(i)) * (11 - i);
@@ -53,7 +53,7 @@ export const validarCPF = (cpf) => {
 /**
  * Valida CNPJ
  * @param {string} cnpj - CNPJ a ser validado
- * @returns {boolean} - true se válido
+ * @returns {boolean} - true se valido
  */
 export const validarCNPJ = (cnpj) => {
   if (!cnpj) return false;
@@ -63,7 +63,7 @@ export const validarCNPJ = (cnpj) => {
   if (apenasNumeros.length !== 14) return false;
   if (/^(\d)\1{13}$/.test(apenasNumeros)) return false;
   
-  // Validação dos dígitos verificadores
+  // Validacao dos digitos verificadores
   let tamanho = apenasNumeros.length - 2;
   let numeros = apenasNumeros.substring(0, tamanho);
   const digitos = apenasNumeros.substring(tamanho);
@@ -97,14 +97,14 @@ export const validarCNPJ = (cnpj) => {
 /**
  * Valida telefone
  * @param {string} telefone - Telefone a ser validado
- * @returns {boolean} - true se válido
+ * @returns {boolean} - true se valido
  */
 export const validarTelefone = (telefone) => {
   if (!telefone) return false;
   
   const apenasNumeros = telefone.replace(/\D/g, '');
   
-  // Aceita 10 ou 11 dígitos (com ou sem 9 no celular)
+  // Aceita 10 ou 11 digitos (com ou sem 9 no celular)
   return apenasNumeros.length === 10 || apenasNumeros.length === 11;
 };
 
@@ -115,32 +115,32 @@ export const validarTelefone = (telefone) => {
  */
 export const validarSenhaForte = (senha) => {
   if (!senha) {
-    return { valido: false, mensagem: 'Senha é obrigatória' };
+    return { valido: false, mensagem: 'Senha e obrigatoria' };
   }
   
   if (senha.length < 8) {
-    return { valido: false, mensagem: 'Senha deve ter no mínimo 8 caracteres' };
+    return { valido: false, mensagem: 'Senha deve ter no minimo 8 caracteres' };
   }
   
   if (!/[A-Z]/.test(senha)) {
-    return { valido: false, mensagem: 'Senha deve conter ao menos uma letra maiúscula' };
+    return { valido: false, mensagem: 'Senha deve conter ao menos uma letra maiuscula' };
   }
   
   if (!/[a-z]/.test(senha)) {
-    return { valido: false, mensagem: 'Senha deve conter ao menos uma letra minúscula' };
+    return { valido: false, mensagem: 'Senha deve conter ao menos uma letra minuscula' };
   }
   
   if (!/[0-9]/.test(senha)) {
-    return { valido: false, mensagem: 'Senha deve conter ao menos um número' };
+    return { valido: false, mensagem: 'Senha deve conter ao menos um numero' };
   }
   
-  return { valido: true, mensagem: 'Senha válida' };
+  return { valido: true, mensagem: 'Senha valida' };
 };
 
 /**
  * Valida CEP
  * @param {string} cep - CEP a ser validado
- * @returns {boolean} - true se válido
+ * @returns {boolean} - true se valido
  */
 export const validarCEP = (cep) => {
   if (!cep) return false;
@@ -152,7 +152,7 @@ export const validarCEP = (cep) => {
 /**
  * Valida URL
  * @param {string} url - URL a ser validada
- * @returns {boolean} - true se válido
+ * @returns {boolean} - true se valido
  */
 export const validarURL = (url) => {
   if (!url) return false;
@@ -168,14 +168,14 @@ export const validarURL = (url) => {
 /**
  * Valida campo vazio
  * @param {string} valor - Valor a ser validado
- * @returns {boolean} - true se não estiver vazio
+ * @returns {boolean} - true se nao estiver vazio
  */
 export const validarCampoObrigatorio = (valor) => {
   return valor !== null && valor !== undefined && valor.trim() !== '';
 };
 
 /**
- * Valida valor numérico positivo
+ * Valida valor numerico positivo
  * @param {number} valor - Valor a ser validado
  * @returns {boolean} - true se positivo
  */

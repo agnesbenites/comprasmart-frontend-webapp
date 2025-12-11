@@ -1,7 +1,7 @@
 // shared/utils/api.js
 
 // ====================================
-// CONFIGURAÇÃO DA API
+// CONFIGURACAO DA API
 // ====================================
 
 const API_URL = 'https://plataforma-consultoria-mvp.onrender.com';
@@ -66,7 +66,7 @@ export const API_CONFIG = {
       webhook: '/api/webhooks/stripe',
     },
     
-    // COMISSÕES
+    // COMISSOES
     comissoes: {
       consultor: (consultorId) => `/api/comissoes/consultor/${consultorId}`,
       aprovar: (id) => `/api/comissoes/aprovar/${id}`,
@@ -89,9 +89,9 @@ export const getFullUrl = (endpoint) => {
 };
 
 /**
- * Faz requisição GET
+ * Faz requisicao GET
  * @param {string} endpoint - Endpoint da API
- * @param {object} options - Opções adicionais
+ * @param {object} options - Opcoes adicionais
  * @returns {Promise} - Resposta da API
  */
 export const apiGet = async (endpoint, options = {}) => {
@@ -112,16 +112,16 @@ export const apiGet = async (endpoint, options = {}) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('❌ Erro na requisição GET:', error);
+    console.error(' Erro na requisicao GET:', error);
     throw error;
   }
 };
 
 /**
- * Faz requisição POST
+ * Faz requisicao POST
  * @param {string} endpoint - Endpoint da API
- * @param {object} body - Corpo da requisição
- * @param {object} options - Opções adicionais
+ * @param {object} body - Corpo da requisicao
+ * @param {object} options - Opcoes adicionais
  * @returns {Promise} - Resposta da API
  */
 export const apiPost = async (endpoint, body = {}, options = {}) => {
@@ -143,16 +143,16 @@ export const apiPost = async (endpoint, body = {}, options = {}) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('❌ Erro na requisição POST:', error);
+    console.error(' Erro na requisicao POST:', error);
     throw error;
   }
 };
 
 /**
- * Faz requisição PATCH
+ * Faz requisicao PATCH
  * @param {string} endpoint - Endpoint da API
- * @param {object} body - Corpo da requisição
- * @param {object} options - Opções adicionais
+ * @param {object} body - Corpo da requisicao
+ * @param {object} options - Opcoes adicionais
  * @returns {Promise} - Resposta da API
  */
 export const apiPatch = async (endpoint, body = {}, options = {}) => {
@@ -174,15 +174,15 @@ export const apiPatch = async (endpoint, body = {}, options = {}) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('❌ Erro na requisição PATCH:', error);
+    console.error(' Erro na requisicao PATCH:', error);
     throw error;
   }
 };
 
 /**
- * Faz requisição DELETE
+ * Faz requisicao DELETE
  * @param {string} endpoint - Endpoint da API
- * @param {object} options - Opções adicionais
+ * @param {object} options - Opcoes adicionais
  * @returns {Promise} - Resposta da API
  */
 export const apiDelete = async (endpoint, options = {}) => {
@@ -203,13 +203,13 @@ export const apiDelete = async (endpoint, options = {}) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('❌ Erro na requisição DELETE:', error);
+    console.error(' Erro na requisicao DELETE:', error);
     throw error;
   }
 };
 
 /**
- * Salva token de autenticação
+ * Salva token de autenticacao
  * @param {string} token - Token JWT
  */
 export const salvarToken = (token) => {
@@ -217,14 +217,14 @@ export const salvarToken = (token) => {
 };
 
 /**
- * Remove token de autenticação
+ * Remove token de autenticacao
  */
 export const removerToken = () => {
   localStorage.removeItem('token');
 };
 
 /**
- * Retorna token de autenticação
+ * Retorna token de autenticacao
  * @returns {string|null} - Token JWT ou null
  */
 export const getToken = () => {
@@ -232,7 +232,7 @@ export const getToken = () => {
 };
 
 /**
- * Verifica se usuário está autenticado
+ * Verifica se usuario esta autenticado
  * @returns {boolean} - true se autenticado
  */
 export const isAutenticado = () => {

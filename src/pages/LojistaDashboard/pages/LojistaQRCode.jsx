@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 
 // Dados mockados de QR Codes gerados
-// CORREÇÃO: Usando IDs e adicionando saleValue (valor simulado da venda)
+// CORRECAO: Usando IDs e adicionando saleValue (valor simulado da venda)
 const MOCK_QRS = [
-    { id: 'QR-001-A', source: 'Vendedor', department: 'Eletrodomésticos', status: 'Ativo', creator: 'VEND-202', saleValue: 4899.00 }, 
-    { id: 'QR-002-C', source: 'Consultor', department: 'Móveis', status: 'Ativo', creator: 'CONS-101', saleValue: 1250.50 }, // ID do Consultor
+    { id: 'QR-001-A', source: 'Vendedor', department: 'Eletrodomesticos', status: 'Ativo', creator: 'VEND-202', saleValue: 4899.00 }, 
+    { id: 'QR-002-C', source: 'Consultor', department: 'Moveis', status: 'Ativo', creator: 'CONS-101', saleValue: 1250.50 }, // ID do Consultor
     { id: 'QR-003-A', source: 'Vendedor', department: 'Cama/Banho', status: 'Inativo', creator: 'VEND-208', saleValue: 0.00 },
     { id: 'QR-004-C', source: 'Consultor', department: 'Tecnologia', status: 'Ativo', creator: 'CONS-105', saleValue: 8200.00 }, // ID do Consultor
     { id: 'QR-005-A', source: 'Lojista', department: 'Geral', status: 'Ativo', creator: 'Agnes Lojista', saleValue: 349.90 },
 ];
 
 const DEPARTMENTS = [
-    'Eletrodomésticos',
-    'Móveis',
+    'Eletrodomesticos',
+    'Moveis',
     'Tecnologia',
     'Cama/Banho',
     'Geral',
@@ -21,19 +21,19 @@ const DEPARTMENTS = [
 const LojistaQRCode = () => {
     const [selectedDept, setSelectedDept] = useState(DEPARTMENTS[0]);
     const [generatedLink, setGeneratedLink] = useState('');
-    // NOVO ESTADO: Para o modal de visualização de QR rastreado
+    // NOVO ESTADO: Para o modal de visualizacao de QR rastreado
     const [modalData, setModalData] = useState(null); 
 
-    // === GERAÇÃO DE QR CODE (SIMULADA) ===
+    // === GERACAO DE QR CODE (SIMULADA) ===
     const handleGenerateQR = () => {
-        // Simula a criação de um link rastreável por departamento e loja
+        // Simula a criacao de um link rastreavel por departamento e loja
         const baseLink = "http://api.comprasmar.com/link";
         const newId = `QR-${Math.floor(Math.random() * 900) + 100}-L`;
         const link = `${baseLink}?source=LOJISTA&dept=${selectedDept}&loja=Agnes&qrId=${newId}`;
         setGeneratedLink(link);
     };
 
-    // --- Funções do Modal de Rastreamento ---
+    // --- Funcoes do Modal de Rastreamento ---
     const handleViewTrackedQR = (qr) => {
         setModalData(qr);
     };
@@ -54,7 +54,7 @@ const LojistaQRCode = () => {
             document.execCommand('copy');
             document.body.removeChild(tempInput);
             
-            console.log(`Link do QR Code ${modalData.id} copiado para a área de transferência.`);
+            console.log(`Link do QR Code ${modalData.id} copiado para a area de transferancia.`);
             closeModal();
         }
     };
@@ -88,7 +88,7 @@ const LojistaQRCode = () => {
             color: '#495057',
             marginBottom: '20px',
         },
-        // Geração
+        // Geracao
         generationArea: {
             display: 'flex',
             gap: '20px',
@@ -215,7 +215,7 @@ const LojistaQRCode = () => {
         }
     };
 
-    // Lógica para definir a cor da Tag de Fonte
+    // Logica para definir a cor da Tag de Fonte
     const getSourceStyle = (source) => {
         if (source === 'Vendedor') return { backgroundColor: '#fff3cd', color: '#856404' }; // Amarelo para Vendedor
         if (source === 'Consultor') return { backgroundColor: '#d1ecf1', color: '#0c5460' }; // Ciano para Consultor
@@ -233,7 +233,7 @@ const LojistaQRCode = () => {
             <div style={styles.modalOverlay}>
                 <div style={styles.modalContent}>
                     <h2 style={{color: styles.title.color, marginBottom: '20px'}}>
-                        🔗 Detalhes do QR Code {modalData.id}
+                         Detalhes do QR Code {modalData.id}
                     </h2>
                     
                     <div style={styles.infoBox}>
@@ -248,9 +248,9 @@ const LojistaQRCode = () => {
                         </p>
                     </div>
 
-                    {/* Simulação Visual do QR Code */}
+                    {/* Simulacao Visual do QR Code */}
                     <div style={{ padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px', marginBottom: '15px' }}>
-                        <p style={{ margin: 0, color: '#495057', fontWeight: 'bold' }}>[Simulação de QR Code]</p>
+                        <p style={{ margin: 0, color: '#495057', fontWeight: 'bold' }}>[Simulacao de QR Code]</p>
                         <img 
                             src={`https://placehold.co/100x100/6f42c1/ffffff?text=${modalData.id}`} 
                             alt="QR Code Simulado" 
@@ -267,7 +267,7 @@ const LojistaQRCode = () => {
                         onClick={handleCopyLink}
                         style={styles.copyButton}
                     >
-                        📋 Copiar Link
+                         Copiar Link
                     </button>
                     <button 
                         onClick={closeModal}
@@ -282,13 +282,13 @@ const LojistaQRCode = () => {
 
     return (
         <div style={styles.container}>
-            <h1 style={styles.title}>🔳 Gerenciamento de QR Codes de Atendimento</h1>
+            <h1 style={styles.title}> Gerenciamento de QR Codes de Atendimento</h1>
 
-            {/* 1. Geração de QR Code por Departamento */}
+            {/* 1. Geracao de QR Code por Departamento */}
             <div style={styles.section}>
                 <h2 style={styles.sectionTitle}>1. Gerar Novo QR Code (Por Departamento)</h2>
                 <p style={{ color: '#666' }}>
-                    Selecione o departamento para o qual este QR Code será usado no ponto de venda:
+                    Selecione o departamento para o qual este QR Code sera usado no ponto de venda:
                 </p>
                 
                 <div style={styles.generationArea}>
@@ -331,7 +331,7 @@ const LojistaQRCode = () => {
             <div style={{ ...styles.section, backgroundColor: 'white' }}>
                 <h2 style={styles.sectionTitle}>2. Rastreamento de QR Codes (Vendedores e Consultores)</h2>
                 <p style={{ color: '#666' }}>
-                    Visualização de todos os QRs criados (Vendedores internos e Consultores externos).
+                    Visualizacao de todos os QRs criados (Vendedores internos e Consultores externos).
                 </p>
                 <div style={{ overflowX: 'auto', marginTop: '20px' }}>
                     <table style={styles.table}>
@@ -343,7 +343,7 @@ const LojistaQRCode = () => {
                                 <th style={styles.th}>Departamento</th>
                                 <th style={styles.th}>Status</th>
                                 <th style={styles.th}>Valor Venda (Sim.)</th>
-                                <th style={styles.th}>Ação</th>
+                                <th style={styles.th}>Acao</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -360,12 +360,12 @@ const LojistaQRCode = () => {
                                     <td style={styles.td} className={qr.status === 'Ativo' ? 'text-green-600' : 'text-red-600'}>
                                         {qr.status}
                                     </td>
-                                    {/* Exibição do valor na tabela */}
+                                    {/* Exibicao do valor na tabela */}
                                     <td style={{...styles.td, fontWeight: 'bold', color: qr.saleValue > 0 ? '#28a745' : '#dc3545'}}>
                                         R$ {qr.saleValue.toFixed(2).replace('.', ',')}
                                     </td>
                                     <td style={styles.td}>
-                                        {/* Botão para abrir o modal */}
+                                        {/* Botao para abrir o modal */}
                                         <button 
                                             onClick={() => handleViewTrackedQR(qr)}
                                             style={{

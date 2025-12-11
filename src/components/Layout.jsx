@@ -1,7 +1,7 @@
 import React from "react";
 
 const Layout = ({ children, title, showHeader = true }) => {
-  // CORREÇÃO CRÍTICA: Remove estilos problemáticos do body
+  // CORRECAO CRTICA: Remove estilos problematicos do body
   React.useEffect(() => {
     const originalStyles = {
       margin: document.body.style.margin,
@@ -14,7 +14,7 @@ const Layout = ({ children, title, showHeader = true }) => {
       minWidth: document.body.style.minWidth,
     };
 
-    // Força os estilos corretos
+    // Forca os estilos corretos
     document.body.style.margin = "0";
     document.body.style.padding = "0";
     document.body.style.display = "block";
@@ -27,7 +27,7 @@ const Layout = ({ children, title, showHeader = true }) => {
     document.body.style.overflowX = "hidden";
 
     return () => {
-      // Restaura estilos originais se necessário
+      // Restaura estilos originais se necessario
       Object.keys(originalStyles).forEach((key) => {
         document.body.style[key] = originalStyles[key];
       });
@@ -63,3 +63,4 @@ const Layout = ({ children, title, showHeader = true }) => {
 };
 
 export default Layout;
+

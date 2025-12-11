@@ -8,7 +8,7 @@ const LojistaFiliais = () => {
   const [editingFilial, setEditingFilial] = useState(null);
   const [filiais, setFiliais] = useState([]);
 
-  // Dados mockados - depois virão do backend
+  // Dados mockados - depois virao do backend
   const [formData, setFormData] = useState({
     nome: "",
     tipo: "fisica",
@@ -32,7 +32,7 @@ const LojistaFiliais = () => {
     offline: 999, // ilimitado
   };
 
-  const planoAtual = "complete-online"; // Isso virá do perfil do usuário
+  const planoAtual = "complete-online"; // Isso vira do perfil do usuario
   const limiteAtual = limitesPlano[planoAtual];
   const filiaisCadastradas = filiais.length;
 
@@ -49,7 +49,7 @@ const LojistaFiliais = () => {
 
     if (filiaisCadastradas >= limiteAtual && !editingFilial) {
       alert(
-        `Seu plano permite apenas ${limiteAtual} filial(is). Faça upgrade para adicionar mais.`
+        `Seu plano permite apenas ${limiteAtual} filial(is). Faca upgrade para adicionar mais.`
       );
       return;
     }
@@ -107,7 +107,7 @@ const LojistaFiliais = () => {
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza que deseja excluir esta filial?")) {
       setFiliais((prev) => prev.filter((f) => f.id !== id));
-      alert("Filial excluída com sucesso!");
+      alert("Filial excluida com sucesso!");
     }
   };
 
@@ -156,7 +156,7 @@ const LojistaFiliais = () => {
           border: "1px solid",
         }}
       >
-        {status === "ativa" ? "✅ Ativa" : "❌ Inativa"}
+        {status === "ativa" ? " Ativa" : " Inativa"}
       </span>
     );
   };
@@ -174,7 +174,7 @@ const LojistaFiliais = () => {
           border: `1px solid ${tipo === "fisica" ? "#b8daff" : "#ffeaa7"}`,
         }}
       >
-        {tipo === "fisica" ? "🏪 Física" : "🌐 Virtual"}
+        {tipo === "fisica" ? " Fisica" : " Virtual"}
       </span>
     );
   };
@@ -184,9 +184,9 @@ const LojistaFiliais = () => {
       {/* Header */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>🏪 Gestão de Filiais</h1>
+          <h1 style={styles.title}> Gestao de Filiais</h1>
           <p style={styles.subtitle}>
-            Gerencie todas as suas lojas físicas e virtuais
+            Gerencie todas as suas lojas fisicas e virtuais
           </p>
         </div>
         <div style={styles.stats}>
@@ -200,9 +200,9 @@ const LojistaFiliais = () => {
           </div>
           <div style={styles.statCard}>
             <span style={styles.statNumber}>
-              {limiteAtual === 999 ? "∞" : limiteAtual - filiaisCadastradas}
+              {limiteAtual === 999 ? "ˆ" : limiteAtual - filiaisCadastradas}
             </span>
-            <span style={styles.statLabel}>Disponíveis</span>
+            <span style={styles.statLabel}>Disponiveis</span>
           </div>
         </div>
       </div>
@@ -210,7 +210,7 @@ const LojistaFiliais = () => {
       {/* Alertas de Limite */}
       {filiaisCadastradas >= limiteAtual && limiteAtual !== 999 && (
         <div style={styles.alert}>
-          ⚠️ Você atingiu o limite do seu plano.
+            Voca atingiu o limite do seu plano.
           <button
             style={styles.upgradeButton}
             onClick={() => navigate("/para-lojistas")}
@@ -220,25 +220,25 @@ const LojistaFiliais = () => {
         </div>
       )}
 
-      {/* Botão Adicionar */}
+      {/* Botao Adicionar */}
       {!showForm && filiaisCadastradas < limiteAtual && (
         <button style={styles.addButton} onClick={() => setShowForm(true)}>
-          ➕ Adicionar Nova Filial
+          O Adicionar Nova Filial
         </button>
       )}
 
-      {/* Formulário */}
+      {/* Formulario */}
       {showForm && (
         <div style={styles.formContainer}>
           <h2 style={styles.formTitle}>
-            {editingFilial ? "✏️ Editar Filial" : "🏪 Nova Filial"}
+            {editingFilial ? " Editar Filial" : " Nova Filial"}
           </h2>
 
           <form onSubmit={handleSubmit} style={styles.form}>
             <div style={styles.formGrid}>
-              {/* Dados Básicos */}
+              {/* Dados Basicos */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Dados Básicos</h3>
+                <h3 style={styles.sectionTitle}>Dados Basicos</h3>
 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>Nome da Filial *</label>
@@ -262,8 +262,8 @@ const LojistaFiliais = () => {
                       style={styles.select}
                       required
                     >
-                      <option value="fisica">🏪 Loja Física</option>
-                      <option value="virtual">🌐 Loja Virtual</option>
+                      <option value="fisica"> Loja Fisica</option>
+                      <option value="virtual"> Loja Virtual</option>
                     </select>
                   </div>
 
@@ -276,8 +276,8 @@ const LojistaFiliais = () => {
                       style={styles.select}
                       required
                     >
-                      <option value="ativa">✅ Ativa</option>
-                      <option value="inativa">❌ Inativa</option>
+                      <option value="ativa"> Ativa</option>
+                      <option value="inativa"> Inativa</option>
                     </select>
                   </div>
                 </div>
@@ -300,7 +300,7 @@ const LojistaFiliais = () => {
                 <h3 style={styles.sectionTitle}>Contato</h3>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Responsável *</label>
+                  <label style={styles.label}>Responsavel *</label>
                   <input
                     type="text"
                     name="responsavel"
@@ -338,10 +338,10 @@ const LojistaFiliais = () => {
                 </div>
               </div>
 
-              {/* Endereço (apenas para físicas) */}
+              {/* Endereco (apenas para fisicas) */}
               {formData.tipo === "fisica" && (
                 <div style={styles.formSection}>
-                  <h3 style={styles.sectionTitle}>Endereço</h3>
+                  <h3 style={styles.sectionTitle}>Endereco</h3>
 
                   <div style={styles.formGroup}>
                     <label style={styles.label}>CEP</label>
@@ -356,7 +356,7 @@ const LojistaFiliais = () => {
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Endereço</label>
+                    <label style={styles.label}>Endereco</label>
                     <input
                       type="text"
                       name="endereco"
@@ -368,7 +368,7 @@ const LojistaFiliais = () => {
 
                   <div style={styles.formRow}>
                     <div style={styles.formGroup}>
-                      <label style={styles.label}>Número</label>
+                      <label style={styles.label}>Numero</label>
                       <input
                         type="text"
                         name="numero"
@@ -441,7 +441,7 @@ const LojistaFiliais = () => {
 
           {filiais.length === 0 ? (
             <div style={styles.emptyState}>
-              <div style={styles.emptyIcon}>🏪</div>
+              <div style={styles.emptyIcon}></div>
               <h3 style={styles.emptyTitle}>Nenhuma filial cadastrada</h3>
               <p style={styles.emptyText}>
                 Comece cadastrando sua primeira filial para gerenciar suas
@@ -451,7 +451,7 @@ const LojistaFiliais = () => {
                 style={styles.addButton}
                 onClick={() => setShowForm(true)}
               >
-                ➕ Adicionar Primeira Filial
+                O Adicionar Primeira Filial
               </button>
             </div>
           ) : (
@@ -468,16 +468,16 @@ const LojistaFiliais = () => {
 
                   <div style={styles.filialInfo}>
                     <p style={styles.filialResponsavel}>
-                      <strong>Responsável:</strong> {filial.responsavel}
+                      <strong>Responsavel:</strong> {filial.responsavel}
                     </p>
                     <p style={styles.filialContato}>
                       <strong>Contato:</strong> {filial.telefone}
-                      {filial.email && ` • ${filial.email}`}
+                      {filial.email && ` * ${filial.email}`}
                     </p>
 
                     {filial.tipo === "fisica" && filial.endereco && (
                       <p style={styles.filialEndereco}>
-                        <strong>Endereço:</strong> {filial.endereco},{" "}
+                        <strong>Endereco:</strong> {filial.endereco},{" "}
                         {filial.numero}
                         {filial.complemento && ` - ${filial.complemento}`}
                         {filial.cidade && `, ${filial.cidade}-${filial.estado}`}
@@ -497,13 +497,13 @@ const LojistaFiliais = () => {
                       onClick={() => handleEdit(filial)}
                       style={styles.editButton}
                     >
-                      ✏️ Editar
+                       Editar
                     </button>
                     <button
                       onClick={() => handleDelete(filial.id)}
                       style={styles.deleteButton}
                     >
-                      🗑️ Excluir
+                       Excluir
                     </button>
                   </div>
                 </div>
@@ -808,3 +808,4 @@ const styles = {
 };
 
 export default LojistaFiliais;
+

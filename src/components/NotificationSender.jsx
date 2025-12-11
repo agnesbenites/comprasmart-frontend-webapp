@@ -13,11 +13,11 @@ const NotificationSender = ({ show, onClose }) => {
 
   const handleSend = () => {
     if (!formData.titulo || !formData.mensagem) {
-      alert('Preencha título e mensagem');
+      alert('Preencha titulo e mensagem');
       return;
     }
 
-    // Enviar notificação para cada grupo selecionado
+    // Enviar notificacao para cada grupo selecionado
     formData.destinatarios.forEach(grupo => {
       addNotification({
         titulo: formData.titulo,
@@ -30,7 +30,7 @@ const NotificationSender = ({ show, onClose }) => {
 
     // Feedback para o admin
     addNotification({
-      titulo: '📤 Mensagem Enviada',
+      titulo: ' Mensagem Enviada',
       mensagem: `Comunicado enviado para ${formData.destinatarios.join(', ')}`,
       tipo: 'success'
     });
@@ -49,16 +49,16 @@ const NotificationSender = ({ show, onClose }) => {
   return (
     <div style={modalStyles.overlay}>
       <div style={modalStyles.content}>
-        <h3 style={modalStyles.title}>📢 Enviar Comunicado Interno</h3>
+        <h3 style={modalStyles.title}> Enviar Comunicado Interno</h3>
         
         <div style={modalStyles.form}>
           <div style={modalStyles.formGroup}>
-            <label style={modalStyles.label}>Título</label>
+            <label style={modalStyles.label}>Titulo</label>
             <input
               type="text"
               value={formData.titulo}
               onChange={(e) => setFormData({...formData, titulo: e.target.value})}
-              placeholder="Título da notificação..."
+              placeholder="Titulo da notificacao..."
               style={modalStyles.input}
             />
           </div>
@@ -91,9 +91,9 @@ const NotificationSender = ({ show, onClose }) => {
                     style={modalStyles.checkbox}
                   />
                   <span>
-                    {grupo === 'lojistas' && '🏪 Lojistas'}
-                    {grupo === 'consultores' && '👥 Consultores'}
-                    {grupo === 'clientes' && '👤 Clientes'}
+                    {grupo === 'lojistas' && ' Lojistas'}
+                    {grupo === 'consultores' && ' Consultores'}
+                    {grupo === 'clientes' && ' Clientes'}
                   </span>
                 </label>
               ))}
@@ -107,10 +107,10 @@ const NotificationSender = ({ show, onClose }) => {
               onChange={(e) => setFormData({...formData, tipo: e.target.value})}
               style={modalStyles.select}
             >
-              <option value="info">🔵 Informativo</option>
-              <option value="success">🟢 Sucesso</option>
-              <option value="warning">🟡 Alerta</option>
-              <option value="error">🔴 Urgente</option>
+              <option value="info"> Informativo</option>
+              <option value="success"> Sucesso</option>
+              <option value="warning"> Alerta</option>
+              <option value="error"> Urgente</option>
             </select>
           </div>
 
@@ -119,7 +119,7 @@ const NotificationSender = ({ show, onClose }) => {
               Cancelar
             </button>
             <button onClick={handleSend} style={modalStyles.sendButton}>
-              📤 Enviar Notificação
+               Enviar Notificacao
             </button>
           </div>
         </div>

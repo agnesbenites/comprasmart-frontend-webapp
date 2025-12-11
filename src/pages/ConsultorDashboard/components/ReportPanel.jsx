@@ -29,11 +29,11 @@ const ReportPanel = ({ consultorId }) => {
       const isValidSize = file.size <= 10 * 1024 * 1024; // 10MB
       
       if (!isValidType) {
-        alert(`❌ Arquivo ${file.name} não é uma imagem ou PDF válido`);
+        alert(` Arquivo ${file.name} nao e uma imagem ou PDF valido`);
         return false;
       }
       if (!isValidSize) {
-        alert(`❌ Arquivo ${file.name} excede o tamanho máximo de 10MB`);
+        alert(` Arquivo ${file.name} excede o tamanho maximo de 10MB`);
         return false;
       }
       return true;
@@ -41,7 +41,7 @@ const ReportPanel = ({ consultorId }) => {
 
     // Limitar a 5 arquivos no total
     if (arquivos.length + validFiles.length > 5) {
-      alert('❌ Você pode enviar no máximo 5 arquivos');
+      alert(' Voca pode enviar no maximo 5 arquivos');
       return;
     }
 
@@ -61,8 +61,8 @@ const ReportPanel = ({ consultorId }) => {
       color: '#dc3545',
       opcoes: [
         'Cliente agressivo ou ofensivo',
-        'Assédio ou comportamento inadequado',
-        'Cliente sob efeito de álcool/drogas',
+        'Assedio ou comportamento inadequado',
+        'Cliente sob efeito de alcool/drogas',
         'Tentativa de golpe ou fraude',
         'Recusa em seguir regras da loja',
         'Outros'
@@ -72,12 +72,12 @@ const ReportPanel = ({ consultorId }) => {
       id: 'loja', 
       label: 'Problema com Loja', 
       icon: <FaStore />,
-      descricao: 'Informações incorretas, políticas abusivas ou má gestão',
+      descricao: 'Informacoes incorretas, politicas abusivas ou ma gestao',
       color: '#fd7e14',
       opcoes: [
-        'Informações de produtos incorretas',
-        'Preços divergentes do anunciado',
-        'Políticas abusivas da loja',
+        'Informacoes de produtos incorretas',
+        'Precos divergentes do anunciado',
+        'Politicas abusivas da loja',
         'Descumprimento de acordo comercial',
         'Ambiente de trabalho inadequado',
         'Falta de suporte da loja',
@@ -88,31 +88,31 @@ const ReportPanel = ({ consultorId }) => {
       id: 'produto', 
       label: 'Problema com Produto', 
       icon: <FaBox />,
-      descricao: 'Informações erradas, estoque incorreto ou produto com defeito',
+      descricao: 'Informacoes erradas, estoque incorreto ou produto com defeito',
       color: '#ffc107',
       opcoes: [
-        'Produto sem estoque (informação errada)',
-        'Especificações técnicas incorretas',
-        'Imagens não correspondem ao produto',
+        'Produto sem estoque (informacao errada)',
+        'Especificacoes tecnicas incorretas',
+        'Imagens nao correspondem ao produto',
         'Produto danificado ou com defeito',
-        'Falta de informações importantes',
-        'Preço errado no sistema',
+        'Falta de informacoes importantes',
+        'Preco errado no sistema',
         'Outros'
       ]
     },
     { 
       id: 'tecnico', 
-      label: 'Problema Técnico', 
+      label: 'Problema Tecnico', 
       icon: <FaBug />,
-      descricao: 'Erro no sistema, falha de conexão ou bug na plataforma',
+      descricao: 'Erro no sistema, falha de conexao ou bug na plataforma',
       color: '#6c757d',
       opcoes: [
-        'Sistema não carrega ou trava',
+        'Sistema nao carrega ou trava',
         'Erro ao finalizar venda',
-        'Chat não funciona corretamente',
-        'Problemas de conexão',
-        'QR Code não é gerado',
-        'Dados não são salvos',
+        'Chat nao funciona corretamente',
+        'Problemas de conexao',
+        'QR Code nao e gerado',
+        'Dados nao sao salvos',
         'Interface com erro visual',
         'Outros'
       ]
@@ -123,7 +123,7 @@ const ReportPanel = ({ consultorId }) => {
     e.preventDefault();
     
     if (!tipoProblema || !opcaoEspecifica || !descricao.trim()) {
-      alert('⚠️ Preencha todos os campos obrigatórios');
+      alert('  Preencha todos os campos obrigatorios');
       return;
     }
 
@@ -133,7 +133,7 @@ const ReportPanel = ({ consultorId }) => {
     try {
       const formData = new FormData();
       
-      // Dados do relatório
+      // Dados do relatorio
       const reportData = {
         consultorId,
         tipoProblema,
@@ -154,7 +154,7 @@ const ReportPanel = ({ consultorId }) => {
         formData.append(`evidencia_${index}`, file);
       });
 
-      // TODO: Enviar para API que enviará email
+      // TODO: Enviar para API que enviara email
       // const response = await fetch(`${API_URL}/api/consultores/${consultorId}/reports`, {
       //   method: 'POST',
       //   body: formData
@@ -163,19 +163,19 @@ const ReportPanel = ({ consultorId }) => {
       // Simular envio
       await new Promise(resolve => setTimeout(resolve, 2000));
 
-      console.log('Relatório enviado para comprasmartconsult@gmail.com:', reportData);
+      console.log('Relatorio enviado para comprasmartconsult@gmail.com:', reportData);
       console.log('Arquivos anexados:', arquivos.map(f => f.name));
 
       setSucesso(true);
       
-      // Limpar formulário após 5 segundos
+      // Limpar formulario apos 5 segundos
       setTimeout(() => {
         handleReset();
       }, 5000);
 
     } catch (error) {
-      console.error('Erro ao enviar relatório:', error);
-      alert('❌ Erro ao enviar relatório. Tente novamente.');
+      console.error('Erro ao enviar relatorio:', error);
+      alert(' Erro ao enviar relatorio. Tente novamente.');
     } finally {
       setEnviando(false);
     }
@@ -198,7 +198,7 @@ const ReportPanel = ({ consultorId }) => {
       {/* Header */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>⚠️ Reportar Problema</h2>
+          <h2 style={styles.title}>  Reportar Problema</h2>
           <p style={styles.subtitle}>
             Relate problemas encontrados durante o atendimento para que possamos melhorar
           </p>
@@ -210,23 +210,23 @@ const ReportPanel = ({ consultorId }) => {
         <div style={styles.successCard}>
           <FaCheckCircle size={50} color="#28a745" />
           <div style={styles.successContent}>
-            <h3 style={styles.successTitle}>✅ Notificação enviada com sucesso!</h3>
+            <h3 style={styles.successTitle}> Notificacao enviada com sucesso!</h3>
             <p style={styles.successText}>
-              Seu relatório foi enviado para <strong>comprasmartconsult@gmail.com</strong>
+              Seu relatorio foi enviado para <strong>comprasmartconsult@gmail.com</strong>
             </p>
             <p style={styles.successDeadline}>
-              ⏰ Em até <strong>30 dias</strong>, você terá retorno sobre o tema.
+              ° Em ate <strong>30 dias</strong>, voca tera retorno sobre o tema.
             </p>
             <p style={styles.successNote}>
-              Você receberá uma notificação por email quando houver uma resposta.
+              Voca recebera uma notificacao por email quando houver uma resposta.
             </p>
           </div>
         </div>
       )}
 
-      {/* Formulário */}
+      {/* Formulario */}
       <form onSubmit={handleSubmit} style={styles.form}>
-        {/* Seleção do Tipo de Problema */}
+        {/* Selecao do Tipo de Problema */}
         <div style={styles.section}>
           <h3 style={styles.sectionTitle}>1. Tipo de Problema</h3>
           <div style={styles.tiposGrid}>
@@ -252,11 +252,11 @@ const ReportPanel = ({ consultorId }) => {
           </div>
         </div>
 
-        {/* Opção Específica do Problema */}
+        {/* Opcao Especifica do Problema */}
         {tipoProblema && (
           <div style={styles.section}>
             <h3 style={styles.sectionTitle}>
-              2. Qual é o problema específico? *
+              2. Qual e o problema especifico? *
             </h3>
             <select
               value={opcaoEspecifica}
@@ -264,7 +264,7 @@ const ReportPanel = ({ consultorId }) => {
               style={styles.selectLarge}
               required
             >
-              <option value="">Selecione uma opção...</option>
+              <option value="">Selecione uma opcao...</option>
               {tiposProblema.find(t => t.id === tipoProblema)?.opcoes.map(opcao => (
                 <option key={opcao} value={opcao}>{opcao}</option>
               ))}
@@ -272,10 +272,10 @@ const ReportPanel = ({ consultorId }) => {
           </div>
         )}
 
-        {/* Informações Contextuais */}
+        {/* Informacoes Contextuais */}
         {opcaoEspecifica && (
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>3. Informações Contextuais (Opcional)</h3>
+            <h3 style={styles.sectionTitle}>3. Informacoes Contextuais (Opcional)</h3>
             <div style={styles.inputsGrid}>
               <div style={styles.inputGroup}>
                 <label style={styles.label}>ID da Chamada</label>
@@ -286,7 +286,7 @@ const ReportPanel = ({ consultorId }) => {
                   placeholder="Ex: CH12345"
                   style={styles.input}
                 />
-                <span style={styles.hint}>Se o problema ocorreu durante uma chamada específica</span>
+                <span style={styles.hint}>Se o problema ocorreu durante uma chamada especifica</span>
               </div>
 
               {(tipoProblema === 'loja') && (
@@ -313,35 +313,35 @@ const ReportPanel = ({ consultorId }) => {
                     placeholder="Ex: SKU-TV-55-001"
                     style={styles.input}
                   />
-                  <span style={styles.hint}>SKU ou código do produto</span>
+                  <span style={styles.hint}>SKU ou codigo do produto</span>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* Descrição Detalhada */}
+        {/* Descricao Detalhada */}
         {opcaoEspecifica && (
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>4. Descrição Detalhada *</h3>
+            <h3 style={styles.sectionTitle}>4. Descricao Detalhada *</h3>
             <textarea
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
-              placeholder="Descreva o problema em detalhes: o que aconteceu, quando, e qualquer informação adicional relevante..."
+              placeholder="Descreva o problema em detalhes: o que aconteceu, quando, e qualquer informacao adicional relevante..."
               style={styles.textarea}
               rows={6}
               required
             />
             <span style={styles.hint}>
-              Seja o mais específico possível para facilitar a resolução
+              Seja o mais especifico possivel para facilitar a resolucao
             </span>
           </div>
         )}
 
-        {/* Upload de Evidências */}
+        {/* Upload de Evidancias */}
         {opcaoEspecifica && (
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>5. Evidências (Opcional)</h3>
+            <h3 style={styles.sectionTitle}>5. Evidancias (Opcional)</h3>
             <p style={styles.evidenciaDesc}>
               Anexe imagens, prints ou documentos que ajudem a ilustrar o problema
             </p>
@@ -365,7 +365,7 @@ const ReportPanel = ({ consultorId }) => {
             </button>
 
             <span style={styles.hint}>
-              Formatos aceitos: JPG, PNG, GIF, PDF (máx. 10MB por arquivo, até 5 arquivos)
+              Formatos aceitos: JPG, PNG, GIF, PDF (max. 10MB por arquivo, ate 5 arquivos)
             </span>
 
             {/* Lista de Arquivos */}
@@ -405,8 +405,8 @@ const ReportPanel = ({ consultorId }) => {
                   onChange={(e) => setPrioridade(e.target.value)}
                   style={styles.radio}
                 />
-                <span style={styles.prioridadeBadge}>🟢 Baixa</span>
-                <span style={styles.prioridadeDesc}>Não urgente, pode aguardar</span>
+                <span style={styles.prioridadeBadge}> Baixa</span>
+                <span style={styles.prioridadeDesc}>Nao urgente, pode aguardar</span>
               </label>
 
               <label style={styles.radioLabel}>
@@ -417,8 +417,8 @@ const ReportPanel = ({ consultorId }) => {
                   onChange={(e) => setPrioridade(e.target.value)}
                   style={styles.radio}
                 />
-                <span style={styles.prioridadeBadge}>🟡 Média</span>
-                <span style={styles.prioridadeDesc}>Atenção necessária em breve</span>
+                <span style={styles.prioridadeBadge}> Media</span>
+                <span style={styles.prioridadeDesc}>Atencao necessaria em breve</span>
               </label>
 
               <label style={styles.radioLabel}>
@@ -429,14 +429,14 @@ const ReportPanel = ({ consultorId }) => {
                   onChange={(e) => setPrioridade(e.target.value)}
                   style={styles.radio}
                 />
-                <span style={styles.prioridadeBadge}>🔴 Alta</span>
-                <span style={styles.prioridadeDesc}>Requer ação imediata</span>
+                <span style={styles.prioridadeBadge}> Alta</span>
+                <span style={styles.prioridadeDesc}>Requer acao imediata</span>
               </label>
             </div>
           </div>
         )}
 
-        {/* Botões de Ação */}
+        {/* Botoes de Acao */}
         {opcaoEspecifica && (
           <div style={styles.actionsContainer}>
             <button
@@ -455,19 +455,19 @@ const ReportPanel = ({ consultorId }) => {
                 opacity: (enviando || !descricao.trim()) ? 0.6 : 1,
               }}
             >
-              {enviando ? 'Enviando...' : 'Enviar Relatório'}
+              {enviando ? 'Enviando...' : 'Enviar Relatorio'}
             </button>
           </div>
         )}
       </form>
 
-      {/* Informações de Contato de Emergência */}
+      {/* Informacoes de Contato de Emergancia */}
       <div style={styles.emergencyCard}>
         <FaExclamationTriangle size={24} color="#dc3545" />
         <div>
-          <h4 style={styles.emergencyTitle}>⚠️ Situação de Emergência?</h4>
+          <h4 style={styles.emergencyTitle}>  Situacao de Emergancia?</h4>
           <p style={styles.emergencyText}>
-            Se você está em uma situação de ameaça ou perigo imediato, 
+            Se voca esta em uma situacao de ameaca ou perigo imediato, 
             entre em contato pelo WhatsApp de suporte: <strong>(11) 9999-9999</strong>
           </p>
         </div>

@@ -1,62 +1,46 @@
 import React, { useState, useEffect } from "react";
-// Importações do Firebase removidas.
-import { createClient } from '@supabase/supabase-js'; 
-import { v4 as uuidv4 } from 'uuid'; // Para gerar IDs únicos de produtos
+import { supabase } from "../../../supabaseClient"; // USA O CLIENTE CENTRALIZADO
+import { v4 as uuidv4 } from 'uuid';
 
-// --- Configuração Supabase (Usando variáveis injetadas ou placeholders) ---
-// ⚠️ ATENÇÃO: Use suas chaves FRONTEND (ANON KEY) aqui.
-const supabaseUrl = "https://vluxffbornrlxcepqmzr.supabase.co"; 
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsdXhmZmJvcm5ybHhjZXBxbXpyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTk2MzA2NiwiZXhwIjoyMDc3MzIzMDY2fQ.rBovfjyawq27VtBrOCxo5eGHhmTegUWaqQOFVskk8A0"; 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const API_URL = "https://plataforma-consultoria-mvp.onrender.com";
 
-// --- Variáveis Globais (Configuração do Canvas) ---
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
 const LojistaProdutosEstoque = () => {
-    // === ESTADOS DE CONEXÃO E DADOS ===
-    // 🛑 Hardcode o UUID de teste para o MVP (substituir pela autenticação real)
     const [userId, setUserId] = useState("858f50c0-f472-4d1d-9e6e-21952f40c7e5"); 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [produtos, setProdutos] = useState([]);
     
-    // === ESTADOS PARA CADASTRO ===
     const [novoProduto, setNovoProduto] = useState({
         nome: "",
         categoria: "",
         preco: "",
         estoque: "",
         estoqueMinimo: "",
-        comissao: "", // comissao -> commission_rate no DB
+        comissao: "",
         sku: ""
     });
     const [modoImportacao, setModoImportacao] = useState(false);
     const [categoriasSugeridas, setCategoriasSugeridas] = useState([]);
 
-    // === ESTADOS PARA EDIÇÃO ===
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [produtoEditando, setProdutoEditando] = useState(null);
     const [novoPreco, setNovoPreco] = useState('');
     const [novaComissao, setNovaComissao] = useState('');
 
-
-    // --- 1. Inicialização do UserID (Simplificada) ---
     useEffect(() => {
-        // A lógica de autenticação foi removida, assumimos o userId.
         setLoading(false);
     }, []);
     
-    // --- FUNÇÃO DE BUSCA DE DADOS ---
     const buscarProdutos = async () => {
         if (!userId) return;
 
         try {
-            // 🛑 SUPABASE SELECT: Busca produtos do lojista
             const { data, error } = await supabase
                 .from('produtos')
                 .select('*')
-                .eq('lojista_id', userId); // Assumindo que a tabela 'produtos' tem uma FK 'lojista_id'
+                .eq('lojista_id', userId);
 
             if (error) {
                 setError("Erro ao carregar produtos do Supabase.");
@@ -77,35 +61,30 @@ const LojistaProdutosEstoque = () => {
 
             setProdutos(produtosTratados);
         } catch (e) {
-            setError('Erro ao buscar produtos. Verifique a conexão do Supabase.');
+            setError('Erro ao buscar produtos. Verifique a conexao do Supabase.');
             console.error("Fetch Error:", e);
         }
     };
 
-    // --- 2. Busca de Dados (useEffect) ---
     useEffect(() => {
         if (!userId) return;
         buscarProdutos();
     }, [userId]);
 
-
-    // --- FUNÇÕES DE CADASTRO ---
-    
     const categorizarProduto = (nomeProduto) => {
-        // [Lógica de IA mantida]
         const palavras = nomeProduto.toLowerCase();
 
         const categoriasIA = [
-            { nome: "📱 Eletroeletrônicos", palavras: ["smartphone", "tv", "celular", "tablet", "fone", "audio", "som", "televisão"] },
-            { nome: "💻 Informática", palavras: ["notebook", "computador", "mouse", "teclado", "monitor", "impressora", "tablet"] },
-            { nome: "🛋️ Móveis", palavras: ["guarda-roupa", "cama", "mesa", "cadeira", "sofá", "estante", "armário", "móvel"] },
-            { nome: "🏠 Eletrodomésticos", palavras: ["geladeira", "fogão", "microondas", "lavadora", "ar condicionado", "ventilador"] },
-            { nome: "🎯 Esportes", palavras: ["bola", "tenis", "chuteira", "academia", "suplemento", "bicicleta"] },
-            { nome: "👕 Vestuário", palavras: ["camisa", "calça", "bermuda", "vestido", "blusa", "jaqueta", "roupa"] },
-            { nome: "📝 Material Escritório", palavras: ["caneta", "lápis", "caderno", "borracha", "papel", "pincel"] },
-            { nome: "🛁 Cama Mesa Banho", palavras: ["toalha", "lençol", "edredom", "travesseiro", "cobre-leito"] },
-            { nome: "🍳 Cozinha", palavras: ["panela", "faca", "prato", "copos", "talheres", "utensílios"] },
-            { nome: "🚗 Automotivo", palavras: ["pneu", "bateria", "óleo", "acessório", "carro", "moto"] }
+            { nome: "Eletroeletronicos", palavras: ["smartphone", "tv", "celular", "tablet", "fone", "audio", "som", "televisao"] },
+            { nome: "Informatica", palavras: ["notebook", "computador", "mouse", "teclado", "monitor", "impressora", "tablet"] },
+            { nome: "Moveis", palavras: ["guarda-roupa", "cama", "mesa", "cadeira", "sofa", "estante", "armario", "movel"] },
+            { nome: "Eletrodomesticos", palavras: ["geladeira", "fogao", "microondas", "lavadora", "ar condicionado", "ventilador"] },
+            { nome: "Esportes", palavras: ["bola", "tenis", "chuteira", "academia", "suplemento", "bicicleta"] },
+            { nome: "Vestuario", palavras: ["camisa", "calca", "bermuda", "vestido", "blusa", "jaqueta", "roupa"] },
+            { nome: "Material Escritorio", palavras: ["caneta", "lapis", "caderno", "borracha", "papel", "pincel"] },
+            { nome: "Cama Mesa Banho", palavras: ["toalha", "lencol", "edredom", "travesseiro", "cobre-leito"] },
+            { nome: "Cozinha", palavras: ["panela", "faca", "prato", "copos", "talheres", "utensilios"] },
+            { nome: "Automotivo", palavras: ["pneu", "bateria", "oleo", "acessorio", "carro", "moto"] }
         ];
 
         const sugestoes = categoriasIA
@@ -122,9 +101,7 @@ const LojistaProdutosEstoque = () => {
         return sugestoes;
     };
 
-
     const handleNomeProdutoChange = (e) => {
-        // [Lógica de IA mantida]
         const nome = e.target.value;
         setNovoProduto({
           ...novoProduto,
@@ -149,13 +126,13 @@ const LojistaProdutosEstoque = () => {
     const handleAddProduto = async (e) => {
         e.preventDefault();
         if (!userId) {
-            setError('Usuário não autenticado.');
+            setError('Usuario nao autenticado.');
             return;
         }
         
         try {
             const produtoData = {
-                id: uuidv4(), // Gera um UUID para o ID
+                id: uuidv4(),
                 lojista_id: userId,
                 nome: novoProduto.nome,
                 categoria: novoProduto.categoria,
@@ -167,7 +144,6 @@ const LojistaProdutosEstoque = () => {
                 status: "ativo"
             };
             
-            // 🛑 SUPABASE INSERT
             const { error } = await supabase
                 .from('produtos')
                 .insert([produtoData]); 
@@ -178,7 +154,7 @@ const LojistaProdutosEstoque = () => {
                 nome: "", categoria: "", preco: "", estoque: "", estoqueMinimo: "", comissao: "", sku: ""
             });
             setCategoriasSugeridas([]);
-            buscarProdutos(); // Recarrega os dados
+            buscarProdutos();
             alert(`Produto ${produtoData.nome} cadastrado com sucesso!`);
             
         } catch (e) {
@@ -200,15 +176,11 @@ const LojistaProdutosEstoque = () => {
         return { texto: "Em Estoque", cor: "#28a745" };
     };
 
-    // --- FUNÇÕES DE AÇÃO NA TABELA (Supabase) ---
-
-    // 1. Ação: Excluir Produto
     const handleDelete = async (produtoId) => {
         const confirmDelete = window.confirm("Tem certeza que deseja EXCLUIR este produto?");
         if (!confirmDelete || !userId) return;
 
         try {
-            // 🛑 SUPABASE DELETE
             const { error } = await supabase
                 .from('produtos')
                 .delete()
@@ -218,14 +190,13 @@ const LojistaProdutosEstoque = () => {
             if (error) throw error;
             
             buscarProdutos(); 
-            alert("Produto excluído com sucesso!");
+            alert("Produto excluido com sucesso!");
         } catch (e) {
             setError("Erro ao excluir produto no Supabase.");
             console.error("Delete Error:", e);
         }
     };
 
-    // 2. Ação: Abrir Modal de Edição
     const handleEdit = (produto) => {
         setProdutoEditando(produto);
         setNovoPreco(produto.preco.toFixed(2));
@@ -233,7 +204,6 @@ const LojistaProdutosEstoque = () => {
         setIsModalOpen(true);
     };
 
-    // 3. Ação: Salvar Edição
     const handleSaveEdit = async (e) => {
         e.preventDefault();
         if (!userId || !produtoEditando) return;
@@ -242,17 +212,16 @@ const LojistaProdutosEstoque = () => {
         const comissaoFinal = parseFloat(novaComissao);
         
         if (isNaN(precoFinal) || isNaN(comissaoFinal)) {
-             alert("Preço ou comissão inválidos.");
+             alert("Preco ou comissao invalidos.");
              return;
         }
         
         try {
-            // 🛑 SUPABASE UPDATE
             const { error } = await supabase
                 .from('produtos')
                 .update({
                     preco: precoFinal,
-                    commission_rate: comissaoFinal // 🛑 Nome da coluna de backend
+                    commission_rate: comissaoFinal
                 })
                 .eq('id', produtoEditando.id)
                 .eq('lojista_id', userId); 
@@ -266,47 +235,40 @@ const LojistaProdutosEstoque = () => {
             setProdutoEditando(null);
             
         } catch (e) {
-            setError("Erro ao salvar edição no Supabase.");
+            setError("Erro ao salvar edicao no Supabase.");
             console.error("Save Edit Error:", e);
         }
     };
 
-
-    // --- RENDERIZAÇÃO ---
     if (loading) {
-        return <div style={styles.loading}>Conectando ao banco de dados... ⏳</div>;
+        return <div style={styles.loading}>Conectando ao banco de dados...</div>;
     }
     
     return (
         <div style={styles.container}>
-            <h1 style={styles.title}>📦 Produtos e Estoque</h1>
-            <p style={styles.subtitle}>Gerencie seu catálogo de produtos e controle de estoque (ID Lojista: {userId})</p>
+            <h1 style={styles.title}>Produtos e Estoque</h1>
+            <p style={styles.subtitle}>Gerencie seu catalogo de produtos e controle de estoque (ID Lojista: {userId})</p>
             
-            {/* ... Renderização do restante da página (abas, formulário, tabela) ... */}
-            
-            {/* ABAS */}
             <div style={styles.abas}>
                 <button
                     style={modoImportacao ? styles.aba : { ...styles.aba, ...styles.abaAtiva }}
                     onClick={() => setModoImportacao(false)}
                 >
-                    ➕ Cadastrar Produto
+                    Cadastrar Produto
                 </button>
                 <button
                     style={modoImportacao ? { ...styles.aba, ...styles.abaAtiva } : styles.aba}
                     onClick={() => setModoImportacao(true)}
                 >
-                    📤 Importar do ERP/CSV
+                    Importar do ERP/CSV
                 </button>
             </div>
 
-            {/* CONTEÚDO */}
             {!modoImportacao ? (
-                // MODO CADASTRO MANUAL
                 <div style={styles.card}>
                     <h3 style={styles.cardTitle}>
                         Cadastrar Novo Produto
-                        <span style={styles.iaBadge}>🤖 IA</span>
+                        <span style={styles.iaBadge}>IA</span>
                     </h3>
                     <form onSubmit={handleAddProduto}>
                         <div style={styles.formGrid}>
@@ -325,10 +287,9 @@ const LojistaProdutosEstoque = () => {
                                     placeholder="Ex: Smartphone Galaxy S23"
                                 />
 
-                                {/* Sugestões de Categoria da IA */}
                                 {categoriasSugeridas.length > 0 && (
                                     <div style={styles.sugestoesIA}>
-                                        <p style={styles.sugestoesTitulo}>🤖 Categorias Sugeridas:</p>
+                                        <p style={styles.sugestoesTitulo}>Categorias Sugeridas:</p>
                                         <div style={styles.sugestoesLista}>
                                             {categoriasSugeridas.map((categoria, index) => (
                                                 <button
@@ -345,9 +306,6 @@ const LojistaProdutosEstoque = () => {
                                                     }))}
                                                 >
                                                     {categoria.nome}
-                                                    <span style={styles.confianca}>
-                                                        {categoria.score >= 2 ? '🎯' : categoria.score === 1 ? '💡' : '🤔'}
-                                                    </span>
                                                 </button>
                                             ))}
                                         </div>
@@ -365,22 +323,22 @@ const LojistaProdutosEstoque = () => {
                                     style={styles.input}
                                 >
                                     <option value="">{categoriasSugeridas.length > 0 ? "Ou selecione manualmente..." : "Selecione a categoria..."}</option>
-                                    <option value="📱 Eletroeletrônicos">📱 Eletroeletrônicos</option>
-                                    <option value="💻 Informática">💻 Informática</option>
-                                    <option value="🛋️ Móveis">🛋️ Móveis</option>
-                                    <option value="🏠 Eletrodomésticos">🏠 Eletrodomésticos</option>
-                                    <option value="🎯 Esportes">🎯 Esportes</option>
-                                    <option value="👕 Vestuário">👕 Vestuário</option>
-                                    <option value="📝 Material Escritório">📝 Material Escritório</option>
-                                    <option value="🛁 Cama Mesa Banho">🛁 Cama Mesa Banho</option>
-                                    <option value="🍳 Cozinha">🍳 Cozinha</option>
-                                    <option value="🚗 Automotivo">🚗 Automotivo</option>
-                                    <option value="🎁 Outros">🎁 Outros</option>
+                                    <option value="Eletroeletronicos">Eletroeletronicos</option>
+                                    <option value="Informatica">Informatica</option>
+                                    <option value="Moveis">Moveis</option>
+                                    <option value="Eletrodomesticos">Eletrodomesticos</option>
+                                    <option value="Esportes">Esportes</option>
+                                    <option value="Vestuario">Vestuario</option>
+                                    <option value="Material Escritorio">Material Escritorio</option>
+                                    <option value="Cama Mesa Banho">Cama Mesa Banho</option>
+                                    <option value="Cozinha">Cozinha</option>
+                                    <option value="Automotivo">Automotivo</option>
+                                    <option value="Outros">Outros</option>
                                 </select>
                             </div>
 
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>Preço (R$) *</label>
+                                <label style={styles.label}>Preco (R$) *</label>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -394,7 +352,7 @@ const LojistaProdutosEstoque = () => {
                             </div>
 
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>Comissão (%) *</label>
+                                <label style={styles.label}>Comissao (%) *</label>
                                 <input
                                     type="number"
                                     step="0.1"
@@ -421,7 +379,7 @@ const LojistaProdutosEstoque = () => {
                             </div>
 
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>Estoque Mínimo *</label>
+                                <label style={styles.label}>Estoque Minimo *</label>
                                 <input
                                     type="number"
                                     name="estoqueMinimo"
@@ -434,51 +392,49 @@ const LojistaProdutosEstoque = () => {
                             </div>
 
                             <div style={styles.formGroup}>
-                                <label style={styles.label}>SKU/Código</label>
+                                <label style={styles.label}>SKU/Codigo</label>
                                 <input
                                     type="text"
                                     name="sku"
                                     value={novoProduto.sku}
                                     onChange={handleChange}
                                     style={styles.input}
-                                    placeholder="Código interno"
+                                    placeholder="Codigo interno"
                                 />
                             </div>
                         </div>
 
                         <button type="submit" style={styles.primaryButton}>
-                            💾 Cadastrar Produto
+                            Cadastrar Produto
                         </button>
                     </form>
                 </div>
             ) : (
-                // MODO IMPORTAÇÃO (MANTIDO)
                 <div style={styles.card}>
                     <h3 style={styles.cardTitle}>Importar Produtos</h3>
                     <div style={styles.importacao}>
                         <div style={styles.importacaoItem}>
-                            <h4>📤 Upload de Arquivo CSV</h4>
-                            <p>Faça upload de um arquivo CSV com os dados dos produtos</p>
+                            <h4>Upload de Arquivo CSV</h4>
+                            <p>Faca upload de um arquivo CSV com os dados dos produtos</p>
                             <input type="file" accept=".csv" style={styles.fileInput} />
                             <button style={styles.secondaryButton}>Processar CSV</button>
                         </div>
 
                         <div style={styles.importacaoItem}>
-                            <h4>🔗 Integração com ERP</h4>
-                            <p>Conecte com seu sistema ERP para sincronização automática</p>
+                            <h4>Integracao com ERP</h4>
+                            <p>Conecte com seu sistema ERP para sincronizacao automatica</p>
                             <button style={styles.secondaryButton}>Configurar ERP</button>
                         </div>
 
                         <div style={styles.importacaoItem}>
-                            <h4>📋 Modelo de CSV</h4>
-                            <p>Baixe nosso modelo para importação em lote</p>
-                            <button style={styles.secondaryButton}>📥 Baixar Modelo</button>
+                            <h4>Modelo de CSV</h4>
+                            <p>Baixe nosso modelo para importacao em lote</p>
+                            <button style={styles.secondaryButton}>Baixar Modelo</button>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* LISTA DE PRODUTOS */}
             <div style={styles.card}>
                 <h3 style={styles.cardTitle}>
                     Lista de Produtos ({produtos.length})
@@ -493,11 +449,11 @@ const LojistaProdutosEstoque = () => {
                             <tr>
                                 <th style={styles.th}>Produto</th>
                                 <th style={styles.th}>Categoria</th>
-                                <th style={styles.th}>Preço</th>
-                                <th style={styles.th}>Comissão</th>
+                                <th style={styles.th}>Preco</th>
+                                <th style={styles.th}>Comissao</th>
                                 <th style={styles.th}>Estoque</th>
                                 <th style={styles.th}>Status</th>
-                                <th style={styles.th}>Ações</th>
+                                <th style={styles.th}>Acoes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -525,16 +481,16 @@ const LojistaProdutosEstoque = () => {
                                             <button 
                                                 onClick={() => handleEdit(produto)} 
                                                 style={styles.smallButton} 
-                                                title="Editar Preço e Comissão"
+                                                title="Editar Preco e Comissao"
                                             >
-                                                ✏️
+                                                Editar
                                             </button>
                                             <button 
                                                 onClick={() => handleDelete(produto.id)} 
                                                 style={styles.smallButtonDanger} 
                                                 title="Excluir Produto"
                                             >
-                                                🗑️
+                                                Excluir
                                             </button>
                                         </td>
                                     </tr>
@@ -545,14 +501,13 @@ const LojistaProdutosEstoque = () => {
                 </div>
             </div>
 
-            {/* MODAL DE EDIÇÃO (NOVIDADE) */}
             {isModalOpen && produtoEditando && (
                 <div style={styles.modalOverlay}>
                     <form onSubmit={handleSaveEdit} style={styles.modalContent}>
                         <h3 style={styles.modalTitle}>Editar: {produtoEditando.nome}</h3>
                         
                         <div style={styles.formGroup}>
-                            <label style={styles.label}>Novo Preço (R$)</label>
+                            <label style={styles.label}>Novo Preco (R$)</label>
                             <input
                                 type="number"
                                 step="0.01"
@@ -564,7 +519,7 @@ const LojistaProdutosEstoque = () => {
                         </div>
 
                         <div style={styles.formGroup}>
-                            <label style={styles.label}>Nova Comissão (%)</label>
+                            <label style={styles.label}>Nova Comissao (%)</label>
                             <input
                                 type="number"
                                 step="0.1"
@@ -584,7 +539,7 @@ const LojistaProdutosEstoque = () => {
                                 Cancelar
                             </button>
                             <button type="submit" style={styles.saveButton}>
-                                💾 Salvar Alterações
+                                Salvar Alteracoes
                             </button>
                         </div>
                     </form>
@@ -594,7 +549,6 @@ const LojistaProdutosEstoque = () => {
     );
 };
 
-// ... [Restante dos Estilos Mantidos (styles, Object.assign)]
 const styles = {
     container: {
         padding: "30px",
@@ -688,6 +642,7 @@ const styles = {
         border: "2px solid #e9ecef",
         borderRadius: "6px",
         fontSize: "1rem",
+        boxSizing: "border-box",
     },
     sugestoesIA: {
         marginTop: "10px",
@@ -717,9 +672,6 @@ const styles = {
         display: "flex",
         alignItems: "center",
         gap: "5px",
-    },
-    confianca: {
-        fontSize: "0.7rem",
     },
     primaryButton: {
         backgroundColor: "#28a745",
@@ -858,79 +810,6 @@ const styles = {
         padding: '50px',
         color: '#666'
     },
-    error: {
-        color: '#dc3545',
-        backgroundColor: '#f8d7da',
-        padding: '10px',
-        borderRadius: '5px',
-        marginBottom: '15px'
-    },
 };
-
-// Efeitos hover
-Object.assign(styles, {
-    input: {
-        ...styles.input,
-        ":focus": {
-            outline: "none",
-            borderColor: "#2c5aa0",
-        },
-    },
-    aba: {
-        ...styles.aba,
-        ":hover": {
-            backgroundColor: "#e9ecef",
-        },
-    },
-    abaAtiva: {
-        ...styles.abaAtiva,
-        ":hover": {
-            backgroundColor: "#1e3d6f",
-        },
-    },
-    sugestaoButton: {
-        ...styles.sugestaoButton,
-        ":hover": {
-            transform: "translateY(-1px)",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-        },
-    },
-    primaryButton: {
-        ...styles.primaryButton,
-        ":hover": {
-            backgroundColor: "#218838",
-        },
-    },
-    secondaryButton: {
-        ...styles.secondaryButton,
-        ":hover": {
-            backgroundColor: "#545b62",
-        },
-    },
-    smallButton: {
-        ...styles.smallButton,
-        ":hover": {
-            backgroundColor: "#138496",
-        },
-    },
-    smallButtonDanger: {
-        ...styles.smallButtonDanger,
-        ":hover": {
-            backgroundColor: "#c82333",
-        },
-    },
-    cancelButton: {
-        ...styles.cancelButton,
-        ":hover": {
-            backgroundColor: '#545b62',
-        }
-    },
-    saveButton: {
-        ...styles.saveButton,
-        ":hover": {
-            backgroundColor: '#218838',
-        }
-    }
-});
 
 export default LojistaProdutosEstoque;

@@ -17,15 +17,15 @@ const QueuePanel = ({ consultorId }) => {
       {
         id: 1,
         clienteNome: 'Maria Silva',
-        nomeVisivel: false, // Cliente optou por não mostrar nome
-        loja: 'Loja Eletrônicos Center',
+        nomeVisivel: false, // Cliente optou por nao mostrar nome
+        loja: 'Loja Eletr´nicos Center',
         setor: 'Smartphones',
         tempoEspera: '2 min',
         prioridade: 'normal',
       },
       {
         id: 2,
-        clienteNome: 'João Santos',
+        clienteNome: 'Joao Santos',
         nomeVisivel: true, // Cliente optou por mostrar nome
         loja: 'Tech Store',
         setor: 'Notebooks',
@@ -78,19 +78,19 @@ const QueuePanel = ({ consultorId }) => {
   };
 
   const getStatusText = () => {
-    if (status === 'disponivel') return '✅ Disponível';
-    if (status === 'ocupado') return '⏳ Em Atendimento';
-    return '🔴 Offline';
+    if (status === 'disponivel') return ' Disponivel';
+    if (status === 'ocupado') return 'o Em Atendimento';
+    return ' Offline';
   };
 
   return (
     <div style={styles.container}>
       {/* Header com Status */}
       <div style={styles.header}>
-        <h2 style={styles.title}>📞 Fila de Atendimento</h2>
+        <h2 style={styles.title}> Fila de Atendimento</h2>
         
         <div style={styles.headerActions}>
-          {/* Botão de Status */}
+          {/* Botao de Status */}
           <button
             onClick={toggleDisponibilidade}
             style={{ ...styles.statusButton, ...getStatusStyle() }}
@@ -101,7 +101,7 @@ const QueuePanel = ({ consultorId }) => {
 
           {/* Contador de pessoas na fila */}
           <div style={styles.counterBadge}>
-            👥 {filaAtendimento.length} na fila
+             {filaAtendimento.length} na fila
           </div>
         </div>
       </div>
@@ -110,10 +110,10 @@ const QueuePanel = ({ consultorId }) => {
       {atendimentoAtual && (
         <div style={styles.atendimentoAtual}>
           <div style={styles.atendimentoInfo}>
-            <p style={styles.atendimentoLabel}>🎯 Atendendo agora:</p>
+            <p style={styles.atendimentoLabel}> Atendendo agora:</p>
             <p style={styles.atendimentoNome}>{getClienteDisplay(atendimentoAtual)}</p>
             <p style={styles.atendimentoDetalhe}>
-              🏪 {atendimentoAtual.loja} - {atendimentoAtual.setor}
+               {atendimentoAtual.loja} - {atendimentoAtual.setor}
             </p>
           </div>
           <div style={styles.atendimentoActions}>
@@ -121,13 +121,13 @@ const QueuePanel = ({ consultorId }) => {
               onClick={() => window.location.href = `/consultor/dashboard/chat`}
               style={styles.chatButton}
             >
-              💬 Abrir Chat
+               Abrir Chat
             </button>
             <button
               onClick={finalizarAtendimento}
               style={styles.finalizarButton}
             >
-              ✅ Finalizar
+               Finalizar
             </button>
           </div>
         </div>
@@ -136,10 +136,10 @@ const QueuePanel = ({ consultorId }) => {
       {/* Mensagem quando offline */}
       {status === 'offline' && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>🔴</div>
-          <p style={styles.emptyTitle}>Você está offline</p>
+          <div style={styles.emptyIcon}></div>
+          <p style={styles.emptyTitle}>Voca esta offline</p>
           <p style={styles.emptySubtitle}>
-            Clique em "Offline" acima para começar a receber chamadas
+            Clique em "Offline" acima para comecar a receber chamadas
           </p>
         </div>
       )}
@@ -147,18 +147,18 @@ const QueuePanel = ({ consultorId }) => {
       {/* Mensagem quando ocupado sem atendimento */}
       {status === 'ocupado' && !atendimentoAtual && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>⏳</div>
-          <p style={styles.emptyTitle}>Você está em atendimento</p>
+          <div style={styles.emptyIcon}>o</div>
+          <p style={styles.emptyTitle}>Voca esta em atendimento</p>
         </div>
       )}
 
-      {/* Mensagem quando disponível mas fila vazia */}
+      {/* Mensagem quando disponivel mas fila vazia */}
       {status === 'disponivel' && filaAtendimento.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>📞</div>
+          <div style={styles.emptyIcon}></div>
           <p style={styles.emptyTitle}>Aguardando chamadas...</p>
           <p style={styles.emptySubtitle}>
-            Você receberá uma notificação quando um cliente solicitar atendimento
+            Voca recebera uma notificacao quando um cliente solicitar atendimento
           </p>
         </div>
       )}
@@ -176,37 +176,37 @@ const QueuePanel = ({ consultorId }) => {
               }}
             >
               <div style={styles.chamadaContent}>
-                {/* Informações da Chamada */}
+                {/* Informacoes da Chamada */}
                 <div style={styles.chamadaInfo}>
                   <div style={styles.chamadaHeader}>
                     <span style={styles.chamadaNome}>
-                      📞 {getClienteDisplay(chamada)}
+                       {getClienteDisplay(chamada)}
                     </span>
                     {chamada.prioridade === 'urgente' && (
-                      <span style={styles.urgenteBadge}>🔥 URGENTE</span>
+                      <span style={styles.urgenteBadge}> URGENTE</span>
                     )}
                   </div>
 
                   <div style={styles.chamadaDetalhes}>
-                    <p style={styles.detalheItem}>🏪 {chamada.loja}</p>
-                    <p style={styles.detalheItem}>🏷️ Setor: {chamada.setor}</p>
-                    <p style={styles.detalheItem}>⏱️ Aguardando há {chamada.tempoEspera}</p>
+                    <p style={styles.detalheItem}> {chamada.loja}</p>
+                    <p style={styles.detalheItem}> Setor: {chamada.setor}</p>
+                    <p style={styles.detalheItem}>± Aguardando ha {chamada.tempoEspera}</p>
                   </div>
                 </div>
 
-                {/* Botões de Ação */}
+                {/* Botoes de Acao */}
                 <div style={styles.chamadaActions}>
                   <button
                     onClick={() => aceitarChamada(chamada)}
                     style={styles.aceitarButton}
                   >
-                    ✅ Aceitar
+                     Aceitar
                   </button>
                   <button
                     onClick={() => recusarChamada(chamada.id)}
                     style={styles.recusarButton}
                   >
-                    ❌ Recusar
+                     Recusar
                   </button>
                 </div>
               </div>

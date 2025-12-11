@@ -138,13 +138,13 @@ const styles = {
 
 const initialUsers = [
     { id: 1, nome: 'Ana Paula Matos', email: 'ana.matos@lojista.com', perfil: 'Admin Lojista', filial: 'Matriz', status: 'ativo' },
-    { id: 2, nome: 'João Silva', email: 'joao.silva@lojista.com', perfil: 'Vendedor', filial: 'Loja Centro - SP', status: 'ativo' },
+    { id: 2, nome: 'Joao Silva', email: 'joao.silva@lojista.com', perfil: 'Vendedor', filial: 'Loja Centro - SP', status: 'ativo' },
     { id: 3, nome: 'Carla Dias', email: 'carla.dias@lojista.com', perfil: 'Vendedor', filial: 'Filial Online', status: 'ativo' },
     { id: 4, nome: 'Pedro Costa', email: 'pedro.costa@lojista.com', perfil: 'Admin Lojista', filial: 'Matriz', status: 'inativo' },
 ];
 
 const initialConsultores = [
-    { id: 101, nome: 'Marcus Vinícius (Consultor Externo)', email: 'marcus.v@consultor.com', status: 'pendente' },
+    { id: 101, nome: 'Marcus Vinicius (Consultor Externo)', email: 'marcus.v@consultor.com', status: 'pendente' },
     { id: 102, nome: 'Juliana Lima (Consultora Externa)', email: 'juliana.l@consultor.com', status: 'aprovado' },
 ];
 
@@ -212,12 +212,12 @@ const LojistaUsuarios = () => {
 
     return (
         <div style={styles.pageContainer}>
-            <h1 style={styles.title}>👥 Gestão de Usuários e Acessos</h1>
-            <p style={styles.subtitle}>Controle quem pode acessar o painel e quais permissões cada usuário possui.</p>
+            <h1 style={styles.title}> Gestao de Usuarios e Acessos</h1>
+            <p style={styles.subtitle}>Controle quem pode acessar o painel e quais permissoes cada usuario possui.</p>
 
-            {/* Cadastro de Novo Usuário Interno */}
+            {/* Cadastro de Novo Usuario Interno */}
             <section style={styles.sectionCard}>
-                <h2 style={styles.cardTitle}>➕ Adicionar Usuário Interno (Lojista/Vendedor)</h2>
+                <h2 style={styles.cardTitle}>O Adicionar Usuario Interno (Lojista/Vendedor)</h2>
                 <div style={styles.formRow}>
                     <div style={{...styles.formGroup, gridColumn: 'span 2'}}>
                         <label style={styles.label}>Nome</label>
@@ -265,14 +265,14 @@ const LojistaUsuarios = () => {
                         </div>
                     )}
                     <button onClick={handleAddUser} style={styles.buttonPrimary}>
-                        Salvar Usuário
+                        Salvar Usuario
                     </button>
                 </div>
             </section>
 
-            {/* Tabela de Usuários Internos */}
+            {/* Tabela de Usuarios Internos */}
             <section style={styles.sectionCard}>
-                <h2 style={styles.cardTitle}>👥 Equipe Interna ({usuarios.length})</h2>
+                <h2 style={styles.cardTitle}> Equipe Interna ({usuarios.length})</h2>
                 <div style={styles.tableContainer}>
                     <table style={styles.table}>
                         <thead style={styles.tableHeader}>
@@ -282,7 +282,7 @@ const LojistaUsuarios = () => {
                                 <th style={styles.th}>Perfil</th>
                                 <th style={styles.th}>Filial</th>
                                 <th style={{...styles.th, textAlign: 'center'}}>Status</th>
-                                <th style={{...styles.th, textAlign: 'center'}}>Ações</th>
+                                <th style={{...styles.th, textAlign: 'center'}}>Acoes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -312,9 +312,9 @@ const LojistaUsuarios = () => {
                 </div>
             </section>
 
-            {/* Aprovação de Consultores */}
+            {/* Aprovacao de Consultores */}
             <section style={styles.sectionCard}>
-                <h2 style={styles.cardTitle}>🔍 Solicitações de Consultores Externos ({consultores.filter(c => c.status === 'pendente').length})</h2>
+                <h2 style={styles.cardTitle}> Solicitacoes de Consultores Externos ({consultores.filter(c => c.status === 'pendente').length})</h2>
                 <p style={{color: '#6b7280', marginBottom: '16px', fontSize: '14px'}}>
                     Aprove ou recuse os consultores da plataforma que desejam vender seus produtos em parceria.
                 </p>
@@ -326,7 +326,7 @@ const LojistaUsuarios = () => {
                                 <th style={styles.th}>Nome do Consultor</th>
                                 <th style={styles.th}>Email</th>
                                 <th style={{...styles.th, textAlign: 'center'}}>Status da Parceria</th>
-                                <th style={{...styles.th, textAlign: 'center'}}>Ações</th>
+                                <th style={{...styles.th, textAlign: 'center'}}>Acoes</th>
                             </tr>
                         </thead>
                         <tbody>

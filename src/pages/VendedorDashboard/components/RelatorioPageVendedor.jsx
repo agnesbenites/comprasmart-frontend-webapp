@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from "../../../components/Layout";
 import { formatarMoeda, formatarData } from '../../../shared/utils/formatters';
 import { API_CONFIG, apiGet } from '../../../shared/utils/api';
-import { supabase } from '../../../shared/utils/supabase'; // se estiver usando
+import { supabase } from "../../../supabaseClient"; // se estiver usando
 
 const RelatorioPageVendedor = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const RelatorioPageVendedor = () => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (!user) {
-          throw new Error('Usuário não autenticado');
+          throw new Error('Usuario nao autenticado');
         }
 
         // 2. Buscar perfil do vendedor
@@ -46,7 +46,7 @@ const RelatorioPageVendedor = () => {
 
         if (lojaError) throw lojaError;
 
-        // 4. Buscar vendas do período
+        // 4. Buscar vendas do periodo
         const { data: vendas, error: vendasError } = await supabase
           .from('vendas')
           .select(`
@@ -142,7 +142,7 @@ const RelatorioPageVendedor = () => {
         setError(null);
       } catch (err) {
         console.error('Erro ao buscar dados:', err);
-        setError('Erro ao carregar dados do relatório');
+        setError('Erro ao carregar dados do relatorio');
       } finally {
         setLoading(false);
       }
@@ -151,7 +151,7 @@ const RelatorioPageVendedor = () => {
     fetchDadosVendas();
   }, [periodo]);
 
-  // Componente de gráfico de barras
+  // Componente de grafico de barras
   const BarChart = ({ data, title, color = "#2c5aa0" }) => {
     if (!data || data.length === 0) {
       return (
@@ -163,7 +163,7 @@ const RelatorioPageVendedor = () => {
           marginBottom: "20px"
         }}>
           <h3 style={{ color: "#2c5aa0", marginBottom: "20px" }}>{title}</h3>
-          <p style={{ color: "#666", textAlign: "center" }}>Sem dados disponíveis</p>
+          <p style={{ color: "#666", textAlign: "center" }}>Sem dados disponiveis</p>
         </div>
       );
     }
@@ -204,7 +204,7 @@ const RelatorioPageVendedor = () => {
     );
   };
 
-  // Componente de gráfico de setores
+  // Componente de grafico de setores
   const SetoresChart = ({ data, title }) => {
     if (!data || data.length === 0) {
       return (
@@ -216,7 +216,7 @@ const RelatorioPageVendedor = () => {
           marginBottom: "20px"
         }}>
           <h3 style={{ color: "#2c5aa0", marginBottom: "20px" }}>{title}</h3>
-          <p style={{ color: "#666", textAlign: "center" }}>Sem dados disponíveis</p>
+          <p style={{ color: "#666", textAlign: "center" }}>Sem dados disponiveis</p>
         </div>
       );
     }
@@ -280,7 +280,7 @@ const RelatorioPageVendedor = () => {
                     color: percentual >= 100 ? "#28a745" : "#dc3545",
                     fontWeight: "bold"
                   }}>
-                    {percentual >= 100 ? "✅ Meta batida!" : `⚠️ Faltam ${setor.meta - setor.vendas}`}
+                    {percentual >= 100 ? " Meta batida!" : `  Faltam ${setor.meta - setor.vendas}`}
                   </span>
                 </div>
               </div>
@@ -291,7 +291,7 @@ const RelatorioPageVendedor = () => {
     );
   };
 
-  // Componente de seletor de período
+  // Componente de seletor de periodo
   const SeletorPeriodo = () => (
     <div style={{
       backgroundColor: "white",
@@ -300,7 +300,7 @@ const RelatorioPageVendedor = () => {
       boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
       marginBottom: "20px"
     }}>
-      <h4 style={{ color: "#2c5aa0", marginBottom: "10px" }}>📅 Selecione o Período</h4>
+      <h4 style={{ color: "#2c5aa0", marginBottom: "10px" }}> Selecione o Periodo</h4>
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <input
           type="date"
@@ -329,7 +329,7 @@ const RelatorioPageVendedor = () => {
             cursor: "pointer"
           }}
         >
-          Mês Atual
+          Mas Atual
         </button>
       </div>
     </div>
@@ -338,9 +338,9 @@ const RelatorioPageVendedor = () => {
   // Loading state
   if (loading) {
     return (
-      <Layout title="Relatório do Vendedor" showHeader={true}>
+      <Layout title="Relatorio do Vendedor" showHeader={true}>
         <div style={{ padding: "40px", textAlign: "center" }}>
-          <h3>Carregando relatório...</h3>
+          <h3>Carregando relatorio...</h3>
           <p>Por favor, aguarde enquanto buscamos seus dados.</p>
         </div>
       </Layout>
@@ -350,9 +350,9 @@ const RelatorioPageVendedor = () => {
   // Error state
   if (error) {
     return (
-      <Layout title="Relatório do Vendedor" showHeader={true}>
+      <Layout title="Relatorio do Vendedor" showHeader={true}>
         <div style={{ padding: "40px", textAlign: "center" }}>
-          <h3 style={{ color: "#dc3545" }}>Erro ao carregar relatório</h3>
+          <h3 style={{ color: "#dc3545" }}>Erro ao carregar relatorio</h3>
           <p>{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -376,23 +376,23 @@ const RelatorioPageVendedor = () => {
   // No data state
   if (!dadosVendas) {
     return (
-      <Layout title="Relatório do Vendedor" showHeader={true}>
+      <Layout title="Relatorio do Vendedor" showHeader={true}>
         <div style={{ padding: "40px", textAlign: "center" }}>
-          <h3>Nenhum dado disponível</h3>
-          <p>Não encontramos dados de vendas para o período selecionado.</p>
+          <h3>Nenhum dado disponivel</h3>
+          <p>Nao encontramos dados de vendas para o periodo selecionado.</p>
         </div>
       </Layout>
     );
   }
 
   return (
-    <Layout title="Relatório do Vendedor" showHeader={true}>
+    <Layout title="Relatorio do Vendedor" showHeader={true}>
       <div style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
         
-        {/* Seletor de Período */}
+        {/* Seletor de Periodo */}
         <SeletorPeriodo />
         
-        {/* Cabeçalho do Relatório */}
+        {/* Cabecalho do Relatorio */}
         <div style={{ 
           display: "flex", 
           justifyContent: "space-between", 
@@ -403,7 +403,7 @@ const RelatorioPageVendedor = () => {
         }}>
           <div>
             <h1 style={{ color: "#2c5aa0", margin: "0 0 10px 0" }}>
-              📊 Relatório do Vendedor
+               Relatorio do Vendedor
             </h1>
             <p style={{ color: "#666", margin: "0 0 5px 0", fontSize: "18px", fontWeight: "500" }}>
               {dadosVendas.vendedor}
@@ -412,7 +412,7 @@ const RelatorioPageVendedor = () => {
               {dadosVendas.loja}
             </p>
             <p style={{ color: "#666", margin: 0 }}>
-              Período: {formatarData(dadosVendas.periodo.inicio)} até {formatarData(dadosVendas.periodo.fim)}
+              Periodo: {formatarData(dadosVendas.periodo.inicio)} ate {formatarData(dadosVendas.periodo.fim)}
             </p>
           </div>
           
@@ -431,23 +431,23 @@ const RelatorioPageVendedor = () => {
                 marginRight: "10px"
               }}
             >
-              🖨️ Imprimir Relatório
+               Imprimir Relatorio
             </button>
             <button
               onClick={() => {
-                // Função para exportar dados
+                // Funcao para exportar dados
                 const csv = [
-                  ['Relatório de Vendas', dadosVendas.vendedor],
-                  ['Período', `${formatarData(dadosVendas.periodo.inicio)} - ${formatarData(dadosVendas.periodo.fim)}`],
+                  ['Relatorio de Vendas', dadosVendas.vendedor],
+                  ['Periodo', `${formatarData(dadosVendas.periodo.inicio)} - ${formatarData(dadosVendas.periodo.fim)}`],
                   [''],
-                  ['Métrica', 'Valor'],
+                  ['Metrica', 'Valor'],
                   ['Total de Vendas', dadosVendas.totalVendas],
                   ['Meta Mensal', dadosVendas.metaMensal],
                   ['Valor Total', formatarMoeda(dadosVendas.valorTotal)],
                   ['Clientes Novos', dadosVendas.clientesNovos],
                   ['Clientes Fregueses', dadosVendas.clientesFregueses],
                   ['Performance', `${dadosVendas.performance}%`],
-                  ['Ticket Médio', formatarMoeda(dadosVendas.ticketMedio)]
+                  ['Ticket Medio', formatarMoeda(dadosVendas.ticketMedio)]
                 ];
                 
                 const csvContent = csv.map(row => row.join(',')).join('\n');
@@ -469,12 +469,12 @@ const RelatorioPageVendedor = () => {
                 marginTop: "10px"
               }}
             >
-              📥 Exportar CSV
+               Exportar CSV
             </button>
           </div>
         </div>
 
-        {/* Métricas Principais */}
+        {/* Metricas Principais */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
@@ -489,7 +489,7 @@ const RelatorioPageVendedor = () => {
             textAlign: "center",
             borderLeft: "4px solid #2c5aa0"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#2c5aa0", fontSize: "16px" }}>💰 Vendas do Período</h3>
+            <h3 style={{ margin: "0 0 10px 0", color: "#2c5aa0", fontSize: "16px" }}> Vendas do Periodo</h3>
             <p style={{ fontSize: "28px", fontWeight: "bold", color: "#2c5aa0", margin: "0 0 5px 0" }}>
               {dadosVendas.totalVendas}/{dadosVendas.metaMensal}
             </p>
@@ -522,19 +522,19 @@ const RelatorioPageVendedor = () => {
             textAlign: "center",
             borderLeft: "4px solid #28a745"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#28a745", fontSize: "16px" }}>👥 Perfil de Clientes</h3>
+            <h3 style={{ margin: "0 0 10px 0", color: "#28a745", fontSize: "16px" }}> Perfil de Clientes</h3>
             <div style={{ display: "flex", justifyContent: "space-around", margin: "15px 0" }}>
               <div>
                 <p style={{ fontSize: "20px", fontWeight: "bold", color: "#28a745", margin: "0" }}>
                   {dadosVendas.clientesNovos}
                 </p>
-                <p style={{ fontSize: "12px", color: "#666", margin: "0" }}>🆕 Novos</p>
+                <p style={{ fontSize: "12px", color: "#666", margin: "0" }}> Novos</p>
               </div>
               <div>
                 <p style={{ fontSize: "20px", fontWeight: "bold", color: "#fd7e14", margin: "0" }}>
                   {dadosVendas.clientesFregueses}
                 </p>
-                <p style={{ fontSize: "12px", color: "#666", margin: "0" }}>🔁 Fregueses</p>
+                <p style={{ fontSize: "12px", color: "#666", margin: "0" }}> Fregueses</p>
               </div>
             </div>
             <p style={{ fontSize: "12px", color: "#666", margin: "10px 0 0 0" }}>
@@ -550,12 +550,12 @@ const RelatorioPageVendedor = () => {
             textAlign: "center",
             borderLeft: "4px solid #fd7e14"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#fd7e14", fontSize: "16px" }}>📈 Performance</h3>
+            <h3 style={{ margin: "0 0 10px 0", color: "#fd7e14", fontSize: "16px" }}> Performance</h3>
             <p style={{ fontSize: "28px", fontWeight: "bold", color: "#fd7e14", margin: "0 0 5px 0" }}>
               {dadosVendas.performance}%
             </p>
             <p style={{ color: "#666", margin: "0 0 10px 0", fontSize: "14px" }}>
-              Ticket Médio
+              Ticket Medio
             </p>
             <p style={{ fontSize: "16px", fontWeight: "bold", color: "#2c5aa0", margin: "0" }}>
               {formatarMoeda(dadosVendas.ticketMedio)}
@@ -563,7 +563,7 @@ const RelatorioPageVendedor = () => {
           </div>
         </div>
 
-        {/* Gráficos */}
+        {/* Graficos */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
@@ -572,13 +572,13 @@ const RelatorioPageVendedor = () => {
         }}>
           <BarChart 
             data={dadosVendas.vendasPorDia} 
-            title="📈 Vendas por Dia" 
+            title=" Vendas por Dia" 
             color="#2c5aa0"
           />
 
           <SetoresChart 
             data={dadosVendas.setoresDetalhados} 
-            title="🎯 Performance por Setor"
+            title=" Performance por Setor"
           />
         </div>
 
@@ -590,19 +590,19 @@ const RelatorioPageVendedor = () => {
           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
           marginBottom: "30px"
         }}>
-          <h3 style={{ color: "#2c5aa0", marginBottom: "15px" }}>📋 Resumo Executivo</h3>
+          <h3 style={{ color: "#2c5aa0", marginBottom: "15px" }}> Resumo Executivo</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "15px" }}>
             <div>
-              <strong>🎯 Situação da Meta:</strong>
+              <strong> Situacao da Meta:</strong>
               <p style={{ margin: "5px 0", color: "#666" }}>
                 {dadosVendas.totalVendas >= dadosVendas.metaMensal ? 
-                  "✅ Meta batida com sucesso!" : 
-                  `⚠️ Faltam ${dadosVendas.metaMensal - dadosVendas.totalVendas} vendas para a meta`
+                  " Meta batida com sucesso!" : 
+                  `  Faltam ${dadosVendas.metaMensal - dadosVendas.totalVendas} vendas para a meta`
                 }
               </p>
             </div>
             <div>
-              <strong>📊 Melhor Setor:</strong>
+              <strong> Melhor Setor:</strong>
               <p style={{ margin: "5px 0", color: "#666" }}>
                 {dadosVendas.setoresDetalhados.length > 0 ? 
                   dadosVendas.setoresDetalhados.reduce((prev, current) => 
@@ -611,16 +611,16 @@ const RelatorioPageVendedor = () => {
               </p>
             </div>
             <div>
-              <strong>👥 Foco de Clientes:</strong>
+              <strong> Foco de Clientes:</strong>
               <p style={{ margin: "5px 0", color: "#666" }}>
                 {dadosVendas.clientesNovos > dadosVendas.clientesFregueses ? 
-                  "🆕 Captação de novos clientes" : 
-                  "🔁 Fidelização de clientes"
+                  " Captacao de novos clientes" : 
+                  " Fidelizacao de clientes"
                 }
               </p>
             </div>
             <div>
-              <strong>💰 Receita Total:</strong>
+              <strong> Receita Total:</strong>
               <p style={{ margin: "5px 0", color: "#666" }}>
                 {formatarMoeda(dadosVendas.valorTotal)}
               </p>
@@ -628,7 +628,7 @@ const RelatorioPageVendedor = () => {
           </div>
         </div>
 
-        {/* Botão Voltar */}
+        {/* Botao Voltar */}
         <div style={{ textAlign: "center" }}>
           <button
             onClick={() => navigate("/vendedor/dashboard")}
@@ -643,7 +643,7 @@ const RelatorioPageVendedor = () => {
               fontWeight: "bold"
             }}
           >
-            ← Voltar para Dashboard
+            &#8592; Voltar para Dashboard
           </button>
         </div>
       </div>

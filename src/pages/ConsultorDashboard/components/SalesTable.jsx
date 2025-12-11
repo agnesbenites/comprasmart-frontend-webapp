@@ -2,17 +2,17 @@
 
 import React, { useState } from 'react';
 
-// Dados mockados para simular o que virá do Supabase
+// Dados mockados para simular o que vira do Supabase
 const mockAnalytics = {
-    avgTime: '12 min',          // 1. Tempo médio de atendimento
-    dailyCount: 15,             // 2. Quantidade de atendimento diário
-    commissionValue: 'R$ 350,00',// 3. Valor de comissão
+    avgTime: '12 min',          // 1. Tempo medio de atendimento
+    dailyCount: 15,             // 2. Quantidade de atendimento diario
+    commissionValue: 'R$ 350,00',// 3. Valor de comissao
     closedSales: 8,             // 7. Quantidade de compras fechadas
     qrCodesSent: 25,            // 6. Quantidade de qr codes enviados
     indicatedConsultants: 3,    // 5. Pessoas indicadas
-    rating: 4.8,                // 11. Avaliação
+    rating: 4.8,                // 11. Avaliacao
     associatedStores: ['Magazine X', 'Loja Y'], // 12. Lojas
-    associatedSegments: ['Eletrônicos', 'Decoração'] // 13. Segmentos
+    associatedSegments: ['Eletr´nicos', 'Decoracao'] // 13. Segmentos
 };
 
 const MetricCard = ({ title, value, detail }) => (
@@ -27,37 +27,37 @@ const AnalyticsPanel = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [productStock, setProductStock] = useState(null);
 
-    // 9. Pesquisa de Produtos e Estoque (Simulação)
+    // 9. Pesquisa de Produtos e Estoque (Simulacao)
     const handleSearch = () => {
-        // Lógica futura: axios.get('/api/estoque?sku=' + searchTerm)
+        // Logica futura: axios.get('/api/estoque?sku=' + searchTerm)
         if (searchTerm.toLowerCase().includes('sku123')) {
             setProductStock('Produto X: 50 unidades em Estoque na Loja Y.');
         } else {
-            setProductStock('Produto não encontrado ou estoque baixo.');
+            setProductStock('Produto nao encontrado ou estoque baixo.');
         }
     };
 
-    // 10. Geração de QR Code (Simulação)
+    // 10. Geracao de QR Code (Simulacao)
     const handleGenerateQR = () => {
-        alert('Funcionalidade de Geração de QR Code Final será implementada no Backend.');
+        alert('Funcionalidade de Geracao de QR Code Final sera implementada no Backend.');
     };
 
-    // 4. Campo de Indicação (Simulação)
+    // 4. Campo de Indicacao (Simulacao)
     const handleNominate = () => {
-        alert('Formulário de Indicação de Consultor será implementado.');
+        alert('Formulario de Indicacao de Consultor sera implementado.');
     };
 
     return (
         <div style={analyticsStyles.container}>
             
-            {/* 1. MÉTRICAS DE DESEMPENHO (Itens 1, 2, 3, 5, 6, 7, 11) */}
-            <h2>Visão Geral e Desempenho</h2>
+            {/* 1. M‰TRICAS DE DESEMPENHO (Itens 1, 2, 3, 5, 6, 7, 11) */}
+            <h2>Visao Geral e Desempenho</h2>
             <div style={analyticsStyles.metricsGrid}>
-                <MetricCard title="Atendimento Diário" value={mockAnalytics.dailyCount} />
+                <MetricCard title="Atendimento Diario" value={mockAnalytics.dailyCount} />
                 <MetricCard title="Vendas Fechadas" value={mockAnalytics.closedSales} />
-                <MetricCard title="Comissão (Mês)" value={mockAnalytics.commissionValue} />
-                <MetricCard title="Avaliação Média" value={mockAnalytics.rating} detail="(Item 11)" />
-                <MetricCard title="Indicações Ativas" value={mockAnalytics.indicatedConsultants} detail="(Item 5)" />
+                <MetricCard title="Comissao (Mas)" value={mockAnalytics.commissionValue} />
+                <MetricCard title="Avaliacao Media" value={mockAnalytics.rating} detail="(Item 11)" />
+                <MetricCard title="Indicacoes Ativas" value={mockAnalytics.indicatedConsultants} detail="(Item 5)" />
             </div>
 
             {/* 2. FERRAMENTAS ESSENCIAIS (Itens 9, 10) */}
@@ -84,8 +84,8 @@ const AnalyticsPanel = () => {
             </button>
 
 
-            {/* 3. INFORMAÇÕES PESSOAIS E INDICAÇÃO (Itens 4, 12, 13) */}
-            <h3 style={{ marginTop: '30px' }}>Minha Afiliação e Indicações</h3>
+            {/* 3. INFORMACOES PESSOAIS E INDICACAO (Itens 4, 12, 13) */}
+            <h3 style={{ marginTop: '30px' }}>Minha Afiliacao e Indicacoes</h3>
 
             <div style={analyticsStyles.infoGrid}>
                 <div>
@@ -105,9 +105,9 @@ const AnalyticsPanel = () => {
                 </div>
             </div>
 
-            {/* 4. HISTÓRICO DE COMPRAS (Item 8) */}
-            <h3 style={{ marginTop: '30px' }}>Histórico de Compras Finalizadas (Item 8)</h3>
-            <p>O histórico detalhado (Pedido, Valor, Loja, Data) será exibido aqui.</p>
+            {/* 4. HIST“RICO DE COMPRAS (Item 8) */}
+            <h3 style={{ marginTop: '30px' }}>Historico de Compras Finalizadas (Item 8)</h3>
+            <p>O historico detalhado (Pedido, Valor, Loja, Data) sera exibido aqui.</p>
         </div>
     );
 };

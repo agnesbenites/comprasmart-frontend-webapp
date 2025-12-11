@@ -1,11 +1,11 @@
 // src/components/UniversalLogin.jsx
-import { useAuth0 } from '@auth0/auth0-react';
+// REMOVIDO: Supabase migrado para Supabase
 import React from 'react';
 
 const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) => {
-  const { loginWithRedirect, logout, isAuthenticated, user, isLoading } = useAuth0();
+  const { login, logout, isAuthenticated, user, isLoading } = useAuth();
 
-  // Define o redirecionamento baseado no tipo de usuário
+  // Define o redirecionamento baseado no tipo de usuario
   const getRedirectPath = () => {
     const paths = {
       lojista: '/lojista/dashboard',
@@ -17,7 +17,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
   };
 
   const handleLogin = () => {
-    loginWithRedirect({
+    login({
       authorizationParams: {
         redirect_uri: `${window.location.origin}${getRedirectPath()}`,
       },
@@ -39,7 +39,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
   if (isLoading) {
     return (
       <div style={{ textAlign: 'center', padding: '20px' }}>
-        <p>⏳ Carregando autenticação...</p>
+        <p>o Carregando autenticacao...</p>
       </div>
     );
   }
@@ -54,7 +54,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
       backgroundColor: 'white',
       boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
     }}>
-      {/* Header com informações da empresa */}
+      {/* Header com informacoes da empresa */}
       {(companyName || cnpj) && (
         <div style={{ 
           padding: '15px', 
@@ -63,8 +63,8 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
           marginBottom: '20px',
           borderLeft: '4px solid #2c5aa0'
         }}>
-          {companyName && <p><strong>🏢 Empresa:</strong> {companyName}</p>}
-          {cnpj && <p><strong>📊 CNPJ:</strong> {cnpj}</p>}
+          {companyName && <p><strong> Empresa:</strong> {companyName}</p>}
+          {cnpj && <p><strong> CNPJ:</strong> {cnpj}</p>}
           <button 
             onClick={() => window.history.back()}
             style={{
@@ -76,7 +76,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
               padding: '5px 0'
             }}
           >
-            ← Trocar empresa
+            &#8592; Trocar empresa
           </button>
         </div>
       )}
@@ -94,7 +94,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
         color: '#666', 
         marginBottom: '30px' 
       }}>
-        Autenticação gerenciada pelo Auth0
+        Autenticacao gerenciada pelo Supabase
       </p>
 
       {!isAuthenticated ? (
@@ -114,7 +114,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
               marginBottom: '15px'
             }}
           >
-            🔐 Entrar no Sistema
+             Entrar no Sistema
           </button>
           
           <div style={{ textAlign: 'center' }}>
@@ -129,7 +129,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
                 textDecoration: 'underline'
               }}
             >
-              ← Voltar para Home
+              &#8592; Voltar para Home
             </button>
           </div>
         </div>
@@ -141,7 +141,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
             borderRadius: '8px',
             marginBottom: '20px'
           }}>
-            <p>✅ <strong>Autenticado como:</strong></p>
+            <p> <strong>Autenticado como:</strong></p>
             <p>{user?.name || user?.email}</p>
             <p><small>Tipo: {userType}</small></p>
           </div>
@@ -158,7 +158,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
               marginRight: '10px'
             }}
           >
-            🚪 Sair
+             Sair
           </button>
           
           <button 
@@ -172,7 +172,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
               cursor: 'pointer'
             }}
           >
-            🚀 Ir para Dashboard
+             Ir para Dashboard
           </button>
         </div>
       )}
@@ -180,7 +180,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
   );
 };
 
-// Helper function para títulos
+// Helper function para titulos
 const getLoginTitle = (userType) => {
   const titles = {
     lojista: 'Login Lojista',
@@ -192,3 +192,5 @@ const getLoginTitle = (userType) => {
 };
 
 export default UniversalLogin;
+
+

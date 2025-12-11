@@ -22,7 +22,7 @@ const ModalBase = ({
       <div style={styles.modal(tamanhos[tamanho])}>
         <div style={styles.header}>
           <h2 style={styles.titulo}>{titulo}</h2>
-          <button style={styles.fechar} onClick={onFechar}>×</button>
+          <button style={styles.fechar} onClick={onFechar}>—</button>
         </div>
         
         <div style={styles.conteudo}>

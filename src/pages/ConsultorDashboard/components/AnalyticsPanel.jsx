@@ -23,7 +23,7 @@ const AnalyticsPanel_Updated = () => {
         setLoading(false);
       }, 500);
     } catch (error) {
-      console.error('Erro ao carregar métricas:', error);
+      console.error('Erro ao carregar metricas:', error);
       setLoading(false);
     }
   };
@@ -45,20 +45,20 @@ const AnalyticsPanel_Updated = () => {
       { dia: 'Qua', vendas: 15, comissao: 600 },
       { dia: 'Qui', vendas: 10, comissao: 400 },
       { dia: 'Sex', vendas: 18, comissao: 720 },
-      { dia: 'Sáb', vendas: 22, comissao: 880 },
+      { dia: 'Sab', vendas: 22, comissao: 880 },
       { dia: 'Dom', vendas: 14, comissao: 560 },
     ],
     vendasPorCategoria: [
-      { categoria: 'Eletrônicos', valor: 2400, quantidade: 15 },
-      { categoria: 'Eletrodomésticos', valor: 1800, quantidade: 12 },
-      { categoria: 'Móveis', valor: 1200, quantidade: 8 },
-      { categoria: 'Decoração', valor: 600, quantidade: 5 },
+      { categoria: 'Eletr´nicos', valor: 2400, quantidade: 15 },
+      { categoria: 'Eletrodomesticos', valor: 1800, quantidade: 12 },
+      { categoria: 'Moveis', valor: 1200, quantidade: 8 },
+      { categoria: 'Decoracao', valor: 600, quantidade: 5 },
     ],
     top5Produtos: [
       { 
         nome: 'Smart TV 55"', 
         sku: 'TV-SMART-55-001',
-        loja: 'Eletrônicos Center',
+        loja: 'Eletr´nicos Center',
         vendas: 8, 
         comissao: 384 
       },
@@ -72,14 +72,14 @@ const AnalyticsPanel_Updated = () => {
       { 
         nome: 'Notebook Gamer', 
         sku: 'NB-GAME-i7-003',
-        loja: 'Eletrônicos Center',
+        loja: 'Eletr´nicos Center',
         vendas: 5, 
         comissao: 492 
       },
       { 
-        nome: 'Sofá 3 Lugares', 
+        nome: 'Sofa 3 Lugares', 
         sku: 'SOF-3L-BEG-004',
-        loja: 'Casa & Decoração',
+        loja: 'Casa & Decoracao',
         vendas: 4, 
         comissao: 220 
       },
@@ -99,7 +99,7 @@ const AnalyticsPanel_Updated = () => {
     return (
       <div style={styles.loadingContainer}>
         <div style={styles.spinner}></div>
-        <p>Carregando métricas...</p>
+        <p>Carregando metricas...</p>
         <style dangerouslySetInnerHTML={{__html: `
           @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -114,7 +114,7 @@ const AnalyticsPanel_Updated = () => {
     <div style={styles.container}>
       {/* Header com filtros */}
       <div style={styles.header}>
-        <h1 style={styles.title}>📊 Analytics & Performance</h1>
+        <h1 style={styles.title}> Analytics & Performance</h1>
         
         <div style={styles.periodFilter}>
           <button
@@ -133,7 +133,7 @@ const AnalyticsPanel_Updated = () => {
               ...(periodo === 'mes' ? styles.periodButtonActive : {})
             }}
           >
-            Mês
+            Mas
           </button>
           <button
             onClick={() => setPeriodo('ano')}
@@ -152,58 +152,58 @@ const AnalyticsPanel_Updated = () => {
         <MetricCard
           title="Vendas Hoje"
           value={metricas.resumo.vendasHoje}
-          icon="🛒"
+          icon=""
           color="#007bff"
         />
         <MetricCard
-          title="Vendas no Mês"
+          title="Vendas no Mas"
           value={metricas.resumo.vendasMes}
-          icon="📈"
+          icon=""
           color="#28a745"
         />
         <MetricCard
-          title="Comissão Hoje"
+          title="Comissao Hoje"
           value={`R$ ${metricas.resumo.comissaoHoje.toFixed(2)}`}
-          icon="💰"
+          icon=""
           color="#ffc107"
         />
         <MetricCard
-          title="Comissão no Mês"
+          title="Comissao no Mas"
           value={`R$ ${metricas.resumo.comissaoMes.toFixed(2)}`}
-          icon="💵"
+          icon=""
           color="#28a745"
         />
         <MetricCard
-          title="Ticket Médio"
+          title="Ticket Medio"
           value={`R$ ${metricas.resumo.ticketMedio.toFixed(2)}`}
-          icon="🎯"
+          icon=""
           color="#007bff"
         />
         <MetricCard
-          title="Taxa de Conversão"
+          title="Taxa de Conversao"
           value={`${metricas.resumo.taxaConversao}%`}
-          icon="✅"
+          icon=""
           color="#28a745"
         />
         <MetricCard
-          title="Tempo Médio"
+          title="Tempo Medio"
           value={metricas.resumo.tempoMedioAtendimento}
-          icon="⏱️"
+          icon="±"
           color="#6c757d"
         />
         <MetricCard
-          title="Avaliação"
+          title="Avaliacao"
           value={metricas.resumo.avaliacaoMedia}
-          icon="⭐"
+          icon="i"
           color="#ffc107"
         />
       </div>
 
-      {/* Gráficos */}
+      {/* Graficos */}
       <div style={styles.chartsGrid}>
-        {/* Gráfico de Vendas por Dia */}
+        {/* Grafico de Vendas por Dia */}
         <div style={styles.chartCard}>
-          <h3 style={styles.chartTitle}>Vendas e Comissões por Dia</h3>
+          <h3 style={styles.chartTitle}>Vendas e Comissoes por Dia</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={metricas.vendasPorDia}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -226,13 +226,13 @@ const AnalyticsPanel_Updated = () => {
                 dataKey="comissao"
                 stroke="#28a745"
                 strokeWidth={2}
-                name="Comissão (R$)"
+                name="Comissao (R$)"
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Gráfico de Vendas por Categoria */}
+        {/* Grafico de Vendas por Categoria */}
         <div style={styles.chartCard}>
           <h3 style={styles.chartTitle}>Vendas por Categoria</h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -251,7 +251,7 @@ const AnalyticsPanel_Updated = () => {
 
       {/* Top 5 Produtos - ATUALIZADO COM SKU E LOJA */}
       <div style={styles.chartCard}>
-        <h3 style={styles.chartTitle}>🏆 Top 5 Produtos Mais Vendidos</h3>
+        <h3 style={styles.chartTitle}> Top 5 Produtos Mais Vendidos</h3>
         <div style={styles.topProductsList}>
           {metricas.top5Produtos.map((produto, index) => (
             <div key={index} style={styles.topProductItem}>
@@ -260,8 +260,8 @@ const AnalyticsPanel_Updated = () => {
                 <span style={styles.topProductName}>{produto.nome}</span>
                 <div style={styles.topProductDetails}>
                   <span style={styles.topProductSku}>SKU: {produto.sku}</span>
-                  <span style={styles.topProductDivider}>•</span>
-                  <span style={styles.topProductLoja}>🏪 {produto.loja}</span>
+                  <span style={styles.topProductDivider}>*</span>
+                  <span style={styles.topProductLoja}> {produto.loja}</span>
                 </div>
                 <span style={styles.topProductSales}>{produto.vendas} vendas</span>
               </div>
@@ -276,7 +276,7 @@ const AnalyticsPanel_Updated = () => {
   );
 };
 
-// Componente de Card de Métrica
+// Componente de Card de Metrica
 const MetricCard = ({ title, value, icon, color }) => (
   <div style={styles.metricCard}>
     <div style={{ ...styles.metricIcon, backgroundColor: color + '20', color: color }}>

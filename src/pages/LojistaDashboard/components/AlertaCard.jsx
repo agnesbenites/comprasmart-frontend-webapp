@@ -28,7 +28,7 @@ const AlertaCard = ({ icone, mensagem, tipo = "info", acao }) => {
       <div style={styles.conteudo}>
         <p style={styles.mensagem}>{mensagem}</p>
       </div>
-      {acao && <div style={styles.seta}>→</div>}
+      {acao && <div style={styles.seta}>&#8592;’</div>}
     </div>
   );
 };

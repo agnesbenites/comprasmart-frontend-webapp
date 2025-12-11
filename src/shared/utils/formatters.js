@@ -2,7 +2,7 @@
 
 /**
  * Formata valor para moeda brasileira (R$)
- * @param {number} valor - Valor numérico
+ * @param {number} valor - Valor numerico
  * @returns {string} - Valor formatado (ex: R$ 1.250,00)
  */
 export const formatarMoeda = (valor) => {
@@ -68,7 +68,7 @@ export const formatarHora = (data) => {
 
 /**
  * Formata CPF
- * @param {string} cpf - CPF sem formatação
+ * @param {string} cpf - CPF sem formatacao
  * @returns {string} - CPF formatado (ex: 123.456.789-00)
  */
 export const formatarCPF = (cpf) => {
@@ -84,7 +84,7 @@ export const formatarCPF = (cpf) => {
 
 /**
  * Formata CNPJ
- * @param {string} cnpj - CNPJ sem formatação
+ * @param {string} cnpj - CNPJ sem formatacao
  * @returns {string} - CNPJ formatado (ex: 12.345.678/0001-00)
  */
 export const formatarCNPJ = (cnpj) => {
@@ -100,7 +100,7 @@ export const formatarCNPJ = (cnpj) => {
 
 /**
  * Formata telefone
- * @param {string} telefone - Telefone sem formatação
+ * @param {string} telefone - Telefone sem formatacao
  * @returns {string} - Telefone formatado (ex: (11) 98765-4321)
  */
 export const formatarTelefone = (telefone) => {
@@ -131,7 +131,7 @@ export const formatarPorcentagem = (valor) => {
 /**
  * Trunca texto longo
  * @param {string} texto - Texto a ser truncado
- * @param {number} limite - Número máximo de caracteres
+ * @param {number} limite - Numero maximo de caracteres
  * @returns {string} - Texto truncado com "..."
  */
 export const truncarTexto = (texto, limite = 50) => {
@@ -144,7 +144,7 @@ export const truncarTexto = (texto, limite = 50) => {
 /**
  * Capitaliza primeira letra
  * @param {string} texto - Texto
- * @returns {string} - Texto com primeira letra maiúscula
+ * @returns {string} - Texto com primeira letra maiuscula
  */
 export const capitalizarPrimeiraLetra = (texto) => {
   if (!texto) return '';

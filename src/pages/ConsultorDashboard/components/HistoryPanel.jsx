@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-// Importação de Hooks e Constantes de Mock (para o contexto do arquivo único)
+// Importacao de Hooks e Constantes de Mock (para o contexto do arquivo unico)
 
-// --- Constantes de Mock (Assumidas como disponíveis no App.jsx) ---
+// --- Constantes de Mock (Assumidas como disponiveis no App.jsx) ---
 const QR_CODE_PLACEHOLDER = "https://placehold.co/128x128/2563eb/ffffff?text=QR+CODE";
 const PRIMARY_COLOR = "bg-blue-600";
 
-// Mock de dados históricos de atendimentos
+// Mock de dados historicos de atendimentos
 const MOCK_HISTORY = [
     {
         id: 'ATT-20230520-001',
@@ -16,7 +16,7 @@ const MOCK_HISTORY = [
         duracao: '15 min',
         venda: true,
         valor: 350.00,
-        comissao: 17.50, // 5% de comissão
+        comissao: 17.50, // 5% de comissao
         statusPagamento: 'Pago',
         qrCodeId: 'QR-345678',
         produtos: [{nome: 'Smartwatch X', quantidade: 1, preco: 350.00}],
@@ -25,7 +25,7 @@ const MOCK_HISTORY = [
     {
         id: 'ATT-20230519-002',
         clientId: 'CLI-002',
-        clienteNome: 'Cliente Beta (Anônimo)',
+        clienteNome: 'Cliente Beta (An´nimo)',
         data: '19/05/2023',
         horario: '09:00',
         duracao: '30 min',
@@ -54,7 +54,7 @@ const MOCK_HISTORY = [
     },
 ];
 
-// Função para agrupar o histórico por Mês/Ano
+// Funcao para agrupar o historico por Mas/Ano
 const groupHistoryByMonth = (history) => {
     return history.reduce((acc, item) => {
         const key = item.mesAno;
@@ -80,22 +80,22 @@ const HistoryPanel = () => {
     const groupedHistory = groupHistoryByMonth(MOCK_HISTORY);
 
     const handleReportProblem = (attendanceId) => {
-        // Lógica: Abrir modal de formulário ou navegar para a página de relatório
-        alert(`Relatório de problema iniciado para o Atendimento ID: ${attendanceId}.`);
+        // Logica: Abrir modal de formulario ou navegar para a pagina de relatorio
+        alert(`Relatorio de problema iniciado para o Atendimento ID: ${attendanceId}.`);
     };
 
     return (
         <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
-            <h1 className="text-3xl font-bold text-blue-800 mb-6">📜 Histórico de Atendimentos</h1>
-            <p className="text-gray-600 mb-6">Visão detalhada de todas as interações e vendas, organizada por mês (similar a um extrato).</p>
+            <h1 className="text-3xl font-bold text-blue-800 mb-6"> Historico de Atendimentos</h1>
+            <p className="text-gray-600 mb-6">Visao detalhada de todas as interacoes e vendas, organizada por mas (similar a um extrato).</p>
             
             {Object.keys(groupedHistory).length === 0 ? (
-                <EmptyState icon="🔎" title="Nenhum Histórico Encontrado" subtitle="Comece a atender clientes para popular seu histórico." />
+                <EmptyState icon="" title="Nenhum Historico Encontrado" subtitle="Comece a atender clientes para popular seu historico." />
             ) : (
                 <div className="space-y-8">
                     {Object.keys(groupedHistory).map((mesAno) => (
                         <div key={mesAno} className="border border-gray-200 rounded-lg overflow-hidden">
-                            {/* Cabeçalho do Mês (Extrato) */}
+                            {/* Cabecalho do Mas (Extrato) */}
                             <div className={`p-4 ${PRIMARY_COLOR} text-white font-bold text-lg`}>
                                 {mesAno}
                             </div>
@@ -106,25 +106,25 @@ const HistoryPanel = () => {
                                     <details key={item.id} className="group cursor-pointer hover:bg-blue-50 transition-colors">
                                         <summary className="p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
                                             
-                                            {/* Coluna 1: ID e Data (Sempre visível) */}
+                                            {/* Coluna 1: ID e Data (Sempre visivel) */}
                                             <div className="w-full md:w-1/4 mb-2 md:mb-0">
                                                 <p className="text-sm font-semibold text-gray-900">ID: {item.id}</p>
-                                                <p className="text-xs text-gray-500">{item.data} às {item.horario}</p>
+                                                <p className="text-xs text-gray-500">{item.data}  s {item.horario}</p>
                                             </div>
 
-                                            {/* Coluna 2: Venda e Comissão (Sempre visível) */}
+                                            {/* Coluna 2: Venda e Comissao (Sempre visivel) */}
                                             <div className="flex w-full md:w-1/4 justify-between md:justify-start gap-4">
                                                 <div>
                                                     <p className="text-xs font-semibold text-gray-700">Venda:</p>
                                                     <p className={`font-bold ${item.venda ? 'text-green-600' : 'text-gray-500'}`}>R$ {item.valor.toFixed(2)}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs font-semibold text-gray-700">Comissão:</p>
+                                                    <p className="text-xs font-semibold text-gray-700">Comissao:</p>
                                                     <p className="font-bold text-yellow-600">R$ {item.comissao.toFixed(2)}</p>
                                                 </div>
                                             </div>
 
-                                            {/* Coluna 3: Status e Cliente (Sempre visível) */}
+                                            {/* Coluna 3: Status e Cliente (Sempre visivel) */}
                                             <div className="w-full md:w-1/4 mt-2 md:mt-0">
                                                 <p className="text-xs font-semibold text-gray-700">Status:</p>
                                                 <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
@@ -136,7 +136,7 @@ const HistoryPanel = () => {
                                                 </span>
                                             </div>
 
-                                            {/* Botão de Expansão (Sempre visível) */}
+                                            {/* Botao de Expansao (Sempre visivel) */}
                                             <div className="w-full md:w-auto mt-2 md:mt-0 text-right">
                                                 <span className={`text-blue-600 font-semibold text-sm`}>
                                                     Detalhes {item.produtos.length > 0 ? '(Venda)' : '(Atendimento)'}
@@ -144,22 +144,22 @@ const HistoryPanel = () => {
                                             </div>
                                         </summary>
 
-                                        {/* Detalhes Expansíveis (Menu Suspenso) */}
+                                        {/* Detalhes Expansiveis (Menu Suspenso) */}
                                         <div className="p-4 bg-gray-50 border-t border-gray-200">
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                 
-                                                {/* Informações do Cliente (Protegidas) */}
+                                                {/* Informacoes do Cliente (Protegidas) */}
                                                 <div>
-                                                    <h4 className="font-bold text-gray-800 mb-2">👤 Dados do Atendimento</h4>
+                                                    <h4 className="font-bold text-gray-800 mb-2"> Dados do Atendimento</h4>
                                                     <p className="text-sm text-gray-600"><strong>Cliente:</strong> {item.clienteNome}</p>
                                                     {/* Ocultando a maior parte do ID para privacidade */}
                                                     <p className="text-sm text-gray-600"><strong>ID Cliente:</strong> {item.clientId.replace(/(\w{3})\w+(\w{3})/, '$1****$2')}</p> 
-                                                    <p className="text-sm text-gray-600"><strong>Duração:</strong> {item.duracao}</p>
+                                                    <p className="text-sm text-gray-600"><strong>Duracao:</strong> {item.duracao}</p>
                                                 </div>
 
                                                 {/* Produtos Vendidos (Menu Suspenso) */}
                                                 <div>
-                                                    <h4 className="font-bold text-gray-800 mb-2">🛒 Produtos Vendidos</h4>
+                                                    <h4 className="font-bold text-gray-800 mb-2"> Produtos Vendidos</h4>
                                                     {item.produtos.length > 0 ? (
                                                         <ul className="list-disc list-inside text-sm text-gray-600 ml-2">
                                                             {item.produtos.map((p, pIndex) => (
@@ -171,23 +171,23 @@ const HistoryPanel = () => {
                                                     )}
                                                 </div>
 
-                                                {/* QR Code e Ações */}
+                                                {/* QR Code e Acoes */}
                                                 <div className="text-center md:text-left">
-                                                    <h4 className="font-bold text-gray-800 mb-2">🏷️ QR Code (Venda)</h4>
+                                                    <h4 className="font-bold text-gray-800 mb-2"> QR Code (Venda)</h4>
                                                     {item.qrCodeId ? (
                                                         <>
                                                             <img src={QR_CODE_PLACEHOLDER} alt="QR Code" className="w-20 h-20 mx-auto md:mx-0 p-1 border border-gray-300 rounded" />
                                                             <p className="text-xs text-gray-500 mt-1">Ref. {item.qrCodeId}</p>
                                                         </>
                                                     ) : (
-                                                        <p className="text-sm text-gray-500 italic">Não aplicável.</p>
+                                                        <p className="text-sm text-gray-500 italic">Nao aplicavel.</p>
                                                     )}
                                                     
                                                     <button
                                                         onClick={() => handleReportProblem(item.id)}
                                                         className="mt-4 w-full md:w-auto bg-red-600 text-white text-sm font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors shadow-md"
                                                     >
-                                                        🚨 Reportar Problema
+                                                         Reportar Problema
                                                     </button>
                                                 </div>
                                             </div>
@@ -202,3 +202,5 @@ const HistoryPanel = () => {
         </div>
     );
 };
+export default HistoryPanel;
+

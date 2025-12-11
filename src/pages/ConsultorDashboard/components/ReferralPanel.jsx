@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const MAX_NOMINATIONS = 15; // Limite de indicações por consultor
+const MAX_NOMINATIONS = 15; // Limite de indicacoes por consultor
 
 const mockNominations = [
     { email: 'indicacao1@email.com', status: 'Cadastrado e Ativo' },
@@ -11,48 +11,48 @@ const mockNominations = [
 
 const NominatePanel = () => {
     const [email, setEmail] = useState('');
-    const nominationsUsed = mockNominations.length; // Simula indicações já feitas
+    const nominationsUsed = mockNominations.length; // Simula indicacoes ja feitas
     const nominationsRemaining = MAX_NOMINATIONS - nominationsUsed;
 
     const handleNominate = () => {
         if (nominationsRemaining <= 0) {
-            alert(`Limite de ${MAX_NOMINATIONS} indicações atingido. Entre em contato com o suporte.`);
+            alert(`Limite de ${MAX_NOMINATIONS} indicacoes atingido. Entre em contato com o suporte.`);
             return;
         }
 
         if (email.trim()) {
-            alert(`E-mail ${email} enviado para indicação!`);
+            alert(`E-mail ${email} enviado para indicacao!`);
             setEmail('');
         }
     };
 
     return (
         <div style={styles.container}>
-            {/* LOGO E TÍTULO */}
+            {/* LOGO E TTULO */}
             <div style={styles.header}>
                 <img src="/img/logo_compra_smart.png" alt="Compra Smart Logo" style={styles.logo} />
-                <h2 style={styles.title}>Indique e Cresça Conosco!</h2>
+                <h2 style={styles.title}>Indique e Cresca Conosco!</h2>
             </div>
 
-            {/* REGRAS DE INDICAÇÃO */}
+            {/* REGRAS DE INDICACAO */}
             <div style={styles.rulesBox}>
-                <h3>Faça suas indicações e ganhe!</h3>
+                <h3>Faca suas indicacoes e ganhe!</h3>
                 <p style={styles.limitText}>
-                    Você pode indicar um total de {MAX_NOMINATIONS} pessoas por mês. ({nominationsRemaining} restantes)
+                    Voca pode indicar um total de {MAX_NOMINATIONS} pessoas por mas. ({nominationsRemaining} restantes)
                 </p>
                 <ul style={styles.rulesList}>
                     <li>O indicado deve fazer o cadastro completo na plataforma.</li>
-                    <li>Após o consultor ser aprovado, você recebe *R$ 10 por indicação.</li>
+                    <li>Apos o consultor ser aprovado, voca recebe *R$ 10 por indicacao.</li>
                 </ul>
-                <p style={styles.highlightText}>Indique, ganhe e cresça conosco!</p>
+                <p style={styles.highlightText}>Indique, ganhe e cresca conosco!</p>
             </div>
 
-            {/* CAMPO DE INDICAÇÃO */}
+            {/* CAMPO DE INDICACAO */}
             <h3 style={styles.subtitle}>Indicar Novo Consultor</h3>
             <div style={styles.inputGroup}>
                 <input 
                     type="email" 
-                    placeholder="E-mail da pessoa que você deseja indicar" 
+                    placeholder="E-mail da pessoa que voca deseja indicar" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     style={styles.input}
@@ -66,8 +66,8 @@ const NominatePanel = () => {
                 </button>
             </div>
 
-            {/* STATUS DAS INDICAÇÕES */}
-            <h3 style={styles.subtitle}>Status das Minhas Indicações ({mockNominations.length} pessoas)</h3>
+            {/* STATUS DAS INDICACOES */}
+            <h3 style={styles.subtitle}>Status das Minhas Indicacoes ({mockNominations.length} pessoas)</h3>
             <ul style={styles.list}>
                 {mockNominations.map((nom) => (
                     <li key={nom.email} style={styles.listItem}>

@@ -27,7 +27,7 @@ const TrainingPanel = ({ consultorId }) => {
       setTimeout(() => {
         setTreinamentosPlataforma(mockTreinamentosPlataforma);
         setTreinamentosLojistas(mockTreinamentosLojistas);
-        setTreinamentosConcluidos(['PLAT-001', 'PLAT-002', 'LOJ-001']); // IDs dos concluídos
+        setTreinamentosConcluidos(['PLAT-001', 'PLAT-002', 'LOJ-001']); // IDs dos concluidos
         calcularProgresso();
         setLoading(false);
       }, 500);
@@ -40,8 +40,8 @@ const TrainingPanel = ({ consultorId }) => {
   const mockTreinamentosPlataforma = [
     {
       id: 'PLAT-001',
-      titulo: 'Conduta e Comunicação na Plataforma',
-      descricao: 'O que você pode ou não perguntar e falar nas chamadas, mensagens de áudio e texto',
+      titulo: 'Conduta e Comunicacao na Plataforma',
+      descricao: 'O que voca pode ou nao perguntar e falar nas chamadas, mensagens de audio e texto',
       tipo: 'video',
       duracao: '15 min',
       obrigatorio: true,
@@ -50,14 +50,14 @@ const TrainingPanel = ({ consultorId }) => {
           'Perguntas permitidas e proibidas',
           'Linguagem apropriada e profissional',
           'Limites de privacidade do cliente',
-          'Como lidar com situações delicadas',
-          'Política de dados pessoais (LGPD)',
+          'Como lidar com situacoes delicadas',
+          'Politica de dados pessoais (LGPD)',
         ],
         pontosPrincipais: [
-          '❌ NUNCA pergunte: CPF, número do cartão, senhas bancárias',
-          '❌ NUNCA fale sobre: política, religião, questões pessoais íntimas',
-          '✅ SEMPRE mantenha: profissionalismo, respeito, foco no produto',
-          '✅ SEMPRE ofereça: informações técnicas, comparações, suporte na escolha',
+          ' NUNCA pergunte: CPF, numero do cartao, senhas bancarias',
+          ' NUNCA fale sobre: politica, religiao, questoes pessoais intimas',
+          ' SEMPRE mantenha: profissionalismo, respeito, foco no produto',
+          ' SEMPRE ofereca: informacoes tecnicas, comparacoes, suporte na escolha',
         ]
       }
     },
@@ -70,24 +70,24 @@ const TrainingPanel = ({ consultorId }) => {
       obrigatorio: true,
       conteudo: {
         topicos: [
-          'Uso de filtros avançados',
+          'Uso de filtros avancados',
           'Palavras-chave eficientes',
-          'Comparação de especificações',
-          'Verificação de estoque em tempo real',
-          'Identificação de melhores ofertas',
+          'Comparacao de especificacoes',
+          'Verificacao de estoque em tempo real',
+          'Identificacao de melhores ofertas',
         ],
         pontosPrincipais: [
-          '🔍 Use filtros por categoria, faixa de preço e marca',
-          '📊 Compare pelo menos 3 produtos similares',
-          '✅ Sempre verifique disponibilidade antes de recomendar',
-          '💡 Destaque diferenciais técnicos relevantes ao cliente',
+          ' Use filtros por categoria, faixa de preco e marca',
+          ' Compare pelo menos 3 produtos similares',
+          ' Sempre verifique disponibilidade antes de recomendar',
+          ' Destaque diferenciais tecnicos relevantes ao cliente',
         ]
       }
     },
     {
       id: 'PLAT-003',
-      titulo: 'Boas Práticas na Plataforma',
-      descricao: 'Diretrizes para atuação profissional e ética',
+      titulo: 'Boas Praticas na Plataforma',
+      descricao: 'Diretrizes para atuacao profissional e etica',
       tipo: 'video',
       duracao: '20 min',
       obrigatorio: true,
@@ -95,40 +95,40 @@ const TrainingPanel = ({ consultorId }) => {
         topicos: [
           'Pontualidade e disponibilidade',
           'Qualidade no atendimento',
-          'Gestão de múltiplas chamadas',
-          'Resolução de conflitos',
-          'Ética profissional',
+          'Gestao de multiplas chamadas',
+          'Resolucao de conflitos',
+          '‰tica profissional',
         ],
         pontosPrincipais: [
-          '⏰ Mantenha seu status atualizado',
-          '💬 Responda mensagens em até 2 minutos',
-          '🎯 Finalize vendas com eficiência',
-          '⭐ Busque avaliações positivas',
+          '° Mantenha seu status atualizado',
+          ' Responda mensagens em ate 2 minutos',
+          ' Finalize vendas com eficiancia',
+          'i Busque avaliacoes positivas',
         ]
       }
     },
     {
       id: 'PLAT-004',
-      titulo: 'Compliance e Gravação de Chamadas',
-      descricao: 'Política de monitoramento e privacidade',
+      titulo: 'Compliance e Gravacao de Chamadas',
+      descricao: 'Politica de monitoramento e privacidade',
       tipo: 'documento',
       duracao: '8 min',
       obrigatorio: true,
       conteudo: {
         topicos: [
-          'Política de gravação de chamadas',
+          'Politica de gravacao de chamadas',
           'Monitoramento de mensagens',
           'Finalidade do compliance',
           'Seus direitos e deveres',
-          'Consequências de violações',
+          'Consequancias de violacoes',
         ],
         pontosPrincipais: [
-          '🎥 A plataforma pode gravar chamadas aleatoriamente SEM AVISO PRÉVIO',
-          '💬 Mensagens podem ser auditadas para fins de compliance',
-          '🛡️ Objetivo: manter integridade e compromisso com usuários',
-          '⚖️ Violações graves podem resultar em suspensão ou banimento',
+          ' A plataforma pode gravar chamadas aleatoriamente SEM AVISO PR‰VIO',
+          ' Mensagens podem ser auditadas para fins de compliance',
+          ' Objetivo: manter integridade e compromisso com usuarios',
+          '– Violacoes graves podem resultar em suspensao ou banimento',
         ],
-        avisoImportante: 'ATENÇÃO: Todas as interações na plataforma podem ser monitoradas para garantir a qualidade e segurança de todos os usuários. Ao aceitar os termos, você concorda com esta política.'
+        avisoImportante: 'ATENCAO: Todas as interacoes na plataforma podem ser monitoradas para garantir a qualidade e seguranca de todos os usuarios. Ao aceitar os termos, voca concorda com esta politica.'
       }
     },
     {
@@ -141,19 +141,19 @@ const TrainingPanel = ({ consultorId }) => {
       conteudo: {
         topicos: [
           'Quando usar o sistema de reports',
-          'Tipos de problemas reportáveis',
-          'Como documentar evidências',
+          'Tipos de problemas reportaveis',
+          'Como documentar evidancias',
           'Prazos de resposta',
-          'O que NÃO fazer',
+          'O que NAO fazer',
         ],
         pontosPrincipais: [
-          '❌ NUNCA acione diretamente as lojas sobre problemas',
-          '✅ SEMPRE use o sistema de reports da plataforma',
-          '📸 Anexe prints e evidências quando possível',
-          '⏱️ Aguarde até 30 dias para retorno oficial',
-          '🚫 Não tente resolver problemas por fora da plataforma',
+          ' NUNCA acione diretamente as lojas sobre problemas',
+          ' SEMPRE use o sistema de reports da plataforma',
+          ' Anexe prints e evidancias quando possivel',
+          '± Aguarde ate 30 dias para retorno oficial',
+          ' Nao tente resolver problemas por fora da plataforma',
         ],
-        avisoImportante: 'IMPORTANTE: O consultor NÃO pode contatar lojas diretamente. Qualquer problema deve ser reportado através da plataforma para análise adequada.'
+        avisoImportante: 'IMPORTANTE: O consultor NAO pode contatar lojas diretamente. Qualquer problema deve ser reportado atraves da plataforma para analise adequada.'
       }
     },
   ];
@@ -161,20 +161,20 @@ const TrainingPanel = ({ consultorId }) => {
   const mockTreinamentosLojistas = [
     {
       id: 'LOJ-001',
-      titulo: 'Lançamento Samsung Galaxy S24 Ultra',
-      descricao: 'Especificações técnicas e diferenciais do novo flagship',
-      loja: 'Eletrônicos Center',
+      titulo: 'Lancamento Samsung Galaxy S24 Ultra',
+      descricao: 'Especificacoes tecnicas e diferenciais do novo flagship',
+      loja: 'Eletr´nicos Center',
       segmento: 'Smartphones',
       tipo: 'video',
       duracao: '18 min',
       dataPublicacao: '2024-12-01',
-      relevante: true, // Se é relevante para os segmentos do consultor
+      relevante: true, // Se e relevante para os segmentos do consultor
       conteudo: {
         topicos: [
-          'Especificações técnicas completas',
-          'Comparação com modelo anterior',
-          'Diferenciais de câmera e IA',
-          'Preços e condições especiais',
+          'Especificacoes tecnicas completas',
+          'Comparacao com modelo anterior',
+          'Diferenciais de c¢mera e IA',
+          'Precos e condicoes especiais',
         ]
       }
     },
@@ -183,7 +183,7 @@ const TrainingPanel = ({ consultorId }) => {
       titulo: 'Nova Linha de Geladeiras Brastemp Inverse',
       descricao: 'Tecnologia inverter e economia de energia',
       loja: 'Tech Store',
-      segmento: 'Eletrodomésticos',
+      segmento: 'Eletrodomesticos',
       tipo: 'documento',
       duracao: '12 min',
       dataPublicacao: '2024-11-28',
@@ -192,17 +192,17 @@ const TrainingPanel = ({ consultorId }) => {
         topicos: [
           'Tecnologia inverter',
           'Economia de energia',
-          'Capacidades disponíveis',
+          'Capacidades disponiveis',
           'Garantia estendida',
         ]
       }
     },
     {
       id: 'LOJ-003',
-      titulo: 'Promoção Black Friday - Eletrônicos',
-      descricao: 'Produtos em destaque e condições especiais',
-      loja: 'Eletrônicos Center',
-      segmento: 'Eletrônicos',
+      titulo: 'Promocao Black Friday - Eletr´nicos',
+      descricao: 'Produtos em destaque e condicoes especiais',
+      loja: 'Eletr´nicos Center',
+      segmento: 'Eletr´nicos',
       tipo: 'documento',
       duracao: '8 min',
       dataPublicacao: '2024-11-20',
@@ -210,9 +210,9 @@ const TrainingPanel = ({ consultorId }) => {
       conteudo: {
         topicos: [
           'Produtos com maior desconto',
-          'Condições de pagamento',
+          'Condicoes de pagamento',
           'Estoque limitado - prioridades',
-          'Comissão diferenciada',
+          'Comissao diferenciada',
         ]
       }
     },
@@ -245,7 +245,7 @@ const TrainingPanel = ({ consultorId }) => {
   };
 
   const concluirTreinamento = async (treinamentoId) => {
-    // TODO: Marcar como concluído na API
+    // TODO: Marcar como concluido na API
     // await fetch(`${API_URL}/api/consultores/${consultorId}/treinamentos/${treinamentoId}/concluir`, {
     //   method: 'POST'
     // });
@@ -253,7 +253,7 @@ const TrainingPanel = ({ consultorId }) => {
     setTreinamentosConcluidos([...treinamentosConcluidos, treinamentoId]);
     setTreinamentoSelecionado(null);
     calcularProgresso();
-    alert('✅ Treinamento concluído com sucesso!');
+    alert(' Treinamento concluido com sucesso!');
   };
 
   const voltarParaLista = () => {
@@ -269,13 +269,13 @@ const TrainingPanel = ({ consultorId }) => {
     );
   }
 
-  // Visualização Detalhada do Treinamento
+  // Visualizacao Detalhada do Treinamento
   if (treinamentoSelecionado) {
     return (
       <div style={styles.container}>
         <div style={styles.detailHeader}>
           <button onClick={voltarParaLista} style={styles.backButton}>
-            ← Voltar
+            &#8592; Voltar
           </button>
           
           <div style={styles.detailTitleSection}>
@@ -283,7 +283,7 @@ const TrainingPanel = ({ consultorId }) => {
             <p style={styles.detailSubtitle}>{treinamentoSelecionado.descricao}</p>
             <div style={styles.detailMeta}>
               {treinamentoSelecionado.tipo === 'video' ? (
-                <span><FaVideo /> Vídeo</span>
+                <span><FaVideo /> Video</span>
               ) : (
                 <span><FaFileAlt /> Documento</span>
               )}
@@ -296,17 +296,17 @@ const TrainingPanel = ({ consultorId }) => {
         </div>
 
         <div style={styles.detailContent}>
-          {/* Simulação de Vídeo */}
+          {/* Simulacao de Video */}
           {treinamentoSelecionado.tipo === 'video' && (
             <div style={styles.videoPlayer}>
               <FaPlay size={60} color="white" />
-              <p style={styles.videoText}>Player de Vídeo</p>
+              <p style={styles.videoText}>Player de Video</p>
             </div>
           )}
 
-          {/* Conteúdo do Treinamento */}
+          {/* Conteudo do Treinamento */}
           <div style={styles.contentSection}>
-            <h3 style={styles.contentTitle}>📚 Conteúdo Programático</h3>
+            <h3 style={styles.contentTitle}> Conteudo Programatico</h3>
             <ul style={styles.topicosList}>
               {treinamentoSelecionado.conteudo.topicos.map((topico, index) => (
                 <li key={index} style={styles.topicoItem}>{topico}</li>
@@ -316,7 +316,7 @@ const TrainingPanel = ({ consultorId }) => {
 
           {treinamentoSelecionado.conteudo.pontosPrincipais && (
             <div style={styles.contentSection}>
-              <h3 style={styles.contentTitle}>⭐ Pontos Principais</h3>
+              <h3 style={styles.contentTitle}>i Pontos Principais</h3>
               <div style={styles.pontosList}>
                 {treinamentoSelecionado.conteudo.pontosPrincipais.map((ponto, index) => (
                   <div key={index} style={styles.pontoItem}>{ponto}</div>
@@ -329,7 +329,7 @@ const TrainingPanel = ({ consultorId }) => {
             <div style={styles.avisoCard}>
               <FaExclamationTriangle size={24} color="#dc3545" />
               <div>
-                <h4 style={styles.avisoTitle}>⚠️ Aviso Importante</h4>
+                <h4 style={styles.avisoTitle}>  Aviso Importante</h4>
                 <p style={styles.avisoText}>{treinamentoSelecionado.conteudo.avisoImportante}</p>
               </div>
             </div>
@@ -340,7 +340,7 @@ const TrainingPanel = ({ consultorId }) => {
               onClick={() => concluirTreinamento(treinamentoSelecionado.id)}
               style={styles.concluirButton}
             >
-              <FaCheckCircle /> Marcar como Concluído
+              <FaCheckCircle /> Marcar como Concluido
             </button>
           )}
         </div>
@@ -348,14 +348,14 @@ const TrainingPanel = ({ consultorId }) => {
     );
   }
 
-  // Visualização em Lista
+  // Visualizacao em Lista
   return (
     <div style={styles.container}>
-      {/* Header com Status de Habilitação */}
+      {/* Header com Status de Habilitacao */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>🎓 Treinamentos e Capacitação</h2>
-          <p style={styles.subtitle}>Complete os treinamentos obrigatórios para ficar 100% habilitado</p>
+          <h2 style={styles.title}> Treinamentos e Capacitacao</h2>
+          <p style={styles.subtitle}>Complete os treinamentos obrigatorios para ficar 100% habilitado</p>
         </div>
 
         <div style={styles.statusCard}>
@@ -364,7 +364,7 @@ const TrainingPanel = ({ consultorId }) => {
               <FaCheckCircle size={40} color="#28a745" />
               <div>
                 <p style={styles.statusLabel}>Status</p>
-                <p style={{ ...styles.statusValue, color: '#28a745' }}>✅ Habilitado</p>
+                <p style={{ ...styles.statusValue, color: '#28a745' }}> Habilitado</p>
               </div>
             </>
           ) : (
@@ -372,7 +372,7 @@ const TrainingPanel = ({ consultorId }) => {
               <FaLock size={40} color="#ffc107" />
               <div>
                 <p style={styles.statusLabel}>Status</p>
-                <p style={{ ...styles.statusValue, color: '#ffc107' }}>⏳ Em Treinamento</p>
+                <p style={{ ...styles.statusValue, color: '#ffc107' }}>o Em Treinamento</p>
               </div>
             </>
           )}
@@ -382,7 +382,7 @@ const TrainingPanel = ({ consultorId }) => {
       {/* Barra de Progresso */}
       <div style={styles.progressCard}>
         <div style={styles.progressHeader}>
-          <span style={styles.progressLabel}>Progresso dos Treinamentos Obrigatórios</span>
+          <span style={styles.progressLabel}>Progresso dos Treinamentos Obrigatorios</span>
           <span style={styles.progressPercentage}>{progressoGeral}%</span>
         </div>
         <div style={styles.progressBarContainer}>
@@ -405,7 +405,7 @@ const TrainingPanel = ({ consultorId }) => {
             <h3 style={styles.columnTitle}>Treinamentos da Plataforma</h3>
           </div>
           <p style={styles.columnDescription}>
-            Políticas, diretrizes e boas práticas para atuação profissional
+            Politicas, diretrizes e boas praticas para atuacao profissional
           </p>
 
           <div style={styles.treinamentosList}>
@@ -427,7 +427,7 @@ const TrainingPanel = ({ consultorId }) => {
             <h3 style={styles.columnTitle}>Treinamentos e Informes das Lojas</h3>
           </div>
           <p style={styles.columnDescription}>
-            Conteúdos sobre produtos, promoções e políticas específicas das lojas
+            Conteudos sobre produtos, promocoes e politicas especificas das lojas
           </p>
 
           <div style={styles.treinamentosList}>
@@ -447,7 +447,7 @@ const TrainingPanel = ({ consultorId }) => {
           {treinamentosLojistas.filter(t => t.relevante).length === 0 && (
             <div style={styles.emptyState}>
               <FaStore size={40} color="#ccc" />
-              <p style={styles.emptyText}>Nenhum treinamento disponível no momento</p>
+              <p style={styles.emptyText}>Nenhum treinamento disponivel no momento</p>
             </div>
           )}
         </div>
@@ -467,7 +467,7 @@ const TrainCard = ({ treinamento, isConcluido, onIniciar, isLojista = false }) =
       <div style={styles.trainCardTitle}>
         {isConcluido && <FaCheckCircle color="#28a745" size={20} />}
         {treinamento.obrigatorio && !isConcluido && (
-          <span style={styles.obrigatorioTag}>OBRIGATÓRIO</span>
+          <span style={styles.obrigatorioTag}>OBRIGAT“RIO</span>
         )}
         <h4 style={styles.trainTitle}>{treinamento.titulo}</h4>
       </div>
@@ -480,7 +480,7 @@ const TrainCard = ({ treinamento, isConcluido, onIniciar, isLojista = false }) =
 
     <div style={styles.trainMeta}>
       {treinamento.tipo === 'video' ? (
-        <span style={styles.metaItem}><FaVideo /> Vídeo</span>
+        <span style={styles.metaItem}><FaVideo /> Video</span>
       ) : (
         <span style={styles.metaItem}><FaFileAlt /> Documento</span>
       )}
@@ -497,7 +497,7 @@ const TrainCard = ({ treinamento, isConcluido, onIniciar, isLojista = false }) =
         backgroundColor: isConcluido ? '#6c757d' : CONSULTOR_PRIMARY,
       }}
     >
-      {isConcluido ? 'Revisar Conteúdo' : 'Iniciar Treinamento'}
+      {isConcluido ? 'Revisar Conteudo' : 'Iniciar Treinamento'}
     </button>
   </div>
 );
@@ -714,7 +714,7 @@ const styles = {
     color: '#999',
     marginTop: '15px',
   },
-  // Estilos para visualização detalhada
+  // Estilos para visualizacao detalhada
   detailHeader: {
     backgroundColor: 'white',
     borderRadius: '12px',

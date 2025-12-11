@@ -25,8 +25,8 @@ const AwaitingApproval = () => {
           textAlign: "center",
         }}
       >
-        {/* Ícone de Aguardando */}
-        <div style={{ fontSize: "80px", marginBottom: "30px" }}>⏳</div>
+        {/* cone de Aguardando */}
+        <div style={{ fontSize: "80px", marginBottom: "30px" }}>o</div>
 
         <h1
           style={{
@@ -36,7 +36,7 @@ const AwaitingApproval = () => {
             marginBottom: "20px",
           }}
         >
-          Cadastro em Análise
+          Cadastro em Analise
         </h1>
 
         <div
@@ -50,7 +50,7 @@ const AwaitingApproval = () => {
           }}
         >
           <h3 style={{ color: "#856404", margin: "0 0 10px 0" }}>
-            📧 E-mail Enviado
+             E-mail Enviado
           </h3>
           <p style={{ color: "#856404", margin: 0, lineHeight: "1.5" }}>
             Seus dados de acesso (e-mail e senha) foram enviados para o e-mail
@@ -69,20 +69,20 @@ const AwaitingApproval = () => {
           }}
         >
           <h3 style={{ color: "#0c5460", margin: "0 0 10px 0" }}>
-            👑 Aprovação Pendente
+             Aprovacao Pendente
           </h3>
           <p style={{ color: "#0c5460", margin: 0, lineHeight: "1.5" }}>
-            Seu cadastro está aguardando aprovação do administrador. Você
-            receberá um e-mail quando sua conta for ativada.
+            Seu cadastro esta aguardando aprovacao do administrador. Voca
+            recebera um e-mail quando sua conta for ativada.
             <br />
             <br />
-            <strong>⏰ Tempo estimado: 24 horas</strong>
+            <strong>° Tempo estimado: 24 horas</strong>
           </p>
         </div>
 
         <div style={{ color: "#666", lineHeight: "1.6", marginBottom: "30px" }}>
           <p>
-            <strong>📞 Dúvidas:</strong> entre em contato com o suporte
+            <strong> Duvidas:</strong> entre em contato com o suporte
           </p>
         </div>
 
@@ -101,7 +101,7 @@ const AwaitingApproval = () => {
           onMouseOver={(e) => (e.target.style.backgroundColor = "#545b62")}
           onMouseOut={(e) => (e.target.style.backgroundColor = "#6c757d")}
         >
-          Voltar para o Início
+          Voltar para o Inicio
         </Link>
       </div>
     </div>
@@ -109,3 +109,4 @@ const AwaitingApproval = () => {
 };
 
 export default AwaitingApproval;
+

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-// IMPORTANTE: Assumimos que 'Buffer' está disponível globalmente (via polyfill ou Webpack)
-// Se não estiver, esta linha deve ser ajustada.
+// IMPORTANTE: Assumimos que 'Buffer' esta disponivel globalmente (via polyfill ou Webpack)
+// Se nao estiver, esta linha deve ser ajustada.
 
 const AplicativoConfirmacao = () => {
   const [qrCodeScanned, setQrCodeScanned] = useState('');
@@ -9,20 +9,20 @@ const AplicativoConfirmacao = () => {
   const [resultado, setResultado] = useState(null);
   const [message, setMessage] = useState(null); // Estado para mensagens de erro/sucesso (substitui alert)
 
-  // Bloco de Correção: Garante que o keyframes 'spin' seja injetado APÓS a montagem do componente.
+  // Bloco de Correcao: Garante que o keyframes 'spin' seja injetado AP“S a montagem do componente.
   useEffect(() => {
     // Verifica se estamos no navegador e se existe pelo menos uma folha de estilo
     if (typeof document !== 'undefined' && document.styleSheets.length > 0) {
       const styleSheet = document.styleSheets[0];
       
-      // Verifica se a regra de animação 'spin' já existe para evitar duplicatas
+      // Verifica se a regra de animacao 'spin' ja existe para evitar duplicatas
       const spinRuleExists = Array.from(styleSheet.cssRules || []).some(
         (rule) => rule.name === 'spin'
       );
 
       if (!spinRuleExists) {
         try {
-          // Injeta a regra CSS para a animação do spinner
+          // Injeta a regra CSS para a animacao do spinner
           styleSheet.insertRule(`
             @keyframes spin {
               0% { transform: rotate(0deg); }
@@ -30,7 +30,7 @@ const AplicativoConfirmacao = () => {
             }
           `, styleSheet.cssRules.length);
         } catch (e) {
-          console.warn("Aviso: Falha ao inserir keyframes 'spin' dinamicamente. O fallback inline será usado.");
+          console.warn("Aviso: Falha ao inserir keyframes 'spin' dinamicamente. O fallback inline sera usado.");
         }
       }
     }
@@ -39,7 +39,7 @@ const AplicativoConfirmacao = () => {
   // Simular escaneamento de QR Code
   const simularEscaneamento = () => {
     setMessage(null); // Limpa mensagem anterior
-    // Em produção, isso viria de uma câmera/leitor
+    // Em producao, isso viria de uma c¢mera/leitor
     const qrCodeMock = Buffer.from(JSON.stringify({
       paymentIntentId: 'pi_123456789',
       vendaId: 'venda_123',
@@ -95,7 +95,7 @@ const AplicativoConfirmacao = () => {
 
     } catch (error) {
       console.error('Erro processar QR Code:', error);
-      setMessage({ type: 'error', text: 'Erro ao processar pagamento. Verifique a conexão.' });
+      setMessage({ type: 'error', text: 'Erro ao processar pagamento. Verifique a conexao.' });
       setResultado({ error: error.message });
     } finally {
       setLoading(false);
@@ -111,28 +111,28 @@ const AplicativoConfirmacao = () => {
 
   const Notification = ({ type, text }) => (
     <div style={{ ...styles.notification, ...(type === 'success' ? styles.notificationSuccess : styles.notificationError) }}>
-      {type === 'success' ? '✅' : '❌'} {text}
+      {type === 'success' ? '' : ''} {text}
     </div>
   );
 
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>🏪 App do Caixa</h1>
+        <h1 style={styles.title}> App do Caixa</h1>
         <p style={styles.subtitle}>Escanear QR Code para confirmar pagamento</p>
       </div>
 
       <div style={styles.content}>
         {message && <Notification type={message.type} text={message.text} />}
 
-        {/* Área de Escaneamento */}
+        {/* rea de Escaneamento */}
         {!vendaProcessando && !resultado && (
           <div style={styles.scanSection}>
             <div style={styles.scanArea}>
               <div style={styles.scanPlaceholder}>
-                📷 Área de Escaneamento
+                 rea de Escaneamento
                 <div style={styles.scanInstructions}>
-                  Posicione o QR Code do cliente nesta área
+                  Posicione o QR Code do cliente nesta area
                 </div>
               </div>
             </div>
@@ -141,14 +141,14 @@ const AplicativoConfirmacao = () => {
               onClick={simularEscaneamento}
               style={styles.scanButton}
             >
-              🔳 Simular Escaneamento (Demo)
+               Simular Escaneamento (Demo)
             </button>
 
             <div style={styles.manualEntry}>
               <h3>Ou digite manualmente:</h3>
               <input 
                 type="text"
-                placeholder="Código do QR Code"
+                placeholder="Codigo do QR Code"
                 value={qrCodeScanned}
                 onChange={(e) => setQrCodeScanned(e.target.value)}
                 style={styles.manualInput}
@@ -168,13 +168,13 @@ const AplicativoConfirmacao = () => {
         {vendaProcessando && loading && (
           <div style={styles.processingSection}>
             <div style={styles.loadingSpinner}></div>
-            <h2>🔄 Processando Pagamento...</h2>
+            <h2> Processando Pagamento...</h2>
             <div style={styles.vendaInfo}>
               <p><strong>Venda:</strong> {vendaProcessando.vendaId}</p>
               <p><strong>Valor:</strong> R$ {vendaProcessando.valorTotal?.toFixed(2)}</p>
               <p><strong>Itens:</strong> {vendaProcessando.produtos?.length}</p>
             </div>
-            {/* Fallback CSS para a animação do spinner */}
+            {/* Fallback CSS para a animacao do spinner */}
             <style dangerouslySetInnerHTML={{__html: `
               @keyframes spin {
                 0% { transform: rotate(0deg); }
@@ -189,7 +189,7 @@ const AplicativoConfirmacao = () => {
           <div style={styles.resultSection}>
             {resultado.success ? (
               <div style={styles.successResult}>
-                <div style={styles.successIcon}>✅</div>
+                <div style={styles.successIcon}></div>
                 <h2 style={styles.successTitle}>Pagamento Confirmado!</h2>
                 
                 <div style={styles.successDetails}>
@@ -200,7 +200,7 @@ const AplicativoConfirmacao = () => {
                     <strong>Valor:</strong> R$ {resultado.valor || vendaProcessando?.valorTotal?.toFixed(2)}
                   </div>
                   <div style={styles.detailItem}>
-                    <strong>Status:</strong> <span style={styles.statusSuccess}>Comissões processadas</span>
+                    <strong>Status:</strong> <span style={styles.statusSuccess}>Comissoes processadas</span>
                   </div>
                   <div style={styles.detailItem}>
                     <strong>Data/Hora:</strong> {new Date().toLocaleString('pt-BR')}
@@ -209,20 +209,20 @@ const AplicativoConfirmacao = () => {
 
                 <div style={styles.nextActions}>
                   <button onClick={novaVenda} style={styles.newSaleButton}>
-                    🛒 Nova Venda
+                     Nova Venda
                   </button>
                   <button onClick={() => window.print()} style={styles.printButton}>
-                    🖨️ Imprimir Comprovante
+                     Imprimir Comprovante
                   </button>
                 </div>
               </div>
             ) : (
               <div style={styles.errorResult}>
-                <div style={styles.errorIcon}>❌</div>
+                <div style={styles.errorIcon}></div>
                 <h2 style={styles.errorTitle}>Erro no Pagamento</h2>
                 <p style={styles.errorMessage}>{resultado.error}</p>
                 <button onClick={novaVenda} style={styles.retryButton}>
-                  🔄 Iniciar Nova Transação
+                   Iniciar Nova Transacao
                 </button>
               </div>
             )}
@@ -434,7 +434,7 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer'
   },
-  // Estilos para a Notificação (substituindo alert)
+  // Estilos para a Notificacao (substituindo alert)
   notification: {
     padding: '15px',
     borderRadius: '8px',

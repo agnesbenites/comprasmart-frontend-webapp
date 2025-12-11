@@ -10,7 +10,7 @@ const LojistaProfile = () => {
     cnpj: "12.345.678/0001-95",
     email: "carlos@empresa.com",
     telefone: "(11) 99999-9999",
-    endereco: "Rua Exemplo, 123 - São Paulo, SP",
+    endereco: "Rua Exemplo, 123 - Sao Paulo, SP",
     site: "www.empresateste.com.br"
   });
 
@@ -19,7 +19,7 @@ const LojistaProfile = () => {
     percentualGlobal: 8.0
   });
 
-  // CARTÕES - Conforme sua imagem
+  // CARTOES - Conforme sua imagem
   const [cartoes, setCartoes] = useState([
     {
       id: 1,
@@ -43,16 +43,16 @@ const LojistaProfile = () => {
   const [segmentos, setSegmentos] = useState([
     {
       id: 1,
-      nome: "📝 Material Escritório",
-      produtos: ["Canetas", "Lápis", "Borracha", "Pincéis"],
+      nome: " Material Escritorio",
+      produtos: ["Canetas", "Lapis", "Borracha", "Pinceis"],
       qrCode: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=segmento-1-escritorio",
       corredor: "A1",
       vendedor: "Ana Silva"
     },
     {
       id: 2,
-      nome: "💻 Informática",
-      produtos: ["Notebooks", "Tablets", "Acessórios"],
+      nome: " Informatica",
+      produtos: ["Notebooks", "Tablets", "Acessorios"],
       qrCode: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=segmento-2-informatica",
       corredor: "B2",
       vendedor: "Paulo Santos"
@@ -93,10 +93,10 @@ const LojistaProfile = () => {
 
   const copiarLinkQRCode = (segmento) => {
     navigator.clipboard.writeText(`https://comprasmart.com/segmento/${segmento.id}`);
-    alert("Link copiado para a área de transferência!");
+    alert("Link copiado para a area de transferancia!");
   };
 
-  // FUNÇÃO DE LOGOUT
+  // FUNCAO DE LOGOUT
   const handleLogout = () => {
     if (window.confirm("Tem certeza que deseja sair?")) {
       // Limpar dados do localStorage
@@ -105,7 +105,7 @@ const LojistaProfile = () => {
       localStorage.removeItem('userName');
       localStorage.removeItem('lojistaId');
       
-      // Redirecionar para a página de login
+      // Redirecionar para a pagina de login
       navigate('/entrar');
     }
   };
@@ -115,18 +115,18 @@ const LojistaProfile = () => {
       {/* HEADER COM LOGOUT */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>👤 Perfil do Administrador</h1>
-          <p style={styles.subtitle}>Gerencie suas informações e configurações da empresa</p>
+          <h1 style={styles.title}> Perfil do Administrador</h1>
+          <p style={styles.subtitle}>Gerencie suas informacoes e configuracoes da empresa</p>
         </div>
         <button onClick={handleLogout} style={styles.logoutButton}>
-          🚪 Sair
+           Sair
         </button>
       </div>
 
       <div style={styles.grid}>
         {/* Dados da Empresa */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>🏢 Dados da Empresa</h3>
+          <h3 style={styles.cardTitle}> Dados da Empresa</h3>
           <form>
             <div style={styles.formGroup}>
               <label style={styles.label}>Nome da Empresa</label>
@@ -177,21 +177,21 @@ const LojistaProfile = () => {
               style={styles.primaryButton}
               onClick={() => salvarConfiguracoes("Dados da empresa")}
             >
-              💾 Salvar Dados
+               Salvar Dados
             </button>
           </form>
         </div>
 
-        {/* Cartões Cadastrados - CONFORME SUA IMAGEM */}
+        {/* Cartoes Cadastrados - CONFORME SUA IMAGEM */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>💳 Cartões de Crédito</h3>
+          <h3 style={styles.cardTitle}> Cartoes de Credito</h3>
           
           {cartoes.map(cartao => (
             <div key={cartao.id} style={styles.cartaoItem}>
-              <div style={styles.cartaoIcon}>💳</div>
+              <div style={styles.cartaoIcon}></div>
               <div style={styles.cartaoInfo}>
                 <div style={styles.cartaoBandeira}>
-                  <strong>VISA •••• {cartao.ultimosDigitos}</strong>
+                  <strong>VISA **** {cartao.ultimosDigitos}</strong>
                 </div>
                 <div style={styles.cartaoDetalhes}>
                   {cartao.titular} - Expira {cartao.vencimento}
@@ -204,12 +204,12 @@ const LojistaProfile = () => {
           ))}
         </div>
 
-        {/* Configurações de Comissão */}
+        {/* Configuracoes de Comissao */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>💰 Configurações de Comissão</h3>
+          <h3 style={styles.cardTitle}> Configuracoes de Comissao</h3>
           
           <div style={styles.formGroup}>
-            <label style={styles.label}>Tipo de Comissão</label>
+            <label style={styles.label}>Tipo de Comissao</label>
             <div style={styles.radioGroup}>
               <label style={styles.radioLabel}>
                 <input
@@ -238,7 +238,7 @@ const LojistaProfile = () => {
 
           {configComissao.tipo === "global" && (
             <div style={styles.formGroup}>
-              <label style={styles.label}>Percentual Global de Comissão</label>
+              <label style={styles.label}>Percentual Global de Comissao</label>
               <div style={styles.inputWithSuffix}>
                 <input
                   type="number"
@@ -258,15 +258,15 @@ const LojistaProfile = () => {
           <button 
             type="button" 
             style={styles.primaryButton}
-            onClick={() => salvarConfiguracoes("Configurações de comissão")}
+            onClick={() => salvarConfiguracoes("Configuracoes de comissao")}
           >
-            💾 Salvar Configurações
+             Salvar Configuracoes
           </button>
         </div>
 
         {/* Segmentos e QR Codes */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>🏷️ Segmentos da Loja</h3>
+          <h3 style={styles.cardTitle}> Segmentos da Loja</h3>
           <p style={styles.cardSubtitle}>QR Codes para cada setor</p>
           
           <div style={styles.segmentosGrid}>
@@ -288,13 +288,13 @@ const LojistaProfile = () => {
                       style={styles.smallButton}
                       onClick={() => baixarQRCode(segmento)}
                     >
-                      📥 Baixar
+                       Baixar
                     </button>
                     <button 
                       style={styles.smallButtonSecondary}
                       onClick={() => copiarLinkQRCode(segmento)}
                     >
-                      🔗 Copiar
+                       Copiar
                     </button>
                   </div>
                 </div>
@@ -303,9 +303,9 @@ const LojistaProfile = () => {
           </div>
         </div>
 
-        {/* Configurações de Notificação */}
+        {/* Configuracoes de Notificacao */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>🔔 Preferências de Notificação</h3>
+          <h3 style={styles.cardTitle}> Preferancias de Notificacao</h3>
           
           <div style={styles.notificacoesList}>
             <label style={styles.checkboxLabel}>
@@ -338,16 +338,16 @@ const LojistaProfile = () => {
                 onChange={handleNotificacoesChange}
                 style={styles.checkbox}
               />
-              Notificações financeiras
+              Notificacoes financeiras
             </label>
           </div>
 
           <button 
             type="button" 
             style={styles.primaryButton}
-            onClick={() => salvarConfiguracoes("Preferências de notificação")}
+            onClick={() => salvarConfiguracoes("Preferancias de notificacao")}
           >
-            💾 Salvar Preferências
+             Salvar Preferancias
           </button>
         </div>
       </div>
@@ -491,7 +491,7 @@ const styles = {
     transition: "background-color 0.3s ease",
     width: "100%",
   },
-  // CARTÕES
+  // CARTOES
   cartaoItem: {
     display: "flex",
     alignItems: "flex-start",

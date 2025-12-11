@@ -1,5 +1,4 @@
 // app-frontend/src/pages/ConsultorDashboard/components/TrainingPanel.jsx
-
 import React, { useState, useEffect } from 'react';
 import { FaGraduationCap, FaCheckCircle, FaLock, FaPlay, FaFileAlt, FaVideo, FaExclamationTriangle, FaClock, FaStore, FaShieldAlt } from 'react-icons/fa';
 
@@ -125,9 +124,9 @@ const TrainingPanel = ({ consultorId }) => {
           'Ética profissional',
         ],
         pontosPrincipais: [
-          '⏰ Mantenha seu status atualizado',
+          '📱 Mantenha seu status atualizado',
           '💬 Responda mensagens em até 2 minutos',
-          '🎯 Finalize vendas com eficiência',
+          '🏆 Finalize vendas com eficiência',
           '⭐ Busque avaliações positivas',
         ]
       }
@@ -152,8 +151,8 @@ const TrainingPanel = ({ consultorId }) => {
         pontosPrincipais: [
           '🎥 A plataforma pode gravar chamadas aleatoriamente SEM AVISO PRÉVIO',
           '💬 Mensagens podem ser auditadas para fins de compliance',
-          '🛡️ Objetivo: manter integridade e compromisso com usuários',
-          '⚖️ Violações graves podem resultar em suspensão ou banimento',
+          '⚖️ Objetivo: manter integridade e compromisso com usuários',
+          '🚫 Violações graves podem resultar em suspensão ou banimento',
         ],
         avisoImportante: 'ATENÇÃO: Todas as interações na plataforma podem ser monitoradas para garantir a qualidade e segurança de todos os usuários. Ao aceitar os termos, você concorda com esta política.'
       }
@@ -179,7 +178,7 @@ const TrainingPanel = ({ consultorId }) => {
           '❌ NUNCA acione diretamente as lojas sobre problemas',
           '✅ SEMPRE use o sistema de reports da plataforma',
           '📸 Anexe prints e evidências quando possível',
-          '⏱️ Aguarde até 30 dias para retorno oficial',
+          '⏳ Aguarde até 30 dias para retorno oficial',
           '🚫 Não tente resolver problemas por fora da plataforma',
         ],
         avisoImportante: 'IMPORTANTE: O consultor NÃO pode contatar lojas diretamente. Qualquer problema deve ser reportado através da plataforma para análise adequada.'
@@ -198,7 +197,7 @@ const TrainingPanel = ({ consultorId }) => {
       duracao: '18 min',
       dataPublicacao: '2024-12-01',
       visualizado: true,
-      relevante: true, // Se é relevante para os segmentos do consultor
+      relevante: true,
       conteudo: {
         topicos: [
           'Especificações técnicas completas',
@@ -290,12 +289,6 @@ const TrainingPanel = ({ consultorId }) => {
     
     // Marcar como visualizado
     if (!treinamento.visualizado) {
-      // TODO: Marcar na API
-      // await fetch(`${API_URL}/api/consultores/${consultorId}/treinamentos/${treinamento.id}/visualizar`, {
-      //   method: 'POST'
-      // });
-      
-      // Atualizar localmente
       if (treinamento.id.startsWith('PLAT')) {
         const index = treinamentosPlataforma.findIndex(t => t.id === treinamento.id);
         if (index !== -1) {
@@ -316,7 +309,6 @@ const TrainingPanel = ({ consultorId }) => {
 
   const concluirTreinamento = async (treinamentoId) => {
     try {
-      // Marcar como concluído na API
       const response = await fetch(`${API_URL}/api/consultores/${consultorId}/treinamentos/${treinamentoId}/concluir`, {
         method: 'POST',
         headers: {
@@ -335,7 +327,6 @@ const TrainingPanel = ({ consultorId }) => {
       alert('✅ Treinamento concluído com sucesso!');
     } catch (error) {
       console.error('Erro ao concluir treinamento:', error);
-      // Fallback: marcar localmente mesmo se a API falhar
       setTreinamentosConcluidos([...treinamentosConcluidos, treinamentoId]);
       setTreinamentoSelecionado(null);
       calcularProgresso();
@@ -383,7 +374,6 @@ const TrainingPanel = ({ consultorId }) => {
         </div>
 
         <div style={styles.detailContent}>
-          {/* Simulação de Vídeo */}
           {treinamentoSelecionado.tipo === 'video' && (
             <div style={styles.videoPlayer}>
               <FaPlay size={60} color="white" />
@@ -391,9 +381,8 @@ const TrainingPanel = ({ consultorId }) => {
             </div>
           )}
 
-          {/* Conteúdo do Treinamento */}
           <div style={styles.contentSection}>
-            <h3 style={styles.contentTitle}>📚 Conteúdo Programático</h3>
+            <h3 style={styles.contentTitle}>📘 Conteúdo Programático</h3>
             <ul style={styles.topicosList}>
               {treinamentoSelecionado.conteudo.topicos.map((topico, index) => (
                 <li key={index} style={styles.topicoItem}>{topico}</li>
@@ -438,7 +427,6 @@ const TrainingPanel = ({ consultorId }) => {
   // Visualização em Lista
   return (
     <div style={styles.container}>
-      {/* Header com Status de Habilitação */}
       <div style={styles.header}>
         <div>
           <h2 style={styles.title}>🎓 Treinamentos e Capacitação</h2>
@@ -459,14 +447,13 @@ const TrainingPanel = ({ consultorId }) => {
               <FaLock size={40} color="#ffc107" />
               <div>
                 <p style={styles.statusLabel}>Status</p>
-                <p style={{ ...styles.statusValue, color: '#ffc107' }}>⏳ Em Treinamento</p>
+                <p style={{ ...styles.statusValue, color: '#ffc107' }}>📚 Em Treinamento</p>
               </div>
             </>
           )}
         </div>
       </div>
 
-      {/* Barra de Progresso */}
       <div style={styles.progressCard}>
         <div style={styles.progressHeader}>
           <span style={styles.progressLabel}>Progresso dos Treinamentos Obrigatórios</span>
@@ -482,10 +469,7 @@ const TrainingPanel = ({ consultorId }) => {
         </div>
       </div>
 
-      {/* Duas Colunas */}
       <div style={styles.columnsContainer}>
-        
-        {/* Coluna 1: Treinamentos da Plataforma */}
         <div style={styles.column}>
           <div style={styles.columnHeader}>
             <FaShieldAlt size={24} color={CONSULTOR_PRIMARY} />
@@ -508,7 +492,6 @@ const TrainingPanel = ({ consultorId }) => {
           </div>
         </div>
 
-        {/* Coluna 2: Treinamentos dos Lojistas */}
         <div style={styles.column}>
           <div style={styles.columnHeader}>
             <FaStore size={24} color={CONSULTOR_PRIMARY} />
@@ -545,7 +528,6 @@ const TrainingPanel = ({ consultorId }) => {
   );
 };
 
-// Componente de Card de Treinamento
 const TrainCard = ({ treinamento, isConcluido, isNovo, onIniciar, isLojista = false }) => {
   return (
     <div style={{
@@ -565,10 +547,10 @@ const TrainCard = ({ treinamento, isConcluido, isNovo, onIniciar, isLojista = fa
               <span style={styles.novoBadge}>🆕 NOVO</span>
             )}
             {!isConcluido && !treinamento.visualizado && !isNovo && (
-              <span style={styles.naoVistoBadge}>• NÃO VISUALIZADO</span>
+              <span style={styles.naoVistoBadge}>👁️ NÃO VISUALIZADO</span>
             )}
             {!isConcluido && treinamento.visualizado && (
-              <span style={styles.naoConcluidoBadge}>⏳ PENDENTE</span>
+              <span style={styles.naoConcluidoBadge}>📚 PENDENTE</span>
             )}
             {treinamento.obrigatorio && !isConcluido && (
               <span style={styles.obrigatorioTag}>OBRIGATÓRIO</span>
@@ -787,7 +769,6 @@ const styles = {
     borderRadius: '6px',
     fontSize: '11px',
     fontWeight: 'bold',
-    animation: 'pulse 2s infinite',
   },
   naoVistoBadge: {
     backgroundColor: '#ffc107',
@@ -807,14 +788,6 @@ const styles = {
   },
   obrigatorioTag: {
     backgroundColor: '#dc3545',
-    color: 'white',
-    padding: '4px 10px',
-    borderRadius: '6px',
-    fontSize: '11px',
-    fontWeight: 'bold',
-  },
-  novoBadge: {
-    backgroundColor: '#28a745',
     color: 'white',
     padding: '4px 10px',
     borderRadius: '6px',
@@ -874,7 +847,6 @@ const styles = {
     color: '#999',
     marginTop: '15px',
   },
-  // Estilos para visualização detalhada
   detailHeader: {
     backgroundColor: 'white',
     borderRadius: '12px',

@@ -1,7 +1,7 @@
 // app-frontend/src/api/config.js
 
 // ====================================
-// CONFIGURAÇÃO ÚNICA DA API
+// CONFIGURACAO NICA DA API
 // ====================================
 
 export const API_CONFIG = {
@@ -73,7 +73,7 @@ export const makeRequest = async (endpoint, options = {}) => {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('❌ Erro na requisição:', error);
+        console.error(' Erro na requisicao:', error);
         throw error;
     }
 };

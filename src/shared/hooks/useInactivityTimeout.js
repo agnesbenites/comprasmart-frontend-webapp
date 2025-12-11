@@ -1,16 +1,16 @@
 // src/hooks/useInactivityTimeout.js
-// Hook para logout automático após período de inatividade
+// Hook para logout automatico apos periodo de inatividade
 
 import { useEffect, useCallback, useRef } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+// REMOVIDO: Supabase migrado para Supabase
 
 /**
- * Hook que monitora inatividade do usuário e faz logout automático
- * @param {number} timeoutMinutes - Minutos de inatividade antes do logout (padrão: 10)
- * @param {boolean} enabled - Se o hook está ativo (padrão: true)
+ * Hook que monitora inatividade do usuario e faz logout automatico
+ * @param {number} timeoutMinutes - Minutos de inatividade antes do logout (padrao: 10)
+ * @param {boolean} enabled - Se o hook esta ativo (padrao: true)
  */
 export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
-  const { logout, isAuthenticated } = useAuth0();
+  const { logout, isAuthenticated } = useAuth();
   const timeoutRef = useRef(null);
   const warningTimeoutRef = useRef(null);
   
@@ -18,14 +18,14 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
   const TIMEOUT_MS = timeoutMinutes * 60 * 1000;
   const WARNING_BEFORE_MS = 60 * 1000; // Aviso 1 minuto antes
 
-  // Função de logout
+  // Funcao de logout
   const handleLogout = useCallback(() => {
-    console.log('⏰ Logout por inatividade');
+    console.log('° Logout por inatividade');
     
     // Limpar dados locais
     localStorage.removeItem('lastActivity');
     
-    // Fazer logout do Auth0
+    // Fazer logout do Supabase
     logout({
       logoutParams: {
         returnTo: window.location.origin
@@ -63,12 +63,12 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
           max-width: 400px;
           animation: fadeIn 0.3s ease;
         ">
-          <div style="font-size: 48px; margin-bottom: 15px;">⏰</div>
+          <div style="font-size: 48px; margin-bottom: 15px;">°</div>
           <h2 style="margin: 0 0 10px; color: #e74c3c; font-size: 1.5rem;">
-            Sessão expirando!
+            Sessao expirando!
           </h2>
           <p style="color: #666; margin-bottom: 20px; font-size: 1rem;">
-            Você será desconectado em <strong>60 segundos</strong> por inatividade.
+            Voca sera desconectado em <strong>60 segundos</strong> por inatividade.
           </p>
           <button 
             id="stay-logged-in-btn"
@@ -92,7 +92,7 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
     
     document.body.appendChild(modal);
 
-    // Botão para continuar
+    // Botao para continuar
     const btn = document.getElementById('stay-logged-in-btn');
     if (btn) {
       btn.onclick = () => {
@@ -114,7 +114,7 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
 
     if (!enabled || !isAuthenticated) return;
 
-    // Salvar última atividade
+    // Salvar ultima atividade
     localStorage.setItem('lastActivity', Date.now().toString());
 
     // Timer para mostrar aviso (1 minuto antes do logout)
@@ -132,7 +132,7 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
   useEffect(() => {
     if (!enabled || !isAuthenticated) return;
 
-    // Eventos que indicam atividade do usuário
+    // Eventos que indicam atividade do usuario
     const events = [
       'mousedown',
       'mousemove',
@@ -143,9 +143,9 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
       'wheel'
     ];
 
-    // Throttle para não resetar a cada movimento mínimo
+    // Throttle para nao resetar a cada movimento minimo
     let lastReset = Date.now();
-    const THROTTLE_MS = 1000; // Resetar no máximo 1x por segundo
+    const THROTTLE_MS = 1000; // Resetar no maximo 1x por segundo
 
     const handleActivity = () => {
       const now = Date.now();
@@ -160,7 +160,7 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
       document.addEventListener(event, handleActivity, { passive: true });
     });
 
-    // Verificar se já estava inativo (ex: voltou de outra aba)
+    // Verificar se ja estava inativo (ex: voltou de outra aba)
     const lastActivity = localStorage.getItem('lastActivity');
     if (lastActivity) {
       const elapsed = Date.now() - parseInt(lastActivity);
@@ -183,8 +183,10 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
     };
   }, [enabled, isAuthenticated, resetTimer, handleLogout, TIMEOUT_MS]);
 
-  // Retornar função para resetar manualmente se necessário
+  // Retornar funcao para resetar manualmente se necessario
   return { resetTimer };
 };
 
 export default useInactivityTimeout;
+
+

@@ -33,11 +33,11 @@ export default function ApprovalsPage() {
     }
   };
 
-  // --- AÇÃO DE APROVAR / REPROVAR ---
+  // --- ACAO DE APROVAR / REPROVAR ---
   const handleApproval = async (type, id, aprovado) => {
     const motivo_rejeicao =
       aprovado === false
-        ? prompt("Motivo da reprovação:") || "Sem justificativa"
+        ? prompt("Motivo da reprovacao:") || "Sem justificativa"
         : null;
 
     try {
@@ -63,7 +63,7 @@ export default function ApprovalsPage() {
             <th className="py-3 px-4 text-left">Email</th>
             <th className="py-3 px-4 text-left">Cidade</th>
             <th className="py-3 px-4 text-center">Status</th>
-            <th className="py-3 px-4 text-center">Ações</th>
+            <th className="py-3 px-4 text-center">Acoes</th>
           </tr>
         </thead>
         <tbody>
@@ -93,10 +93,10 @@ export default function ApprovalsPage() {
                 <td className="py-3 px-4">{item.cidade}</td>
                 <td className="py-3 px-4 text-center">
                   {item.aprovado
-                    ? "✅ Aprovado"
+                    ? " Aprovado"
                     : item.motivo_rejeicao
-                    ? "❌ Reprovado"
-                    : "⏳ Pendente"}
+                    ? " Reprovado"
+                    : "o Pendente"}
                 </td>
                 <td className="py-3 px-4 text-center space-x-2">
                   <button
@@ -135,7 +135,7 @@ export default function ApprovalsPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold text-gray-700 mb-6">
-        Painel de Aprovações
+        Painel de Aprovacoes
       </h1>
 
       {/* Tabs */}
@@ -169,3 +169,4 @@ export default function ApprovalsPage() {
     </div>
   );
 }
+

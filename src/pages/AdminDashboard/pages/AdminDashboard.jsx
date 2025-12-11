@@ -29,7 +29,7 @@ const ClientTable = ({ clients, onViewDetails }) => (
           <th style={styles.th}>Plano</th>
           <th style={styles.th}>Status</th>
           <th style={styles.th}>Expira em</th>
-          <th style={styles.th}>Ações</th>
+          <th style={styles.th}>Acoes</th>
         </tr>
       </thead>
       <tbody>
@@ -72,7 +72,7 @@ const ClientTable = ({ clients, onViewDetails }) => (
                       : "#dc3545",
                 }}
               >
-                ● {client.status}
+                — {client.status}
               </span>
             </td>
             <td style={styles.td}>
@@ -87,7 +87,7 @@ const ClientTable = ({ clients, onViewDetails }) => (
                 onClick={() => onViewDetails(client)}
                 style={styles.actionButton}
               >
-                👁️ Detalhes
+                 Detalhes
               </button>
             </td>
           </tr>
@@ -116,7 +116,7 @@ const AdminDashboard = () => {
     clients: [
       {
         id: 1,
-        name: "João Silva",
+        name: "Joao Silva",
         email: "joao@empresa.com",
         plan: "Trial",
         status: "Trial",
@@ -159,9 +159,9 @@ const AdminDashboard = () => {
       setClients(mockData.clients);
       setLoading(false);
       
-      // Adicionar notificação de boas-vindas
+      // Adicionar notificacao de boas-vindas
       addNotification({
-        titulo: 'Bem-vindo ao Dashboard! 🎉',
+        titulo: 'Bem-vindo ao Dashboard! ',
         mensagem: 'Sistema administrativo carregado com sucesso.',
         tipo: 'success'
       });
@@ -180,18 +180,18 @@ const AdminDashboard = () => {
   const handleSendBroadcastNotification = (notificationData) => {
     // Notificar o admin que a mensagem foi enviada
     addNotification({
-      titulo: '📤 Comunicado Enviado',
+      titulo: ' Comunicado Enviado',
       mensagem: `Sua mensagem foi enviada para ${notificationData.destinatarios.join(', ')}`,
       tipo: 'success'
     });
 
-    // Aqui você pode integrar com sua API para enviar para outros usuários
-    console.log('Enviando notificação para:', notificationData);
+    // Aqui voca pode integrar com sua API para enviar para outros usuarios
+    console.log('Enviando notificacao para:', notificationData);
   };
 
   const handleExpiringTrialAlert = () => {
     addNotification({
-      titulo: '⏰ Trial Expirando',
+      titulo: '° Trial Expirando',
       mensagem: 'Pedro Oliveira tem 2 dias restantes no trial',
       tipo: 'warning',
       destinatario: 'admin'
@@ -201,7 +201,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div style={styles.loadingContainer}>
-        <div style={styles.loadingSpinner}>⏳</div>
+        <div style={styles.loadingSpinner}>o</div>
         <p>Carregando dashboard...</p>
       </div>
     );
@@ -209,29 +209,29 @@ const AdminDashboard = () => {
 
   return (
     <div style={styles.container}>
-      {/* Header Atualizado com Notificações */}
+      {/* Header Atualizado com Notificacoes */}
       <div style={styles.header}>
         <div style={styles.headerContent}>
           <div style={styles.headerTitle}>
-            <h1>👑 Dashboard Administrativo</h1>
-            <p>Gestão completa de clientes e trials</p>
+            <h1> Dashboard Administrativo</h1>
+            <p>Gestao completa de clientes e trials</p>
           </div>
           <div style={styles.headerActions}>
-            {/* Bell de Notificações */}
+            {/* Bell de Notificacoes */}
             <NotificationBell />
             
-            {/* Botão para enviar notificações */}
+            {/* Botao para enviar notificacoes */}
             <button 
               onClick={() => setShowNotificationModal(true)}
               style={styles.notificationButton}
             >
-              📢 Enviar Comunicado
+               Enviar Comunicado
             </button>
             
             <button style={styles.primaryButton} onClick={handleAddClient}>
-              ➕ Novo Cliente
+              O Novo Cliente
             </button>
-            <button style={styles.secondaryButton}>⚙️ Configurações</button>
+            <button style={styles.secondaryButton}> Configuracoes</button>
           </div>
         </div>
       </div>
@@ -242,76 +242,76 @@ const AdminDashboard = () => {
           style={activeTab === "overview" ? styles.activeTab : styles.tab}
           onClick={() => setActiveTab("overview")}
         >
-          📊 Visão Geral
+           Visao Geral
         </button>
         <button
           style={activeTab === "clients" ? styles.activeTab : styles.tab}
           onClick={() => setActiveTab("clients")}
         >
-          👥 Clientes
+           Clientes
         </button>
         <button
           style={activeTab === "trials" ? styles.activeTab : styles.tab}
           onClick={() => setActiveTab("trials")}
         >
-          ⏰ Trials
+          ° Trials
         </button>
         <button
           style={activeTab === "reports" ? styles.activeTab : styles.tab}
           onClick={() => setActiveTab("reports")}
         >
-          📈 Relatórios
+           Relatorios
         </button>
         <button
           style={activeTab === "notifications" ? styles.activeTab : styles.tab}
           onClick={() => setActiveTab("notifications")}
         >
-          🔔 Notificações
+           Notificacoes
         </button>
       </div>
 
-      {/* Conteúdo Principal */}
+      {/* Conteudo Principal */}
       <div style={styles.mainContent}>
         {activeTab === "overview" && (
           <>
-            {/* Cards de Estatísticas */}
+            {/* Cards de Estatisticas */}
             <div style={styles.statsGrid}>
               <StatCard
                 title="Total de Clientes"
                 value={mockData.stats.totalClients}
-                icon="👥"
+                icon=""
                 color="#007bff"
                 trend="+12%"
               />
               <StatCard
                 title="Trials Ativos"
                 value={mockData.stats.activeTrials}
-                icon="⏰"
+                icon="°"
                 color="#ffc107"
                 trend="+5"
               />
               <StatCard
                 title="Expirando em 7 dias"
                 value={mockData.stats.expiringSoon}
-                icon="⚠️"
+                icon=" "
                 color="#dc3545"
-                trend="Atenção"
+                trend="Atencao"
               />
               <StatCard
                 title="Receita Mensal"
                 value={mockData.stats.revenue}
-                icon="💰"
+                icon=""
                 color="#28a745"
                 trend="+8%"
               />
             </div>
 
-            {/* Gráficos e Tabela Rápida */}
+            {/* Graficos e Tabela Rapida */}
             <div style={styles.overviewGrid}>
               <div style={styles.chartSection}>
-                <h3>📈 Visão Geral - Últimos 30 dias</h3>
+                <h3> Visao Geral - ltimos 30 dias</h3>
                 <div style={styles.chartPlaceholder}>
-                  <p>Gráfico de crescimento de clientes</p>
+                  <p>Grafico de crescimento de clientes</p>
                   <div style={styles.barChart}>
                     {[65, 80, 75, 90, 85, 95].map((height, index) => (
                       <div
@@ -328,27 +328,27 @@ const AdminDashboard = () => {
               </div>
 
               <div style={styles.recentActivity}>
-                <h3>🕐 Atividade Recente</h3>
+                <h3> Atividade Recente</h3>
                 <div style={styles.activityList}>
                   <div style={styles.activityItem}>
-                    <span style={styles.activityIcon}>🎯</span>
+                    <span style={styles.activityIcon}></span>
                     <div>
                       <strong>Novo trial iniciado</strong>
-                      <p>Loja Central - 2 horas atrás</p>
+                      <p>Loja Central - 2 horas atras</p>
                     </div>
                   </div>
                   <div style={styles.activityItem}>
-                    <span style={styles.activityIcon}>💰</span>
+                    <span style={styles.activityIcon}></span>
                     <div>
                       <strong>Upgrade para Premium</strong>
-                      <p>Maria Santos - 1 dia atrás</p>
+                      <p>Maria Santos - 1 dia atras</p>
                     </div>
                   </div>
                   <div style={styles.activityItem}>
-                    <span style={styles.activityIcon}>⚠️</span>
+                    <span style={styles.activityIcon}> </span>
                     <div>
                       <strong>Trial expirando</strong>
-                      <p>Pedro Oliveira - 2 dias atrás</p>
+                      <p>Pedro Oliveira - 2 dias atras</p>
                       <button 
                         onClick={handleExpiringTrialAlert}
                         style={styles.smallButton}
@@ -366,7 +366,7 @@ const AdminDashboard = () => {
         {activeTab === "clients" && (
           <div style={styles.tabContent}>
             <div style={styles.tabHeader}>
-              <h2>👥 Gestão de Clientes</h2>
+              <h2> Gestao de Clientes</h2>
               <div style={styles.filters}>
                 <select style={styles.filterSelect}>
                   <option>Todos os Planos</option>
@@ -382,7 +382,7 @@ const AdminDashboard = () => {
                 </select>
                 <input
                   type="text"
-                  placeholder="🔍 Buscar cliente..."
+                  placeholder=" Buscar cliente..."
                   style={styles.searchInput}
                 />
               </div>
@@ -393,8 +393,8 @@ const AdminDashboard = () => {
 
         {activeTab === "trials" && (
           <div style={styles.tabContent}>
-            <h2>⏰ Gestão de Trials</h2>
-            <p>Controle de períodos de teste e expirações</p>
+            <h2>° Gestao de Trials</h2>
+            <p>Controle de periodos de teste e expiracoes</p>
             <div style={styles.trialStats}>
               <div style={styles.trialCard}>
                 <h4>Trials Ativos</h4>
@@ -405,7 +405,7 @@ const AdminDashboard = () => {
                 <p style={styles.trialNumberWarning}>3</p>
               </div>
               <div style={styles.trialCard}>
-                <h4>Conversões</h4>
+                <h4>Conversoes</h4>
                 <p style={styles.trialNumberSuccess}>8</p>
               </div>
             </div>
@@ -414,19 +414,19 @@ const AdminDashboard = () => {
 
         {activeTab === "reports" && (
           <div style={styles.tabContent}>
-            <h2>📈 Relatórios e Analytics</h2>
-            <p>Relatórios detalhados de performance</p>
+            <h2> Relatorios e Analytics</h2>
+            <p>Relatorios detalhados de performance</p>
             <div style={styles.reportsGrid}>
               <div style={styles.reportCard}>
-                <h4>📊 Relatório de Conversão</h4>
-                <p>Taxa de conversão de trials: 45%</p>
+                <h4> Relatorio de Conversao</h4>
+                <p>Taxa de conversao de trials: 45%</p>
               </div>
               <div style={styles.reportCard}>
-                <h4>💰 Receita Mensal</h4>
+                <h4> Receita Mensal</h4>
                 <p>R$ 8.240,00</p>
               </div>
               <div style={styles.reportCard}>
-                <h4>👥 Retenção de Clientes</h4>
+                <h4> Retencao de Clientes</h4>
                 <p>Taxa de 92%</p>
               </div>
             </div>
@@ -435,42 +435,42 @@ const AdminDashboard = () => {
 
         {activeTab === "notifications" && (
           <div style={styles.tabContent}>
-            <h2>🔔 Centro de Notificações</h2>
-            <p>Gerencie e envie notificações para seus usuários</p>
+            <h2> Centro de Notificacoes</h2>
+            <p>Gerencie e envie notificacoes para seus usuarios</p>
             
             <div style={styles.notificationControls}>
               <button 
                 onClick={() => setShowNotificationModal(true)}
                 style={styles.primaryButton}
               >
-                📢 Enviar Novo Comunicado
+                 Enviar Novo Comunicado
               </button>
               
               <div style={styles.quickActions}>
-                <h4>Ações Rápidas:</h4>
+                <h4>Acoes Rapidas:</h4>
                 <button 
                   onClick={() => {
                     addNotification({
-                      titulo: '🆕 Nova Atualização',
+                      titulo: ' Nova Atualizacao',
                       mensagem: 'Sistema atualizado com novas funcionalidades',
                       tipo: 'info'
                     });
                   }}
                   style={styles.quickButton}
                 >
-                  Anunciar Atualização
+                  Anunciar Atualizacao
                 </button>
                 <button 
                   onClick={() => {
                     addNotification({
-                      titulo: '🔧 Manutenção Programada',
-                      mensagem: 'Sistema ficará offline domingo às 02:00',
+                      titulo: ' Manutencao Programada',
+                      mensagem: 'Sistema ficara offline domingo  s 02:00',
                       tipo: 'warning'
                     });
                   }}
                   style={styles.quickButton}
                 >
-                  Aviso de Manutenção
+                  Aviso de Manutencao
                 </button>
               </div>
             </div>
@@ -478,7 +478,7 @@ const AdminDashboard = () => {
         )}
       </div>
 
-      {/* Modal de Envio de Notificações */}
+      {/* Modal de Envio de Notificacoes */}
       <NotificationSender 
         show={showNotificationModal}
         onClose={() => setShowNotificationModal(false)}

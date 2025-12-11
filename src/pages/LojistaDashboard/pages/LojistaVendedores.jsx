@@ -25,7 +25,7 @@ const LojistaVendedores = () => {
     comissao: "5",
     metaMensal: "",
 
-    // Endereço
+    // Endereco
     cep: "",
     endereco: "",
     numero: "",
@@ -54,10 +54,10 @@ const LojistaVendedores = () => {
   ];
 
   const cargos = [
-    { id: "vendedor", nome: "💼 Vendedor", cor: "#007bff" },
-    { id: "supervisor", nome: "👨‍💼 Supervisor", cor: "#28a745" },
-    { id: "coordenador", nome: "🎯 Coordenador", cor: "#ffc107" },
-    { id: "gerente", nome: "📊 Gerente", cor: "#dc3545" },
+    { id: "vendedor", nome: " Vendedor", cor: "#007bff" },
+    { id: "supervisor", nome: " Supervisor", cor: "#28a745" },
+    { id: "coordenador", nome: " Coordenador", cor: "#ffc107" },
+    { id: "gerente", nome: " Gerente", cor: "#dc3545" },
   ];
 
   const handleInputChange = (e) => {
@@ -79,7 +79,7 @@ const LojistaVendedores = () => {
     const vendedorData = {
       id: vendedorEditando ? vendedorEditando.id : Date.now(),
       ...formData,
-      // Gerar matrícula automaticamente se for novo vendedor
+      // Gerar matricula automaticamente se for novo vendedor
       matricula: vendedorEditando ? formData.matricula : gerarMatricula(),
       dataCriacao: vendedorEditando
         ? vendedorEditando.dataCriacao
@@ -145,7 +145,7 @@ const LojistaVendedores = () => {
   const handleExcluir = (id) => {
     if (window.confirm("Tem certeza que deseja excluir este vendedor?")) {
       setVendedores((prev) => prev.filter((v) => v.id !== id));
-      alert("Vendedor excluído com sucesso!");
+      alert("Vendedor excluido com sucesso!");
     }
   };
 
@@ -192,15 +192,15 @@ const LojistaVendedores = () => {
 
   const getStatusBadge = (status) => {
     return status === "ativo" ? (
-      <span style={styles.badgeAtivo}>✅ Ativo</span>
+      <span style={styles.badgeAtivo}> Ativo</span>
     ) : (
-      <span style={styles.badgeInativo}>❌ Inativo</span>
+      <span style={styles.badgeInativo}> Inativo</span>
     );
   };
 
   const getFilialNome = (filialId) => {
     const filial = filiais.find((f) => f.id.toString() === filialId);
-    return filial ? filial.nome : "Não definida";
+    return filial ? filial.nome : "Nao definida";
   };
 
   const calcularPerformance = (vendas, meta) => {
@@ -234,7 +234,7 @@ const LojistaVendedores = () => {
       {/* Header */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>💼 Vendedores Próprios</h1>
+          <h1 style={styles.title}> Vendedores Proprios</h1>
           <p style={styles.subtitle}>Gerencie sua equipe de vendas interna</p>
         </div>
         <div style={styles.stats}>
@@ -254,17 +254,17 @@ const LojistaVendedores = () => {
             <span style={styles.statNumber}>
               R$ {estatisticas.comissaoTotal.toFixed(2)}
             </span>
-            <span style={styles.statLabel}>Comissão Total</span>
+            <span style={styles.statLabel}>Comissao Total</span>
           </div>
         </div>
       </div>
 
-      {/* Filtros e Ações */}
+      {/* Filtros e Acoes */}
       <div style={styles.filters}>
         <div style={styles.searchBox}>
           <input
             type="text"
-            placeholder="🔍 Buscar por nome, email ou matrícula..."
+            placeholder=" Buscar por nome, email ou matricula..."
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
             style={styles.searchInput}
@@ -276,21 +276,21 @@ const LojistaVendedores = () => {
           onChange={(e) => setFiltroStatus(e.target.value)}
           style={styles.filterSelect}
         >
-          <option value="todos">👥 Todos os status</option>
-          <option value="ativo">✅ Ativos</option>
-          <option value="inativo">❌ Inativos</option>
+          <option value="todos"> Todos os status</option>
+          <option value="ativo"> Ativos</option>
+          <option value="inativo"> Inativos</option>
         </select>
 
         <button style={styles.addButton} onClick={() => setShowForm(true)}>
-          ➕ Novo Vendedor
+          O Novo Vendedor
         </button>
       </div>
 
-      {/* Formulário */}
+      {/* Formulario */}
       {showForm && (
         <div style={styles.formContainer}>
           <h2 style={styles.formTitle}>
-            {vendedorEditando ? "✏️ Editar Vendedor" : "💼 Novo Vendedor"}
+            {vendedorEditando ? " Editar Vendedor" : " Novo Vendedor"}
           </h2>
 
           <form onSubmit={handleSubmit} style={styles.form}>
@@ -366,7 +366,7 @@ const LojistaVendedores = () => {
 
                 {vendedorEditando && (
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Matrícula</label>
+                    <label style={styles.label}>Matricula</label>
                     <input
                       type="text"
                       value={formData.matricula}
@@ -374,7 +374,7 @@ const LojistaVendedores = () => {
                       readOnly
                     />
                     <small style={styles.helpText}>
-                      Matrícula gerada automaticamente
+                      Matricula gerada automaticamente
                     </small>
                   </div>
                 )}
@@ -386,7 +386,7 @@ const LojistaVendedores = () => {
 
                 <div style={styles.formRow}>
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Data de Admissão *</label>
+                    <label style={styles.label}>Data de Admissao *</label>
                     <input
                       type="date"
                       name="dataAdmissao"
@@ -453,7 +453,7 @@ const LojistaVendedores = () => {
 
                 <div style={styles.formRow}>
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Comissão (%) *</label>
+                    <label style={styles.label}>Comissao (%) *</label>
                     <input
                       type="number"
                       step="0.1"
@@ -480,9 +480,9 @@ const LojistaVendedores = () => {
                 </div>
               </div>
 
-              {/* Endereço */}
+              {/* Endereco */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Endereço</h3>
+                <h3 style={styles.sectionTitle}>Endereco</h3>
 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>CEP</label>
@@ -497,7 +497,7 @@ const LojistaVendedores = () => {
                 </div>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Endereço</label>
+                  <label style={styles.label}>Endereco</label>
                   <input
                     type="text"
                     name="endereco"
@@ -509,7 +509,7 @@ const LojistaVendedores = () => {
 
                 <div style={styles.formRow}>
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Número</label>
+                    <label style={styles.label}>Numero</label>
                     <input
                       type="text"
                       name="numero"
@@ -555,9 +555,9 @@ const LojistaVendedores = () => {
                 </div>
               </div>
 
-              {/* Status e Observações */}
+              {/* Status e Observacoes */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Status e Observações</h3>
+                <h3 style={styles.sectionTitle}>Status e Observacoes</h3>
 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>Status</label>
@@ -567,20 +567,20 @@ const LojistaVendedores = () => {
                     onChange={handleInputChange}
                     style={styles.select}
                   >
-                    <option value="ativo">✅ Ativo</option>
-                    <option value="inativo">❌ Inativo</option>
+                    <option value="ativo"> Ativo</option>
+                    <option value="inativo"> Inativo</option>
                   </select>
                 </div>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Observações</label>
+                  <label style={styles.label}>Observacoes</label>
                   <textarea
                     name="observacoes"
                     value={formData.observacoes}
                     onChange={handleInputChange}
                     style={styles.textarea}
                     rows="3"
-                    placeholder="Observações adicionais sobre o vendedor..."
+                    placeholder="Observacoes adicionais sobre o vendedor..."
                   />
                 </div>
               </div>
@@ -611,7 +611,7 @@ const LojistaVendedores = () => {
 
           {vendedores.length === 0 ? (
             <div style={styles.emptyState}>
-              <div style={styles.emptyIcon}>💼</div>
+              <div style={styles.emptyIcon}></div>
               <h3 style={styles.emptyTitle}>Nenhum vendedor cadastrado</h3>
               <p style={styles.emptyText}>
                 Comece cadastrando sua equipe de vendas interna.
@@ -620,7 +620,7 @@ const LojistaVendedores = () => {
                 style={styles.addButton}
                 onClick={() => setShowForm(true)}
               >
-                ➕ Adicionar Primeiro Vendedor
+                O Adicionar Primeiro Vendedor
               </button>
             </div>
           ) : (
@@ -673,10 +673,10 @@ const LojistaVendedores = () => {
                         <strong>Departamento:</strong> {vendedor.departamento}
                       </div>
                       <div style={styles.detalheItem}>
-                        <strong>Comissão:</strong> {vendedor.comissao}%
+                        <strong>Comissao:</strong> {vendedor.comissao}%
                       </div>
                       <div style={styles.detalheItem}>
-                        <strong>Admissão:</strong>{" "}
+                        <strong>Admissao:</strong>{" "}
                         {new Date(vendedor.dataAdmissao).toLocaleDateString(
                           "pt-BR"
                         )}
@@ -687,7 +687,7 @@ const LojistaVendedores = () => {
                     {vendedor.metaMensal && (
                       <div style={styles.performanceSection}>
                         <div style={styles.performanceHeader}>
-                          <span>🎯 Performance do Mês</span>
+                          <span> Performance do Mas</span>
                           <span style={styles.performancePercent}>
                             {performance.toFixed(1)}%
                           </span>
@@ -713,7 +713,7 @@ const LojistaVendedores = () => {
                           </span>
                           <span>Meta: R$ {vendedor.metaMensal}</span>
                           <span>
-                            Comissão: R${" "}
+                            Comissao: R${" "}
                             {vendedor.comissaoAcumulada?.toFixed(2) || "0.00"}
                           </span>
                         </div>
@@ -730,20 +730,20 @@ const LojistaVendedores = () => {
                         }
                       >
                         {vendedor.status === "ativo"
-                          ? "❌ Desativar"
-                          : "✅ Ativar"}
+                          ? " Desativar"
+                          : " Ativar"}
                       </button>
                       <button
                         onClick={() => handleEditar(vendedor)}
                         style={styles.editButton}
                       >
-                        ✏️ Editar
+                         Editar
                       </button>
                       <button
                         onClick={() => handleExcluir(vendedor.id)}
                         style={styles.deleteButton}
                       >
-                        🗑️ Excluir
+                         Excluir
                       </button>
                     </div>
                   </div>
@@ -1162,3 +1162,4 @@ const styles = {
 };
 
 export default LojistaVendedores;
+

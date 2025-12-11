@@ -7,7 +7,7 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Carregar notificações do localStorage ou API
+  // Carregar notificacoes do localStorage ou API
   useEffect(() => {
     const savedNotifications = JSON.parse(localStorage.getItem('app-notifications') || '[]');
     setNotifications(savedNotifications);

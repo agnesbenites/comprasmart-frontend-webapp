@@ -18,9 +18,9 @@ const ProfilePanel = ({ consultorId }) => {
     telefone: '(11) 98765-4321',
     cpf: '123.456.789-00',
     dataNascimento: '15/03/1990',
-    cidade: 'São Paulo',
+    cidade: 'Sao Paulo',
     estado: 'SP',
-    bio: 'Consultor especializado em eletrônicos e tecnologia. 5 anos de experiência em vendas.',
+    bio: 'Consultor especializado em eletr´nicos e tecnologia. 5 anos de experiancia em vendas.',
     curriculoUrl: '/curriculos/carlos_mendes_cv.pdf',
     curriculoNome: 'carlos_mendes_cv.pdf',
     dataUploadCurriculo: '2024-01-10',
@@ -32,7 +32,7 @@ const ProfilePanel = ({ consultorId }) => {
 
   const handleLogout = () => {
     if (window.confirm('Tem certeza que deseja sair?')) {
-      // Limpar dados de autenticação
+      // Limpar dados de autenticacao
       localStorage.removeItem('consultorToken');
       localStorage.removeItem('consultorId');
       localStorage.removeItem('consultorData');
@@ -49,13 +49,13 @@ const ProfilePanel = ({ consultorId }) => {
     // Validar tipo de arquivo
     const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     if (!allowedTypes.includes(file.type)) {
-      alert('❌ Formato não permitido. Envie apenas PDF ou DOC/DOCX');
+      alert(' Formato nao permitido. Envie apenas PDF ou DOC/DOCX');
       return;
     }
 
     // Validar tamanho (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('❌ Arquivo muito grande. Tamanho máximo: 5MB');
+      alert(' Arquivo muito grande. Tamanho maximo: 5MB');
       return;
     }
 
@@ -80,10 +80,10 @@ const ProfilePanel = ({ consultorId }) => {
         dataUploadCurriculo: new Date().toISOString().split('T')[0],
       });
 
-      alert('✅ Currículo atualizado com sucesso!');
+      alert(' Curriculo atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao fazer upload:', error);
-      alert('❌ Erro ao atualizar currículo. Tente novamente.');
+      alert(' Erro ao atualizar curriculo. Tente novamente.');
     } finally {
       setUploadingCurriculo(false);
     }
@@ -104,10 +104,10 @@ const ProfilePanel = ({ consultorId }) => {
 
       setPerfil(editedPerfil);
       setIsEditing(false);
-      alert('✅ Perfil atualizado com sucesso!');
+      alert(' Perfil atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao salvar:', error);
-      alert('❌ Erro ao salvar perfil');
+      alert(' Erro ao salvar perfil');
     }
   };
 
@@ -152,10 +152,10 @@ const ProfilePanel = ({ consultorId }) => {
       </div>
 
       <div style={styles.content}>
-        {/* Coluna Esquerda - Informações Pessoais */}
+        {/* Coluna Esquerda - Informacoes Pessoais */}
         <div style={styles.leftColumn}>
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>📋 Informações Pessoais</h3>
+            <h3 style={styles.sectionTitle}> Informacoes Pessoais</h3>
             
             <div style={styles.infoGrid}>
               <InfoField 
@@ -208,7 +208,7 @@ const ProfilePanel = ({ consultorId }) => {
           </div>
 
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>💬 Biografia</h3>
+            <h3 style={styles.sectionTitle}> Biografia</h3>
             {isEditing ? (
               <textarea
                 value={editedPerfil.bio}
@@ -222,10 +222,10 @@ const ProfilePanel = ({ consultorId }) => {
           </div>
         </div>
 
-        {/* Coluna Direita - Currículo e Documentos */}
+        {/* Coluna Direita - Curriculo e Documentos */}
         <div style={styles.rightColumn}>
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>📄 Currículo</h3>
+            <h3 style={styles.sectionTitle}> Curriculo</h3>
             
             {perfil.curriculoUrl ? (
               <div style={styles.curriculoCard}>
@@ -245,13 +245,13 @@ const ProfilePanel = ({ consultorId }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  📥 Baixar
+                   Baixar
                 </a>
               </div>
             ) : (
               <div style={styles.noCurriculoCard}>
                 <FaFileAlt size={40} color="#ccc" />
-                <p style={styles.noCurriculoText}>Nenhum currículo enviado</p>
+                <p style={styles.noCurriculoText}>Nenhum curriculo enviado</p>
               </div>
             )}
 
@@ -269,21 +269,21 @@ const ProfilePanel = ({ consultorId }) => {
               style={styles.uploadButton}
             >
               <FaUpload />
-              {uploadingCurriculo ? 'Enviando...' : 'Substituir Currículo'}
+              {uploadingCurriculo ? 'Enviando...' : 'Substituir Curriculo'}
             </button>
 
             <p style={styles.uploadHint}>
-              Formatos aceitos: PDF, DOC, DOCX (máx. 5MB)
+              Formatos aceitos: PDF, DOC, DOCX (max. 5MB)
             </p>
           </div>
 
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>📊 Estatísticas Rápidas</h3>
+            <h3 style={styles.sectionTitle}> Estatisticas Rapidas</h3>
             <div style={styles.statsGrid}>
-              <StatCard icon="🛒" label="Vendas no Mês" value="156" />
-              <StatCard icon="💰" label="Comissão Acumulada" value="R$ 6.240" />
-              <StatCard icon="⭐" label="Avaliação Média" value="4.8" />
-              <StatCard icon="🏪" label="Lojas Ativas" value="3" />
+              <StatCard icon="" label="Vendas no Mas" value="156" />
+              <StatCard icon="" label="Comissao Acumulada" value="R$ 6.240" />
+              <StatCard icon="i" label="Avaliacao Media" value="4.8" />
+              <StatCard icon="" label="Lojas Ativas" value="3" />
             </div>
           </div>
         </div>
@@ -292,7 +292,7 @@ const ProfilePanel = ({ consultorId }) => {
   );
 };
 
-// Componente auxiliar para campos de informação
+// Componente auxiliar para campos de informacao
 const InfoField = ({ label, value, isEditing, onChange }) => (
   <div style={styles.infoField}>
     <label style={styles.infoLabel}>{label}</label>
@@ -309,7 +309,7 @@ const InfoField = ({ label, value, isEditing, onChange }) => (
   </div>
 );
 
-// Componente auxiliar para cards de estatística
+// Componente auxiliar para cards de estatistica
 const StatCard = ({ icon, label, value }) => (
   <div style={styles.statCard}>
     <span style={styles.statIcon}>{icon}</span>

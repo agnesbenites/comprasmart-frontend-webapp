@@ -16,10 +16,10 @@ const VendedorRegisterPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Lógica real de registro ou link com Auth0
+        // Logica real de registro ou link com Supabase
         console.log("Dados de registro de vendedor:", formData);
-        alert("Registro enviado para aprovação/complemento. Verifique seu e-mail.");
-        // Redirecionar para tela de login ou aguardando aprovação
+        alert("Registro enviado para aprovacao/complemento. Verifique seu e-mail.");
+        // Redirecionar para tela de login ou aguardando aprovacao
     };
 
     const styles = {
@@ -67,7 +67,7 @@ const VendedorRegisterPage = () => {
 
     return (
         <div style={styles.container}>
-            <h1 style={styles.title}>💼 Registro de Vendedor</h1>
+            <h1 style={styles.title}> Registro de Vendedor</h1>
             <form onSubmit={handleSubmit}>
                 <div style={styles.formGroup}>
                     <label style={styles.label}>Nome Completo</label>
@@ -87,7 +87,7 @@ const VendedorRegisterPage = () => {
                 </div>
                 <button type="submit" style={styles.submitButton}>Cadastrar</button>
                 <p style={{ marginTop: '15px', fontSize: '0.9rem' }}>
-                    Se já possui cadastro, <a href="/vendedor/login" style={{ color: '#007bff', textDecoration: 'none' }}>faça login aqui</a>.
+                    Se ja possui cadastro, <a href="/vendedor/login" style={{ color: '#007bff', textDecoration: 'none' }}>faca login aqui</a>.
                 </p>
             </form>
         </div>
@@ -95,3 +95,4 @@ const VendedorRegisterPage = () => {
 };
 
 export default VendedorRegisterPage;
+

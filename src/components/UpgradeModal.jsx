@@ -6,7 +6,7 @@ const UpgradeModal = ({ isOpen, onClose, limitInfo }) => {
     if (!isOpen) return null;
 
     const handleUpgrade = () => {
-        // Redirecionar para página de planos/upgrade
+        // Redirecionar para pagina de planos/upgrade
         window.location.href = '/lojista/planos';
     };
 
@@ -21,8 +21,8 @@ const UpgradeModal = ({ isOpen, onClose, limitInfo }) => {
         <div style={styles.overlay} onClick={onClose}>
             <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div style={styles.header}>
-                    <h2 style={styles.title}>🔒 Limite do Plano Atingido</h2>
-                    <button style={styles.closeBtn} onClick={onClose}>✕</button>
+                    <h2 style={styles.title}> Limite do Plano Atingido</h2>
+                    <button style={styles.closeBtn} onClick={onClose}>O</button>
                 </div>
 
                 <div style={styles.body}>
@@ -30,19 +30,19 @@ const UpgradeModal = ({ isOpen, onClose, limitInfo }) => {
 
                     {limitInfo.tempoRestante && (
                         <div style={styles.waitBox}>
-                            <p>⏰ Tempo restante: <strong>{limitInfo.tempoRestante}h</strong></p>
+                            <p>° Tempo restante: <strong>{limitInfo.tempoRestante}h</strong></p>
                         </div>
                     )}
 
                     {limitInfo.diasRestantes && (
                         <div style={styles.waitBox}>
-                            <p>📅 Dias restantes: <strong>{limitInfo.diasRestantes} dias</strong></p>
+                            <p> Dias restantes: <strong>{limitInfo.diasRestantes} dias</strong></p>
                         </div>
                     )}
 
                     {limitInfo.addon && (
                         <div style={styles.addonBox}>
-                            <h3>💡 Ou compre um pacote adicional:</h3>
+                            <h3> Ou compre um pacote adicional:</h3>
                             <p><strong>R$ {limitInfo.addon.preco}</strong></p>
                             <p>{limitInfo.addon.beneficios}</p>
                             <button style={styles.addonBtn} onClick={handleBuyAddon}>
@@ -52,10 +52,10 @@ const UpgradeModal = ({ isOpen, onClose, limitInfo }) => {
                     )}
 
                     <div style={styles.upgradeBox}>
-                        <h3>🚀 Faça upgrade do seu plano!</h3>
+                        <h3> Faca upgrade do seu plano!</h3>
                         <p>Tenha acesso a mais recursos e limites maiores.</p>
                         <button style={styles.upgradeBtn} onClick={handleUpgrade}>
-                            Ver Planos Disponíveis
+                            Ver Planos Disponiveis
                         </button>
                     </div>
                 </div>

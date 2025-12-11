@@ -38,22 +38,22 @@ const AdminCadastroVendedor = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validações básicas
+    // Validacoes basicas
     if (
       !formData.matricula ||
       !formData.nome ||
       !formData.email ||
       !formData.telefone
     ) {
-      setError("Preencha todos os campos obrigatórios.");
+      setError("Preencha todos os campos obrigatorios.");
       return;
     }
 
-    // Gerar senha temporária
+    // Gerar senha temporaria
     const senhaTemporaria = generateRandomPassword();
 
     try {
-      // Simulação de cadastro no sistema
+      // Simulacao de cadastro no sistema
       console.log("Cadastrando vendedor:", {
         ...formData,
         senhaTemporaria,
@@ -61,16 +61,16 @@ const AdminCadastroVendedor = () => {
         dataCadastro: new Date().toISOString(),
       });
 
-      // Aqui viria a integração com a API/Supabase
+      // Aqui viria a integracao com a API/Supabase
       // await axios.post('/api/admin/vendedores', { ...formData, senhaTemporaria });
 
       setSuccess(`Vendedor cadastrado com sucesso! 
-        Número de Matrícula: ${formData.matricula}
-        Senha Temporária: ${senhaTemporaria}
+        Numero de Matricula: ${formData.matricula}
+        Senha Temporaria: ${senhaTemporaria}
         
-        Estas informações foram enviadas para o e-mail do vendedor.`);
+        Estas informacoes foram enviadas para o e-mail do vendedor.`);
 
-      // Limpar formulário
+      // Limpar formulario
       setFormData({
         matricula: "",
         nome: "",
@@ -87,26 +87,26 @@ const AdminCadastroVendedor = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        {/* Cabeçalho com identificação clara que é área restrita */}
+        {/* Cabecalho com identificacao clara que e area restrita */}
         <div style={styles.header}>
-          <div style={styles.headerIcon}>👑</div>
+          <div style={styles.headerIcon}></div>
           <h1 style={styles.title}>Cadastro de Vendedor Interno</h1>
           <p style={styles.subtitle}>
-            Área exclusiva para administradores - Sistema Interno
+            rea exclusiva para administradores - Sistema Interno
           </p>
         </div>
 
         {/* Aviso de confidencialidade */}
         <div style={styles.alert}>
-          <strong>⚠️ ACESSO RESTRITO</strong>
+          <strong>  ACESSO RESTRITO</strong>
           <br />
-          Esta página não está visível para consultores externos ou vendedores.
+          Esta pagina nao esta visivel para consultores externos ou vendedores.
         </div>
 
         <form onSubmit={handleSubmit} style={styles.form}>
-          {/* Número de Matrícula */}
+          {/* Numero de Matricula */}
           <div style={styles.formGroup}>
-            <label style={styles.label}>Número de Matrícula *</label>
+            <label style={styles.label}>Numero de Matricula *</label>
             <input
               type="text"
               name="matricula"
@@ -117,7 +117,7 @@ const AdminCadastroVendedor = () => {
               required
             />
             <small style={styles.helpText}>
-              Número único de identificação do vendedor na empresa
+              Numero unico de identificacao do vendedor na empresa
             </small>
           </div>
 
@@ -203,7 +203,7 @@ const AdminCadastroVendedor = () => {
           {success && (
             <div style={styles.successAlert}>
               <pre style={styles.successText}>{success}</pre>
-              <small>⚠️ Salve estas informações em local seguro</small>
+              <small>  Salve estas informacoes em local seguro</small>
             </div>
           )}
 
@@ -213,25 +213,25 @@ const AdminCadastroVendedor = () => {
               onClick={() => navigate("/lojista/dashboard")}
               style={styles.cancelButton}
             >
-              ← Voltar ao Dashboard
+              &#8592; Voltar ao Dashboard
             </button>
             <button type="submit" style={styles.submitButton}>
-              🚀 Cadastrar Vendedor
+               Cadastrar Vendedor
             </button>
           </div>
         </form>
 
-        {/* Informações do processo */}
+        {/* Informacoes do processo */}
         <div style={styles.infoBox}>
-          <h4>📋 Como funciona:</h4>
+          <h4> Como funciona:</h4>
           <ul style={styles.infoList}>
-            <li>✅ Sistema gera senha temporária automaticamente</li>
-            <li>✅ Credenciais são enviadas por e-mail para o vendedor</li>
-            <li>✅ Vendedor deve alterar a senha no primeiro acesso</li>
-            <li>✅ Acesso imediato ao sistema após cadastro</li>
+            <li> Sistema gera senha temporaria automaticamente</li>
+            <li> Credenciais sao enviadas por e-mail para o vendedor</li>
+            <li> Vendedor deve alterar a senha no primeiro acesso</li>
+            <li> Acesso imediato ao sistema apos cadastro</li>
             <li>
-              🔒 <strong>Comissões configuradas internamente</strong> (não
-              visível aqui)
+               <strong>Comissoes configuradas internamente</strong> (nao
+              visivel aqui)
             </li>
           </ul>
         </div>
@@ -381,3 +381,4 @@ const styles = {
 };
 
 export default AdminCadastroVendedor;
+

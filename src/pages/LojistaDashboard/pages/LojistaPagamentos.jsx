@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import api from '../../../api/adminToken.js'; 
 
 // =================================================================================
-// LINKS E CONFIGURAÇÕES DO STRIPE (ATUALIZADOS COM DADOS REAIS)
+// LINKS E CONFIGURACOES DO STRIPE (ATUALIZADOS COM DADOS REAIS)
 // =================================================================================
 
 const STRIPE_LINKS = {
@@ -21,96 +21,96 @@ const STRIPE_LINKS = {
     ADICIONAL_ERP: "https://buy.stripe.com/3cI9ATc9G7YodNYfh7gQE08" // ERP - ADICIONADO
 };
 
-// Estrutura de benefícios e incrementos - PREÇOS CORRIGIDOS
+// Estrutura de beneficios e incrementos - PRECOS CORRIGIDOS
 const PLANS_DETAILS = {
-    'Plano Básico': {
-        nome: 'Plano Básico',
+    'Plano Basico': {
+        nome: 'Plano Basico',
         valor: 99.90,
         recursos: [
-            'Limite de 1 Filial (comprável)',
-            'Limite de 10 Vendedores (comprável)',
+            'Limite de 1 Filial (compravel)',
+            'Limite de 10 Vendedores (compravel)',
             '5 Consultores Ativos',
-            'Relatórios Padrão Incluídos',
+            'Relatorios Padrao Incluidos',
             'Suporte por Email (SLA 48h)'
         ],
         upgradeUrl: STRIPE_LINKS.PRO,
     },
     'Plano Pro': {
         nome: 'Plano Pro',
-        valor: 199.90, // ✅ CORRIGIDO: era 499.90
+        valor: 199.90, //  CORRIGIDO: era 499.90
         recursos: [
             'Limite de 5 Filiais',
             'Limite de 50 Vendedores',
             'Consultores Ilimitados',
-            'Relatórios Avançados e BI',
-            'Suporte Prioritário (SLA 4h)',
+            'Relatorios Avancados e BI',
+            'Suporte Prioritario (SLA 4h)',
             'Gerenciamento de Fluxo de Caixa'
         ],
         upgradeUrl: STRIPE_LINKS.ENTERPRISE,
     },
     'Plano Enterprise': {
         nome: 'Plano Enterprise',
-        valor: 360.00, // ✅ CORRIGIDO: era 999.90
+        valor: 360.00, //  CORRIGIDO: era 999.90
         recursos: [
             'Filiais Ilimitadas',
             'Vendedores Ilimitados',
             'Consultores Ilimitados',
-            'Relatórios Avançados e BI', 
+            'Relatorios Avancados e BI', 
             'Suporte 24/7 Dedicado',
-            'Múltiplas Contas Stripe Conectadas',
-            'Integração de Sistemas Legados'
+            'Multiplas Contas Stripe Conectadas',
+            'Integracao de Sistemas Legados'
         ],
-        upgradeUrl: null, // Plano máximo
+        upgradeUrl: null, // Plano maximo
     }
 };
 
-// Add-ons - PREÇOS E LINKS CORRIGIDOS conforme painel Stripe
+// Add-ons - PRECOS E LINKS CORRIGIDOS conforme painel Stripe
 const ADDONS_DETAILS = [
     { 
         nome: 'Basic Adicional', 
         preco: 49.90, 
         link: STRIPE_LINKS.ADICIONAL_BASIC, 
-        descricao: 'Recursos básicos adicionais para complementar seu plano.', 
+        descricao: 'Recursos basicos adicionais para complementar seu plano.', 
         emBreve: false 
     },
     { 
         nome: 'Vendedor Adicional', 
-        preco: 15.00, // ✅ CORRIGIDO: era 29.90
+        preco: 15.00, //  CORRIGIDO: era 29.90
         link: STRIPE_LINKS.ADICIONAL_VENDEDOR, 
         descricao: 'Contrate mais vagas para sua equipe de vendas.', 
         emBreve: false 
     },
     { 
         nome: 'Filial Adicional', 
-        preco: 25.00, // ✅ CORRIGIDO: era 79.90
+        preco: 25.00, //  CORRIGIDO: era 79.90
         link: STRIPE_LINKS.ADICIONAL_FILIAL, 
         descricao: 'Permite cadastrar e gerenciar uma nova unidade (filial) em sua conta.', 
         emBreve: false 
     },
     { 
         nome: '20 Produtos Adicionais', 
-        preco: 10.00, // ✅ NOVO
+        preco: 10.00, //  NOVO
         link: STRIPE_LINKS.ADICIONAL_PRODUTOS, 
-        descricao: 'Adicione mais 20 produtos ao catálogo da sua loja.', 
+        descricao: 'Adicione mais 20 produtos ao catalogo da sua loja.', 
         emBreve: false 
     },
     { 
         nome: 'Campanha de Marketing', 
-        preco: 25.90, // ✅ CORRIGIDO: era 149.90
+        preco: 25.90, //  CORRIGIDO: era 149.90
         link: STRIPE_LINKS.ADICIONAL_MARKETING, 
         descricao: 'Execute campanhas de engajamento e fidelidade automatizadas.', 
         emBreve: false 
     },
     { 
-        nome: 'Módulo ERP', 
-        preco: 59.90, // ✅ CORRIGIDO: era "Em Breve"
+        nome: 'Modulo ERP', 
+        preco: 59.90, //  CORRIGIDO: era "Em Breve"
         link: STRIPE_LINKS.ADICIONAL_ERP, 
         descricao: 'Gerencie pedidos, estoque e faturamento de forma completa.', 
-        emBreve: false // ✅ Agora está disponível!
+        emBreve: false //  Agora esta disponivel!
     }
 ];
 
-// Mapeamento para exibir os planos de upgrade disponíveis
+// Mapeamento para exibir os planos de upgrade disponiveis
 const AVAILABLE_UPGRADES = ['Plano Pro', 'Plano Enterprise'];
 
 // =================================================================================
@@ -132,18 +132,18 @@ const LojistaPlanosAssinaturas = () => {
         carregarDadosPagamentos();
     }, []);
     
-    // Função para buscar dados do Stripe (simulação)
+    // Funcao para buscar dados do Stripe (simulacao)
     const carregarDadosPagamentos = async () => {
         try {
             setLoading(true);
             setError(null);
             setApiStatus('checking');
             
-            // URL MOCKADA para simular download/visualização de fatura (não de checkout)
+            // URL MOCKADA para simular download/visualizacao de fatura (nao de checkout)
             const MOCK_INVOICE_URL_PDF = "https://mock-faturas.com/download-fatura.pdf?id=";
             const MOCK_INVOICE_URL_VIEW = "https://mock-faturas.com/view-fatura.html?id=";
 
-            // Simulação de chamada de API (Substitua pela chamada real)
+            // Simulacao de chamada de API (Substitua pela chamada real)
             const response = {
                 data: {
                     user: {
@@ -154,7 +154,7 @@ const LojistaPlanosAssinaturas = () => {
                         stripe_account_id: 'acct_123456789' 
                     },
                     planoAtual: {
-                        nome: 'Plano Básico', // Plano atual para teste
+                        nome: 'Plano Basico', // Plano atual para teste
                         valor: 99.90, 
                         status: 'active',
                     },
@@ -168,7 +168,7 @@ const LojistaPlanosAssinaturas = () => {
             // const response = await api.get('/api/lojista/dados-pagamento'); 
             const { user, planoAtual: plano, faturas: faturasData } = response.data;
             
-            const planoConfig = PLANS_DETAILS[plano.nome] || PLANS_DETAILS['Plano Básico'];
+            const planoConfig = PLANS_DETAILS[plano.nome] || PLANS_DETAILS['Plano Basico'];
 
             setUserData(user);
             setPlanoAtual({...plano, recursos: planoConfig.recursos, upgradeUrl: planoConfig.upgradeUrl});
@@ -176,26 +176,26 @@ const LojistaPlanosAssinaturas = () => {
             setApiStatus('success');
             
         } catch (err) {
-            console.error('❌ Erro REAL ao carregar dados:', err);
+            console.error(' Erro REAL ao carregar dados:', err);
             
             if (err.response?.status === 401) {
-                setError('🔐 Não autorizado. Faça login novamente.');
+                setError(' Nao autorizado. Faca login novamente.');
                 setApiStatus('unauthorized');
             } else if (err.response?.status === 404) {
-                setError('📡 Endpoint não encontrado. O backend pode não ter esta rota implementada.');
+                setError(' Endpoint nao encontrado. O backend pode nao ter esta rota implementada.');
                 setApiStatus('not_found');
-                setDadosMockados('Plano Básico');
+                setDadosMockados('Plano Basico');
             } else {
-                setError('❌ Erro ao conectar com o servidor. Usando dados de demonstração.');
+                setError(' Erro ao conectar com o servidor. Usando dados de demonstracao.');
                 setApiStatus('error');
-                setDadosMockados('Plano Básico');
+                setDadosMockados('Plano Basico');
             }
         } finally {
             setLoading(false);
         }
     };
 
-    // 🛠️ FALLBACK: Dados mockados quando a API não está disponível
+    //   FALLBACK: Dados mockados quando a API nao esta disponivel
     const setDadosMockados = (planoNome) => {
         const MOCK_INVOICE_URL_PDF = "https://mock-faturas.com/download-fatura.pdf?id=";
         const MOCK_INVOICE_URL_VIEW = "https://mock-faturas.com/view-fatura.html?id=";
@@ -207,7 +207,7 @@ const LojistaPlanosAssinaturas = () => {
             stripe_account_id: null
         });
         
-        const planoConfig = PLANS_DETAILS[planoNome] || PLANS_DETAILS['Plano Básico'];
+        const planoConfig = PLANS_DETAILS[planoNome] || PLANS_DETAILS['Plano Basico'];
 
         setPlanoAtual({
             nome: planoNome,
@@ -239,49 +239,49 @@ const LojistaPlanosAssinaturas = () => {
         ]);
     };
     
-    // Função genérica para redirecionar para links de venda/upgrade
+    // Funcao generica para redirecionar para links de venda/upgrade
     const redirecionarParaLinkDeVenda = (url) => {
         if (url) {
             window.open(url, '_blank');
         } else {
-            alert('Link de Checkout Indisponível ou funcionalidade em desenvolvimento.');
+            alert('Link de Checkout Indisponivel ou funcionalidade em desenvolvimento.');
         }
     };
 
-    // Função que simula o envio de email
+    // Funcao que simula o envio de email
     const enviarFaturaPorEmail = (faturaNumber) => {
-        // Em um ambiente real, esta função chamaria a API do backend:
+        // Em um ambiente real, esta funcao chamaria a API do backend:
         // await api.post('/api/faturas/${faturaNumber}/send-email');
-        setSuccess(`✅ Simulação: Requisição para envio da Fatura ${faturaNumber} por e-mail enviada.`);
+        setSuccess(` Simulacao: Requisicao para envio da Fatura ${faturaNumber} por e-mail enviada.`);
     };
 
-    // Função que mostra o modal de detalhes do plano
+    // Funcao que mostra o modal de detalhes do plano
     const showPlanDetailsModal = (targetPlanName) => {
         const currentPlan = PLANS_DETAILS[planoAtual.nome];
         const targetPlan = PLANS_DETAILS[targetPlanName];
 
         if (!currentPlan || !targetPlan) {
-            setError(`Configuração do plano ${targetPlanName} não encontrada.`);
+            setError(`Configuracao do plano ${targetPlanName} nao encontrada.`);
             return;
         }
         
-        // Se o plano atual for igual ou superior ao destino, não abre o modal de upgrade
+        // Se o plano atual for igual ou superior ao destino, nao abre o modal de upgrade
         if (currentPlan.valor >= targetPlan.valor) {
-            alert(`Você já está no Plano ${currentPlan.nome} ou superior.`);
+            alert(`Voca ja esta no Plano ${currentPlan.nome} ou superior.`);
             return;
         }
 
         const currentResources = currentPlan.recursos;
         const targetResources = targetPlan.recursos;
         
-        // Calcula os recursos que são novos ou incrementados
+        // Calcula os recursos que sao novos ou incrementados
         const incrementos = targetResources.filter(recurso => !currentResources.includes(recurso) || recurso.includes('Ilimitados'));
-        // Calcula os recursos já existentes
+        // Calcula os recursos ja existentes
         const recursosMantidos = targetResources.filter(recurso => currentResources.includes(recurso) && !recurso.includes('Ilimitados'));
 
         setModalContent({
             title: `Upgrade para ${targetPlanName}`,
-            message: `Ao fazer o upgrade, você terá um aumento de R$ ${(targetPlan.valor - currentPlan.valor).toFixed(2)} na mensalidade e ganhará os seguintes benefícios:`,
+            message: `Ao fazer o upgrade, voca tera um aumento de R$ ${(targetPlan.valor - currentPlan.valor).toFixed(2)} na mensalidade e ganhara os seguintes beneficios:`,
             incrementos: incrementos,
             mantidos: recursosMantidos,
             targetUrl: targetPlan.upgradeUrl,
@@ -296,26 +296,26 @@ const LojistaPlanosAssinaturas = () => {
     const baixarFatura = (faturaId, invoicePdfUrl) => {
         if (invoicePdfUrl) {
             window.open(invoicePdfUrl, '_blank'); 
-            setSuccess(`📥 Simulação de Download: Fatura ${faturaId} aberta em nova aba. No ambiente real, seu backend faria o download seguro.`);
+            setSuccess(` Simulacao de Download: Fatura ${faturaId} aberta em nova aba. No ambiente real, seu backend faria o download seguro.`);
         } else {
-            alert(`📥 Download da fatura ${faturaId}\n\nLink não disponível.`);
+            alert(` Download da fatura ${faturaId}\n\nLink nao disponivel.`);
         }
     };
 
     const visualizarFatura = (hostedInvoiceUrl) => {
         if (hostedInvoiceUrl) {
             window.open(hostedInvoiceUrl, '_blank');
-            setSuccess(`👁️ Simulação de Visualização: Fatura aberta em nova aba. No ambiente real, seu backend redirecionaria para a fatura hospedada pelo Stripe.`);
+            setSuccess(` Simulacao de Visualizacao: Fatura aberta em nova aba. No ambiente real, seu backend redirecionaria para a fatura hospedada pelo Stripe.`);
         } else {
-            alert('👁️ Visualização da fatura\n\nLink não disponível.');
+            alert(' Visualizacao da fatura\n\nLink nao disponivel.');
         }
     };
     
-    // Simulação de criação de conta Stripe (para lojistas sem conta conectada)
+    // Simulacao de criacao de conta Stripe (para lojistas sem conta conectada)
     const criarContaStripe = () => {
         const mockOnboardingUrl = "https://connect.stripe.com/onboarding/mock_url_12345";
         window.open(mockOnboardingUrl, '_blank');
-        setSuccess('✅ Modo de demonstração: Configuração de pagamentos simulada.');
+        setSuccess(' Modo de demonstracao: Configuracao de pagamentos simulada.');
     };
 
     const formatarData = (dataString) => {
@@ -333,7 +333,7 @@ const LojistaPlanosAssinaturas = () => {
         }).format(valor || 0);
     };
     
-    // Calcula a data da próxima cobrança 
+    // Calcula a data da proxima cobranca 
     const proximaCobranca = faturas.length > 0 && faturas[0].status === 'paid'
         ? new Date(new Date(faturas[0].date).getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
         : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
@@ -343,7 +343,7 @@ const LojistaPlanosAssinaturas = () => {
         return (
             <div style={styles.container}>
                 <div style={styles.loading}>
-                    <p>⏳ Carregando informações de plano e pagamento...</p>
+                    <p>o Carregando informacoes de plano e pagamento...</p>
                 </div>
             </div>
         );
@@ -362,7 +362,7 @@ const LojistaPlanosAssinaturas = () => {
                     {content.isUpgrade && (
                         <div style={modalStyles.upgradeDetails}>
                             <div style={modalStyles.section}>
-                                <h4 style={modalStyles.sectionTitle.incremento}>🚀 Novos Recursos Adicionados:</h4>
+                                <h4 style={modalStyles.sectionTitle.incremento}> Novos Recursos Adicionados:</h4>
                                 <ul style={modalStyles.recursosList}>
                                     {content.incrementos.map((inc, i) => (
                                         <li key={`inc-${i}`} style={modalStyles.recursoItem.incremento}>+ {inc}</li>
@@ -370,10 +370,10 @@ const LojistaPlanosAssinaturas = () => {
                                 </ul>
                             </div>
                             <div style={modalStyles.section}>
-                                <h4 style={modalStyles.sectionTitle.mantido}>✔️ Benefícios Mantidos:</h4>
+                                <h4 style={modalStyles.sectionTitle.mantido}>” Beneficios Mantidos:</h4>
                                 <ul style={modalStyles.recursosList}>
                                     {content.mantidos.map((mant, i) => (
-                                        <li key={`mant-${i}`} style={modalStyles.recursoItem.mantido}>• {mant}</li>
+                                        <li key={`mant-${i}`} style={modalStyles.recursoItem.mantido}>* {mant}</li>
                                     ))}
                                 </ul>
                             </div>
@@ -402,7 +402,7 @@ const LojistaPlanosAssinaturas = () => {
             <h4 style={styles.addonTitle}>{nome}</h4>
             <p style={styles.addonDescription}>{descricao}</p>
             <p style={styles.addonPrice}>
-                {emBreve ? 'Em Breve' : formatarValor(preco) + '/mês'}
+                {emBreve ? 'Em Breve' : formatarValor(preco) + '/mas'}
             </p>
             <button 
                 style={emBreve ? styles.disabledButton : styles.addonButton}
@@ -414,7 +414,7 @@ const LojistaPlanosAssinaturas = () => {
         </div>
     );
     
-    // Componente Card de Opções de Upgrade
+    // Componente Card de Opcoes de Upgrade
     const UpgradePlanCard = ({ planName, currentPlanName }) => {
         const targetPlan = PLANS_DETAILS[planName];
         if (!targetPlan || targetPlan.valor <= PLANS_DETAILS[currentPlanName].valor) return null;
@@ -425,17 +425,17 @@ const LojistaPlanosAssinaturas = () => {
                 onClick={() => showPlanDetailsModal(planName)}
             >
                 <h4 style={styles.planCardTitle}>{targetPlan.nome}</h4>
-                <p style={styles.planCardPrice}>{formatarValor(targetPlan.valor)}/mês</p>
+                <p style={styles.planCardPrice}>{formatarValor(targetPlan.valor)}/mas</p>
                 <div style={styles.planCardBenefits}>
                     {targetPlan.recursos.slice(0, 4).map((recurso, index) => (
                         <p key={index} style={styles.planCardBenefitItem}>
-                            {recurso.includes('Ilimitados') ? '🚀' : '✅'} {recurso}
+                            {recurso.includes('Ilimitados') ? '' : ''} {recurso}
                         </p>
                     ))}
                     <p style={styles.planCardBenefitItemBold}>... e mais.</p>
                 </div>
                 <button style={styles.planCardButton}>
-                    Ver Benefícios e Mudar
+                    Ver Beneficios e Mudar
                 </button>
             </div>
         );
@@ -446,58 +446,58 @@ const LojistaPlanosAssinaturas = () => {
         <div style={styles.container}>
             <ModalComponent content={modalContent} onClose={() => setModalOpen(false)} />
 
-            {/* Título */}
-            <h1 style={styles.title}>💳 Planos e Assinaturas</h1>
+            {/* Titulo */}
+            <h1 style={styles.title}> Planos e Assinaturas</h1>
 
             {/* Mensagens de Status (apenas erro/sucesso) */}
-            {error && (<div style={styles.errorMessage}>❌ {error}</div>)}
-            {success && (<div style={styles.successMessage}>✅ {success}</div>)}
+            {error && (<div style={styles.errorMessage}> {error}</div>)}
+            {success && (<div style={styles.successMessage}> {success}</div>)}
             
             {/* Plano Atual */}
             <div style={styles.card}>
                 <div style={styles.planoHeader}>
                     <div style={styles.planoInfo}>
                         <h2 style={styles.planoNome}>Seu Plano Atual: {planoAtual.nome}</h2>
-                        <p style={styles.planoValor}>{formatarValor(planoAtual.valor)}/mês</p>
+                        <p style={styles.planoValor}>{formatarValor(planoAtual.valor)}/mas</p>
                         <p style={styles.planoData}>
-                            Próxima cobrança: {formatarData(proximaCobranca)}
+                            Proxima cobranca: {formatarData(proximaCobranca)}
                         </p>
                         <span style={planoAtual.status === 'active' ? styles.statusBadge : styles.statusInativo}>
-                            {planoAtual.status === 'active' ? '✅ Assinatura Ativa' : '❌ Assinatura Inativa'}
+                            {planoAtual.status === 'active' ? ' Assinatura Ativa' : ' Assinatura Inativa'}
                         </span>
                         
-                        <h3 style={styles.recursosTitle}>Benefícios Inclusos:</h3>
+                        <h3 style={styles.recursosTitle}>Beneficios Inclusos:</h3>
                         <ul style={styles.recursosList}>
                             {(planoAtual.recursos || []).map((recurso, index) => (
-                                <li key={index} style={styles.recursoItem}>✅ {recurso}</li>
+                                <li key={index} style={styles.recursoItem}> {recurso}</li>
                             ))}
                         </ul>
                     </div>
                 </div>
                 
                 <div style={styles.buttonGroup}>
-                    {/* Botão de Configurar Pagamentos - Visível apenas se NÃO estiver conectado */}
+                    {/* Botao de Configurar Pagamentos - Visivel apenas se NAO estiver conectado */}
                     {!userData?.stripe_account_id && (
                         <div style={styles.infoBox}>
                             <p style={{margin: '0 0 10px 0', fontWeight: 'bold'}}>
-                                ⚠️ Repasses Pendentes: Sua conta Stripe ainda não está conectada.
+                                  Repasses Pendentes: Sua conta Stripe ainda nao esta conectada.
                             </p>
                             <button
                                 style={{...styles.successButton, flex: 'none'}}
                                 onClick={criarContaStripe}
                             >
-                                🚀 Configurar Conta Stripe
+                                 Configurar Conta Stripe
                             </button>
                         </div>
                     )}
                 </div>
             </div>
             
-            {/* Opções de Upgrade de Plano */}
+            {/* Opcoes de Upgrade de Plano */}
             {planoAtual.upgradeUrl && (
                 <div style={styles.card}>
-                    <h3 style={styles.sectionTitle}>⬆️ Opções de Upgrade</h3>
-                    <p style={styles.addonSubtitle}>Clique em um plano para ver os benefícios e iniciar a contratação.</p>
+                    <h3 style={styles.sectionTitle}>&#8592; Opcoes de Upgrade</h3>
+                    <p style={styles.addonSubtitle}>Clique em um plano para ver os beneficios e iniciar a contratacao.</p>
                     <div style={styles.upgradeGrid}>
                         {AVAILABLE_UPGRADES
                             .filter(p => PLANS_DETAILS[p].valor > planoAtual.valor)
@@ -515,7 +515,7 @@ const LojistaPlanosAssinaturas = () => {
 
             {/* Funcionalidades Adicionais (Add-ons) */}
             <div style={styles.card}>
-                <h3 style={styles.sectionTitle}>🛒 Funcionalidades Adicionais (Add-ons)</h3>
+                <h3 style={styles.sectionTitle}> Funcionalidades Adicionais (Add-ons)</h3>
                 <p style={styles.addonSubtitle}>Compre recursos avulsos para complementar seu plano atual.</p>
                 
                 <div style={styles.addonGrid}>
@@ -531,7 +531,7 @@ const LojistaPlanosAssinaturas = () => {
 
             {/* Faturas */}
             <div style={styles.card}>
-                <h3>📄 Histórico de Faturas</h3>
+                <h3> Historico de Faturas</h3>
 
                 {faturas.length === 0 ? (
                     <p style={{color: '#666', textAlign: 'center', padding: '20px'}}>
@@ -541,11 +541,11 @@ const LojistaPlanosAssinaturas = () => {
                     <table style={styles.table}>
                         <thead>
                             <tr>
-                                <th style={styles.th}>Número</th>
+                                <th style={styles.th}>Numero</th>
                                 <th style={styles.th}>Data</th>
                                 <th style={styles.th}>Valor</th>
                                 <th style={styles.th}>Status</th>
-                                <th style={styles.th}>Ações</th>
+                                <th style={styles.th}>Acoes</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -558,9 +558,9 @@ const LojistaPlanosAssinaturas = () => {
                                         ...styles.td,
                                         ...(fatura.status === 'paid' ? styles.statusPaga : styles.statusAberta)
                                     }}>
-                                        {fatura.status === 'paid' ? '✅ Paga' :
-                                         fatura.status === 'open' ? '⏳ Aberta' :
-                                         '❌ ' + (fatura.status || 'Desconhecido')}
+                                        {fatura.status === 'paid' ? ' Paga' :
+                                         fatura.status === 'open' ? 'o Aberta' :
+                                         ' ' + (fatura.status || 'Desconhecido')}
                                     </td>
                                     <td style={styles.td}>
                                         <div style={{display: 'flex', gap: '8px', flexWrap: 'wrap'}}>
@@ -569,7 +569,7 @@ const LojistaPlanosAssinaturas = () => {
                                                     style={styles.secondaryButtonSmall}
                                                     onClick={() => baixarFatura(fatura.id, fatura.invoice_pdf)}
                                                 >
-                                                    📥 Download
+                                                     Download
                                                 </button>
                                             )}
                                         
@@ -578,7 +578,7 @@ const LojistaPlanosAssinaturas = () => {
                                                     style={styles.secondaryButtonSmall}
                                                     onClick={() => visualizarFatura(fatura.hosted_invoice_url)}
                                                 >
-                                                    👁️ Visualizar
+                                                     Visualizar
                                                 </button>
                                             )}
 
@@ -587,7 +587,7 @@ const LojistaPlanosAssinaturas = () => {
                                                 style={styles.secondaryButtonSmall}
                                                 onClick={() => enviarFaturaPorEmail(fatura.number || fatura.id)}
                                             >
-                                                📧 Enviar por E-mail
+                                                 Enviar por E-mail
                                             </button>
                                         )}
                                         </div>

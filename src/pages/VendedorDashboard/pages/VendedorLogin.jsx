@@ -1,17 +1,33 @@
-// src/pages/VendedorLogin.jsx
-import React from "react";
-import { useAuth } from "../../../hooks/useAuth"; // ✅ CAMINHO CORRETO
+// src/pages/VendedorDashboard/pages/VendedorLogin.jsx
+import React, { useEffect } from "react";
+// REMOVIDO: Supabase migrado para Supabase
+import { useNavigate } from "react-router-dom";
 
 const VendedorLogin = () => {
-  const { login, isAuthenticated, isLoading } = useAuth('vendedor');
+  const { login, isAuthenticated, isLoading } = useAuth();
+  const navigate = useNavigate();
+  const targetDashboard = '/vendedor/dashboard';
 
-  // Se já está autenticado, não mostra o login
-  if (isAuthenticated) {
+  //  Se ja esta autenticado, redireciona para o dashboard
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(targetDashboard, { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
+  //  Funcao de login
+  const handleLogin = () => {
+    login({
+      appState: { returnTo: targetDashboard }
+    });
+  };
+
+  //  Estado de loading
+  if (isLoading) {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <p style={styles.successText}>✅ Você já está autenticado!</p>
-          <p>Redirecionando para o dashboard...</p>
+          <p style={styles.loadingText}>o Carregando...</p>
         </div>
       </div>
     );
@@ -20,38 +36,31 @@ const VendedorLogin = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        
-        <h2 style={styles.title}>
-          💼 Login Vendedor
-        </h2>
+        <h2 style={styles.title}> Login Vendedor</h2>
 
         <div style={styles.credenciaisBox}>
           <p style={styles.credenciaisText}>
-            <strong>Autenticação via Auth0</strong><br />
+            <strong>Autenticacao via Supabase</strong><br />
             Seu acesso foi criado pelo administrador da empresa.
           </p>
         </div>
 
         <button
-          onClick={login}
-          disabled={isLoading}
-          style={{
-            ...styles.loginButton,
-            backgroundColor: isLoading ? '#6c757d' : '#fd7e14'
-          }}
+          onClick={handleLogin}
+          style={styles.loginButton}
         >
-          {isLoading ? "⏳ Redirecionando..." : "🔐 Entrar com Auth0"}
+           Entrar com Supabase
         </button>
 
         <div style={styles.infoBox}>
           <p style={styles.infoText}>
-            Entre com suas credenciais do Auth0
+            Entre com suas credenciais do Supabase
           </p>
         </div>
 
         <div style={styles.footer}>
-          <a href="/" style={styles.backLink}>
-            ← Voltar para Home
+          <a href="/entrar" style={styles.backLink}>
+            &#8592; Voltar para Escolha de Perfil
           </a>
         </div>
       </div>
@@ -84,11 +93,10 @@ const styles = {
     fontSize: "1.8rem",
     fontWeight: "700",
   },
-  successText: {
+  loadingText: {
     textAlign: "center",
-    color: "#28a745",
-    fontSize: "1.2rem",
-    fontWeight: "bold"
+    color: "#666",
+    fontSize: "1.1rem",
   },
   credenciaisBox: {
     backgroundColor: "#d1ecf1",
@@ -107,6 +115,7 @@ const styles = {
   loginButton: {
     width: "100%",
     padding: "15px",
+    backgroundColor: "#ff9800",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -140,3 +149,5 @@ const styles = {
 };
 
 export default VendedorLogin;
+
+

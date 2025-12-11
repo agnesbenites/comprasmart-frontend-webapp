@@ -1,6 +1,6 @@
 // src/pages/AdminDashboard/pages/AdminLogin.jsx
 import React from "react";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const AdminLogin = () => {
   const { login, isAuthenticated, isLoading } = useAuth('admin');
@@ -9,8 +9,8 @@ const AdminLogin = () => {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <p style={styles.successText}>✅ Acesso administrativo concedido!</p>
-          <p>Redirecionando para o painel de administração...</p>
+          <p style={styles.successText}> Acesso administrativo concedido!</p>
+          <p>Redirecionando para o painel de administracao...</p>
         </div>
       </div>
     );
@@ -21,13 +21,13 @@ const AdminLogin = () => {
       <div style={styles.card}>
         
         <h2 style={styles.title}>
-          ⚙️ Login Administrador
+           Login Administrador
         </h2>
 
         <div style={styles.warningBox}>
           <p style={styles.warningText}>
             <strong>Acesso Restrito</strong><br />
-            Esta área é exclusiva para administradores do sistema.
+            Esta area e exclusiva para administradores do sistema.
           </p>
         </div>
 
@@ -39,12 +39,12 @@ const AdminLogin = () => {
             backgroundColor: isLoading ? '#6c757d' : '#dc3545'
           }}
         >
-          {isLoading ? "⏳ Redirecionando..." : "🔐 Entrar como Admin"}
+          {isLoading ? "o Redirecionando..." : " Entrar como Admin"}
         </button>
 
         <div style={styles.footer}>
           <a href="/" style={styles.backLink}>
-            ← Voltar para Home
+            &#8592; Voltar para Home
           </a>
         </div>
       </div>
@@ -120,3 +120,4 @@ const styles = {
 };
 
 export default AdminLogin;
+

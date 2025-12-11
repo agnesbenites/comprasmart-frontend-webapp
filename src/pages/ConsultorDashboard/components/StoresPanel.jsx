@@ -24,8 +24,8 @@ const StoresPanel = ({ consultorId }) => {
     const mockLojas = [
       {
         id: 1,
-        nome: 'Eletrônicos Center',
-        cidade: 'São Paulo',
+        nome: 'Eletr´nicos Center',
+        cidade: 'Sao Paulo',
         estado: 'SP',
         setores: ['Smartphones', 'Notebooks', 'TVs'],
         comissaoMedia: 8,
@@ -39,7 +39,7 @@ const StoresPanel = ({ consultorId }) => {
         nome: 'Tech Store',
         cidade: 'Rio de Janeiro',
         estado: 'RJ',
-        setores: ['Informática', 'Games', 'Áudio'],
+        setores: ['Informatica', 'Games', 'udio'],
         comissaoMedia: 10,
         comissaoMin: 8,
         comissaoMax: 15,
@@ -48,15 +48,15 @@ const StoresPanel = ({ consultorId }) => {
       },
       {
         id: 3,
-        nome: 'Casa & Decoração',
+        nome: 'Casa & Decoracao',
         cidade: 'Belo Horizonte',
         estado: 'MG',
-        setores: ['Móveis', 'Decoração', 'Iluminação'],
+        setores: ['Moveis', 'Decoracao', 'Iluminacao'],
         comissaoMedia: 12,
         comissaoMin: 10,
         comissaoMax: 18,
         avaliacaoLoja: 4.2,
-        aceitaCandidaturas: false, // Não aceita candidaturas no momento
+        aceitaCandidaturas: false, // Nao aceita candidaturas no momento
       },
     ];
     setLojas(mockLojas);
@@ -81,25 +81,25 @@ const StoresPanel = ({ consultorId }) => {
         ...minhasCandidaturas,
         { lojaId, status: 'pendente', dataCandidatura: new Date().toISOString() },
       ]);
-      alert('✅ Candidatura enviada com sucesso!');
+      alert(' Candidatura enviada com sucesso!');
     } catch (error) {
       console.error('Erro ao candidatar:', error);
-      alert('❌ Erro ao enviar candidatura');
+      alert(' Erro ao enviar candidatura');
     }
   };
 
   const getStatusCandidatura = (lojaId, aceitaCandidaturas) => {
     if (lojasAprovadas.includes(lojaId)) {
-      return { status: 'aprovado', label: '✅ Aprovado', cor: '#28a745' };
+      return { status: 'aprovado', label: ' Aprovado', cor: '#28a745' };
     }
     const candidatura = minhasCandidaturas.find(c => c.lojaId === lojaId);
     if (candidatura) {
-      return { status: 'pendente', label: '⏳ Aguardando Aprovação', cor: '#ffc107' };
+      return { status: 'pendente', label: 'o Aguardando Aprovacao', cor: '#ffc107' };
     }
     if (!aceitaCandidaturas) {
-      return { status: 'sem_vagas', label: '📩 Enviar Convite', cor: '#6c757d' };
+      return { status: 'sem_vagas', label: ' Enviar Convite', cor: '#6c757d' };
     }
-    return { status: 'nao_candidatado', label: '📝 Candidatar-se', cor: CONSULTOR_PRIMARY };
+    return { status: 'nao_candidatado', label: ' Candidatar-se', cor: CONSULTOR_PRIMARY };
   };
 
   const lojasFiltradas = lojas.filter(loja => {
@@ -124,9 +124,9 @@ const StoresPanel = ({ consultorId }) => {
     <div style={styles.container}>
       {/* Header */}
       <div style={styles.header}>
-        <h2 style={styles.title}>🏪 Lojas Disponíveis</h2>
+        <h2 style={styles.title}> Lojas Disponiveis</h2>
         
-        {/* Estatísticas */}
+        {/* Estatisticas */}
         <div style={styles.statsContainer}>
           <div style={styles.statCard}>
             <p style={styles.statLabel}>Candidaturas</p>
@@ -143,7 +143,7 @@ const StoresPanel = ({ consultorId }) => {
       <div style={styles.filtrosContainer}>
         {/* Barra de busca */}
         <div style={styles.searchContainer}>
-          <span style={styles.searchIcon}>🔍</span>
+          <span style={styles.searchIcon}></span>
           <input
             type="text"
             placeholder="Buscar lojas..."
@@ -210,14 +210,14 @@ const StoresPanel = ({ consultorId }) => {
               {/* Header da Loja */}
               <div style={styles.lojaHeader}>
                 <div style={styles.lojaIconContainer}>
-                  <span style={styles.lojaIcon}>🏬</span>
+                  <span style={styles.lojaIcon}></span>
                 </div>
                 <div style={styles.lojaInfo}>
                   <h3 style={styles.lojaNome}>{loja.nome}</h3>
-                  <p style={styles.lojaLocal}>📍 {loja.cidade}, {loja.estado}</p>
+                  <p style={styles.lojaLocal}> {loja.cidade}, {loja.estado}</p>
                 </div>
                 <div style={styles.avaliacaoContainer}>
-                  <span style={styles.avaliacaoIcon}>⭐</span>
+                  <span style={styles.avaliacaoIcon}>i</span>
                   <span style={styles.avaliacaoValor}>{loja.avaliacaoLoja}</span>
                 </div>
               </div>
@@ -234,14 +234,14 @@ const StoresPanel = ({ consultorId }) => {
                 </div>
               </div>
 
-              {/* Comissão */}
+              {/* Comissao */}
               <div style={styles.comissaoContainer}>
                 <div style={styles.comissaoHeader}>
-                  <span>💰 Comissão</span>
+                  <span> Comissao</span>
                 </div>
                 <div style={styles.comissaoDetails}>
                   <div style={styles.comissaoRow}>
-                    <span style={styles.comissaoLabel}>Média:</span>
+                    <span style={styles.comissaoLabel}>Media:</span>
                     <span style={styles.comissaoMedia}>{loja.comissaoMedia}%</span>
                   </div>
                   <div style={styles.comissaoRow}>
@@ -252,7 +252,7 @@ const StoresPanel = ({ consultorId }) => {
                 </div>
               </div>
 
-              {/* Botão de Ação */}
+              {/* Botao de Acao */}
               <button
                 onClick={() => {
                   if (statusCandidatura.status === 'nao_candidatado' || 
@@ -286,7 +286,7 @@ const StoresPanel = ({ consultorId }) => {
               {!loja.aceitaCandidaturas && statusCandidatura.status !== 'aprovado' && 
                statusCandidatura.status !== 'pendente' && (
                 <p style={styles.infoText}>
-                  💡 Esta loja receberá seu convite e poderá te aprovar posteriormente
+                   Esta loja recebera seu convite e podera te aprovar posteriormente
                 </p>
               )}
             </div>
@@ -294,10 +294,10 @@ const StoresPanel = ({ consultorId }) => {
         })}
       </div>
 
-      {/* Mensagem quando não há lojas */}
+      {/* Mensagem quando nao ha lojas */}
       {lojasFiltradas.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>🏪</div>
+          <div style={styles.emptyIcon}></div>
           <p style={styles.emptyTitle}>Nenhuma loja encontrada</p>
           <p style={styles.emptySubtitle}>Tente ajustar os filtros de busca</p>
         </div>

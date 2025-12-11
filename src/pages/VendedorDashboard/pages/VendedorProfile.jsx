@@ -1,23 +1,23 @@
 // src/pages/VendedorDashboard/pages/VendedorProfile.jsx
 import React, { useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+// REMOVIDO: Supabase migrado para Supabase
 import { useNavigate } from "react-router-dom";
 
-// Cores do Vendedor (mesmo padrão do dashboard)
+// Cores do Vendedor (mesmo padrao do dashboard)
 const VENDOR_PRIMARY = "#4a6fa5";
 const VENDOR_PRIMARY_DARK = "#2c3e50";
 const VENDOR_LIGHT_BG = "#eaf2ff";
 
 const VendedorProfile = () => {
-    const { user } = useAuth0();
+    const { user } = useAuth();
     const navigate = useNavigate();
     
-    // Estados para os campos editáveis
+    // Estados para os campos editaveis
     const [nome, setNome] = useState(user?.name || "Ana Vendedora");
     const [email, setEmail] = useState(user?.email || "vendedor@exemplo.com");
     const [fotoPerfil, setFotoPerfil] = useState(user?.picture || null);
     
-    // Estados para controle de edição
+    // Estados para controle de edicao
     const [editando, setEditando] = useState({
         nome: false,
         email: false,
@@ -33,22 +33,22 @@ const VendedorProfile = () => {
     const [mensagem, setMensagem] = useState({ tipo: "", texto: "" });
     const [loading, setLoading] = useState(false);
 
-    // Função para mostrar mensagem temporária
+    // Funcao para mostrar mensagem temporaria
     const mostrarMensagem = (tipo, texto) => {
         setMensagem({ tipo, texto });
         setTimeout(() => setMensagem({ tipo: "", texto: "" }), 3000);
     };
 
-    // Função para salvar nome
+    // Funcao para salvar nome
     const salvarNome = async () => {
         if (!nome.trim()) {
-            mostrarMensagem("erro", "O nome não pode estar vazio.");
+            mostrarMensagem("erro", "O nome nao pode estar vazio.");
             return;
         }
         
         setLoading(true);
         try {
-            // Simulação de chamada à API
+            // Simulacao de chamada   API
             await new Promise(resolve => setTimeout(resolve, 500));
             localStorage.setItem("userName", nome);
             setEditando({ ...editando, nome: false });
@@ -60,17 +60,17 @@ const VendedorProfile = () => {
         }
     };
 
-    // Função para salvar email
+    // Funcao para salvar email
     const salvarEmail = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            mostrarMensagem("erro", "Por favor, insira um e-mail válido.");
+            mostrarMensagem("erro", "Por favor, insira um e-mail valido.");
             return;
         }
         
         setLoading(true);
         try {
-            // Simulação de chamada à API
+            // Simulacao de chamada   API
             await new Promise(resolve => setTimeout(resolve, 500));
             setEditando({ ...editando, email: false });
             mostrarMensagem("sucesso", "E-mail atualizado! Verifique sua caixa de entrada para confirmar.");
@@ -81,7 +81,7 @@ const VendedorProfile = () => {
         }
     };
 
-    // Função para alterar senha
+    // Funcao para alterar senha
     const alterarSenha = async () => {
         if (!senhaAtual) {
             mostrarMensagem("erro", "Digite sua senha atual.");
@@ -92,13 +92,13 @@ const VendedorProfile = () => {
             return;
         }
         if (novaSenha !== confirmarSenha) {
-            mostrarMensagem("erro", "As senhas não coincidem.");
+            mostrarMensagem("erro", "As senhas nao coincidem.");
             return;
         }
         
         setLoading(true);
         try {
-            // Simulação de chamada à API
+            // Simulacao de chamada   API
             await new Promise(resolve => setTimeout(resolve, 500));
             setSenhaAtual("");
             setNovaSenha("");
@@ -112,12 +112,12 @@ const VendedorProfile = () => {
         }
     };
 
-    // Função para upload de foto
+    // Funcao para upload de foto
     const handleFotoUpload = (event) => {
         const file = event.target.files[0];
         if (file) {
             if (file.size > 2 * 1024 * 1024) {
-                mostrarMensagem("erro", "A imagem deve ter no máximo 2MB.");
+                mostrarMensagem("erro", "A imagem deve ter no maximo 2MB.");
                 return;
             }
             
@@ -130,7 +130,7 @@ const VendedorProfile = () => {
         }
     };
 
-    // FUNÇÃO DE LOGOUT
+    // FUNCAO DE LOGOUT
     const handleLogout = () => {
         if (window.confirm("Tem certeza que deseja sair?")) {
             // Limpar dados do localStorage
@@ -139,7 +139,7 @@ const VendedorProfile = () => {
             localStorage.removeItem('userName');
             localStorage.removeItem('vendedorId');
             
-            // Redirecionar para a página de login
+            // Redirecionar para a pagina de login
             navigate('/entrar');
         }
     };
@@ -148,9 +148,9 @@ const VendedorProfile = () => {
         <div style={styles.container}>
             {/* HEADER COM LOGOUT */}
             <div style={styles.header}>
-                <h1 style={styles.title}>👤 Meu Perfil</h1>
+                <h1 style={styles.title}> Meu Perfil</h1>
                 <button onClick={handleLogout} style={styles.logoutButton}>
-                    🚪 Sair
+                     Sair
                 </button>
             </div>
             
@@ -162,13 +162,13 @@ const VendedorProfile = () => {
                     color: mensagem.tipo === "sucesso" ? "#155724" : "#721c24",
                     borderColor: mensagem.tipo === "sucesso" ? "#c3e6cb" : "#f5c6cb"
                 }}>
-                    {mensagem.tipo === "sucesso" ? "✅" : "❌"} {mensagem.texto}
+                    {mensagem.tipo === "sucesso" ? "" : ""} {mensagem.texto}
                 </div>
             )}
 
             {/* Card de Foto de Perfil */}
             <div style={styles.card}>
-                <h2 style={styles.cardTitle}>📷 Foto de Perfil</h2>
+                <h2 style={styles.cardTitle}> Foto de Perfil</h2>
                 
                 <div style={styles.fotoContainer}>
                     <div style={styles.fotoWrapper}>
@@ -183,7 +183,7 @@ const VendedorProfile = () => {
                     
                     <div style={styles.fotoActions}>
                         <label style={styles.uploadButton}>
-                            📤 Alterar Foto
+                             Alterar Foto
                             <input
                                 type="file"
                                 accept="image/*"
@@ -191,14 +191,14 @@ const VendedorProfile = () => {
                                 style={{ display: "none" }}
                             />
                         </label>
-                        <p style={styles.fotoHint}>JPG, PNG ou GIF. Máximo 2MB.</p>
+                        <p style={styles.fotoHint}>JPG, PNG ou GIF. Maximo 2MB.</p>
                     </div>
                 </div>
             </div>
 
             {/* Card de Nome */}
             <div style={styles.card}>
-                <h2 style={styles.cardTitle}>✏️ Nome</h2>
+                <h2 style={styles.cardTitle}> Nome</h2>
                 
                 {editando.nome ? (
                     <div style={styles.editContainer}>
@@ -215,7 +215,7 @@ const VendedorProfile = () => {
                                 disabled={loading}
                                 style={styles.saveButton}
                             >
-                                {loading ? "Salvando..." : "💾 Salvar"}
+                                {loading ? "Salvando..." : " Salvar"}
                             </button>
                             <button
                                 onClick={() => {
@@ -235,7 +235,7 @@ const VendedorProfile = () => {
                             onClick={() => setEditando({ ...editando, nome: true })}
                             style={styles.editButton}
                         >
-                            ✏️ Editar
+                             Editar
                         </button>
                     </div>
                 )}
@@ -243,7 +243,7 @@ const VendedorProfile = () => {
 
             {/* Card de E-mail */}
             <div style={styles.card}>
-                <h2 style={styles.cardTitle}>📧 E-mail</h2>
+                <h2 style={styles.cardTitle}> E-mail</h2>
                 
                 {editando.email ? (
                     <div style={styles.editContainer}>
@@ -260,7 +260,7 @@ const VendedorProfile = () => {
                                 disabled={loading}
                                 style={styles.saveButton}
                             >
-                                {loading ? "Salvando..." : "💾 Salvar"}
+                                {loading ? "Salvando..." : " Salvar"}
                             </button>
                             <button
                                 onClick={() => {
@@ -273,7 +273,7 @@ const VendedorProfile = () => {
                             </button>
                         </div>
                         <p style={styles.hint}>
-                            ⚠️ Você receberá um e-mail de confirmação no novo endereço.
+                              Voca recebera um e-mail de confirmacao no novo endereco.
                         </p>
                     </div>
                 ) : (
@@ -283,7 +283,7 @@ const VendedorProfile = () => {
                             onClick={() => setEditando({ ...editando, email: true })}
                             style={styles.editButton}
                         >
-                            ✏️ Editar
+                             Editar
                         </button>
                     </div>
                 )}
@@ -291,7 +291,7 @@ const VendedorProfile = () => {
 
             {/* Card de Senha */}
             <div style={styles.card}>
-                <h2 style={styles.cardTitle}>🔒 Senha</h2>
+                <h2 style={styles.cardTitle}> Senha</h2>
                 
                 {editando.senha ? (
                     <div style={styles.editContainer}>
@@ -313,7 +313,7 @@ const VendedorProfile = () => {
                                 value={novaSenha}
                                 onChange={(e) => setNovaSenha(e.target.value)}
                                 style={styles.input}
-                                placeholder="Mínimo 6 caracteres"
+                                placeholder="Minimo 6 caracteres"
                             />
                         </div>
                         
@@ -334,7 +334,7 @@ const VendedorProfile = () => {
                                 disabled={loading}
                                 style={styles.saveButton}
                             >
-                                {loading ? "Salvando..." : "💾 Alterar Senha"}
+                                {loading ? "Salvando..." : " Alterar Senha"}
                             </button>
                             <button
                                 onClick={() => {
@@ -351,12 +351,12 @@ const VendedorProfile = () => {
                     </div>
                 ) : (
                     <div style={styles.viewContainer}>
-                        <span style={styles.value}>••••••••</span>
+                        <span style={styles.value}>********</span>
                         <button
                             onClick={() => setEditando({ ...editando, senha: true })}
                             style={styles.editButton}
                         >
-                            🔑 Alterar Senha
+                             Alterar Senha
                         </button>
                     </div>
                 )}
@@ -554,3 +554,5 @@ const styles = {
 };
 
 export default VendedorProfile;
+
+

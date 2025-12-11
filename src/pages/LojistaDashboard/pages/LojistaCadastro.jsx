@@ -3,7 +3,7 @@ import React, { useState } from "react";
 const LojistaCadastro = () => {
   const [configuracoes, setConfiguracoes] = useState({
     webhookUrl: "",
-    apiKey: "sk_live_••••••••••••••••••••••",
+    apiKey: "sk_live_**********************",
     backupAutomatico: true,
     notificacoesEmail: true
   });
@@ -17,7 +17,7 @@ const LojistaCadastro = () => {
   };
 
   const handleIntegracaoERP = () => {
-    alert("Redirecionando para configuração de ERP...");
+    alert("Redirecionando para configuracao de ERP...");
   };
 
   const handleGerarAPIKey = () => {
@@ -33,13 +33,13 @@ const LojistaCadastro = () => {
     if (configuracoes.webhookUrl) {
       alert(`Webhook configurado para: ${configuracoes.webhookUrl}`);
     } else {
-      alert("Por favor, insira uma URL de webhook válida");
+      alert("Por favor, insira uma URL de webhook valida");
     }
   };
 
   const handleExportarBackup = () => {
-    alert("Iniciando exportação de backup...");
-    // Simulação de download
+    alert("Iniciando exportacao de backup...");
+    // Simulacao de download
     setTimeout(() => {
       alert("Backup exportado com sucesso!");
     }, 2000);
@@ -47,49 +47,49 @@ const LojistaCadastro = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>⚙️ Configurações Avançadas</h1>
-      <p style={styles.subtitle}>Gerencie integrações e configurações técnicas da sua loja</p>
+      <h1 style={styles.title}> Configuracoes Avancadas</h1>
+      <p style={styles.subtitle}>Gerencie integracoes e configuracoes tecnicas da sua loja</p>
 
       <div style={styles.grid}>
-        {/* Integração com ERP */}
+        {/* Integracao com ERP */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}>🔄 Integração com ERP</h3>
-            <span style={styles.statusBadge}>Disponível</span>
+            <h3 style={styles.cardTitle}> Integracao com ERP</h3>
+            <span style={styles.statusBadge}>Disponivel</span>
           </div>
           <p style={styles.cardDescription}>
-            Sincronize automaticamente seus produtos, estoque e vendas com seu sistema de gestão.
+            Sincronize automaticamente seus produtos, estoque e vendas com seu sistema de gestao.
           </p>
           <div style={styles.erpOptions}>
             <div style={styles.erpOption}>
               <strong>SAP</strong>
-              <span style={styles.erpStatus}>✅ Conectado</span>
+              <span style={styles.erpStatus}> Conectado</span>
             </div>
             <div style={styles.erpOption}>
               <strong>TOTVS</strong>
-              <span style={styles.erpStatus}>⚡ Disponível</span>
+              <span style={styles.erpStatus}>a Disponivel</span>
             </div>
             <div style={styles.erpOption}>
               <strong>BLING</strong>
-              <span style={styles.erpStatus}>🔗 Conectar</span>
+              <span style={styles.erpStatus}> Conectar</span>
             </div>
           </div>
           <button 
             style={styles.primaryButton}
             onClick={handleIntegracaoERP}
           >
-            🔧 Configurar Integração
+             Configurar Integracao
           </button>
         </div>
 
         {/* API Keys */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}>🔑 API Keys</h3>
+            <h3 style={styles.cardTitle}> API Keys</h3>
             <span style={styles.statusBadge}>Ativa</span>
           </div>
           <p style={styles.cardDescription}>
-            Sua chave de API para integrações personalizadas e automações.
+            Sua chave de API para integracoes personalizadas e automacoes.
           </p>
           <div style={styles.apiKeySection}>
             <label style={styles.label}>Chave de API:</label>
@@ -99,14 +99,14 @@ const LojistaCadastro = () => {
                 style={styles.copyButton}
                 onClick={() => {
                   navigator.clipboard.writeText(configuracoes.apiKey);
-                  alert("API Key copiada para a área de transferência!");
+                  alert("API Key copiada para a area de transferancia!");
                 }}
               >
-                📋 Copiar
+                 Copiar
               </button>
             </div>
             <small style={styles.helperText}>
-              Mantenha esta chave em segredo. Ela fornece acesso completo à sua conta.
+              Mantenha esta chave em segredo. Ela fornece acesso completo   sua conta.
             </small>
           </div>
           <div style={styles.buttonGroup}>
@@ -114,10 +114,10 @@ const LojistaCadastro = () => {
               style={styles.secondaryButton}
               onClick={handleGerarAPIKey}
             >
-              🔄 Gerar Nova Key
+               Gerar Nova Key
             </button>
             <button style={styles.secondaryButton}>
-              📊 Ver Logs de Uso
+               Ver Logs de Uso
             </button>
           </div>
         </div>
@@ -125,11 +125,11 @@ const LojistaCadastro = () => {
         {/* Webhooks */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}>🌐 Webhooks</h3>
-            <span style={styles.statusBadge}>Configurável</span>
+            <h3 style={styles.cardTitle}> Webhooks</h3>
+            <span style={styles.statusBadge}>Configuravel</span>
           </div>
           <p style={styles.cardDescription}>
-            Receba notificações em tempo real sobre eventos da sua loja.
+            Receba notificacoes em tempo real sobre eventos da sua loja.
           </p>
           <div style={styles.formGroup}>
             <label style={styles.label}>URL do Webhook:</label>
@@ -142,27 +142,27 @@ const LojistaCadastro = () => {
               style={styles.input}
             />
             <small style={styles.helperText}>
-              URL que receberá as notificações de eventos
+              URL que recebera as notificacoes de eventos
             </small>
           </div>
           <div style={styles.webhookEvents}>
-            <h4 style={styles.sectionSubtitle}>Eventos Disponíveis:</h4>
+            <h4 style={styles.sectionSubtitle}>Eventos Disponiveis:</h4>
             <div style={styles.eventList}>
               <label style={styles.checkboxLabel}>
                 <input type="checkbox" defaultChecked />
-                🛒 Novas vendas
+                 Novas vendas
               </label>
               <label style={styles.checkboxLabel}>
                 <input type="checkbox" defaultChecked />
-                📦 Alterações no estoque
+                 Alteracoes no estoque
               </label>
               <label style={styles.checkboxLabel}>
                 <input type="checkbox" />
-                👥 Clientes novos
+                 Clientes novos
               </label>
               <label style={styles.checkboxLabel}>
                 <input type="checkbox" />
-                💳 Pagamentos processados
+                 Pagamentos processados
               </label>
             </div>
           </div>
@@ -170,27 +170,27 @@ const LojistaCadastro = () => {
             style={styles.primaryButton}
             onClick={handleConfigurarWebhook}
           >
-            💾 Salvar Configurações
+             Salvar Configuracoes
           </button>
         </div>
 
         {/* Backup de Dados */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}>💾 Backup de Dados</h3>
-            <span style={styles.statusBadge}>Automático</span>
+            <h3 style={styles.cardTitle}> Backup de Dados</h3>
+            <span style={styles.statusBadge}>Automatico</span>
           </div>
           <p style={styles.cardDescription}>
-            Proteja seus dados com backups regulares e exportações.
+            Proteja seus dados com backups regulares e exportacoes.
           </p>
           <div style={styles.backupInfo}>
             <div style={styles.backupItem}>
-              <strong>Último Backup:</strong>
+              <strong>ltimo Backup:</strong>
               <span>Hoje, 08:30</span>
             </div>
             <div style={styles.backupItem}>
-              <strong>Próximo Backup:</strong>
-              <span>Amanhã, 08:30</span>
+              <strong>Proximo Backup:</strong>
+              <span>Amanha, 08:30</span>
             </div>
             <div style={styles.backupItem}>
               <strong>Tamanho:</strong>
@@ -205,7 +205,7 @@ const LojistaCadastro = () => {
                 checked={configuracoes.backupAutomatico}
                 onChange={handleConfigChange}
               />
-              Backup automático diário
+              Backup automatico diario
             </label>
             <label style={styles.checkboxLabel}>
               <input
@@ -222,10 +222,10 @@ const LojistaCadastro = () => {
               style={styles.primaryButton}
               onClick={handleExportarBackup}
             >
-              📥 Exportar Backup Agora
+               Exportar Backup Agora
             </button>
             <button style={styles.secondaryButton}>
-              ⏰ Agendar Backup
+              ° Agendar Backup
             </button>
           </div>
         </div>

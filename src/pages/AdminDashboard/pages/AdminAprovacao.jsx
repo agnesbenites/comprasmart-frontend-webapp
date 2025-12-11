@@ -7,7 +7,7 @@ const initialMockData = {
   consultores: [
     {
       id: 1,
-      name: "João Silva",
+      name: "Joao Silva",
       email: "joao@email.com",
       type: "consultor",
       cpfValidado: "approved",
@@ -96,7 +96,7 @@ const initialAnalyticsData = {
 const Container = styled.div`
   min-height: 100vh;
   background-color: #f8f9fa;
-  padding: 30px; /* Mais espaço em desktop */
+  padding: 30px; /* Mais espaco em desktop */
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -104,7 +104,7 @@ const Container = styled.div`
 
 const ContentWrapper = styled.div`
   width: 100%;
-  max-width: 1400px; /* Definindo largura máxima ideal para desktop */
+  max-width: 1400px; /* Definindo largura maxima ideal para desktop */
 `;
 
 const Header = styled.div`
@@ -178,7 +178,7 @@ const CommsButton = styled.button`
   grid-column: 3;
   transition: background-color 0.3s;
   height: 45px;
-  align-self: end; /* Alinha o botão com o fundo */
+  align-self: end; /* Alinha o botao com o fundo */
 
   &:hover {
     background-color: #0d214f;
@@ -216,7 +216,7 @@ const MetricCard = styled.div`
   flex-direction: column;
   align-items: center;
 
-  /* Estilos para cards que ocupam 2 linhas (Gráficos) */
+  /* Estilos para cards que ocupam 2 linhas (Graficos) */
   ${(props) =>
     props.$spanTwo &&
     css`
@@ -252,7 +252,7 @@ const MetricSubDetail = styled.small`
   margin-top: 5px;
 `;
 
-// Estilos de Gráficos (serão usados nos subcomponentes)
+// Estilos de Graficos (serao usados nos subcomponentes)
 const ChartContainer = styled.div`
   width: 100%;
   margin-top: 15px;
@@ -317,7 +317,7 @@ const LegendColor = styled.span`
   background-color: ${(props) => props.$bgColor};
 `;
 
-// Estilos para Status e Estatísticas
+// Estilos para Status e Estatisticas
 const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 colunas fixas em desktop */
@@ -359,7 +359,7 @@ const TabsWrapper = styled.div`
   display: flex;
   gap: 15px;
   margin-bottom: 40px;
-  justify-content: flex-start; /* Alinhamento à esquerda em desktop */
+  justify-content: flex-start; /* Alinhamento   esquerda em desktop */
   flex-wrap: wrap;
 `;
 
@@ -370,7 +370,7 @@ const TabButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  min-width: 180px; /* Botões mais largos em desktop */
+  min-width: 180px; /* Botoes mais largos em desktop */
   color: #333;
 
   /* Estilo ativo */
@@ -384,7 +384,7 @@ const TabButton = styled.button`
     `}
 `;
 
-// Estilos para Grid de Usuários e Cards de Aprovação
+// Estilos para Grid de Usuarios e Cards de Aprovacao
 const UsersGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(
@@ -610,7 +610,7 @@ const CriteriaListItem = styled.li`
   color: #555;
 `;
 
-// **CORREÇÃO:** Removido seletor aninhado que causava ReferenceError
+// **CORRECAO:** Removido seletor aninhado que causava ReferenceError
 const ChecklistActions = styled.div`
   margin-left: auto;
   display: flex;
@@ -618,7 +618,7 @@ const ChecklistActions = styled.div`
 `;
 
 // ----------------------------------------
-// 2. SUBCOMPONENTES (Com Correção do ChecklistItem)
+// 2. SUBCOMPONENTES (Com Correcao do ChecklistItem)
 // ----------------------------------------
 
 const BarChart = ({ data }) => {
@@ -649,7 +649,7 @@ const PieChart = ({ premium, basic }) => {
 
   return (
     <ChartContainer>
-      <ChartTitle>Distribuição de Assinaturas</ChartTitle>
+      <ChartTitle>Distribuicao de Assinaturas</ChartTitle>
       <PieChartWrapper>
         <PieChartElement $background={gradient} />
         <Legend>
@@ -685,7 +685,7 @@ const ChecklistItem = ({
       ? "#ffc107"
       : "#dc3545";
   const statusIcon =
-    status === "approved" ? "✅" : status === "pending" ? "⏳" : "❌";
+    status === "approved" ? "" : status === "pending" ? "o" : "";
 
   return (
     <ChecklistItemWrapper>
@@ -693,7 +693,7 @@ const ChecklistItem = ({
         <StatusIcon $color={statusColor}>{statusIcon}</StatusIcon>
         <ChecklistLabel>{label}</ChecklistLabel>
         <ChecklistActions>
-          {/* CORREÇÃO: Estilizando o ActionButton diretamente para evitar ReferenceError */}
+          {/* CORRECAO: Estilizando o ActionButton diretamente para evitar ReferenceError */}
           <ActionButton
             onClick={() => handleToggle("approved")}
             disabled={status === "approved"}
@@ -706,7 +706,7 @@ const ChecklistItem = ({
               fontWeight: "bold",
             }}
           >
-            👍
+            
           </ActionButton>
           <ActionButton
             onClick={() => handleToggle("rejected")}
@@ -720,7 +720,7 @@ const ChecklistItem = ({
               fontWeight: "bold",
             }}
           >
-            👎
+            
           </ActionButton>
         </ChecklistActions>
       </ChecklistHeader>
@@ -741,7 +741,7 @@ const ApprovalCard = ({
   onViewDetails,
   onToggleStatus,
 }) => {
-  // Lista de critérios de aprovação (baseado no mock)
+  // Lista de criterios de aprovacao (baseado no mock)
   const approvalCriteria =
     type === "consultor"
       ? [
@@ -750,26 +750,26 @@ const ApprovalCard = ({
           { label: "Selfie Validada", key: "selfieValidada" },
           { label: "Email Verificado", key: "emailVerificado" },
           { label: "Telefone Verificado", key: "telefoneVerificado" },
-          { label: "Currículo Analisado", key: "curriculoAnalisado" },
-          { label: "Endereço Completo", key: "enderecoCompleto" },
-          { label: "Dados Bancários", key: "dadosBancarios" },
+          { label: "Curriculo Analisado", key: "curriculoAnalisado" },
+          { label: "Endereco Completo", key: "enderecoCompleto" },
+          { label: "Dados Bancarios", key: "dadosBancarios" },
         ]
       : [
           { label: "CNPJ Validado", key: "cnpjValidado" },
           { label: "Contrato Social", key: "contratoSocial" },
-          { label: "Comprovante Endereço", key: "comprovanteEndereco" },
+          { label: "Comprovante Endereco", key: "comprovanteEndereco" },
           { label: "Email Corporativo", key: "emailCorporativo" },
           { label: "Telefone Comercial", key: "telefoneComercial" },
           { label: "Segmento Definido", key: "segmentoDefinido" },
-          { label: "Responsável Legal", key: "responsavelLegal" },
+          { label: "Responsavel Legal", key: "responsavelLegal" },
         ];
 
   const getChecklistItems = () => {
     return approvalCriteria.map((item) => ({
       ...item,
-      status: user[item.key], // Pega o status do usuário (approved, pending, rejected)
+      status: user[item.key], // Pega o status do usuario (approved, pending, rejected)
       observations:
-        user[item.key] === "rejected" ? "Documento ilegível/inválido" : "", // Exemplo de observação
+        user[item.key] === "rejected" ? "Documento ilegivel/invalido" : "", // Exemplo de observacao
     }));
   };
 
@@ -799,7 +799,7 @@ const ApprovalCard = ({
             <UserName>{user.name}</UserName>
             <UserEmail>{user.email}</UserEmail>
             <UserType>
-              {type === "consultor" ? "👨‍💼 Consultor" : "🏪 Lojista"} |
+              {type === "consultor" ? " Consultor" : " Lojista"} |
               Cadastrado em: {user.dataCadastro}
             </UserType>
           </div>
@@ -811,12 +811,12 @@ const ApprovalCard = ({
               $bgColor={progressBarColor}
             />
           </ProgressBar>
-          <Percentage>{approvalPercentage}% Concluído</Percentage>
+          <Percentage>{approvalPercentage}% Concluido</Percentage>
         </ApprovalStatus>
       </CardHeader>
 
       <ChecklistSection>
-        <ChecklistTitle>Checklist de Aprovação</ChecklistTitle>
+        <ChecklistTitle>Checklist de Aprovacao</ChecklistTitle>
         {getChecklistItems().map((item) => (
           <ChecklistItem
             key={`${user.id}-${item.key}`}
@@ -824,7 +824,7 @@ const ApprovalCard = ({
             userId={user.id}
             itemKey={item.key}
             label={item.label}
-            status={user[item.key]} // Usando o status real do usuário
+            status={user[item.key]} // Usando o status real do usuario
             observations={item.observations}
             onToggleStatus={onToggleStatus}
           />
@@ -833,20 +833,20 @@ const ApprovalCard = ({
 
       <CardActions>
         <DetailsButton onClick={() => onViewDetails(user)}>
-          📋 Ver Detalhes
+           Ver Detalhes
         </DetailsButton>
         <ApprovalButtons>
           <RejectButton
             onClick={() => onReject(user)}
             disabled={user.status !== "pending"}
           >
-            ❌ Reprovar
+             Reprovar
           </RejectButton>
           <ApproveButton
             onClick={() => onApprove(user)}
             disabled={approvalPercentage < 100 || user.status !== "pending"}
           >
-            ✅ Aprovar
+             Aprovar
           </ApproveButton>
         </ApprovalButtons>
       </CardActions>
@@ -855,7 +855,7 @@ const ApprovalCard = ({
 };
 
 // ----------------------------------------
-// 3. COMPONENTE PRINCIPAL (Com Lógica Mockada Adicionada)
+// 3. COMPONENTE PRINCIPAL (Com Logica Mockada Adicionada)
 // ----------------------------------------
 
 const AdminAprovacao = () => {
@@ -866,7 +866,7 @@ const AdminAprovacao = () => {
   const [message, setMessage] = useState("");
   const [recipient, setRecipient] = useState("all");
 
-  // Helper para calcular estatísticas
+  // Helper para calcular estatisticas
   const calculateStats = (data) => {
     const totalConsultores = data.consultores.length;
     const aprovadosConsultores = data.consultores.filter(
@@ -907,7 +907,7 @@ const AdminAprovacao = () => {
     setUsers(initialMockData); // Inicializa com mock
   }, []);
 
-  // Atualiza um item do checklist de um usuário
+  // Atualiza um item do checklist de um usuario
   const handleToggleStatus = ({ userType, userId, itemKey, newStatus }) => {
     setUsers((prevUsers) => {
       const typeList = [...prevUsers[userType + "s"]]; // 'consultores' ou 'lojistas'
@@ -927,7 +927,7 @@ const AdminAprovacao = () => {
     });
   };
 
-  // Aprova o usuário (muda o status geral)
+  // Aprova o usuario (muda o status geral)
   const handleApprove = (userToApprove) => {
     setUsers((prevUsers) => {
       const typeList = [...prevUsers[userToApprove.type + "s"]];
@@ -941,7 +941,7 @@ const AdminAprovacao = () => {
     });
   };
 
-  // Reprova o usuário (muda o status geral)
+  // Reprova o usuario (muda o status geral)
   const handleReject = (userToReject) => {
     setUsers((prevUsers) => {
       const typeList = [...prevUsers[userToReject.type + "s"]];
@@ -957,8 +957,8 @@ const AdminAprovacao = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    console.log(`Enviando mensagem para: ${recipient}, Conteúdo: ${message}`);
-    // Simula envio à API
+    console.log(`Enviando mensagem para: ${recipient}, Conteudo: ${message}`);
+    // Simula envio   API
     alert(`Mensagem enviada para ${recipient}: "${message}"`);
     setMessage("");
   };
@@ -983,15 +983,15 @@ const AdminAprovacao = () => {
       <ContentWrapper>
         {/* Header */}
         <Header>
-          <HeaderTitle>👑 Sistema de Aprovação</HeaderTitle>
+          <HeaderTitle> Sistema de Aprovacao</HeaderTitle>
           <HeaderSubtitle>
-            Gerencie aprovações de consultores e lojistas
+            Gerencie aprovacoes de consultores e lojistas
           </HeaderSubtitle>
         </Header>
 
-        {/* Comunicação Admin-Usuário */}
+        {/* Comunicacao Admin-Usuario */}
         <CommunicationSection>
-          <CommunicationTitle>📣 Mensagem da Plataforma</CommunicationTitle>
+          <CommunicationTitle> Mensagem da Plataforma</CommunicationTitle>
           <CommsForm onSubmit={handleSendMessage}>
             <CommsSelect
               value={recipient}
@@ -1002,7 +1002,7 @@ const AdminAprovacao = () => {
               <option value="lojistas">Apenas Lojistas</option>
             </CommsSelect>
             <CommsTextarea
-              placeholder="Digite sua mensagem aqui (Será disparada como notificação/email)."
+              placeholder="Digite sua mensagem aqui (Sera disparada como notificacao/email)."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
@@ -1011,13 +1011,13 @@ const AdminAprovacao = () => {
           </CommsForm>
         </CommunicationSection>
 
-        {/* Dashboard de Métricas / Analytics */}
+        {/* Dashboard de Metricas / Analytics */}
         <MetricsSection>
-          <MetricsTitle>📊 Métricas e Analytics</MetricsTitle>
+          <MetricsTitle> Metricas e Analytics</MetricsTitle>
           <MetricsGrid>
-            {/* Métrica 1: Assinaturas Totais + Gráfico de Pizza */}
+            {/* Metrica 1: Assinaturas Totais + Grafico de Pizza */}
             <MetricCard $spanTwo>
-              <MetricIcon>💰</MetricIcon>
+              <MetricIcon></MetricIcon>
               <MetricLabel>Total de Assinaturas</MetricLabel>
               <MetricValue>{analytics.totalAssinaturas}</MetricValue>
               <PieChart
@@ -1030,9 +1030,9 @@ const AdminAprovacao = () => {
               </MetricSubDetail>
             </MetricCard>
 
-            {/* Métrica 2: Acesso ao App / Site + Gráfico de Barras */}
+            {/* Metrica 2: Acesso ao App / Site + Grafico de Barras */}
             <MetricCard $spanTwo>
-              <MetricIcon>📱</MetricIcon>
+              <MetricIcon></MetricIcon>
               <MetricLabel>Acessos na Semana</MetricLabel>
               <MetricValue>
                 {analytics.acessosApp + analytics.acessosSite}
@@ -1048,9 +1048,9 @@ const AdminAprovacao = () => {
               </MetricSubDetail>
             </MetricCard>
 
-            {/* Métrica 3: Logins */}
+            {/* Metrica 3: Logins */}
             <MetricCard>
-              <MetricIcon>🔒</MetricIcon>
+              <MetricIcon></MetricIcon>
               <MetricLabel>Logins (7 dias)</MetricLabel>
               <MetricValue>{analytics.loginsUltimaSemana}</MetricValue>
               <MetricSubDetail>
@@ -1058,42 +1058,42 @@ const AdminAprovacao = () => {
               </MetricSubDetail>
             </MetricCard>
 
-            {/* Métrica 4: Assinatura Mais Vendida */}
+            {/* Metrica 4: Assinatura Mais Vendida */}
             <MetricCard>
-              <MetricIcon>⭐</MetricIcon>
-              <MetricLabel>Assinatura Líder</MetricLabel>
+              <MetricIcon>i</MetricIcon>
+              <MetricLabel>Assinatura Lider</MetricLabel>
               <MetricValue>{analytics.maisVendida}</MetricValue>
               <MetricSubDetail>
-                Taxa de Conversão: {analytics.taxaConversao}
+                Taxa de Conversao: {analytics.taxaConversao}
               </MetricSubDetail>
             </MetricCard>
           </MetricsGrid>
         </MetricsSection>
 
-        {/* Estatísticas de Aprovação */}
+        {/* Estatisticas de Aprovacao */}
         <StatsGrid>
           <StatCard>
-            <StatCardTitle>👨‍💼 Consultores</StatCardTitle>
+            <StatCardTitle> Consultores</StatCardTitle>
             <StatNumbers>
               <StatValue>{stats.totalConsultores}</StatValue>
               <StatDetail>
-                {stats.aprovadosConsultores} aprovados •{" "}
+                {stats.aprovadosConsultores} aprovados *{" "}
                 {stats.pendentesConsultores} pendentes
               </StatDetail>
             </StatNumbers>
           </StatCard>
           <StatCard>
-            <StatCardTitle>🏪 Lojistas</StatCardTitle>
+            <StatCardTitle> Lojistas</StatCardTitle>
             <StatNumbers>
               <StatValue>{stats.totalLojistas}</StatValue>
               <StatDetail>
-                {stats.aprovadosLojistas} aprovados • {stats.pendentesLojistas}{" "}
+                {stats.aprovadosLojistas} aprovados * {stats.pendentesLojistas}{" "}
                 pendentes
               </StatDetail>
             </StatNumbers>
           </StatCard>
           <StatCard>
-            <StatCardTitle>💼 Vendedores</StatCardTitle>
+            <StatCardTitle> Vendedores</StatCardTitle>
             <StatNumbers>
               <StatValue>{stats.totalVendedores}</StatValue>
               <StatDetail>Cadastrados no sistema</StatDetail>
@@ -1101,31 +1101,31 @@ const AdminAprovacao = () => {
           </StatCard>
         </StatsGrid>
 
-        {/* Tabs de Navegação */}
+        {/* Tabs de Navegacao */}
         <TabsWrapper>
           <TabButton
             $active={activeTab === "pending"}
             onClick={() => setActiveTab("pending")}
           >
-            ⏳ Pendentes ({stats.pendentesConsultores + stats.pendentesLojistas}
+            o Pendentes ({stats.pendentesConsultores + stats.pendentesLojistas}
             )
           </TabButton>
           <TabButton
             $active={activeTab === "approved"}
             onClick={() => setActiveTab("approved")}
           >
-            ✅ Aprovados ({stats.aprovadosConsultores + stats.aprovadosLojistas}
+             Aprovados ({stats.aprovadosConsultores + stats.aprovadosLojistas}
             )
           </TabButton>
           <TabButton
             $active={activeTab === "rejected"}
             onClick={() => setActiveTab("rejected")}
           >
-            ❌ Reprovados ({stats.reprovadosLojistas})
+             Reprovados ({stats.reprovadosLojistas})
           </TabButton>
         </TabsWrapper>
 
-        {/* Lista de Usuários */}
+        {/* Lista de Usuarios */}
         <UsersGrid>
           {usersToShow.map((user) => (
             <ApprovalCard
@@ -1141,62 +1141,62 @@ const AdminAprovacao = () => {
 
           {usersToShow.length === 0 && (
             <EmptyState>
-              <EmptyIcon>📋</EmptyIcon>
-              <h3>Nenhum usuário encontrado</h3>
-              <p>Não há usuários com status "{activeTab}" no momento.</p>
+              <EmptyIcon></EmptyIcon>
+              <h3>Nenhum usuario encontrado</h3>
+              <p>Nao ha usuarios com status "{activeTab}" no momento.</p>
             </EmptyState>
           )}
         </UsersGrid>
 
-        {/* Critérios de Aprovação */}
+        {/* Criterios de Aprovacao */}
         <CriteriaSection>
           <h3 style={{ color: "#333", margin: "0 0 20px 0" }}>
-            🎯 Critérios de Aprovação
+             Criterios de Aprovacao
           </h3>
           <CriteriaGrid>
             <CriteriaCard>
-              <CriteriaCardTitle>👨‍💼 Consultores (CPF)</CriteriaCardTitle>
+              <CriteriaCardTitle> Consultores (CPF)</CriteriaCardTitle>
               <CriteriaList>
-                <CriteriaListItem>✅ CPF válido e regular</CriteriaListItem>
+                <CriteriaListItem> CPF valido e regular</CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Documento de identidade legível
+                   Documento de identidade legivel
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Selfie comprovando identidade
+                   Selfie comprovando identidade
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ E-mail e telefone verificados
+                   E-mail e telefone verificados
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Currículo analisado pela IA
+                   Curriculo analisado pela IA
                 </CriteriaListItem>
-                <CriteriaListItem>✅ Endereço completo válido</CriteriaListItem>
+                <CriteriaListItem> Endereco completo valido</CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Dados bancários para pagamento
+                   Dados bancarios para pagamento
                 </CriteriaListItem>
               </CriteriaList>
             </CriteriaCard>
             <CriteriaCard>
-              <CriteriaCardTitle>🏪 Lojistas (CNPJ)</CriteriaCardTitle>
+              <CriteriaCardTitle> Lojistas (CNPJ)</CriteriaCardTitle>
               <CriteriaList>
-                <CriteriaListItem>✅ CNPJ válido e ativo</CriteriaListItem>
+                <CriteriaListItem> CNPJ valido e ativo</CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Contrato social digitalizado
+                   Contrato social digitalizado
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Comprovante de endereço comercial
+                   Comprovante de endereco comercial
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ E-mail corporativo verificado
+                   E-mail corporativo verificado
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Telefone comercial funcional
+                   Telefone comercial funcional
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Segmento de atuação definido
+                   Segmento de atuacao definido
                 </CriteriaListItem>
                 <CriteriaListItem>
-                  ✅ Responsável legal identificado
+                   Responsavel legal identificado
                 </CriteriaListItem>
               </CriteriaList>
             </CriteriaCard>
@@ -1208,3 +1208,4 @@ const AdminAprovacao = () => {
 };
 
 export default AdminAprovacao;
+

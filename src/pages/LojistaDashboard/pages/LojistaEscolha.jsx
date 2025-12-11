@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components"; // Importa a biblioteca
+import styled from "styled-components";
 
 // ----------------------------------------
 // ESTILOS CONVERTIDOS PARA STYLED COMPONENTS
@@ -75,9 +75,12 @@ const CardsContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   margin-bottom: 50px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
-// O uso de '&:hover' substitui todo o seu código 'useEffect'
 const Card = styled.div`
   background-color: white;
   border-radius: 15px;
@@ -90,7 +93,6 @@ const Card = styled.div`
   flex-direction: column;
   height: 480px;
 
-  /* Estilo hover nativo e eficiente */
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
@@ -104,9 +106,7 @@ const CardIcon = styled.div`
   text-align: center;
 `;
 
-const CardContent = styled.div`
-  /* Estilo do conteúdo (se houver) */
-`;
+const CardContent = styled.div``;
 
 const CardTitle = styled.h3`
   font-size: 24px;
@@ -156,7 +156,6 @@ const CardButton = styled.button`
   cursor: pointer;
   transition: background-color 0.3s;
 
-  /* Estilo hover nativo e eficiente */
   &:hover {
     background-color: #1b3670;
   }
@@ -176,7 +175,6 @@ const BackButton = styled.button`
   font-size: 16px;
   transition: all 0.3s;
 
-  /* Estilo hover nativo e eficiente */
   &:hover {
     background-color: #f8f9fa;
     border-color: #999;
@@ -184,13 +182,11 @@ const BackButton = styled.button`
 `;
 
 // ----------------------------------------
-// COMPONENTE PRINCIPAL COM JSX LIMPO
+// COMPONENTE PRINCIPAL
 // ----------------------------------------
 
 const LojistaEscolha = () => {
   const navigate = useNavigate();
-
-  // Removemos o useEffect para hover, pois o Styled Components lida com isso.
 
   return (
     <Container>
@@ -203,11 +199,11 @@ const LojistaEscolha = () => {
               alt="Logo Compra Smart"
             />
             <LogoText>Compra Smart</LogoText>
-            <LogoSubtitle>Área do Lojista</LogoSubtitle>
+            <LogoSubtitle>Area do Lojista</LogoSubtitle>
           </LogoWrapper>
         </Header>
 
-        {/* Conteúdo Principal */}
+        {/* Conteudo Principal */}
         <MainContent>
           <WelcomeSection>
             <WelcomeTitle>Selecione o Tipo de Acesso</WelcomeTitle>
@@ -218,22 +214,22 @@ const LojistaEscolha = () => {
           </WelcomeSection>
 
           <CardsContainer>
-            {/* Card Admin */}
+            {/* Card Admin/Lojista */}
             <Card onClick={() => navigate("/lojista/login")}>
-              <CardIcon>👑</CardIcon>
+              <CardIcon>&#128081;</CardIcon>
               <CardContent>
-                <CardTitle>Administrador</CardTitle>
+                <CardTitle>Lojista (Admin)</CardTitle>
                 <CardDescription>
-                  Acesso completo ao painel administrativo com gestão de lojas,
-                  vendedores, relatórios e configurações do sistema.
+                  Acesso completo ao painel administrativo com gestao de lojas,
+                  vendedores, relatorios e configuracoes do sistema.
                 </CardDescription>
                 <FeaturesList>
                   <FeatureListItem>
-                    ✅ Gestão de múltiplas lojas
+                    &#10003; Gestao de multiplas lojas
                   </FeatureListItem>
-                  <FeatureListItem>✅ Cadastro de vendedores</FeatureListItem>
-                  <FeatureListItem>✅ Relatórios detalhados</FeatureListItem>
-                  <FeatureListItem>✅ Configurações do sistema</FeatureListItem>
+                  <FeatureListItem>&#10003; Cadastro de vendedores</FeatureListItem>
+                  <FeatureListItem>&#10003; Relatorios detalhados</FeatureListItem>
+                  <FeatureListItem>&#10003; Configuracoes do sistema</FeatureListItem>
                 </FeaturesList>
               </CardContent>
               <CardAction>
@@ -243,20 +239,20 @@ const LojistaEscolha = () => {
 
             {/* Card Vendedor */}
             <Card onClick={() => navigate("/vendedor/login")}>
-              <CardIcon>💼</CardIcon>
+              <CardIcon>&#128188;</CardIcon>
               <CardContent>
                 <CardTitle>Vendedor</CardTitle>
                 <CardDescription>
                   Acesso ao sistema de vendas com ferramentas para atendimento,
-                  gestão de pedidos e comunicação integrada.
+                  gestao de pedidos e comunicacao integrada.
                 </CardDescription>
                 <FeaturesList>
-                  <FeatureListItem>✅ Atendimento ao cliente</FeatureListItem>
+                  <FeatureListItem>&#10003; Atendimento ao cliente</FeatureListItem>
                   <FeatureListItem>
-                    ✅ Sistema de chamadas/vídeo
+                    &#10003; Sistema de chamadas/video
                   </FeatureListItem>
-                  <FeatureListItem>✅ Gestão de pedidos</FeatureListItem>
-                  <FeatureListItem>✅ Mensagens integradas</FeatureListItem>
+                  <FeatureListItem>&#10003; Gestao de pedidos</FeatureListItem>
+                  <FeatureListItem>&#10003; Mensagens integradas</FeatureListItem>
                 </FeaturesList>
               </CardContent>
               <CardAction>
@@ -265,10 +261,10 @@ const LojistaEscolha = () => {
             </Card>
           </CardsContainer>
 
-          {/* Botão Voltar */}
+          {/* Botao Voltar */}
           <Footer>
-            <BackButton onClick={() => navigate("/")}>
-              ← Voltar para a página inicial
+            <BackButton onClick={() => navigate("/entrar")}>
+              Voltar para escolha de perfil
             </BackButton>
           </Footer>
         </MainContent>

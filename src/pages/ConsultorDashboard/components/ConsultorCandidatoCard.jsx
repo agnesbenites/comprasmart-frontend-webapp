@@ -7,21 +7,21 @@ const LOJISTA_PRIMARY = "#28a745";
 const LOJISTA_LIGHT_BG = "#e8f5e9";
 
 /**
- * Card que o LOJISTA vê ao avaliar candidaturas de consultores
+ * Card que o LOJISTA va ao avaliar candidaturas de consultores
  * Mostra o SCORE calculado automaticamente baseado em:
- * - Avaliações recebidas (peso 40%)
+ * - Avaliacoes recebidas (peso 40%)
  * - Quantidade de vendas (peso 35%)
- * - Treinamentos concluídos (peso 25%)
+ * - Treinamentos concluidos (peso 25%)
  */
 const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
   
   const getNivelBadge = (nivel) => {
     const badges = {
-      'Diamante': { color: '#b9f2ff', icon: '💎', textColor: '#006d8f' },
-      'Ouro': { color: '#ffd700', icon: '🥇', textColor: '#8b6914' },
-      'Prata': { color: '#c0c0c0', icon: '🥈', textColor: '#6b6b6b' },
-      'Bronze': { color: '#cd7f32', icon: '🥉', textColor: '#5c3a1a' },
-      'Iniciante': { color: '#e9ecef', icon: '🌱', textColor: '#495057' },
+      'Diamante': { color: '#b9f2ff', icon: '', textColor: '#006d8f' },
+      'Ouro': { color: '#ffd700', icon: '', textColor: '#8b6914' },
+      'Prata': { color: '#c0c0c0', icon: '', textColor: '#6b6b6b' },
+      'Bronze': { color: '#cd7f32', icon: '', textColor: '#5c3a1a' },
+      'Iniciante': { color: '#e9ecef', icon: '', textColor: '#495057' },
     };
     return badges[nivel] || badges['Iniciante'];
   };
@@ -61,21 +61,21 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
         </div>
       </div>
 
-      {/* Métricas Detalhadas */}
+      {/* Metricas Detalhadas */}
       <div style={styles.metricas}>
         
-        {/* Avaliações */}
+        {/* Avaliacoes */}
         <div style={styles.metricaItem}>
           <div style={styles.metricaHeader}>
             <FaStar color="#ffc107" size={18} />
-            <span style={styles.metricaLabel}>Avaliações</span>
+            <span style={styles.metricaLabel}>Avaliacoes</span>
           </div>
           <div style={styles.metricaValor}>
             <span style={styles.metricaNumero}>
               {consultor.score.componentes.atendimento.avaliacaoMedia.toFixed(1)}
             </span>
             <span style={styles.metricaSubtexto}>
-              ({consultor.score.componentes.atendimento.totalAvaliacoes} avaliações)
+              ({consultor.score.componentes.atendimento.totalAvaliacoes} avaliacoes)
             </span>
           </div>
           <div style={styles.progressBar}>
@@ -88,7 +88,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
             />
           </div>
           <p style={styles.metricaDetalhe}>
-            {consultor.score.componentes.atendimento.taxaSatisfacao.toFixed(0)}% de satisfação
+            {consultor.score.componentes.atendimento.taxaSatisfacao.toFixed(0)}% de satisfacao
           </p>
         </div>
 
@@ -114,7 +114,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
             />
           </div>
           <p style={styles.metricaDetalhe}>
-            {consultor.score.componentes.vendas.vendasUltimos30Dias} vendas nos últimos 30 dias
+            {consultor.score.componentes.vendas.vendasUltimos30Dias} vendas nos ultimos 30 dias
           </p>
         </div>
 
@@ -129,7 +129,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
               {consultor.score.componentes.treinamentos.concluidos}
             </span>
             <span style={styles.metricaSubtexto}>
-              de {consultor.score.componentes.treinamentos.total} concluídos
+              de {consultor.score.componentes.treinamentos.total} concluidos
             </span>
           </div>
           <div style={styles.progressBar}>
@@ -143,17 +143,17 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
           </div>
           <p style={styles.metricaDetalhe}>
             {consultor.score.componentes.treinamentos.obrigatoriosConcluidos 
-              ? '✅ Todos obrigatórios concluídos' 
-              : '⏳ Treinamentos obrigatórios pendentes'}
+              ? ' Todos obrigatorios concluidos' 
+              : 'o Treinamentos obrigatorios pendentes'}
           </p>
         </div>
       </div>
 
-      {/* Informações Adicionais */}
+      {/* Informacoes Adicionais */}
       <div style={styles.infoAdicional}>
         <div style={styles.infoItem}>
           <FaClock color="#666" />
-          <span>Cadastrado há {consultor.tempoPlataforma}</span>
+          <span>Cadastrado ha {consultor.tempoPlataforma}</span>
         </div>
         <div style={styles.infoItem}>
           <FaCheckCircle color="#28a745" />
@@ -161,20 +161,20 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
         </div>
       </div>
 
-      {/* Explicação do Score */}
+      {/* Explicacao do Score */}
       <div style={styles.scoreExplicacao}>
         <p style={styles.explicacaoTexto}>
-          💡 <strong>Score calculado por:</strong> Avaliações (40%) + Vendas (35%) + Treinamentos (25%)
+           <strong>Score calculado por:</strong> Avaliacoes (40%) + Vendas (35%) + Treinamentos (25%)
         </p>
       </div>
 
-      {/* Botões de Ação */}
+      {/* Botoes de Acao */}
       <div style={styles.acoes}>
         <button onClick={() => onRecusar(consultor.id)} style={styles.recusarButton}>
-          ✕ Recusar
+          O Recusar
         </button>
         <button onClick={() => onAprovar(consultor.id)} style={styles.aprovarButton}>
-          ✓ Aprovar Consultor
+          “ Aprovar Consultor
         </button>
       </div>
     </div>
@@ -185,14 +185,14 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
 export const mockConsultorCandidato = {
   id: 'cons123',
   nome: 'Carlos Mendes',
-  cidade: 'São Paulo',
+  cidade: 'Sao Paulo',
   estado: 'SP',
   tempoPlataforma: '6 meses',
   lojasAtivas: 3,
   score: {
     scoreTotal: 8.7, // Calculado automaticamente pelo backend
     nivel: 'Ouro', // Diamante (9-10), Ouro (7.5-8.9), Prata (6-7.4), Bronze (4-5.9), Iniciante (<4)
-    ranking: 'Top 15%', // Posição entre todos os consultores
+    ranking: 'Top 15%', // Posicao entre todos os consultores
     componentes: {
       atendimento: {
         peso: 40, // 40% do score total

@@ -7,7 +7,7 @@ const PlanLimitsBar = ({ lojistaId }) => {
     const { planInfo, getLimits, loading } = usePlanLimits(lojistaId);
 
     if (loading || !planInfo) {
-        return <div style={styles.loading}>Carregando informações do plano...</div>;
+        return <div style={styles.loading}>Carregando informacoes do plano...</div>;
     }
 
     const limits = getLimits();
@@ -41,10 +41,10 @@ const PlanLimitsBar = ({ lojistaId }) => {
         <div style={styles.container}>
             <div style={styles.header}>
                 <h3 style={styles.title}>
-                    📊 Plano: <span style={styles.planName}>{planInfo.plano.nome}</span>
+                     Plano: <span style={styles.planName}>{planInfo.plano.nome}</span>
                 </h3>
                 <a href="/lojista/planos" style={styles.upgradeLink}>
-                    🚀 Upgrade
+                     Upgrade
                 </a>
             </div>
 
@@ -53,12 +53,12 @@ const PlanLimitsBar = ({ lojistaId }) => {
                 {renderLimitBar('Filiais', limits.filiais)}
                 {renderLimitBar('Vendedores', limits.vendedores)}
                 {renderLimitBar('Consultores', limits.consultores)}
-                {planInfo.plano.permite_video && renderLimitBar('Chamadas Vídeo', limits.chamadasVideo)}
+                {planInfo.plano.permite_video && renderLimitBar('Chamadas Video', limits.chamadasVideo)}
             </div>
 
             {planInfo.plano.permite_adicionais && (
                 <div style={styles.addonInfo}>
-                    💡 <strong>Pacotes adicionais disponíveis por R$ {planInfo.plano.pacote_adicional_preco}</strong>
+                     <strong>Pacotes adicionais disponiveis por R$ {planInfo.plano.pacote_adicional_preco}</strong>
                 </div>
             )}
         </div>

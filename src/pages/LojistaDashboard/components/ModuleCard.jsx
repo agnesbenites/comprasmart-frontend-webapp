@@ -8,7 +8,7 @@ const ModuleCard = ({
   estatistica, 
   rota, 
   cor = "#007bff",
-  icone = "📦"
+  icone = ""
 }) => {
   const navigate = useNavigate();
 
@@ -43,7 +43,7 @@ const ModuleCard = ({
         <ul style={styles.featuresList}>
           {features.map((feature, index) => (
             <li key={index} style={styles.feature}>
-              • {feature}
+              * {feature}
             </li>
           ))}
         </ul>
@@ -62,7 +62,7 @@ const ModuleCard = ({
             e.target.style.opacity = "1";
           }}
         >
-          Acessar Módulo →
+          Acessar Modulo &#8592;’
         </button>
       )}
     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-// Mantenha o useNavigate e Link para a navegação interna
+// Mantenha o useNavigate e Link para a navegacao interna
 import { useNavigate, Link } from "react-router-dom";
 
 const LojistaHomePanel = () => {
@@ -7,14 +7,14 @@ const LojistaHomePanel = () => {
 
     // Dados mockados do lojista
     const lojistaInfo = {
-        nome: "João Silva",
-        empresa: "Loja do João LTDA",
+        nome: "Joao Silva",
+        empresa: "Loja do Joao LTDA",
         plano: "Completo Online",
         vencimento: "15/03/2024",
         status: "ativo",
     };
 
-    // Estatísticas mockadas
+    // Estatisticas mockadas
     const estatisticas = {
         vendasMes: 15420.5,
         vendasSemana: 3250.75,
@@ -24,16 +24,16 @@ const LojistaHomePanel = () => {
         metaAtingida: 85,
     };
 
-    // Módulos do sistema (ROTAS CORRIGIDAS)
+    // Modulos do sistema (ROTAS CORRIGIDAS)
     const modules = [
         {
             id: "filiais",
-            title: "🏪 Filiais",
-            description: "Gerencie suas lojas físicas e virtuais",
+            title: " Filiais",
+            description: "Gerencie suas lojas fisicas e virtuais",
             color: "#007bff",
             features: [
                 "Cadastrar filiais",
-                "Definir responsáveis",
+                "Definir responsaveis",
                 "Limites por plano",
             ],
             estatistica: "3 filiais ativas",
@@ -41,131 +41,131 @@ const LojistaHomePanel = () => {
         },
         {
             id: "produtos",
-            title: "📦 Produtos",
-            description: "Cadastro e gestão de produtos",
+            title: " Produtos",
+            description: "Cadastro e gestao de produtos",
             color: "#28a745",
-            features: ["Categorias", "Estoque", "Preços", "Comissões"],
+            features: ["Categorias", "Estoque", "Precos", "Comissoes"],
             estatistica: "128 produtos ativos",
             rota: "/lojista/dashboard/produtos", // CORRIGIDO
         },
         {
             id: "qrcode",
-            title: "🔳 QR Codes",
-            description: "Gerar códigos para consultores",
+            title: " QR Codes",
+            description: "Gerar codigos para consultores",
             color: "#6f42c1",
-            features: ["QR por seção", "Rastreamento", "Relatórios"],
+            features: ["QR por secao", "Rastreamento", "Relatorios"],
             estatistica: "15 QR Codes gerados",
             rota: "/lojista/dashboard/qrcode", // CORRIGIDO
         },
         {
             id: "usuarios",
-            title: "👥 Usuários",
+            title: " Usuarios",
             description: "Controle de acesso da equipe",
             color: "#fd7e14",
-            features: ["Permissões", "Visualizadores", "Gerentes"],
-            estatistica: "8 usuários ativos",
+            features: ["Permissoes", "Visualizadores", "Gerentes"],
+            estatistica: "8 usuarios ativos",
             rota: "/lojista/dashboard/usuarios", // CORRIGIDO
         },
         {
             id: "vendedores",
-            title: "💼 Vendedores",
-            description: "Sua equipe de vendas própria",
+            title: " Vendedores",
+            description: "Sua equipe de vendas propria",
             color: "#e83e8c",
-            features: ["Cadastro", "Matrículas", "Dashboard simples"],
+            features: ["Cadastro", "Matriculas", "Dashboard simples"],
             estatistica: "5 vendedores ativos",
             rota: "/lojista/dashboard/vendedores", // CORRIGIDO
         },
         {
             id: "relatorios",
-            title: "📊 Relatórios",
-            description: "Relatórios e análises de performance",
+            title: " Relatorios",
+            description: "Relatorios e analises de performance",
             color: "#20c997",
-            features: ["Vendas", "Comissões", "Performance", "Metas"],
-            estatistica: "12 relatórios disponíveis",
+            features: ["Vendas", "Comissoes", "Performance", "Metas"],
+            estatistica: "12 relatorios disponiveis",
             rota: "/lojista/dashboard/relatorios", // CORRIGIDO
         },
         {
             id: "pagamentos",
-            title: "💳 Pagamentos",
-            description: "Gestão de faturas, boletos e dados de pagamento",
+            title: " Pagamentos",
+            description: "Gestao de faturas, boletos e dados de pagamento",
             color: "#17a2b8",
             features: [
                 "Faturas e notas fiscais",
-                "Boletos bancários",
-                "Cartões criptografados",
-                "Histórico de pagamentos"
+                "Boletos bancarios",
+                "Cartoes criptografados",
+                "Historico de pagamentos"
             ],
-            estatistica: "Próxima fatura: 15/03/2024",
+            estatistica: "Proxima fatura: 15/03/2024",
             rota: "/lojista/dashboard/pagamentos", // CORRIGIDO
         },
     ];
 
-    // Alertas e notificações
+    // Alertas e notificacoes
     const alertas = [
         {
             id: 1,
             tipo: "estoque",
             mensagem: "5 produtos com estoque baixo",
             cor: "#ffc107",
-            icone: "⚠️",
+            icone: " ",
         },
         {
             id: 2,
             tipo: "vendas",
             mensagem: "Meta da semana atingida em 85%",
             cor: "#28a745",
-            icone: "🎯",
+            icone: "",
         },
         {
             id: 3,
             tipo: "comissao",
-            mensagem: "R$ 2.850,30 em comissões pagas este mês",
+            mensagem: "R$ 2.850,30 em comissoes pagas este mas",
             cor: "#17a2b8",
-            icone: "💰",
+            icone: "",
         },
     ];
 
     return (
         <div style={styles.container}>
-            {/* Header com informações do lojista */}
+            {/* Header com informacoes do lojista */}
             <div style={styles.header}>
                 <div style={styles.welcomeSection}>
-                    <h1 style={styles.title}>Bem-vindo, {lojistaInfo.nome}! 👋</h1>
+                    <h1 style={styles.title}>Bem-vindo, {lojistaInfo.nome}! </h1>
                     <p style={styles.subtitle}>
-                        {lojistaInfo.empresa} • Plano {lojistaInfo.plano}
+                        {lojistaInfo.empresa} * Plano {lojistaInfo.plano}
                     </p>
                     <div style={styles.statusBar}>
                         <Link to="/lojista/dashboard/pagamentos" style={{textDecoration: 'none'}}>
                             <div style={styles.statusAtivoClicavel}>
-                                ✅ Conta Ativa
+                                 Conta Ativa
                             </div>
                         </Link>
                         <Link to="/lojista/dashboard/pagamentos" style={{textDecoration: 'none'}}>
                             <div style={styles.vencimentoClicavel}>
-                                📅 Vencimento: {lojistaInfo.vencimento}
+                                 Vencimento: {lojistaInfo.vencimento}
                             </div>
                         </Link>
                     </div>
                 </div>
                 <div style={styles.quickStats}>
                     <div style={styles.statItem}>
-                        <div style={styles.statIcon}>💰</div>
+                        <div style={styles.statIcon}></div>
                         <div>
                             <div style={styles.statValue}>
                                 R$ {estatisticas.vendasMes.toLocaleString("pt-BR")}
                             </div>
-                            <div style={styles.statLabel}>Vendas do Mês</div>
+                            <div style={styles.statLabel}>Vendas do Mas</div>
                         </div>
                     </div>
                     <div style={styles.statItem}>
-                        <div style={styles.statIcon}>👥</div>
+                        <div style={styles.statIcon}></div>
                         <div>
                             <div style={styles.statValue}>{estatisticas.clientesNovos}</div>
                             <div style={styles.statLabel}>Novos Clientes</div>
                         </div>
                     </div>
                     <div style={styles.statItem}>
-                        <div style={styles.statIcon}>📦</div>
+                        <div style={styles.statIcon}></div>
                         <div>
                             <div style={styles.statValue}>{estatisticas.produtosAtivos}</div>
                             <div style={styles.statLabel}>Produtos Ativos</div>
@@ -176,7 +176,7 @@ const LojistaHomePanel = () => {
 
             {/* Alertas */}
             <div style={styles.alertasSection}>
-                <h2 style={styles.sectionTitle}>📢 Alertas e Notificações</h2>
+                <h2 style={styles.sectionTitle}> Alertas e Notificacoes</h2>
                 <div style={styles.alertasGrid}>
                     {alertas.map((alerta) => (
                         <div
@@ -195,9 +195,9 @@ const LojistaHomePanel = () => {
                 </div>
             </div>
 
-            {/* Módulos do Sistema */}
+            {/* Modulos do Sistema */}
             <div style={styles.modulesSection}>
-                <h2 style={styles.sectionTitle}>🎯 Módulos do Sistema</h2>
+                <h2 style={styles.sectionTitle}> Modulos do Sistema</h2>
                 <div style={styles.modulesGrid}>
                     {modules.map((module) => (
                         <div
@@ -207,7 +207,7 @@ const LojistaHomePanel = () => {
                                 borderLeft: `4px solid ${module.color}`,
                                 background: `linear-gradient(135deg, ${module.color}10, ${module.color}05)`,
                             }}
-                            // AQUI É USADA A ROTA ABSOLUTA CORRETA
+                            // AQUI ‰ USADA A ROTA ABSOLUTA CORRETA
                             onClick={() => navigate(module.rota)} 
                         >
                             <div style={styles.moduleHeader}>
@@ -222,7 +222,7 @@ const LojistaHomePanel = () => {
                             <ul style={styles.featuresList}>
                                 {module.features.map((feature, index) => (
                                     <li key={index} style={styles.feature}>
-                                        • {feature}
+                                        * {feature}
                                     </li>
                                 ))}
                             </ul>
@@ -233,17 +233,17 @@ const LojistaHomePanel = () => {
                                     backgroundColor: module.color,
                                 }}
                             >
-                                Acessar Módulo →
+                                Acessar Modulo &#8592;’
                             </button>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Performance Rápida */}
+            {/* Performance Rapida */}
             <div style={styles.performanceSection}>
                 <div style={styles.performanceCard}>
-                    <h3 style={styles.performanceTitle}>🎯 Performance do Mês</h3>
+                    <h3 style={styles.performanceTitle}> Performance do Mas</h3>
                     <div style={styles.performanceContent}>
                         <div style={styles.metaProgress}>
                             <div style={styles.metaHeader}>
@@ -274,7 +274,7 @@ const LojistaHomePanel = () => {
 
                         <div style={styles.comissaoInfo}>
                             <div style={styles.comissaoItem}>
-                                <span style={styles.comissaoLabel}>Comissões Pagas:</span>
+                                <span style={styles.comissaoLabel}>Comissoes Pagas:</span>
                                 <span style={styles.comissaoValue}>
                                     R$ {estatisticas.comissaoPaga.toLocaleString("pt-BR")}
                                 </span>
@@ -290,37 +290,37 @@ const LojistaHomePanel = () => {
                 </div>
 
                 <div style={styles.quickActions}>
-                    <h3 style={styles.quickActionsTitle}>⚡ Ações Rápidas</h3>
+                    <h3 style={styles.quickActionsTitle}>a Acoes Rapidas</h3>
                     <div style={styles.actionsGrid}>
                         <button
                             style={styles.quickActionButton}
                             onClick={() => navigate("/lojista/dashboard/pagamentos")} // CORRIGIDO
                         >
-                            💳 Gerenciar Pagamentos
+                             Gerenciar Pagamentos
                         </button>
                         <button
                             style={styles.quickActionButton}
                             onClick={() => navigate("/lojista/dashboard/produtos")} // CORRIGIDO
                         >
-                            ➕ Adicionar Produto
+                            O Adicionar Produto
                         </button>
                         <button
                             style={styles.quickActionButton}
                             onClick={() => navigate("/lojista/dashboard/qrcode")} // CORRIGIDO
                         >
-                            🔳 Gerar QR Code
+                             Gerar QR Code
                         </button>
                         <button
                             style={styles.quickActionButton}
                             onClick={() => navigate("/lojista/dashboard/vendedores")} // CORRIGIDO
                         >
-                            💼 Cadastrar Vendedor
+                             Cadastrar Vendedor
                         </button>
                         <button
                             style={styles.quickActionButton}
                             onClick={() => navigate("/lojista/dashboard/relatorios")} // CORRIGIDO
                         >
-                            📊 Ver Relatórios
+                             Ver Relatorios
                         </button>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 /**
- * Hook para verificar limites do plano antes de executar ações
+ * Hook para verificar limites do plano antes de executar acoes
  */
 export function usePlanLimits(lojistaId) {
     const [planInfo, setPlanInfo] = useState(null);
@@ -30,7 +30,7 @@ export function usePlanLimits(lojistaId) {
     };
 
     /**
-     * Verifica se uma ação pode ser executada
+     * Verifica se uma acao pode ser executada
      */
     const canPerformAction = async (action, data = {}) => {
         try {
@@ -59,12 +59,12 @@ export function usePlanLimits(lojistaId) {
                     addon: error.response.data.addon
                 };
             }
-            return { allowed: false, error: 'Erro ao verificar permissões' };
+            return { allowed: false, error: 'Erro ao verificar permissoes' };
         }
     };
 
     /**
-     * Retorna limites atuais vs máximos
+     * Retorna limites atuais vs maximos
      */
     const getLimits = () => {
         if (!planInfo) return null;
@@ -94,7 +94,7 @@ export function usePlanLimits(lojistaId) {
             },
             chamadasVideo: {
                 usado: uso.chamadas_video_mes || 0,
-                maximo: plano.chamadas_video_mes === 999999 ? '∞' : plano.chamadas_video_mes,
+                maximo: plano.chamadas_video_mes === 999999 ? 'ˆ' : plano.chamadas_video_mes,
                 percentual: plano.chamadas_video_mes === 999999 ? 0 : ((uso.chamadas_video_mes || 0) / plano.chamadas_video_mes) * 100
             }
         };

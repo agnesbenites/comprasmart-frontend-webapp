@@ -20,7 +20,7 @@ const NotificationBell = () => {
 
   const handleNotificationClick = (notification) => {
     markAsRead(notification.id);
-    // Aqui você pode adicionar navegação para a página específica
+    // Aqui voca pode adicionar navegacao para a pagina especifica
     setIsOpen(false);
   };
 
@@ -30,21 +30,21 @@ const NotificationBell = () => {
     const diffInHours = (now - time) / (1000 * 60 * 60);
     
     if (diffInHours < 1) return 'Agora mesmo';
-    if (diffInHours < 24) return `${Math.floor(diffInHours)}h atrás`;
-    return `${Math.floor(diffInHours / 24)}d atrás`;
+    if (diffInHours < 24) return `${Math.floor(diffInHours)}h atras`;
+    return `${Math.floor(diffInHours / 24)}d atras`;
   };
 
   const getIconByType = (tipo) => {
     const icons = {
-      info: '🔵',
-      success: '🟢',
-      warning: '🟡',
-      error: '🔴',
-      payment: '💰',
-      user: '👤',
-      system: '⚙️'
+      info: '',
+      success: '',
+      warning: '',
+      error: '',
+      payment: '',
+      user: '',
+      system: ''
     };
-    return icons[tipo] || '🔔';
+    return icons[tipo] || '';
   };
 
   return (
@@ -54,7 +54,7 @@ const NotificationBell = () => {
         style={styles.bellContainer}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span style={styles.bellIcon}>🔔</span>
+        <span style={styles.bellIcon}></span>
         {unreadCount > 0 && (
           <span style={styles.badge}>
             {unreadCount > 9 ? '9+' : unreadCount}
@@ -62,11 +62,11 @@ const NotificationBell = () => {
         )}
       </div>
 
-      {/* Dropdown de Notificações */}
+      {/* Dropdown de Notificacoes */}
       {isOpen && (
         <div style={styles.dropdown}>
           <div style={styles.dropdownHeader}>
-            <h3 style={styles.dropdownTitle}>Notificações</h3>
+            <h3 style={styles.dropdownTitle}>Notificacoes</h3>
             {unreadCount > 0 && (
               <button 
                 onClick={markAllAsRead}
@@ -80,8 +80,8 @@ const NotificationBell = () => {
           <div style={styles.notificationsList}>
             {notifications.length === 0 ? (
               <div style={styles.emptyState}>
-                <span style={styles.emptyIcon}>📭</span>
-                <p>Nenhuma notificação</p>
+                <span style={styles.emptyIcon}></span>
+                <p>Nenhuma notificacao</p>
               </div>
             ) : (
               notifications.slice(0, 10).map(notification => (
@@ -112,7 +112,7 @@ const NotificationBell = () => {
           {notifications.length > 0 && (
             <div style={styles.dropdownFooter}>
               <button style={styles.viewAllButton}>
-                Ver todas as notificações
+                Ver todas as notificacoes
               </button>
             </div>
           )}

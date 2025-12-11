@@ -73,7 +73,7 @@ const TrainingManagementPanel = () => {
         }
       });
 
-      if (!response.ok) throw new Error('Erro ao carregar estatísticas');
+      if (!response.ok) throw new Error('Erro ao carregar estatisticas');
 
       const data = await response.json();
       setStats(data.stats);
@@ -134,7 +134,7 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao salvar treinamento');
 
-      alert(editingTreinamento ? '✅ Treinamento atualizado!' : '✅ Treinamento criado!');
+      alert(editingTreinamento ? ' Treinamento atualizado!' : ' Treinamento criado!');
       
       setShowModal(false);
       resetForm();
@@ -143,7 +143,7 @@ const TrainingManagementPanel = () => {
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao salvar treinamento');
+      alert(' Erro ao salvar treinamento');
     }
   };
 
@@ -176,13 +176,13 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao excluir');
 
-      alert('✅ Treinamento excluído!');
+      alert(' Treinamento excluido!');
       carregarTreinamentos();
       carregarEstatisticas();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao excluir treinamento');
+      alert(' Erro ao excluir treinamento');
     }
   };
 
@@ -199,12 +199,12 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao alterar status');
 
-      alert(`✅ Treinamento ${!currentStatus ? 'ativado' : 'desativado'}!`);
+      alert(` Treinamento ${!currentStatus ? 'ativado' : 'desativado'}!`);
       carregarTreinamentos();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao alterar status');
+      alert(' Erro ao alterar status');
     }
   };
 
@@ -266,7 +266,7 @@ const TrainingManagementPanel = () => {
       {/* HEADER */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>📚 Gerenciar Treinamentos</h2>
+          <h2 style={styles.title}> Gerenciar Treinamentos</h2>
           <p style={styles.subtitle}>Crie e gerencie treinamentos para seus consultores</p>
         </div>
         <button onClick={() => setShowModal(true)} style={styles.addButton}>
@@ -274,10 +274,10 @@ const TrainingManagementPanel = () => {
         </button>
       </div>
 
-      {/* ESTATÍSTICAS */}
+      {/* ESTATSTICAS */}
       <div style={styles.statsGrid}>
         <div style={styles.statCard}>
-          <div style={styles.statIcon}>📚</div>
+          <div style={styles.statIcon}></div>
           <div>
             <p style={styles.statLabel}>Total de Treinamentos</p>
             <p style={styles.statValue}>{stats.total}</p>
@@ -285,7 +285,7 @@ const TrainingManagementPanel = () => {
         </div>
 
         <div style={styles.statCard}>
-          <div style={styles.statIcon}>✅</div>
+          <div style={styles.statIcon}></div>
           <div>
             <p style={styles.statLabel}>Treinamentos Ativos</p>
             <p style={styles.statValue}>{stats.ativos}</p>
@@ -293,7 +293,7 @@ const TrainingManagementPanel = () => {
         </div>
 
         <div style={styles.statCard}>
-          <div style={styles.statIcon}>👥</div>
+          <div style={styles.statIcon}></div>
           <div>
             <p style={styles.statLabel}>Consultores Inscritos</p>
             <p style={styles.statValue}>{stats.consultoresInscritos}</p>
@@ -306,20 +306,20 @@ const TrainingManagementPanel = () => {
         <table style={styles.table}>
           <thead>
             <tr style={styles.tableHeader}>
-              <th style={styles.th}>Título</th>
+              <th style={styles.th}>Titulo</th>
               <th style={styles.th}>Segmento</th>
-              <th style={styles.th}>Nível</th>
-              <th style={styles.th}>Duração</th>
+              <th style={styles.th}>Nivel</th>
+              <th style={styles.th}>Duracao</th>
               <th style={styles.th}>Status</th>
-              <th style={styles.th}>Obrigatório</th>
-              <th style={styles.th}>Ações</th>
+              <th style={styles.th}>Obrigatorio</th>
+              <th style={styles.th}>Acoes</th>
             </tr>
           </thead>
           <tbody>
             {treinamentos.length === 0 ? (
               <tr>
                 <td colSpan="7" style={styles.emptyState}>
-                  Nenhum treinamento cadastrado. Clique em "Novo Treinamento" para começar.
+                  Nenhum treinamento cadastrado. Clique em "Novo Treinamento" para comecar.
                 </td>
               </tr>
             ) : (
@@ -343,11 +343,11 @@ const TrainingManagementPanel = () => {
                       onClick={() => handleToggleStatus(treinamento.id, treinamento.ativo)}
                       style={treinamento.ativo ? styles.badgeActive : styles.badgeInactive}
                     >
-                      {treinamento.ativo ? '✅ Ativo' : '⏸️ Inativo'}
+                      {treinamento.ativo ? ' Ativo' : ' Inativo'}
                     </button>
                   </td>
                   <td style={styles.td}>
-                    {treinamento.obrigatorio ? '⚠️ Sim' : 'Não'}
+                    {treinamento.obrigatorio ? '  Sim' : 'Nao'}
                   </td>
                   <td style={styles.td}>
                     <div style={styles.actions}>
@@ -366,43 +366,43 @@ const TrainingManagementPanel = () => {
         </table>
       </div>
 
-      {/* MODAL DE CRIAÇÃO/EDIÇÃO */}
+      {/* MODAL DE CRIACAO/EDICAO */}
       {showModal && (
         <div style={styles.modalOverlay} onClick={() => setShowModal(false)}>
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div style={styles.modalHeader}>
               <h3 style={styles.modalTitle}>
-                {editingTreinamento ? '✏️ Editar Treinamento' : '➕ Novo Treinamento'}
+                {editingTreinamento ? ' Editar Treinamento' : 'O Novo Treinamento'}
               </h3>
-              <button onClick={() => { setShowModal(false); resetForm(); }} style={styles.closeButton}>✕</button>
+              <button onClick={() => { setShowModal(false); resetForm(); }} style={styles.closeButton}>O</button>
             </div>
 
             <form onSubmit={handleSubmit} style={styles.form}>
-              {/* INFORMAÇÕES BÁSICAS */}
+              {/* INFORMACOES BSICAS */}
               <div style={styles.formSection}>
-                <h4 style={styles.formSectionTitle}>📝 Informações Básicas</h4>
+                <h4 style={styles.formSectionTitle}> Informacoes Basicas</h4>
                 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Título *</label>
+                  <label style={styles.label}>Titulo *</label>
                   <input
                     type="text"
                     value={formData.titulo}
                     onChange={(e) => setFormData({...formData, titulo: e.target.value})}
                     style={styles.input}
                     required
-                    placeholder="Ex: Treinamento de Eletrônicos - Smartphones"
+                    placeholder="Ex: Treinamento de Eletr´nicos - Smartphones"
                   />
                 </div>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Descrição *</label>
+                  <label style={styles.label}>Descricao *</label>
                   <textarea
                     value={formData.descricao}
                     onChange={(e) => setFormData({...formData, descricao: e.target.value})}
                     style={styles.textarea}
                     required
                     rows={3}
-                    placeholder="Descreva o conteúdo e objetivos do treinamento..."
+                    placeholder="Descreva o conteudo e objetivos do treinamento..."
                   />
                 </div>
 
@@ -421,26 +421,26 @@ const TrainingManagementPanel = () => {
                       ))}
                     </select>
                     <small style={{ fontSize: '12px', color: '#666', display: 'block', marginTop: '5px' }}>
-                      Apenas consultores deste segmento verão este treinamento
+                      Apenas consultores deste segmento verao este treinamento
                     </small>
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Nível *</label>
+                    <label style={styles.label}>Nivel *</label>
                     <select
                       value={formData.nivel}
                       onChange={(e) => setFormData({...formData, nivel: e.target.value})}
                       style={styles.select}
                       required
                     >
-                      <option value="basico">Básico</option>
-                      <option value="intermediario">Intermediário</option>
-                      <option value="avancado">Avançado</option>
+                      <option value="basico">Basico</option>
+                      <option value="intermediario">Intermediario</option>
+                      <option value="avancado">Avancado</option>
                     </select>
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Duração (min) *</label>
+                    <label style={styles.label}>Duracao (min) *</label>
                     <input
                       type="number"
                       value={formData.duracao_estimada}
@@ -461,7 +461,7 @@ const TrainingManagementPanel = () => {
                       onChange={(e) => setFormData({...formData, obrigatorio: e.target.checked})}
                       style={styles.checkbox}
                     />
-                    ⚠️ Treinamento Obrigatório
+                      Treinamento Obrigatorio
                   </label>
 
                   <label style={styles.checkboxLabel}>
@@ -471,54 +471,54 @@ const TrainingManagementPanel = () => {
                       onChange={(e) => setFormData({...formData, ativo: e.target.checked})}
                       style={styles.checkbox}
                     />
-                    ✅ Ativar Imediatamente
+                     Ativar Imediatamente
                   </label>
                 </div>
               </div>
 
-              {/* MÓDULOS */}
+              {/* M“DULOS */}
               <div style={styles.formSection}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
-                  <h4 style={styles.formSectionTitle}>📖 Módulos do Treinamento</h4>
+                  <h4 style={styles.formSectionTitle}> Modulos do Treinamento</h4>
                   <button type="button" onClick={handleAddModulo} style={styles.addModuloButton}>
-                    <FaPlus /> Adicionar Módulo
+                    <FaPlus /> Adicionar Modulo
                   </button>
                 </div>
 
                 {formData.conteudo.modulos.map((modulo, index) => (
                   <div key={index} style={styles.moduloCard}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                      <strong>Módulo {index + 1}</strong>
+                      <strong>Modulo {index + 1}</strong>
                       <button type="button" onClick={() => handleRemoveModulo(index)} style={styles.removeModuloButton}>
                         <FaTrash /> Remover
                       </button>
                     </div>
 
                     <div style={styles.formGroup}>
-                      <label style={styles.labelSmall}>Título do Módulo</label>
+                      <label style={styles.labelSmall}>Titulo do Modulo</label>
                       <input
                         type="text"
                         value={modulo.titulo}
                         onChange={(e) => handleModuloChange(index, 'titulo', e.target.value)}
                         style={styles.inputSmall}
-                        placeholder="Ex: Introdução aos Smartphones"
+                        placeholder="Ex: Introducao aos Smartphones"
                       />
                     </div>
 
                     <div style={styles.formGroup}>
-                      <label style={styles.labelSmall}>Descrição</label>
+                      <label style={styles.labelSmall}>Descricao</label>
                       <textarea
                         value={modulo.descricao}
                         onChange={(e) => handleModuloChange(index, 'descricao', e.target.value)}
                         style={styles.textareaSmall}
                         rows={2}
-                        placeholder="Breve descrição do conteúdo..."
+                        placeholder="Breve descricao do conteudo..."
                       />
                     </div>
 
                     <div style={styles.formRow}>
                       <div style={styles.formGroup}>
-                        <label style={styles.labelSmall}>URL do Vídeo (opcional)</label>
+                        <label style={styles.labelSmall}>URL do Video (opcional)</label>
                         <input
                           type="url"
                           value={modulo.video_url}
@@ -529,7 +529,7 @@ const TrainingManagementPanel = () => {
                       </div>
 
                       <div style={styles.formGroup}>
-                        <label style={styles.labelSmall}>Duração (min)</label>
+                        <label style={styles.labelSmall}>Duracao (min)</label>
                         <input
                           type="number"
                           value={modulo.duracao}
@@ -544,18 +544,18 @@ const TrainingManagementPanel = () => {
 
                 {formData.conteudo.modulos.length === 0 && (
                   <p style={{ textAlign: 'center', color: '#666', fontSize: 14 }}>
-                    Nenhum módulo adicionado. Clique em "Adicionar Módulo" para começar.
+                    Nenhum modulo adicionado. Clique em "Adicionar Modulo" para comecar.
                   </p>
                 )}
               </div>
 
-              {/* BOTÕES */}
+              {/* BOTOES */}
               <div style={styles.modalFooter}>
                 <button type="button" onClick={() => { setShowModal(false); resetForm(); }} style={styles.cancelButton}>
                   Cancelar
                 </button>
                 <button type="submit" style={styles.submitButton}>
-                  {editingTreinamento ? '💾 Salvar Alterações' : '✅ Criar Treinamento'}
+                  {editingTreinamento ? ' Salvar Alteracoes' : ' Criar Treinamento'}
                 </button>
               </div>
             </form>
@@ -569,14 +569,14 @@ const TrainingManagementPanel = () => {
 // ======= HELPERS =======
 const getSegmentoLabel = (segmentoId) => {
   const segmento = mockSegmentos.find(s => s.id === segmentoId);
-  return segmento ? segmento.nome : 'Não definido';
+  return segmento ? segmento.nome : 'Nao definido';
 };
 
 const getNivelLabel = (nivel) => {
   const labels = {
-    basico: 'Básico',
-    intermediario: 'Intermediário',
-    avancado: 'Avançado'
+    basico: 'Basico',
+    intermediario: 'Intermediario',
+    avancado: 'Avancado'
   };
   return labels[nivel] || nivel;
 };
@@ -592,13 +592,13 @@ const getNivelStyle = (nivel) => {
 
 // ======= MOCK DATA =======
 const mockSegmentos = [
-  { id: 'eletronicos', nome: 'Eletrônicos' },
+  { id: 'eletronicos', nome: 'Eletr´nicos' },
   { id: 'smartphones', nome: 'Smartphones' },
-  { id: 'informatica', nome: 'Informática' },
-  { id: 'eletrodomesticos', nome: 'Eletrodomésticos' },
-  { id: 'moveis', nome: 'Móveis' },
-  { id: 'moda', nome: 'Moda e Vestuário' },
-  { id: 'cosmeticos', nome: 'Cosméticos e Beleza' },
+  { id: 'informatica', nome: 'Informatica' },
+  { id: 'eletrodomesticos', nome: 'Eletrodomesticos' },
+  { id: 'moveis', nome: 'Moveis' },
+  { id: 'moda', nome: 'Moda e Vestuario' },
+  { id: 'cosmeticos', nome: 'Cosmeticos e Beleza' },
   { id: 'esportes', nome: 'Esportes e Lazer' },
   { id: 'livros', nome: 'Livros e Papelaria' },
   { id: 'alimentos', nome: 'Alimentos e Bebidas' },
@@ -608,7 +608,7 @@ const mockTreinamentos = [
   {
     id: 1,
     titulo: 'Conhecendo Smartphones Samsung',
-    descricao: 'Aprenda sobre os principais modelos e características da linha Galaxy',
+    descricao: 'Aprenda sobre os principais modelos e caracteristicas da linha Galaxy',
     segmento: 'smartphones',
     categoria: 'produto',
     nivel: 'basico',
@@ -617,9 +617,9 @@ const mockTreinamentos = [
     ativo: true,
     conteudo: {
       modulos: [
-        { titulo: 'Introdução à Samsung', descricao: 'História e posicionamento', video_url: '', duracao: 10 },
+        { titulo: 'Introducao   Samsung', descricao: 'Historia e posicionamento', video_url: '', duracao: 10 },
         { titulo: 'Linha Galaxy S', descricao: 'Modelos premium', video_url: '', duracao: 20 },
-        { titulo: 'Linha Galaxy A', descricao: 'Modelos intermediários', video_url: '', duracao: 15 },
+        { titulo: 'Linha Galaxy A', descricao: 'Modelos intermediarios', video_url: '', duracao: 15 },
       ]
     }
   },
@@ -637,7 +637,7 @@ const mockTreinamentos = [
   },
   {
     id: 3,
-    titulo: 'Técnicas Avançadas - TVs 4K e 8K',
+    titulo: 'Tecnicas Avancadas - TVs 4K e 8K',
     descricao: 'Entenda as tecnologias e diferenciais das Smart TVs',
     segmento: 'eletronicos',
     categoria: 'produto',

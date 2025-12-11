@@ -1,11 +1,11 @@
 // app-frontend/src/hooks/useBlockedCheck.js
 
-import { useAuth0 } from '@auth0/auth0-react';
+// REMOVIDO: Supabase migrado para Supabase
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export const useBlockedCheck = () => {
-  const { user, isAuthenticated } = useAuth0();
+  const { user, isAuthenticated } = useAuth();
   const [isBlocked, setIsBlocked] = useState(false);
   const [loading, setLoading] = useState(true);
   
@@ -31,3 +31,4 @@ export const useBlockedCheck = () => {
   
   return { isBlocked, loading };
 };
+

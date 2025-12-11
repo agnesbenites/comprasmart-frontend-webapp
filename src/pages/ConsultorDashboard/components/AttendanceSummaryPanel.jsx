@@ -12,11 +12,11 @@ const AttendanceSummaryPanel = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Dados passados do ChatPanel (opcional, mas útil)
+  // Dados passados do ChatPanel (opcional, mas util)
   const { saleStatus, cart, clienteData } = location.state || {};
 
   useEffect(() => {
-    // Busca dados detalhados da venda se o ID for válido e for um sucesso
+    // Busca dados detalhados da venda se o ID for valido e for um sucesso
     if (vendaId && vendaId !== 'novo' && saleStatus === 'success') {
       const fetchSaleDetails = async () => {
         try {
@@ -28,19 +28,19 @@ const AttendanceSummaryPanel = () => {
           setResumoData(data);
         } catch (err) {
           console.error(err);
-          setError('Não foi possível carregar os detalhes da venda.');
+          setError('Nao foi possivel carregar os detalhes da venda.');
         } finally {
           setLoading(false);
         }
       };
       fetchSaleDetails();
     } else {
-        // Se não houve venda ou a venda falhou, mostra os dados do atendimento
+        // Se nao houve venda ou a venda falhou, mostra os dados do atendimento
         setLoading(false);
         setResumoData({
             cliente: clienteData,
             statusVenda: saleStatus,
-            mensagem: saleStatus === 'success' ? `Venda ${vendaId} concluída.` : 'Atendimento encerrado sem venda.',
+            mensagem: saleStatus === 'success' ? `Venda ${vendaId} concluida.` : 'Atendimento encerrado sem venda.',
             carrinho: cart,
             // Adicionar mais dados do atendimento (tempo, motivo de encerramento, etc.)
         });
@@ -49,7 +49,7 @@ const AttendanceSummaryPanel = () => {
 
 
   const handleFinalizeAttendance = () => {
-    // 1. Lógica para encerrar o atendimento no servidor (limpar a fila, etc.)
+    // 1. Logica para encerrar o atendimento no servidor (limpar a fila, etc.)
     // Ex: await api.post('/api/atendimento/encerrar', { clienteId: clienteData.id });
 
     // 2. Redirecionar para a Home ou Fila de Atendimento
@@ -68,13 +68,13 @@ const AttendanceSummaryPanel = () => {
       </div>
 
       <div className={`sale-status-box ${resumoData?.statusVenda}`}>
-        <h3>Status da Venda: {resumoData?.statusVenda === 'success' ? 'Venda Concluída' : 'Venda Não Concluída'}</h3>
+        <h3>Status da Venda: {resumoData?.statusVenda === 'success' ? 'Venda Concluida' : 'Venda Nao Concluida'}</h3>
         {resumoData?.statusVenda === 'stock_error' && (
-             <p className="warning">A venda falhou devido a esgotamento de estoque no último momento.</p>
+             <p className="warning">A venda falhou devido a esgotamento de estoque no ultimo momento.</p>
         )}
       </div>
 
-      {/* Detalhes do atendimento e outras informações */}
+      {/* Detalhes do atendimento e outras informacoes */}
       {/* ... */}
       
       <button 

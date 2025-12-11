@@ -17,6 +17,6 @@ export const loginConsultor = async (email, password) => {
     } catch (error) {
         throw error.response 
               ? error.response.data 
-              : new Error('Erro de rede ou conexão com o servidor.');
+              : new Error('Erro de rede ou conexao com o servidor.');
     }
 };
