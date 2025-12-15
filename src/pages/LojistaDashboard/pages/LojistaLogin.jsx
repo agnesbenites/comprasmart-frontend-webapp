@@ -1,12 +1,12 @@
-// src/pages/LojistaDashboard/pages/LojistaLogin.jsx - VERSO CORRIGIDA
+// src/pages/LojistaDashboard/pages/LojistaLogin.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "@contexts/AuthContext";
 
 const LojistaLogin = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated, loading: authLoading } = useAuth();
-  
+
   const [etapa, setEtapa] = useState("cnpj");
   const [cnpj, setCnpj] = useState("");
   const [email, setEmail] = useState("");
@@ -14,10 +14,10 @@ const LojistaLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Se já está autenticado, redireciona
+  // Redireciona se já autenticado
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/lojista/dashboard/pagamentos', { replace: true });
+      navigate('/lojista/dashboard', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
@@ -51,9 +51,9 @@ const LojistaLogin = () => {
 
     try {
       const result = await login(email, password);
-      
+
       if (result.success) {
-        navigate('/lojista/dashboard/pagamentos', { replace: true });
+        navigate('/lojista/dashboard', { replace: true });
       } else {
         setError(result.error || "Erro ao fazer login");
       }
@@ -139,7 +139,7 @@ const LojistaLogin = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="OOOOOOOO"
+                  placeholder="XXXXX"
                   style={styles.input}
                   required
                   disabled={loading}

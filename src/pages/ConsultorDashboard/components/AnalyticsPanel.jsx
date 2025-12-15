@@ -1,473 +1,414 @@
-// app-frontend/src/pages/ConsultorDashboard/components/AnalyticsPanel_Updated.jsx
+// web-consultor/src/components/AnalyticsPanel.jsx
 
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { supabase } from '../../../supabaseClient';
 
-const PRIMARY_COLOR = "#007bff";
-const SECONDARY_COLOR = "#495057";
-
-const AnalyticsPanel_Updated = () => {
-  const [periodo, setPeriodo] = useState('mes');
-  const [metricas, setMetricas] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    carregarMetricas();
-  }, [periodo]);
-
-  const carregarMetricas = async () => {
-    setLoading(true);
-    try {
-      setTimeout(() => {
-        setMetricas(mockMetricas);
-        setLoading(false);
-      }, 500);
-    } catch (error) {
-      console.error('Erro ao carregar metricas:', error);
-      setLoading(false);
-    }
-  };
-
-  const mockMetricas = {
-    resumo: {
-      vendasHoje: 12,
-      vendasMes: 156,
-      comissaoHoje: 480.00,
-      comissaoMes: 6240.00,
-      ticketMedio: 250.00,
-      taxaConversao: 68,
-      tempoMedioAtendimento: '14 min',
-      avaliacaoMedia: 4.8,
-    },
-    vendasPorDia: [
-      { dia: 'Seg', vendas: 8, comissao: 320 },
-      { dia: 'Ter', vendas: 12, comissao: 480 },
-      { dia: 'Qua', vendas: 15, comissao: 600 },
-      { dia: 'Qui', vendas: 10, comissao: 400 },
-      { dia: 'Sex', vendas: 18, comissao: 720 },
-      { dia: 'Sab', vendas: 22, comissao: 880 },
-      { dia: 'Dom', vendas: 14, comissao: 560 },
-    ],
-    vendasPorCategoria: [
-      { categoria: 'Eletr´nicos', valor: 2400, quantidade: 15 },
-      { categoria: 'Eletrodomesticos', valor: 1800, quantidade: 12 },
-      { categoria: 'Moveis', valor: 1200, quantidade: 8 },
-      { categoria: 'Decoracao', valor: 600, quantidade: 5 },
-    ],
-    top5Produtos: [
-      { 
-        nome: 'Smart TV 55"', 
-        sku: 'TV-SMART-55-001',
-        loja: 'Eletr´nicos Center',
-        vendas: 8, 
-        comissao: 384 
-      },
-      { 
-        nome: 'Geladeira Inverter', 
-        sku: 'GEL-INV-450-002',
-        loja: 'Tech Store',
-        vendas: 6, 
-        comissao: 280 
-      },
-      { 
-        nome: 'Notebook Gamer', 
-        sku: 'NB-GAME-i7-003',
-        loja: 'Eletr´nicos Center',
-        vendas: 5, 
-        comissao: 492 
-      },
-      { 
-        nome: 'Sofa 3 Lugares', 
-        sku: 'SOF-3L-BEG-004',
-        loja: 'Casa & Decoracao',
-        vendas: 4, 
-        comissao: 220 
-      },
-      { 
-        nome: 'Air Fryer', 
-        sku: 'AIR-FRY-5L-005',
-        loja: 'Tech Store',
-        vendas: 12, 
-        comissao: 54 
-      },
-    ],
-  };
-
-  const COLORS = ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d'];
-
-  if (loading) {
-    return (
-      <div style={styles.loadingContainer}>
-        <div style={styles.spinner}></div>
-        <p>Carregando metricas...</p>
-        <style dangerouslySetInnerHTML={{__html: `
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}} />
-      </div>
-    );
-  }
-
-  return (
-    <div style={styles.container}>
-      {/* Header com filtros */}
-      <div style={styles.header}>
-        <h1 style={styles.title}> Analytics & Performance</h1>
-        
-        <div style={styles.periodFilter}>
-          <button
-            onClick={() => setPeriodo('semana')}
-            style={{
-              ...styles.periodButton,
-              ...(periodo === 'semana' ? styles.periodButtonActive : {})
-            }}
-          >
-            Semana
-          </button>
-          <button
-            onClick={() => setPeriodo('mes')}
-            style={{
-              ...styles.periodButton,
-              ...(periodo === 'mes' ? styles.periodButtonActive : {})
-            }}
-          >
-            Mas
-          </button>
-          <button
-            onClick={() => setPeriodo('ano')}
-            style={{
-              ...styles.periodButton,
-              ...(periodo === 'ano' ? styles.periodButtonActive : {})
-            }}
-          >
-            Ano
-          </button>
-        </div>
-      </div>
-
-      {/* Cards de Resumo */}
-      <div style={styles.cardsGrid}>
-        <MetricCard
-          title="Vendas Hoje"
-          value={metricas.resumo.vendasHoje}
-          icon=""
-          color="#007bff"
-        />
-        <MetricCard
-          title="Vendas no Mas"
-          value={metricas.resumo.vendasMes}
-          icon=""
-          color="#28a745"
-        />
-        <MetricCard
-          title="Comissao Hoje"
-          value={`R$ ${metricas.resumo.comissaoHoje.toFixed(2)}`}
-          icon=""
-          color="#ffc107"
-        />
-        <MetricCard
-          title="Comissao no Mas"
-          value={`R$ ${metricas.resumo.comissaoMes.toFixed(2)}`}
-          icon=""
-          color="#28a745"
-        />
-        <MetricCard
-          title="Ticket Medio"
-          value={`R$ ${metricas.resumo.ticketMedio.toFixed(2)}`}
-          icon=""
-          color="#007bff"
-        />
-        <MetricCard
-          title="Taxa de Conversao"
-          value={`${metricas.resumo.taxaConversao}%`}
-          icon=""
-          color="#28a745"
-        />
-        <MetricCard
-          title="Tempo Medio"
-          value={metricas.resumo.tempoMedioAtendimento}
-          icon="±"
-          color="#6c757d"
-        />
-        <MetricCard
-          title="Avaliacao"
-          value={metricas.resumo.avaliacaoMedia}
-          icon="i"
-          color="#ffc107"
-        />
-      </div>
-
-      {/* Graficos */}
-      <div style={styles.chartsGrid}>
-        {/* Grafico de Vendas por Dia */}
-        <div style={styles.chartCard}>
-          <h3 style={styles.chartTitle}>Vendas e Comissoes por Dia</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={metricas.vendasPorDia}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="dia" />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
-              <Tooltip />
-              <Legend />
-              <Line
-                yAxisId="left"
-                type="monotone"
-                dataKey="vendas"
-                stroke="#007bff"
-                strokeWidth={2}
-                name="Vendas"
-              />
-              <Line
-                yAxisId="right"
-                type="monotone"
-                dataKey="comissao"
-                stroke="#28a745"
-                strokeWidth={2}
-                name="Comissao (R$)"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Grafico de Vendas por Categoria */}
-        <div style={styles.chartCard}>
-          <h3 style={styles.chartTitle}>Vendas por Categoria</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={metricas.vendasPorCategoria}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="categoria" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="valor" fill="#007bff" name="Valor (R$)" />
-              <Bar dataKey="quantidade" fill="#28a745" name="Quantidade" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Top 5 Produtos - ATUALIZADO COM SKU E LOJA */}
-      <div style={styles.chartCard}>
-        <h3 style={styles.chartTitle}> Top 5 Produtos Mais Vendidos</h3>
-        <div style={styles.topProductsList}>
-          {metricas.top5Produtos.map((produto, index) => (
-            <div key={index} style={styles.topProductItem}>
-              <div style={styles.topProductRank}>#{index + 1}</div>
-              <div style={styles.topProductInfo}>
-                <span style={styles.topProductName}>{produto.nome}</span>
-                <div style={styles.topProductDetails}>
-                  <span style={styles.topProductSku}>SKU: {produto.sku}</span>
-                  <span style={styles.topProductDivider}>*</span>
-                  <span style={styles.topProductLoja}> {produto.loja}</span>
-                </div>
-                <span style={styles.topProductSales}>{produto.vendas} vendas</span>
-              </div>
-              <div style={styles.topProductComission}>
-                R$ {produto.comissao.toFixed(2)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+const MetricCard = ({ title, value, detail, loading, color }) => (
+    <div style={analyticsStyles.card}>
+        <h4 style={analyticsStyles.cardTitle}>{title}</h4>
+        <p style={{...analyticsStyles.cardValue, color: color || '#364fab'}}>
+            {loading ? '...' : value}
+        </p>
+        {detail && <small style={analyticsStyles.cardDetail}>{detail}</small>}
     </div>
-  );
-};
-
-// Componente de Card de Metrica
-const MetricCard = ({ title, value, icon, color }) => (
-  <div style={styles.metricCard}>
-    <div style={{ ...styles.metricIcon, backgroundColor: color + '20', color: color }}>
-      {icon}
-    </div>
-    <div style={styles.metricContent}>
-      <p style={styles.metricTitle}>{title}</p>
-      <p style={{ ...styles.metricValue, color: color }}>{value}</p>
-    </div>
-  </div>
 );
 
-const styles = {
-  container: {
-    padding: '30px',
-    backgroundColor: '#f8f9fa',
-    minHeight: '100%',
-  },
-  loadingContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '400px',
-  },
-  spinner: {
-    width: '50px',
-    height: '50px',
-    border: '4px solid #f3f3f3',
-    borderTop: '4px solid #007bff',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
-    marginBottom: '20px',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '30px',
-  },
-  title: {
-    margin: 0,
-    fontSize: '2rem',
-    color: SECONDARY_COLOR,
-  },
-  periodFilter: {
-    display: 'flex',
-    gap: '10px',
-  },
-  periodButton: {
-    padding: '10px 20px',
-    border: '1px solid #dee2e6',
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    fontSize: '0.9rem',
-    fontWeight: '500',
-    color: SECONDARY_COLOR,
-    transition: 'all 0.2s',
-  },
-  periodButtonActive: {
-    backgroundColor: PRIMARY_COLOR,
-    color: 'white',
-    borderColor: PRIMARY_COLOR,
-  },
-  cardsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '20px',
-    marginBottom: '30px',
-  },
-  metricCard: {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '12px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '15px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-    border: '1px solid #e9ecef',
-  },
-  metricIcon: {
-    width: '50px',
-    height: '50px',
-    borderRadius: '12px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.5rem',
-  },
-  metricContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '5px',
-  },
-  metricTitle: {
-    margin: 0,
-    fontSize: '0.85rem',
-    color: '#6c757d',
-  },
-  metricValue: {
-    margin: 0,
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-  },
-  chartsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))',
-    gap: '20px',
-    marginBottom: '20px',
-  },
-  chartCard: {
-    backgroundColor: 'white',
-    padding: '25px',
-    borderRadius: '12px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-    border: '1px solid #e9ecef',
-  },
-  chartTitle: {
-    margin: '0 0 20px 0',
-    fontSize: '1.2rem',
-    color: SECONDARY_COLOR,
-    fontWeight: '600',
-  },
-  topProductsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-  },
-  topProductItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '15px',
-    padding: '18px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '10px',
-    border: '1px solid #e9ecef',
-  },
-  topProductRank: {
-    width: '45px',
-    height: '45px',
-    borderRadius: '50%',
-    backgroundColor: PRIMARY_COLOR,
-    color: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 'bold',
-    fontSize: '1.1rem',
-    flexShrink: 0,
-  },
-  topProductInfo: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px',
-  },
-  topProductName: {
-    fontSize: '1.05rem',
-    fontWeight: '600',
-    color: SECONDARY_COLOR,
-  },
-  topProductDetails: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '0.85rem',
-    color: '#6c757d',
-  },
-  topProductSku: {
-    fontFamily: 'monospace',
-    backgroundColor: '#e9ecef',
-    padding: '2px 8px',
-    borderRadius: '4px',
-  },
-  topProductDivider: {
-    color: '#dee2e6',
-  },
-  topProductLoja: {
-    fontStyle: 'italic',
-  },
-  topProductSales: {
-    fontSize: '0.85rem',
-    color: '#6c757d',
-  },
-  topProductComission: {
-    fontSize: '1.15rem',
-    fontWeight: 'bold',
-    color: '#28a745',
-    flexShrink: 0,
-  },
+const AnalyticsPanel = () => {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [productStock, setProductStock] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [consultorId, setConsultorId] = useState(null);
+    
+    const [analytics, setAnalytics] = useState({
+        avgTime: '-- min',
+        dailyCount: 0,
+        commissionValue: 'R$ 0,00',
+        closedSales: 0,
+        qrCodesSent: 0,
+        indicatedConsultants: 0,
+        rating: 0,
+        associatedStores: [],
+        associatedSegments: []
+    });
+
+    useEffect(() => {
+        const carregarDados = async () => {
+            setLoading(true);
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (!user) {
+                    setLoading(false);
+                    return;
+                }
+                
+                setConsultorId(user.id);
+                await carregarMetricas(user.id);
+                
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        carregarDados();
+    }, []);
+
+    const carregarMetricas = async (userId) => {
+        try {
+            const dataInicio = new Date();
+            dataInicio.setDate(dataInicio.getDate() - 30);
+            
+            const { data: vendas } = await supabase
+                .from('vendas')
+                .select('*')
+                .eq('consultor_id', userId)
+                .gte('created_at', dataInicio.toISOString());
+            
+            const hoje = new Date().toISOString().split('T')[0];
+            const { data: atendimentosHoje } = await supabase
+                .from('atendimentos')
+                .select('*')
+                .eq('consultor_id', userId)
+                .gte('created_at', `${hoje}T00:00:00`);
+            
+            const { data: lojas } = await supabase
+                .from('consultor_lojas')
+                .select('loja:lojas_corrigida(nome_fantasia)')
+                .eq('consultor_id', userId)
+                .eq('status', 'aprovado');
+            
+            const { data: segmentos } = await supabase
+                .from('consultor_segmentos')
+                .select('segmento:segmentos(nome)')
+                .eq('consultor_id', userId);
+            
+            const { data: indicacoes } = await supabase
+                .from('indicacoes')
+                .select('*')
+                .eq('indicador_id', userId)
+                .eq('status', 'ativo');
+            
+            const { data: avaliacoes } = await supabase
+                .from('avaliacoes')
+                .select('nota')
+                .eq('consultor_id', userId);
+            
+            const vendasConcluidas = vendas?.filter(v => v.status === 'concluida') || [];
+            const totalComissao = vendasConcluidas.reduce((acc, v) => acc + (parseFloat(v.comissao) || 0), 0);
+            const mediaAvaliacao = avaliacoes?.length > 0 
+                ? (avaliacoes.reduce((acc, a) => acc + a.nota, 0) / avaliacoes.length).toFixed(1)
+                : 0;
+            
+            let tempoMedio = '-- min';
+            if (atendimentosHoje?.length > 0) {
+                const atendimentosComTempo = atendimentosHoje.filter(a => a.duracao_minutos);
+                if (atendimentosComTempo.length > 0) {
+                    const totalMinutos = atendimentosComTempo.reduce((acc, a) => acc + a.duracao_minutos, 0);
+                    tempoMedio = `${Math.round(totalMinutos / atendimentosComTempo.length)} min`;
+                }
+            }
+            
+            setAnalytics({
+                avgTime: tempoMedio,
+                dailyCount: atendimentosHoje?.length || 0,
+                commissionValue: `R$ ${totalComissao.toFixed(2).replace('.', ',')}`,
+                closedSales: vendasConcluidas.length,
+                qrCodesSent: vendas?.length || 0,
+                indicatedConsultants: indicacoes?.length || 0,
+                rating: mediaAvaliacao,
+                associatedStores: lojas?.map(l => l.loja?.nome_fantasia).filter(Boolean) || [],
+                associatedSegments: segmentos?.map(s => s.segmento?.nome).filter(Boolean) || []
+            });
+            
+        } catch (error) {
+            console.error('Erro ao carregar métricas:', error);
+        }
+    };
+
+    const handleSearch = async () => {
+        if (!searchTerm.trim()) {
+            setProductStock('Digite um termo para buscar.');
+            return;
+        }
+        
+        setProductStock('Buscando...');
+        
+        try {
+            const { data, error } = await supabase
+                .from('produtos')
+                .select('nome, estoque, loja:lojas_corrigida(nome_fantasia)')
+                .or(`sku.ilike.%${searchTerm}%,nome.ilike.%${searchTerm}%`)
+                .limit(5);
+            
+            if (error) throw error;
+            
+            if (data && data.length > 0) {
+                const resultados = data.map(p => 
+                    `${p.nome}: ${p.estoque} un.${p.loja ? ` (${p.loja.nome_fantasia})` : ''}`
+                ).join('\n');
+                setProductStock(resultados);
+            } else {
+                setProductStock('Produto não encontrado.');
+            }
+        } catch (error) {
+            setProductStock('Erro ao buscar produto.');
+        }
+    };
+
+    const handleGenerateQR = () => {
+        alert('Para gerar um QR Code, vá até a tela de Atendimento e finalize uma venda.');
+    };
+
+    const handleNominate = async () => {
+        const nome = prompt('Nome do consultor a indicar:');
+        if (!nome) return;
+        
+        const email = prompt('Email do consultor:');
+        if (!email) return;
+        
+        const telefone = prompt('Telefone do consultor:');
+        if (!telefone) return;
+        
+        try {
+            const { error } = await supabase
+                .from('indicacoes')
+                .insert({
+                    indicador_id: consultorId,
+                    nome_indicado: nome,
+                    email_indicado: email,
+                    telefone_indicado: telefone,
+                    status: 'pendente',
+                    created_at: new Date().toISOString()
+                });
+            
+            if (error) throw error;
+            
+            alert('✅ Indicação enviada com sucesso!');
+            setAnalytics(prev => ({
+                ...prev,
+                indicatedConsultants: prev.indicatedConsultants + 1
+            }));
+            
+        } catch (error) {
+            alert('Erro ao enviar indicação.');
+        }
+    };
+
+    return (
+        <div style={analyticsStyles.container}>
+            
+            <h2 style={analyticsStyles.sectionTitle}>📊 Visão Geral e Desempenho</h2>
+            <div style={analyticsStyles.metricsGrid}>
+                <MetricCard title="Atendimentos Hoje" value={analytics.dailyCount} loading={loading} />
+                <MetricCard title="Vendas Fechadas (Mês)" value={analytics.closedSales} loading={loading} />
+                <MetricCard title="Comissão (Mês)" value={analytics.commissionValue} loading={loading} color="#28a745" />
+                <MetricCard title="Avaliação Média" value={analytics.rating > 0 ? `${analytics.rating} ⭐` : 'N/A'} loading={loading} />
+                <MetricCard title="Indicações Ativas" value={analytics.indicatedConsultants} loading={loading} />
+                <MetricCard title="QR Codes Enviados" value={analytics.qrCodesSent} loading={loading} />
+            </div>
+
+            <h3 style={analyticsStyles.sectionSubtitle}>🔧 Ferramentas de Atendimento</h3>
+            
+            <div style={analyticsStyles.toolContainer}>
+                <input 
+                    type="text" 
+                    placeholder="Pesquisar Produto/Estoque (SKU, Nome)" 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    style={analyticsStyles.searchInput} 
+                />
+                <button onClick={handleSearch} style={{...analyticsStyles.toolButton, backgroundColor: '#364fab'}}>
+                    🔍 Buscar Estoque
+                </button>
+            </div>
+            {productStock && (
+                <pre style={analyticsStyles.stockResult}>{productStock}</pre>
+            )}
+
+            <button onClick={handleGenerateQR} style={{...analyticsStyles.toolButtonLarge, backgroundColor: '#28a745'}}>
+                📱 Gerar QR Code (Ir para Atendimento)
+            </button>
+
+            <h3 style={analyticsStyles.sectionSubtitle}>🏪 Minha Afiliação e Indicações</h3>
+
+            <div style={analyticsStyles.infoGrid}>
+                <div style={analyticsStyles.infoCard}>
+                    <h4 style={analyticsStyles.infoTitle}>Lojas Associadas</h4>
+                    <p style={analyticsStyles.infoText}>
+                        {analytics.associatedStores.length > 0 
+                            ? analytics.associatedStores.join(', ')
+                            : 'Nenhuma loja associada'}
+                    </p>
+                </div>
+                <div style={analyticsStyles.infoCard}>
+                    <h4 style={analyticsStyles.infoTitle}>Segmentos</h4>
+                    <p style={analyticsStyles.infoText}>
+                        {analytics.associatedSegments.length > 0 
+                            ? analytics.associatedSegments.join(', ')
+                            : 'Nenhum segmento'}
+                    </p>
+                </div>
+                <div style={analyticsStyles.infoCard}>
+                    <h4 style={analyticsStyles.infoTitle}>Indicar Consultor</h4>
+                    <button onClick={handleNominate} style={analyticsStyles.nominateButton}>
+                        👥 Indicar Nova Pessoa
+                    </button>
+                </div>
+            </div>
+
+            <h3 style={analyticsStyles.sectionSubtitle}>📜 Histórico de Compras Finalizadas</h3>
+            <p style={analyticsStyles.linkText}>
+                Acesse o menu <strong>Histórico</strong> para ver todas as suas vendas.
+            </p>
+        </div>
+    );
 };
 
-export default AnalyticsPanel_Updated;
+const analyticsStyles = {
+    container: {
+        padding: '30px',
+        backgroundColor: '#f8f9fa',
+        overflowY: 'auto',
+        fontFamily: 'Arial, sans-serif',
+        minHeight: '100%',
+    },
+    sectionTitle: {
+        fontSize: '1.5rem',
+        color: '#333',
+        marginBottom: '20px',
+        fontWeight: '600',
+    },
+    sectionSubtitle: {
+        fontSize: '1.2rem',
+        color: '#333',
+        marginTop: '30px',
+        marginBottom: '15px',
+        fontWeight: '600',
+    },
+    metricsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+        gap: '20px',
+        marginBottom: '30px',
+    },
+    card: {
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        textAlign: 'center',
+        transition: 'transform 0.2s',
+    },
+    cardTitle: {
+        fontSize: '14px',
+        color: '#6c757d',
+        margin: '0 0 8px 0',
+        fontWeight: '500',
+    },
+    cardValue: {
+        fontSize: '28px',
+        fontWeight: 'bold',
+        color: '#364fab',
+        margin: 0,
+    },
+    cardDetail: {
+        fontSize: '11px',
+        color: '#888',
+        marginTop: '4px',
+        display: 'block',
+    },
+    toolContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        marginBottom: '15px',
+        gap: '10px',
+    },
+    searchInput: {
+        padding: '12px 16px',
+        borderRadius: '8px',
+        border: '2px solid #e0e0e0',
+        flexGrow: 1,
+        fontSize: '14px',
+        outline: 'none',
+        transition: 'border-color 0.2s',
+    },
+    stockResult: {
+        backgroundColor: '#fff3cd',
+        color: '#856404',
+        padding: '15px',
+        borderRadius: '8px',
+        marginBottom: '20px',
+        border: '1px solid #ffeeba',
+        whiteSpace: 'pre-wrap',
+        fontSize: '14px',
+        fontFamily: 'inherit',
+    },
+    toolButton: {
+        padding: '12px 20px',
+        color: 'white',
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: '600',
+        whiteSpace: 'nowrap',
+    },
+    toolButtonLarge: {
+        width: '100%',
+        padding: '14px',
+        backgroundColor: '#28a745',
+        color: 'white',
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontSize: '16px',
+        fontWeight: '600',
+        marginBottom: '20px',
+    },
+    infoGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '20px',
+        marginBottom: '30px',
+    },
+    infoCard: {
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '12px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+    },
+    infoTitle: {
+        fontSize: '14px',
+        color: '#333',
+        marginBottom: '10px',
+        fontWeight: '600',
+    },
+    infoText: {
+        fontSize: '14px',
+        color: '#666',
+        margin: 0,
+    },
+    nominateButton: {
+        padding: '10px 16px',
+        backgroundColor: '#ffc107',
+        color: '#333',
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: '600',
+        marginTop: '8px',
+    },
+    linkText: {
+        fontSize: '14px',
+        color: '#666',
+        backgroundColor: 'white',
+        padding: '15px',
+        borderRadius: '8px',
+    },
+};
+
+export default AnalyticsPanel;

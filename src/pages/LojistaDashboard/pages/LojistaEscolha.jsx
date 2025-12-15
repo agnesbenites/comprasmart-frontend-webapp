@@ -181,6 +181,38 @@ const BackButton = styled.button`
   }
 `;
 
+const RegisterSection = styled.div`
+  text-align: center;
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #e8f4fd;
+  border-radius: 12px;
+  border: 2px dashed #2c5aa0;
+`;
+
+const RegisterText = styled.p`
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 15px;
+`;
+
+const RegisterButton = styled.button`
+  padding: 15px 40px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #218838;
+    transform: scale(1.02);
+  }
+`;
+
 // ----------------------------------------
 // COMPONENTE PRINCIPAL
 // ----------------------------------------
@@ -199,7 +231,7 @@ const LojistaEscolha = () => {
               alt="Logo Compra Smart"
             />
             <LogoText>Compra Smart</LogoText>
-            <LogoSubtitle>Area do Lojista</LogoSubtitle>
+            <LogoSubtitle>Área do Lojista</LogoSubtitle>
           </LogoWrapper>
         </Header>
 
@@ -216,20 +248,18 @@ const LojistaEscolha = () => {
           <CardsContainer>
             {/* Card Admin/Lojista */}
             <Card onClick={() => navigate("/lojista/login")}>
-              <CardIcon>&#128081;</CardIcon>
+              <CardIcon>👑</CardIcon>
               <CardContent>
                 <CardTitle>Lojista (Admin)</CardTitle>
                 <CardDescription>
-                  Acesso completo ao painel administrativo com gestao de lojas,
-                  vendedores, relatorios e configuracoes do sistema.
+                  Acesso completo ao painel administrativo com gestão de lojas,
+                  vendedores, relatórios e configurações do sistema.
                 </CardDescription>
                 <FeaturesList>
-                  <FeatureListItem>
-                    &#10003; Gestao de multiplas lojas
-                  </FeatureListItem>
-                  <FeatureListItem>&#10003; Cadastro de vendedores</FeatureListItem>
-                  <FeatureListItem>&#10003; Relatorios detalhados</FeatureListItem>
-                  <FeatureListItem>&#10003; Configuracoes do sistema</FeatureListItem>
+                  <FeatureListItem>✓ Gestão de múltiplas lojas</FeatureListItem>
+                  <FeatureListItem>✓ Cadastro de vendedores</FeatureListItem>
+                  <FeatureListItem>✓ Relatórios detalhados</FeatureListItem>
+                  <FeatureListItem>✓ Configurações do sistema</FeatureListItem>
                 </FeaturesList>
               </CardContent>
               <CardAction>
@@ -239,20 +269,18 @@ const LojistaEscolha = () => {
 
             {/* Card Vendedor */}
             <Card onClick={() => navigate("/vendedor/login")}>
-              <CardIcon>&#128188;</CardIcon>
+              <CardIcon>💼</CardIcon>
               <CardContent>
                 <CardTitle>Vendedor</CardTitle>
                 <CardDescription>
                   Acesso ao sistema de vendas com ferramentas para atendimento,
-                  gestao de pedidos e comunicacao integrada.
+                  gestão de pedidos e comunicação integrada.
                 </CardDescription>
                 <FeaturesList>
-                  <FeatureListItem>&#10003; Atendimento ao cliente</FeatureListItem>
-                  <FeatureListItem>
-                    &#10003; Sistema de chamadas/video
-                  </FeatureListItem>
-                  <FeatureListItem>&#10003; Gestao de pedidos</FeatureListItem>
-                  <FeatureListItem>&#10003; Mensagens integradas</FeatureListItem>
+                  <FeatureListItem>✓ Atendimento ao cliente</FeatureListItem>
+                  <FeatureListItem>✓ Sistema de chamadas/vídeo</FeatureListItem>
+                  <FeatureListItem>✓ Gestão de pedidos</FeatureListItem>
+                  <FeatureListItem>✓ Mensagens integradas</FeatureListItem>
                 </FeaturesList>
               </CardContent>
               <CardAction>
@@ -261,10 +289,20 @@ const LojistaEscolha = () => {
             </Card>
           </CardsContainer>
 
+          {/* Seção de Cadastro */}
+          <RegisterSection>
+            <RegisterText>
+              🚀 <strong>Ainda não usa o Compra Smart?</strong> Cadastre sua loja e comece a vender hoje mesmo!
+            </RegisterText>
+            <RegisterButton onClick={() => navigate("/lojista/cadastro")}>
+              📝 Cadastre-se Grátis
+            </RegisterButton>
+          </RegisterSection>
+
           {/* Botao Voltar */}
-          <Footer>
+          <Footer style={{ marginTop: "30px" }}>
             <BackButton onClick={() => navigate("/entrar")}>
-              Voltar para escolha de perfil
+              ← Voltar para escolha de perfil
             </BackButton>
           </Footer>
         </MainContent>

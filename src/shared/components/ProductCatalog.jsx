@@ -2,95 +2,132 @@
 
 import React, { useState, useEffect } from 'react';
 
-const ProductCatalog = ({ lojistaId, onAddToCart }) => {
+const ProductCatalog = ({ lojistaId, onAddToCart, supabase }) => {
   const [produtos, setProdutos] = useState([]);
   const [filtro, setFiltro] = useState('');
   const [categoria, setCategoria] = useState('todos');
   const [loading, setLoading] = useState(true);
 
-  // Produtos mockados (substituir por API real depois)
-  const produtosMock = [
+  // Produtos de demonstração (usados quando não há produtos no banco)
+  const produtosDemo = [
     {
       id: 'prod_001',
       nome: 'Smartphone Galaxy S23',
-      descricao: 'Tela 6.1", 128GB, 8GB RAM, C¢mera 50MP',
+      descricao: 'Tela 6.1", 128GB, 8GB RAM, Câmera 50MP',
       preco: 2500.00,
-      categoria: 'Eletr´nicos',
+      categoria: 'Eletrônicos',
       estoque: 15,
-      imagem: '',
+      imagem: '📱',
     },
     {
       id: 'prod_002',
       nome: 'Notebook Dell Inspiron',
       descricao: 'Intel i5, 8GB RAM, SSD 256GB, Tela 15.6"',
       preco: 3200.00,
-      categoria: 'Informatica',
+      categoria: 'Informática',
       estoque: 8,
-      imagem: '',
+      imagem: '💻',
     },
     {
       id: 'prod_003',
       nome: 'Smart TV Samsung 55"',
       descricao: '4K UHD, HDR, Smart Tizen, 3 HDMI',
       preco: 2800.00,
-      categoria: 'TV e udio',
+      categoria: 'TV e Áudio',
       estoque: 12,
-      imagem: '',
+      imagem: '📺',
     },
     {
       id: 'prod_004',
       nome: 'Geladeira Brastemp Frost Free',
       descricao: 'Duplex, 375L, Inox, Classe A',
       preco: 2900.00,
-      categoria: 'Eletrodomesticos',
+      categoria: 'Eletrodomésticos',
       estoque: 5,
-      imagem: '',
+      imagem: '🧊',
     },
     {
       id: 'prod_005',
-      nome: 'Fogao Consul 5 Bocas',
-      descricao: 'Mesa de vidro, Acendimento automatico',
+      nome: 'Fogão Consul 5 Bocas',
+      descricao: 'Mesa de vidro, Acendimento automático',
       preco: 890.00,
-      categoria: 'Eletrodomesticos',
+      categoria: 'Eletrodomésticos',
       estoque: 10,
-      imagem: '',
+      imagem: '🔥',
     },
     {
       id: 'prod_006',
       nome: 'Micro-ondas Electrolux 30L',
-      descricao: 'Funcao tostex, 10 receitas pre-programadas',
+      descricao: 'Função tostex, 10 receitas pré-programadas',
       preco: 550.00,
-      categoria: 'Eletrodomesticos',
+      categoria: 'Eletrodomésticos',
       estoque: 20,
-      imagem: '',
+      imagem: '🍽️',
     },
     {
       id: 'prod_007',
       nome: 'Fone Bluetooth JBL',
-      descricao: 'Cancelamento de ruido, 20h bateria',
+      descricao: 'Cancelamento de ruído, 20h bateria',
       preco: 299.00,
-      categoria: 'Eletr´nicos',
+      categoria: 'Eletrônicos',
       estoque: 35,
-      imagem: '',
+      imagem: '🎧',
     },
     {
       id: 'prod_008',
       nome: 'Smartwatch Apple Watch SE',
-      descricao: 'GPS, Monitor cardiaco, € prova d\'agua',
+      descricao: 'GPS, Monitor cardíaco, À prova d\'água',
       preco: 2400.00,
       categoria: 'Wearables',
       estoque: 7,
-      imagem: '',
+      imagem: '⌚',
     },
   ];
 
   useEffect(() => {
-    // Simular carregamento
-    setTimeout(() => {
-      setProdutos(produtosMock);
-      setLoading(false);
-    }, 800);
-  }, [lojistaId]);
+    const carregarProdutos = async () => {
+      setLoading(true);
+      
+      try {
+        if (supabase && lojistaId) {
+          // Buscar produtos reais do Supabase
+          const { data, error } = await supabase
+            .from('produtos')
+            .select('*')
+            .eq('loja_id', lojistaId)
+            .eq('ativo', true)
+            .gt('estoque', 0);
+          
+          if (error) throw error;
+          
+          if (data && data.length > 0) {
+            setProdutos(data.map(p => ({
+              id: p.id,
+              nome: p.nome,
+              descricao: p.descricao || '',
+              preco: parseFloat(p.preco),
+              categoria: p.categoria || 'Geral',
+              estoque: p.estoque || 0,
+              imagem: p.imagem_url || '📦',
+            })));
+          } else {
+            // Sem produtos cadastrados - usar demo
+            setProdutos(produtosDemo);
+          }
+        } else {
+          // Sem Supabase ou lojistaId - usar demo
+          setProdutos(produtosDemo);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+        setProdutos(produtosDemo);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    carregarProdutos();
+  }, [lojistaId, supabase]);
 
   const produtosFiltrados = produtos.filter((produto) => {
     const matchFiltro =
@@ -202,6 +239,18 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
       cursor: 'pointer',
       transition: 'background-color 0.2s',
     },
+    addButtonDisabled: {
+      width: '100%',
+      padding: '10px',
+      backgroundColor: '#6c757d',
+      color: 'white',
+      border: 'none',
+      borderRadius: '6px',
+      fontSize: '0.9rem',
+      fontWeight: '600',
+      cursor: 'not-allowed',
+      opacity: 0.6,
+    },
     loading: {
       textAlign: 'center',
       padding: '40px',
@@ -215,13 +264,15 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
   };
 
   const handleAddToCart = (produto) => {
+    if (produto.estoque === 0) return;
+    
     if (onAddToCart) {
       onAddToCart({
         id: produto.id,
         name: produto.nome,
         price: produto.preco,
         quantity: 1,
-        percentualComissao: 8, // 8% padrao
+        percentualComissao: 8, // 8% padrão
         valorComissao: produto.preco * 0.08,
       });
     }
@@ -231,7 +282,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
     return (
       <div style={styles.container}>
         <div style={styles.loading}>
-          <div style={{ fontSize: '2rem', marginBottom: '10px' }}>o</div>
+          <div style={{ fontSize: '2rem', marginBottom: '10px' }}>⏳</div>
           Carregando produtos...
         </div>
       </div>
@@ -241,12 +292,12 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h3 style={styles.title}> Catalogo de Produtos</h3>
+        <h3 style={styles.title}>🛍️ Catálogo de Produtos</h3>
 
         <div style={styles.filters}>
           <input
             type="text"
-            placeholder=" Buscar produto..."
+            placeholder="🔍 Buscar produto..."
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
             style={styles.searchInput}
@@ -259,7 +310,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
           >
             {categorias.map((cat) => (
               <option key={cat} value={cat}>
-                {cat === 'todos' ? ' Todas Categorias' : ` ${cat}`}
+                {cat === 'todos' ? '📦 Todas Categorias' : cat}
               </option>
             ))}
           </select>
@@ -268,7 +319,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
 
       {produtosFiltrados.length === 0 ? (
         <div style={styles.emptyState}>
-          <div style={{ fontSize: '3rem', marginBottom: '10px' }}></div>
+          <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🔍</div>
           <p>Nenhum produto encontrado</p>
         </div>
       ) : (
@@ -279,8 +330,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
               style={styles.productCard}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-3px)';
-                e.currentTarget.style.boxShadow =
-                  '0 6px 16px rgba(0,0,0,0.15)';
+                e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.15)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
@@ -298,28 +348,18 @@ const ProductCatalog = ({ lojistaId, onAddToCart }) => {
               <div style={styles.productStock}>
                 {produto.estoque > 0 ? (
                   <span style={{ color: '#28a745' }}>
-                     {produto.estoque} em estoque
+                    ✅ {produto.estoque} em estoque
                   </span>
                 ) : (
-                  <span style={{ color: '#dc3545' }}> Sem estoque</span>
+                  <span style={{ color: '#dc3545' }}>❌ Sem estoque</span>
                 )}
               </div>
               <button
                 onClick={() => handleAddToCart(produto)}
-                style={styles.addButton}
+                style={produto.estoque > 0 ? styles.addButton : styles.addButtonDisabled}
                 disabled={produto.estoque === 0}
-                onMouseEnter={(e) => {
-                  if (produto.estoque > 0) {
-                    e.currentTarget.style.backgroundColor = '#218838';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (produto.estoque > 0) {
-                    e.currentTarget.style.backgroundColor = '#28a745';
-                  }
-                }}
               >
-                {produto.estoque > 0 ? 'O Adicionar' : 'Indisponivel'}
+                {produto.estoque > 0 ? '➕ Adicionar' : 'Indisponível'}
               </button>
             </div>
           ))}

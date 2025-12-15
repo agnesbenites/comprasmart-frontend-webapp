@@ -1,8 +1,9 @@
 // src/pages/RegisterPage.jsx
-// Cadastro de Consultor com Validacao Biometrica
+// Cadastro de Consultor com Validação Biométrica
 
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabaseClient";
 import BiometricValidation from "../components/BiometricValidation";
 
 const RegisterPage = () => {
@@ -29,13 +30,13 @@ const RegisterPage = () => {
   const [erro, setErro] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Callback da validacao biometrica
+  // Callback da validação biométrica
   const handleValidationComplete = (result) => {
     if (result.aprovado) {
       setValidacaoConcluida(true);
       setDadosValidados(result.dados);
       
-      // Preencher automaticamente os dados extraidos do documento
+      // Preencher automaticamente os dados extraídos do documento
       setFormData({
         ...formData,
         nome: result.dados.nome || "",
@@ -45,38 +46,132 @@ const RegisterPage = () => {
       });
       
       setEtapa(2);
-      alert(" Identidade validada! Score: " + result.score + "%\n\nDados preenchidos automaticamente.");
+      alert(`✅ Identidade validada! Score: ${result.score}%\n\nDados preenchidos automaticamente.`);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    
+    // Aplicar máscaras
+    let valorFormatado = value;
+    
+    if (name === 'cpf') {
+      valorFormatado = formatarCPF(value);
+    } else if (name === 'telefone') {
+      valorFormatado = formatarTelefone(value);
+    } else if (name === 'rg') {
+      valorFormatado = formatarRG(value);
+    }
+    
+    setFormData({ ...formData, [name]: valorFormatado });
+  };
+
+  // Máscaras
+  const formatarCPF = (valor) => {
+    return valor
+      .replace(/\D/g, '')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
+  };
+
+  const formatarTelefone = (valor) => {
+    return valor
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{4})\d+?$/, '$1');
+  };
+
+  const formatarRG = (valor) => {
+    return valor
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1})/, '$1-$2')
+      .replace(/(-\d{1})\d+?$/, '$1');
+  };
+
+  // Validações
+  const validarCPF = (cpf) => {
+    cpf = cpf.replace(/\D/g, '');
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1+$/.test(cpf)) return false;
+    
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+      soma += parseInt(cpf.charAt(i)) * (10 - i);
+    }
+    let resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(9))) return false;
+    
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+      soma += parseInt(cpf.charAt(i)) * (11 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.charAt(10))) return false;
+    
+    return true;
+  };
+
+  const validarSenhaForte = (senha) => {
+    // Mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número, 1 especial
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+    return regex.test(senha);
   };
 
   const validarEtapa2 = () => {
-    if (!formData.email || !formData.telefone) {
-      setErro("Preencha Email e Telefone");
+    if (!formData.nome || formData.nome.trim().length < 3) {
+      setErro("Nome deve ter pelo menos 3 caracteres");
       return false;
     }
+    
+    if (!formData.cpf || !validarCPF(formData.cpf)) {
+      setErro("CPF inválido");
+      return false;
+    }
+    
+    if (!formData.email) {
+      setErro("Email é obrigatório");
+      return false;
+    }
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setErro("Email invalido");
+      setErro("Email inválido");
       return false;
     }
+    
+    if (!formData.telefone || formData.telefone.replace(/\D/g, '').length < 10) {
+      setErro("Telefone inválido");
+      return false;
+    }
+    
     setErro("");
     return true;
   };
 
   const validarEtapa3 = () => {
-    if (!formData.senha || formData.senha.length < 6) {
-      setErro("Senha deve ter no minimo 6 caracteres");
+    if (!formData.senha || formData.senha.length < 8) {
+      setErro("Senha deve ter no mínimo 8 caracteres");
       return false;
     }
+    
+    if (!validarSenhaForte(formData.senha)) {
+      setErro("Senha deve conter: maiúscula, minúscula, número e caractere especial (@$!%*?&#)");
+      return false;
+    }
+    
     if (formData.senha !== formData.confirmarSenha) {
-      setErro("As senhas nao coincidem");
+      setErro("As senhas não coincidem");
       return false;
     }
+    
     setErro("");
     return true;
   };
@@ -93,7 +188,7 @@ const RegisterPage = () => {
   };
 
   const etapaAnterior = () => {
-    if (etapa > 2) { // Nao volta para biometria
+    if (etapa > 2) { // Não volta para biometria
       setEtapa(etapa - 1);
     }
   };
@@ -103,23 +198,67 @@ const RegisterPage = () => {
     setErro("");
 
     try {
-      const payload = {
-        ...formData,
-        tipo: "consultor",
-        validacao_biometrica: {
-          aprovado: true,
-          score: dadosValidados?.score || 95,
-          dados_extraidos: dadosValidados,
-        },
-      };
+      // 1. Criar usuário no Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.senha,
+        options: {
+          data: {
+            nome: formData.nome,
+            tipo: 'consultor',
+          }
+        }
+      });
 
-      // TODO: Enviar para API
-      console.log("Enviando:", payload);
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      if (authError) {
+        if (authError.message.includes('already registered')) {
+          setErro("Este email já está cadastrado. Faça login ou use outro email.");
+        } else {
+          setErro(`Erro no cadastro: ${authError.message}`);
+        }
+        return;
+      }
 
-      alert(" Cadastro realizado com sucesso!\n\nFaca login para comecar.");
+      if (!authData.user) {
+        setErro("Erro ao criar usuário. Tente novamente.");
+        return;
+      }
+
+      // 2. Inserir dados adicionais na tabela de consultores
+      const { error: consultorError } = await supabase
+        .from('consultores')
+        .insert({
+          id: authData.user.id,
+          nome: formData.nome,
+          email: formData.email,
+          cpf: formData.cpf.replace(/\D/g, ''),
+          rg: formData.rg.replace(/\D/g, ''),
+          telefone: formData.telefone.replace(/\D/g, ''),
+          data_nascimento: formData.dataNascimento || null,
+          endereco: formData.endereco || null,
+          cidade: formData.cidade || null,
+          estado: formData.estado || null,
+          validacao_biometrica: {
+            aprovado: true,
+            score: dadosValidados?.score || 95,
+            dados_extraidos: dadosValidados,
+            data_validacao: new Date().toISOString(),
+          },
+          status: 'ativo',
+          created_at: new Date().toISOString(),
+        });
+
+      if (consultorError) {
+        console.error('Erro ao salvar consultor:', consultorError);
+        // Se falhar, ainda assim o usuário foi criado no Auth
+        // Podemos continuar e tentar salvar depois
+      }
+
+      alert("✅ Cadastro realizado com sucesso!\n\nVerifique seu email para confirmar a conta.");
       navigate("/consultor/login");
+      
     } catch (error) {
+      console.error('Erro no cadastro:', error);
       setErro("Erro ao realizar cadastro. Tente novamente.");
     } finally {
       setLoading(false);
@@ -128,7 +267,7 @@ const RegisterPage = () => {
 
   return (
     <div style={styles.container}>
-      {/* ETAPA 1: VALIDACAO BIOM‰TRICA */}
+      {/* ETAPA 1: VALIDAÇÃO BIOMÉTRICA */}
       {etapa === 1 && !validacaoConcluida && (
         <BiometricValidation
           onValidationComplete={handleValidationComplete}
@@ -136,21 +275,21 @@ const RegisterPage = () => {
         />
       )}
 
-      {/* ETAPAS 2 e 3: FORMULRIO */}
+      {/* ETAPAS 2 e 3: FORMULÁRIO */}
       {etapa >= 2 && validacaoConcluida && (
         <div style={styles.card}>
           <div style={styles.header}>
-            <h1 style={styles.title}> Cadastro de Consultor</h1>
-            <p style={styles.subtitle}>Complete seus dados para comecar</p>
+            <h1 style={styles.title}>📋 Cadastro de Consultor</h1>
+            <p style={styles.subtitle}>Complete seus dados para começar</p>
             
-            {/* Badge de validacao */}
+            {/* Badge de validação */}
             <div style={styles.validatedBadge}>
-               Identidade Verificada - Score: {dadosValidados?.score || 95}%
+              ✅ Identidade Verificada - Score: {dadosValidados?.score || 95}%
             </div>
 
             {/* Progress */}
             <div style={styles.progressBar}>
-              <div style={{...styles.progressStep, backgroundColor: "#28a745"}}>“</div>
+              <div style={{...styles.progressStep, backgroundColor: "#28a745"}}>✓</div>
               <div style={{...styles.progressStep, backgroundColor: etapa >= 2 ? "#28a745" : "#e0e0e0"}}>2</div>
               <div style={{...styles.progressStep, backgroundColor: etapa >= 3 ? "#28a745" : "#e0e0e0"}}>3</div>
             </div>
@@ -161,14 +300,14 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          <form style={styles.form}>
+          <form style={styles.form} onSubmit={(e) => e.preventDefault()}>
             {/* ETAPA 2: DADOS PESSOAIS */}
             {etapa === 2 && (
               <div style={styles.etapa}>
-                <h2 style={styles.etapaTitle}> Dados Pessoais</h2>
+                <h2 style={styles.etapaTitle}>📝 Dados Pessoais</h2>
 
                 <div style={styles.inputGroup}>
-                  <label style={styles.label}>Nome Completo *</label>
+                  <label style={styles.inputLabel}>Nome Completo *</label>
                   <input
                     type="text"
                     name="nome"
@@ -181,19 +320,20 @@ const RegisterPage = () => {
                     readOnly={!!dadosValidados?.nome}
                   />
                   {dadosValidados?.nome && (
-                    <span style={styles.autoFilled}> Extraido do documento</span>
+                    <span style={styles.autoFilled}>✓ Extraído do documento</span>
                   )}
                 </div>
 
                 <div style={styles.row}>
                   <div style={styles.inputGroup}>
-                    <label style={styles.label}>CPF *</label>
+                    <label style={styles.inputLabel}>CPF *</label>
                     <input
                       type="text"
                       name="cpf"
                       value={formData.cpf}
                       onChange={handleChange}
                       placeholder="000.000.000-00"
+                      maxLength={14}
                       style={{
                         ...styles.input,
                         backgroundColor: dadosValidados?.cpf ? "#e8f5e9" : "white"
@@ -201,18 +341,19 @@ const RegisterPage = () => {
                       readOnly={!!dadosValidados?.cpf}
                     />
                     {dadosValidados?.cpf && (
-                      <span style={styles.autoFilled}> Extraido</span>
+                      <span style={styles.autoFilled}>✓ Extraído</span>
                     )}
                   </div>
 
                   <div style={styles.inputGroup}>
-                    <label style={styles.label}>RG *</label>
+                    <label style={styles.inputLabel}>RG *</label>
                     <input
                       type="text"
                       name="rg"
                       value={formData.rg}
                       onChange={handleChange}
                       placeholder="00.000.000-0"
+                      maxLength={12}
                       style={{
                         ...styles.input,
                         backgroundColor: dadosValidados?.rg ? "#e8f5e9" : "white"
@@ -220,13 +361,13 @@ const RegisterPage = () => {
                       readOnly={!!dadosValidados?.rg}
                     />
                     {dadosValidados?.rg && (
-                      <span style={styles.autoFilled}> Extraido</span>
+                      <span style={styles.autoFilled}>✓ Extraído</span>
                     )}
                   </div>
                 </div>
 
                 <div style={styles.inputGroup}>
-                  <label style={styles.label}>Data de Nascimento *</label>
+                  <label style={styles.inputLabel}>Data de Nascimento *</label>
                   <input
                     type="date"
                     name="dataNascimento"
@@ -241,7 +382,7 @@ const RegisterPage = () => {
                 </div>
 
                 <div style={styles.inputGroup}>
-                  <label style={styles.label}>E-mail *</label>
+                  <label style={styles.inputLabel}>E-mail *</label>
                   <input
                     type="email"
                     name="email"
@@ -253,59 +394,79 @@ const RegisterPage = () => {
                 </div>
 
                 <div style={styles.inputGroup}>
-                  <label style={styles.label}>Telefone *</label>
+                  <label style={styles.inputLabel}>Telefone *</label>
                   <input
                     type="tel"
                     name="telefone"
                     value={formData.telefone}
                     onChange={handleChange}
                     placeholder="(11) 99999-9999"
+                    maxLength={15}
                     style={styles.input}
                   />
                 </div>
 
                 <div style={styles.inputGroup}>
-                  <label style={styles.label}>Endereco</label>
+                  <label style={styles.inputLabel}>Endereço</label>
                   <input
                     type="text"
                     name="endereco"
                     value={formData.endereco}
                     onChange={handleChange}
-                    placeholder="Rua, Numero"
+                    placeholder="Rua, Número"
                     style={styles.input}
                   />
                 </div>
 
                 <div style={styles.row}>
                   <div style={styles.inputGroup}>
-                    <label style={styles.label}>Cidade</label>
+                    <label style={styles.inputLabel}>Cidade</label>
                     <input
                       type="text"
                       name="cidade"
                       value={formData.cidade}
                       onChange={handleChange}
-                      placeholder="Cidade"
+                      placeholder="Sua cidade"
                       style={styles.input}
                     />
                   </div>
 
                   <div style={styles.inputGroup}>
-                    <label style={styles.label}>Estado</label>
+                    <label style={styles.inputLabel}>Estado</label>
                     <select
                       name="estado"
                       value={formData.estado}
                       onChange={handleChange}
                       style={styles.input}
                     >
-                      <option value="">UF</option>
-                      <option value="SP">SP</option>
-                      <option value="RJ">RJ</option>
-                      <option value="MG">MG</option>
-                      <option value="ES">ES</option>
-                      <option value="PR">PR</option>
-                      <option value="SC">SC</option>
-                      <option value="RS">RS</option>
-                      {/* Adicionar outros estados */}
+                      <option value="">Selecione</option>
+                      <option value="AC">Acre</option>
+                      <option value="AL">Alagoas</option>
+                      <option value="AP">Amapá</option>
+                      <option value="AM">Amazonas</option>
+                      <option value="BA">Bahia</option>
+                      <option value="CE">Ceará</option>
+                      <option value="DF">Distrito Federal</option>
+                      <option value="ES">Espírito Santo</option>
+                      <option value="GO">Goiás</option>
+                      <option value="MA">Maranhão</option>
+                      <option value="MT">Mato Grosso</option>
+                      <option value="MS">Mato Grosso do Sul</option>
+                      <option value="MG">Minas Gerais</option>
+                      <option value="PA">Pará</option>
+                      <option value="PB">Paraíba</option>
+                      <option value="PR">Paraná</option>
+                      <option value="PE">Pernambuco</option>
+                      <option value="PI">Piauí</option>
+                      <option value="RJ">Rio de Janeiro</option>
+                      <option value="RN">Rio Grande do Norte</option>
+                      <option value="RS">Rio Grande do Sul</option>
+                      <option value="RO">Rondônia</option>
+                      <option value="RR">Roraima</option>
+                      <option value="SC">Santa Catarina</option>
+                      <option value="SP">São Paulo</option>
+                      <option value="SE">Sergipe</option>
+                      <option value="TO">Tocantins</option>
                     </select>
                   </div>
                 </div>
@@ -315,34 +476,38 @@ const RegisterPage = () => {
             {/* ETAPA 3: SENHA */}
             {etapa === 3 && (
               <div style={styles.etapa}>
-                <h2 style={styles.etapaTitle}> Criar Senha de Acesso</h2>
+                <h2 style={styles.etapaTitle}>🔐 Crie sua Senha</h2>
 
                 <div style={styles.inputGroup}>
-                  <label style={styles.label}>Senha *</label>
+                  <label style={styles.inputLabel}>Senha *</label>
                   <input
                     type="password"
                     name="senha"
                     value={formData.senha}
                     onChange={handleChange}
-                    placeholder="Minimo 6 caracteres"
+                    placeholder="Mínimo 8 caracteres"
                     style={styles.input}
                   />
+                  <small style={styles.hint}>
+                    A senha deve conter: maiúscula, minúscula, número e caractere especial (@$!%*?&#)
+                  </small>
                 </div>
 
                 <div style={styles.inputGroup}>
-                  <label style={styles.label}>Confirmar Senha *</label>
+                  <label style={styles.inputLabel}>Confirmar Senha *</label>
                   <input
                     type="password"
                     name="confirmarSenha"
                     value={formData.confirmarSenha}
                     onChange={handleChange}
-                    placeholder="Repita a senha"
+                    placeholder="Digite novamente"
                     style={styles.input}
                   />
                 </div>
 
+                {/* Resumo */}
                 <div style={styles.resumo}>
-                  <h3 style={styles.resumoTitle}> Resumo do Cadastro</h3>
+                  <h3 style={styles.resumoTitle}>📋 Resumo do Cadastro</h3>
                   <div style={styles.resumoItem}>
                     <strong>Nome:</strong> {formData.nome}
                   </div>
@@ -356,24 +521,26 @@ const RegisterPage = () => {
                     <strong>Telefone:</strong> {formData.telefone}
                   </div>
                   <div style={styles.resumoItem}>
-                    <strong>Validacao:</strong>  Aprovada ({dadosValidados?.score || 95}%)
+                    <strong>Validação:</strong> ✅ Aprovada ({dadosValidados?.score || 95}%)
                   </div>
                 </div>
 
                 <div style={styles.termos}>
                   <label style={styles.checkboxLabel}>
-                    <input type="checkbox" required />
-                    Aceito os <a href="/termos" style={styles.link}>Termos de Uso</a> e a{" "}
-                    <a href="/privacidade" style={styles.link}>Politica de Privacidade</a>
+                    <input type="checkbox" required style={styles.checkbox} />
+                    <span>
+                      Aceito os <a href="/termos" style={styles.link}>Termos de Uso</a> e a{" "}
+                      <a href="/privacidade" style={styles.link}>Política de Privacidade</a>
+                    </span>
                   </label>
                 </div>
               </div>
             )}
 
             {/* Erro */}
-            {erro && <div style={styles.erro}> {erro}</div>}
+            {erro && <div style={styles.erro}>⚠️ {erro}</div>}
 
-            {/* Botoes */}
+            {/* Botões */}
             <div style={styles.buttonGroup}>
               {etapa > 2 && (
                 <button
@@ -382,7 +549,7 @@ const RegisterPage = () => {
                   style={styles.buttonSecondary}
                   disabled={loading}
                 >
-                  &#8592; Voltar
+                  ← Voltar
                 </button>
               )}
 
@@ -396,20 +563,20 @@ const RegisterPage = () => {
                 }}
                 disabled={loading}
               >
-                {loading ? "Enviando..." : etapa === 3 ? " Finalizar Cadastro" : "Proximo &#8592;’"}
+                {loading ? "Enviando..." : etapa === 3 ? "✅ Finalizar Cadastro" : "Próximo →"}
               </button>
             </div>
 
             {/* Link Login */}
             <div style={styles.footer}>
               <p style={styles.footerText}>
-                Ja tem uma conta?{" "}
+                Já tem uma conta?{" "}
                 <button
                   type="button"
                   onClick={() => navigate("/consultor/login")}
                   style={styles.linkButton}
                 >
-                  Faca login aqui
+                  Faça login aqui
                 </button>
               </p>
             </div>
@@ -507,6 +674,13 @@ const styles = {
   inputGroup: {
     marginBottom: "20px",
   },
+  inputLabel: {
+    display: "block",
+    marginBottom: "6px",
+    fontSize: "0.9rem",
+    fontWeight: "600",
+    color: "#333",
+  },
   input: {
     width: "100%",
     padding: "12px 16px",
@@ -528,6 +702,12 @@ const styles = {
     fontSize: "0.8rem",
     color: "#28a745",
     fontWeight: "600",
+  },
+  hint: {
+    display: "block",
+    marginTop: "4px",
+    fontSize: "0.75rem",
+    color: "#666",
   },
   resumo: {
     backgroundColor: "#f8f9fa",
@@ -555,6 +735,10 @@ const styles = {
     gap: "8px",
     fontSize: "0.9rem",
     color: "#666",
+    cursor: "pointer",
+  },
+  checkbox: {
+    marginTop: "3px",
   },
   link: {
     color: "#17a2b8",

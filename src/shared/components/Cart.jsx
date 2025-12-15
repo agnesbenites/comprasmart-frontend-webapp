@@ -1,5 +1,5 @@
 // app-frontend/src/shared/components/Cart.jsx
-// Usado por: CONSULTOR e VENDEDOR (com edicao)
+// Usado por: CONSULTOR e VENDEDOR (com edição)
 
 import React from 'react';
 
@@ -12,7 +12,7 @@ const Cart = ({
   onRemoveItem, 
   onFinalize,
   showFinalizeButton = true,
-  readOnly = false  // &#8592; NOVO: Para cliente ver mas nao editar
+  readOnly = false  // Para cliente ver mas não editar
 }) => {
   
   const calculateSubtotal = () => {
@@ -20,7 +20,7 @@ const Cart = ({
   };
 
   const calculateCommission = () => {
-    return calculateSubtotal() * 0.08; // 8% de comissao
+    return calculateSubtotal() * 0.08; // 8% de comissão
   };
 
   const calculateTotal = () => {
@@ -183,25 +183,25 @@ const Cart = ({
   return (
     <div style={styles.container}>
       <h3 style={styles.title}>
-         Carrinho ({items.length} {items.length === 1 ? 'item' : 'itens'})
+        🛒 Carrinho ({items.length} {items.length === 1 ? 'item' : 'itens'})
       </h3>
 
       {readOnly && (
         <div style={styles.readOnlyBadge}>
-           Modo Visualizacao (Apenas Leitura)
+          👁️ Modo Visualização (Apenas Leitura)
         </div>
       )}
 
       {items.length === 0 ? (
         <div style={styles.emptyCart}>
           <span style={{ fontSize: '3rem', display: 'block', marginBottom: '10px' }}>
-            
+            🛒
           </span>
           <p style={{ margin: 0 }}>Carrinho vazio</p>
           <p style={{ margin: '5px 0 0 0', fontSize: '0.85rem' }}>
             {readOnly 
-              ? 'O consultor ainda nao adicionou produtos'
-              : 'Adicione produtos para comecar'
+              ? 'O consultor ainda não adicionou produtos'
+              : 'Adicione produtos para começar'
             }
           </p>
         </div>
@@ -240,7 +240,7 @@ const Cart = ({
                       style={styles.removeButton}
                       disabled={readOnly}
                     >
-                      
+                      🗑️
                     </button>
                   </div>
                 )}
@@ -255,7 +255,7 @@ const Cart = ({
               <span style={styles.summaryValue}>R$ {calculateSubtotal().toFixed(2)}</span>
             </div>
             <div style={styles.summaryRow}>
-              <span style={styles.summaryLabel}>Comissao (8%):</span>
+              <span style={styles.summaryLabel}>Comissão (8%):</span>
               <span style={styles.summaryValue}>R$ {calculateCommission().toFixed(2)}</span>
             </div>
             <div style={styles.totalRow}>
@@ -264,13 +264,13 @@ const Cart = ({
             </div>
           </div>
 
-          {/* Botao Finalizar */}
+          {/* Botão Finalizar */}
           {showFinalizeButton && !readOnly && (
             <button
               onClick={onFinalize}
               style={styles.finalizeButton}
             >
-              Finalizar Venda & Gerar QR Code
+              ✅ Finalizar Venda & Gerar QR Code
             </button>
           )}
         </>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { supabase } from "../../../supabaseClient";
+import { supabase } from "@/supabaseClient";
 
 const LOJISTA_ID = "858f50c0-f472-4d1d-9e6e-21952f40c7e5";
 const STRIPE_PURCHASE_URL = "https://buy.stripe.com/14AeVdgpWemMaBMb0RgQE07";

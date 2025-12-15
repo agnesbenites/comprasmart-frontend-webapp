@@ -29,7 +29,7 @@ const QRCodeGenerator = ({
     try {
       setLoading(true);
       
-      console.log(' Gerando QR Code para venda:', vendaId);
+      console.log('📱 Gerando QR Code para venda:', vendaId);
       
       // Criar Payment Intent no Stripe
       const response = await fetch(`${API_URL}/api/payment/create`, {
@@ -46,7 +46,7 @@ const QRCodeGenerator = ({
       const data = await response.json();
       
       if (data.success) {
-        console.log(' Payment Intent criado:', data.paymentIntentId);
+        console.log('✅ Payment Intent criado:', data.paymentIntentId);
         
         setQrCodeData({
           paymentUrl: `${API_URL}/pay/${data.paymentIntentId}`,
@@ -57,7 +57,7 @@ const QRCodeGenerator = ({
         throw new Error(data.error || 'Erro ao criar pagamento');
       }
     } catch (error) {
-      console.error(' Erro ao gerar QR Code:', error);
+      console.error('❌ Erro ao gerar QR Code:', error);
       alert('Erro ao gerar QR Code: ' + error.message);
       onClose();
     } finally {
@@ -67,14 +67,14 @@ const QRCodeGenerator = ({
 
   const sendByEmail = async () => {
     if (!clienteEmail) {
-      alert('Email do cliente nao informado');
+      alert('Email do cliente não informado');
       return;
     }
 
     try {
       setSending(true);
       
-      console.log(' Enviando QR Code para:', clienteEmail);
+      console.log('📧 Enviando QR Code para:', clienteEmail);
       
       const response = await fetch(`${API_URL}/api/vendas/enviar-qrcode`, {
         method: 'POST',
@@ -92,7 +92,7 @@ const QRCodeGenerator = ({
       const data = await response.json();
       
       if (data.success) {
-        console.log(' Email enviado com sucesso');
+        console.log('✅ Email enviado com sucesso');
         setSent(true);
         setTimeout(() => {
           onSuccess && onSuccess();
@@ -102,7 +102,7 @@ const QRCodeGenerator = ({
         alert('Erro ao enviar email: ' + data.error);
       }
     } catch (error) {
-      console.error(' Erro ao enviar email:', error);
+      console.error('❌ Erro ao enviar email:', error);
       alert('Erro ao enviar email. Tente novamente.');
     } finally {
       setSending(false);
@@ -112,7 +112,7 @@ const QRCodeGenerator = ({
   const copyToClipboard = () => {
     if (qrCodeData?.paymentUrl) {
       navigator.clipboard.writeText(qrCodeData.paymentUrl);
-      alert(' Link copiado para a area de transferancia!');
+      alert('✅ Link copiado para a área de transferência!');
     }
   };
 
@@ -133,7 +133,7 @@ const QRCodeGenerator = ({
         link.download = `qrcode-venda-${vendaId}.png`;
         link.href = url;
         link.click();
-        console.log(' QR Code baixado');
+        console.log('📥 QR Code baixado');
       };
       
       img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
@@ -146,9 +146,9 @@ const QRCodeGenerator = ({
         {/* Header */}
         <div style={styles.header}>
           <h2 style={styles.title}>
-            {sent ? ' Venda Finalizada!' : ' Venda Concluida!'}
+            {sent ? '🎉 Venda Finalizada!' : '✅ Venda Concluída!'}
           </h2>
-          <button onClick={onClose} style={styles.closeButton}>O</button>
+          <button onClick={onClose} style={styles.closeButton}>✕</button>
         </div>
 
         {/* Content */}
@@ -160,13 +160,13 @@ const QRCodeGenerator = ({
             </div>
           ) : sent ? (
             <div style={styles.successContainer}>
-              <span style={styles.successIcon}></span>
+              <span style={styles.successIcon}>✉️</span>
               <h3 style={styles.successTitle}>Email Enviado!</h3>
               <p style={styles.successText}>
                 O QR Code foi enviado para <strong>{clienteEmail}</strong>
               </p>
               <p style={styles.successSubtext}>
-                O cliente pode pagar escaneando o codigo ou clicando no link.
+                O cliente pode pagar escaneando o código ou clicando no link.
               </p>
             </div>
           ) : (
@@ -213,7 +213,7 @@ const QRCodeGenerator = ({
                   style={styles.linkInput}
                 />
                 <button onClick={copyToClipboard} style={styles.copyButton}>
-                   Copiar
+                  📋 Copiar
                 </button>
               </div>
 
@@ -232,28 +232,28 @@ const QRCodeGenerator = ({
                 ))}
               </div>
 
-              {/* Botoes de Acao */}
+              {/* Botões de Ação */}
               <div style={styles.actions}>
                 <button
                   onClick={sendByEmail}
                   disabled={sending}
                   style={styles.primaryButton}
                 >
-                  {sending ? ' Enviando...' : ' Enviar por Email'}
+                  {sending ? '⏳ Enviando...' : '📧 Enviar por Email'}
                 </button>
                 
                 <button
                   onClick={downloadQRCode}
                   style={styles.secondaryButton}
                 >
-                   Baixar QR Code
+                  📥 Baixar QR Code
                 </button>
               </div>
 
-              {/* Informacao do Email */}
+              {/* Informação do Email */}
               {clienteEmail && (
                 <p style={styles.emailInfo}>
-                  Sera enviado para: <strong>{clienteEmail}</strong>
+                  Será enviado para: <strong>{clienteEmail}</strong>
                 </p>
               )}
             </>
@@ -264,7 +264,7 @@ const QRCodeGenerator = ({
         {!loading && !sent && (
           <div style={styles.footer}>
             <p style={styles.footerText}>
-              „¹ O cliente tem 24 horas para realizar o pagamento
+              ⏰ O cliente tem 24 horas para realizar o pagamento
             </p>
           </div>
         )}

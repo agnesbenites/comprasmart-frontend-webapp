@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from "../../../components/Layout";
 import { formatarMoeda, formatarData } from '../../../shared/utils/formatters';
 import { API_CONFIG, apiGet } from '../../../shared/utils/api';
-import { supabase } from "../../../supabaseClient"; // se estiver usando
+import { supabase } from "@/supabaseClient"; // se estiver usando
 
 const RelatorioPageVendedor = () => {
   const navigate = useNavigate();

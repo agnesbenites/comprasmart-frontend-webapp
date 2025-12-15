@@ -18,23 +18,27 @@ import {
   FaTrash,
   FaQrcode
 } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { supabase } from '../../../supabaseClient';
 
 const API_URL = 'https://plataforma-consultoria-mvp.onrender.com';
 
-const clienteData = {
-  id: "c123456",
-  nome: "Cliente Exemplo",
-  nomeVisivel: false,
-  email: "cliente.exemplo@email.com",
-  status: "Ativo",
-  descricao: "Em busca de produtos",
-};
-
-const consultorId = "cons7890";
-
 const ChatPanel = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Dados do cliente - vem da navegação ou do estado
+  const [clienteData, setClienteData] = useState({
+    id: location.state?.clienteId || "c123456",
+    nome: location.state?.clienteNome || "Cliente",
+    nomeVisivel: location.state?.nomeVisivel || false,
+    email: location.state?.clienteEmail || "",
+    status: "Ativo",
+    descricao: "Em atendimento",
+  });
+  
+  // ID do consultor logado
+  const [consultorId, setConsultorId] = useState(null);
   
   // Estados principais
   const [cart, setCart] = useState([]);
@@ -44,8 +48,7 @@ const ChatPanel = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([
-    { id: 1, sender: 'consultor', text: 'Olá! Em que posso ajudar?', time: '10:00' },
-    { id: 2, sender: 'cliente', text: 'Gostaria do Smartwatch X e de um fone Bluetooth.', time: '10:01' },
+    { id: 1, sender: 'consultor', text: 'Olá! Em que posso ajudar?', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
   ]);
   
   // Estados multimídia
@@ -56,42 +59,90 @@ const ChatPanel = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isOnCall, setIsOnCall] = useState(false);
   
+  // Estados de produtos (carregados da API)
+  const [produtosDisponiveis, setProdutosDisponiveis] = useState([]);
+  const [loadingProdutos, setLoadingProdutos] = useState(true);
+  
   // Refs
   const mediaRecorderRef = useRef(null);
   const videoRef = useRef(null);
   const fileInputRef = useRef(null);
   const chatMessagesRef = useRef(null);
   
-  // Produtos disponíveis
-  const produtosDisponiveis = [
-    { 
-      id: 'prod1', 
-      name: 'Smartwatch X', 
-      price: 350.00, 
-      sku: 'SWX-2024', 
-      categoria: 'eletrônicos', 
-      cor: 'Preto',
-      estoque: 10
-    },
-    { 
-      id: 'prod2', 
-      name: 'Fone Bluetooth', 
-      price: 120.00, 
-      sku: 'FB-2024', 
-      categoria: 'eletrônicos', 
-      cor: 'Branco',
-      estoque: 15
-    },
-    { 
-      id: 'prod3', 
-      name: 'Capa Protetora', 
-      price: 45.00, 
-      sku: 'CAP-001', 
-      categoria: 'acessórios', 
-      cor: 'Transparente',
-      estoque: 20
-    },
-  ];
+  // Carregar dados do consultor logado
+  useEffect(() => {
+    const carregarConsultor = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          setConsultorId(user.id);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar consultor:', error);
+      }
+    };
+    
+    carregarConsultor();
+  }, []);
+  
+  // Carregar produtos da loja atual
+  useEffect(() => {
+    const carregarProdutos = async () => {
+      setLoadingProdutos(true);
+      try {
+        const lojistaId = localStorage.getItem('lojistaAtual');
+        
+        if (lojistaId) {
+          // Buscar produtos da loja específica
+          const { data, error } = await supabase
+            .from('produtos')
+            .select('*')
+            .eq('loja_id', lojistaId)
+            .eq('ativo', true)
+            .gt('estoque', 0);
+          
+          if (error) throw error;
+          
+          if (data && data.length > 0) {
+            setProdutosDisponiveis(data.map(p => ({
+              id: p.id,
+              name: p.nome,
+              price: parseFloat(p.preco),
+              sku: p.sku || `SKU-${p.id.substring(0, 6)}`,
+              categoria: p.categoria || 'Geral',
+              cor: p.cor || 'N/A',
+              estoque: p.estoque || 0,
+              imagem: p.imagem_url
+            })));
+          } else {
+            // Produtos de demonstração se não houver produtos cadastrados
+            setProdutosDisponiveis([
+              { id: 'demo1', name: 'Produto Demonstração 1', price: 99.90, sku: 'DEMO-001', categoria: 'Demo', cor: 'N/A', estoque: 10 },
+              { id: 'demo2', name: 'Produto Demonstração 2', price: 149.90, sku: 'DEMO-002', categoria: 'Demo', cor: 'N/A', estoque: 5 },
+            ]);
+          }
+        } else {
+          // Sem loja selecionada - produtos de demonstração
+          setProdutosDisponiveis([
+            { id: 'demo1', name: 'Smartwatch X', price: 350.00, sku: 'SWX-2024', categoria: 'Eletrônicos', cor: 'Preto', estoque: 10 },
+            { id: 'demo2', name: 'Fone Bluetooth', price: 120.00, sku: 'FB-2024', categoria: 'Eletrônicos', cor: 'Branco', estoque: 15 },
+            { id: 'demo3', name: 'Capa Protetora', price: 45.00, sku: 'CAP-001', categoria: 'Acessórios', cor: 'Transparente', estoque: 20 },
+          ]);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+        // Fallback para produtos de demonstração
+        setProdutosDisponiveis([
+          { id: 'demo1', name: 'Smartwatch X', price: 350.00, sku: 'SWX-2024', categoria: 'Eletrônicos', cor: 'Preto', estoque: 10 },
+          { id: 'demo2', name: 'Fone Bluetooth', price: 120.00, sku: 'FB-2024', categoria: 'Eletrônicos', cor: 'Branco', estoque: 15 },
+        ]);
+      } finally {
+        setLoadingProdutos(false);
+      }
+    };
+    
+    carregarProdutos();
+  }, []);
   
   // Filtrar produtos
   const produtosFiltrados = searchTerm 
@@ -99,7 +150,7 @@ const ChatPanel = () => {
         produto.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         produto.sku.toLowerCase().includes(searchTerm.toLowerCase()) ||
         produto.categoria.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        produto.cor.toLowerCase().includes(searchTerm.toLowerCase())
+        (produto.cor && produto.cor.toLowerCase().includes(searchTerm.toLowerCase()))
       )
     : produtosDisponiveis;
   
@@ -114,8 +165,10 @@ const ChatPanel = () => {
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
     
-    setMessages([...messages, newMessage]);
+    setMessages(prev => [...prev, newMessage]);
     setMessage('');
+    
+    // TODO: Enviar mensagem via WebSocket para o cliente
   };
   
   const handleKeyPress = (e) => {
@@ -149,8 +202,11 @@ const ChatPanel = () => {
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         
-        setMessages([...messages, audioMessage]);
+        setMessages(prev => [...prev, audioMessage]);
         setIsRecording(false);
+        
+        // Limpar stream
+        stream.getTracks().forEach(track => track.stop());
       };
       
       mediaRecorder.start();
@@ -159,33 +215,52 @@ const ChatPanel = () => {
       
     } catch (error) {
       console.error('Erro ao acessar microfone:', error);
-      alert('NÀo foi possível acessar o microfone.');
+      alert('Não foi possível acessar o microfone. Verifique as permissões do navegador.');
     }
   };
   
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
     }
   };
   
-  // Vídeo
+  // Vídeo - CORRIGIDO
   const toggleVideo = async () => {
     if (isVideoActive) {
+      // Parar vídeo
       if (videoStream) {
         videoStream.getTracks().forEach(track => track.stop());
         setVideoStream(null);
       }
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
       setIsVideoActive(false);
+      
+      const videoMessage = {
+        id: messages.length + 1,
+        sender: 'system',
+        text: 'Chamada de vídeo encerrada',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages(prev => [...prev, videoMessage]);
+      
     } else {
+      // Iniciar vídeo
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ 
-          video: true,
+          video: { width: 640, height: 480 },
           audio: true 
         });
+        
         setVideoStream(stream);
         setIsVideoActive(true);
+        
+        // Conectar stream ao elemento de vídeo
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
         
         const videoMessage = {
           id: messages.length + 1,
@@ -193,19 +268,32 @@ const ChatPanel = () => {
           text: 'Chamada de vídeo iniciada',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
-        setMessages([...messages, videoMessage]);
+        setMessages(prev => [...prev, videoMessage]);
         
       } catch (error) {
         console.error('Erro ao acessar câmera:', error);
-        alert('NÀo foi possível acessar a câmera.');
+        alert('Não foi possível acessar a câmera. Verifique as permissões do navegador.');
       }
     }
   };
+  
+  // Efeito para conectar stream ao vídeo quando ativado
+  useEffect(() => {
+    if (videoRef.current && videoStream) {
+      videoRef.current.srcObject = videoStream;
+    }
+  }, [videoStream, isVideoActive]);
   
   // Imagem
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validar tamanho (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Imagem muito grande. Máximo 5MB.');
+        return;
+      }
+      
       const reader = new FileReader();
       reader.onload = (e) => {
         const imageUrl = e.target.result;
@@ -218,7 +306,7 @@ const ChatPanel = () => {
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
         
-        setMessages([...messages, imageMessage]);
+        setMessages(prev => [...prev, imageMessage]);
         setSelectedImage(imageUrl);
       };
       reader.readAsDataURL(file);
@@ -229,17 +317,17 @@ const ChatPanel = () => {
     fileInputRef.current.click();
   };
   
-  // Chamada
+  // Chamada de voz
   const toggleCall = () => {
     setIsOnCall(!isOnCall);
     
     const callMessage = {
       id: messages.length + 1,
       sender: 'system',
-      text: isOnCall ? 'Chamada encerrada' : 'Chamada iniciada',
+      text: isOnCall ? 'Chamada encerrada' : 'Chamada de voz iniciada',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-    setMessages([...messages, callMessage]);
+    setMessages(prev => [...prev, callMessage]);
   };
   
   // Carrinho
@@ -248,6 +336,15 @@ const ChatPanel = () => {
   };
   
   const addToCart = (product) => {
+    // Verificar estoque antes de adicionar
+    const itemNoCarrinho = cart.find(item => item.id === product.id);
+    const quantidadeAtual = itemNoCarrinho ? itemNoCarrinho.quantity : 0;
+    
+    if (quantidadeAtual >= product.estoque) {
+      alert(`Estoque insuficiente! Disponível: ${product.estoque} unidades.`);
+      return;
+    }
+    
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
       if (existingItem) {
@@ -263,10 +360,34 @@ const ChatPanel = () => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
   
+  const updateQuantity = (productId, newQuantity) => {
+    if (newQuantity < 1) {
+      removeFromCart(productId);
+      return;
+    }
+    
+    const product = produtosDisponiveis.find(p => p.id === productId);
+    if (product && newQuantity > product.estoque) {
+      alert(`Estoque insuficiente! Disponível: ${product.estoque} unidades.`);
+      return;
+    }
+    
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+  
   // Venda
   const handleFinalizeSale = async () => {
     if (cart.length === 0) {
       alert("Carrinho vazio! Adicione produtos para finalizar a venda.");
+      return;
+    }
+    
+    if (!consultorId) {
+      alert("Erro: Consultor não identificado. Faça login novamente.");
       return;
     }
     
@@ -286,7 +407,7 @@ const ChatPanel = () => {
           preco: item.price,
           total: item.price * item.quantity,
         })),
-        valorTotal: calculateTotal(),
+        valorTotal: parseFloat(calculateTotal()),
       };
       
       const response = await fetch(`${API_URL}/api/vendas/criar`, {
@@ -300,8 +421,10 @@ const ChatPanel = () => {
       if (!response.ok) {
         if (response.status === 409) {
           setSaleStatus('estoque_erro');
+          alert("Alguns produtos estão sem estoque. Atualize o carrinho.");
         } else {
           setSaleStatus('erro');
+          alert("Erro ao processar venda. Tente novamente.");
         }
         return;
       }
@@ -310,11 +433,15 @@ const ChatPanel = () => {
         setVendaId(responseBody.vendaId);
         setShowQRCode(true);
         setSaleStatus('sucesso');
+        
+        // Limpar carrinho após sucesso
+        // setCart([]); // Descomentar se quiser limpar automaticamente
       }
       
     } catch (error) {
       console.error("Erro:", error);
       setSaleStatus('erro');
+      alert("Erro de conexão. Verifique sua internet e tente novamente.");
     }
   };
   
@@ -327,10 +454,10 @@ const ChatPanel = () => {
         clienteNome: clienteData.nome,
         vendaId: comVenda ? vendaId : null,
         produtos: comVenda ? cart : [],
-        valorTotal: comVenda ? calculateTotal() : 0,
+        valorTotal: comVenda ? parseFloat(calculateTotal()) : 0,
         status: comVenda ? 'venda_concluida' : 'sem_venda',
         dataAtendimento: new Date().toISOString(),
-        mensagens: messages
+        mensagens: messages.filter(m => m.type !== 'audio') // Não salvar áudios no histórico
       };
       
       await fetch(`${API_URL}/api/atendimentos/historico`, {
@@ -338,6 +465,12 @@ const ChatPanel = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(historicoPayload),
       });
+      
+      // Limpar estados
+      setCart([]);
+      setSaleStatus('idle');
+      setShowQRCode(false);
+      setVendaId(null);
       
       navigate('/consultor/dashboard/historico');
       
@@ -353,12 +486,19 @@ const ChatPanel = () => {
     }
   };
   
-  // Cleanup
+  // Cleanup - MELHORADO
   useEffect(() => {
     return () => {
-      if (videoStream) videoStream.getTracks().forEach(track => track.stop());
-      if (mediaRecorderRef.current) {
-        mediaRecorderRef.current.stream?.getTracks().forEach(track => track.stop());
+      // Limpar stream de vídeo
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+      }
+      // Limpar gravação de áudio
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+        if (mediaRecorderRef.current.stream) {
+          mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+        }
       }
     };
   }, [videoStream]);
@@ -372,7 +512,30 @@ const ChatPanel = () => {
   
   // Funções auxiliares
   const getClienteDisplay = () => {
-    return clienteData.nomeVisivel ? clienteData.nome : `Cliente #${clienteData.id.substring(1, 7)}`;
+    return clienteData.nomeVisivel ? clienteData.nome : `Cliente #${clienteData.id.substring(0, 6)}`;
+  };
+  
+  // Enviar QR Code pelo WhatsApp
+  const enviarWhatsApp = () => {
+    if (!vendaId) {
+      alert('Finalize a venda primeiro para gerar o QR Code.');
+      return;
+    }
+    
+    const mensagem = encodeURIComponent(
+      `Olá! Segue o link para finalizar sua compra:\n\n` +
+      `🛒 Total: R$ ${calculateTotal()}\n` +
+      `📱 Código: ${vendaId.substring(0, 8)}\n\n` +
+      `Acesse: https://suacomprasmart.com.br/pagamento/${vendaId}`
+    );
+    
+    // Usar telefone do cliente se disponível
+    const telefone = clienteData.telefone ? clienteData.telefone.replace(/\D/g, '') : '';
+    const url = telefone 
+      ? `https://wa.me/55${telefone}?text=${mensagem}`
+      : `https://wa.me/?text=${mensagem}`;
+    
+    window.open(url, '_blank');
   };
   
   return (
@@ -400,37 +563,38 @@ const ChatPanel = () => {
           
           {/* Header do Chat */}
           <div style={styles.chatHeader}>
-            <h3 style={styles.chatTitle}>SimulaçÀo de Chat</h3>
+            <h3 style={styles.chatTitle}>Chat de Atendimento</h3>
             <div style={styles.chatControls}>
               <button
                 style={isOnCall ? styles.controlButtonActive : styles.controlButton}
                 onClick={toggleCall}
-                title="Chamada"
+                title="Chamada de voz"
               >
                 <FaPhone size={14} />
               </button>
               <button
                 style={isVideoActive ? styles.controlButtonActive : styles.controlButton}
                 onClick={toggleVideo}
-                title="Vídeo"
+                title="Chamada de vídeo"
               >
                 <FaVideo size={14} />
               </button>
             </div>
           </div>
           
-          {/* Vídeo Ativo */}
-          {isVideoActive && videoStream && (
+          {/* Vídeo Ativo - CORRIGIDO */}
+          {isVideoActive && (
             <div style={styles.videoPreview}>
               <video
                 ref={videoRef}
                 autoPlay
+                playsInline
                 muted
                 style={styles.videoElement}
               />
               <div style={styles.videoOverlay}>
                 <button onClick={toggleVideo} style={styles.stopVideoBtn}>
-                  <FaStopCircle /> Parar
+                  <FaStopCircle /> Encerrar Vídeo
                 </button>
               </div>
             </div>
@@ -452,12 +616,13 @@ const ChatPanel = () => {
                     <FaMicrophone size={12} />
                     <audio controls style={styles.audioPlayer}>
                       <source src={msg.audioUrl} type="audio/webm" />
+                      Seu navegador não suporta áudio.
                     </audio>
                     <span style={styles.msgTime}>{msg.time}</span>
                   </div>
                 ) : msg.type === 'image' ? (
                   <div style={styles.imageContainer}>
-                    <img src={msg.imageUrl} alt="Enviada" style={styles.chatImage} />
+                    <img src={msg.imageUrl} alt="Imagem enviada" style={styles.chatImage} />
                     <span style={styles.msgTime}>{msg.time}</span>
                   </div>
                 ) : (
@@ -476,16 +641,16 @@ const ChatPanel = () => {
               <button
                 onClick={isRecording ? stopRecording : startRecording}
                 style={isRecording ? styles.mediaButtonRecording : styles.mediaButton}
-                title="Áudio"
+                title={isRecording ? "Parar gravação" : "Gravar áudio"}
               >
-                <FaMicrophone size={14} />
+                {isRecording ? <FaStop size={14} /> : <FaMicrophone size={14} />}
                 {isRecording && <span style={styles.recordingDot} />}
               </button>
               
               <button
                 onClick={triggerImageInput}
                 style={styles.mediaButton}
-                title="Imagem"
+                title="Enviar imagem"
               >
                 <FaImage size={14} />
               </button>
@@ -500,7 +665,7 @@ const ChatPanel = () => {
               <button
                 onClick={toggleVideo}
                 style={isVideoActive ? styles.mediaButtonActive : styles.mediaButton}
-                title="Câmera"
+                title={isVideoActive ? "Encerrar câmera" : "Iniciar câmera"}
               >
                 <FaCamera size={14} />
               </button>
@@ -518,7 +683,11 @@ const ChatPanel = () => {
             <button
               onClick={handleSendMessage}
               disabled={!message.trim()}
-              style={styles.sendButton}
+              style={{
+                ...styles.sendButton,
+                opacity: message.trim() ? 1 : 0.5,
+                cursor: message.trim() ? 'pointer' : 'not-allowed'
+              }}
             >
               <FaPaperPlane size={14} />
             </button>
@@ -543,7 +712,7 @@ const ChatPanel = () => {
           {/* Carrinho */}
           <div style={styles.cartSection}>
             <h3 style={styles.sectionTitle}>
-              <FaShoppingCart /> Carrinho de Vendas
+              <FaShoppingCart /> Carrinho de Vendas ({cart.length})
             </h3>
             
             {cart.length === 0 ? (
@@ -555,14 +724,15 @@ const ChatPanel = () => {
                     <div style={styles.cartItemInfo}>
                       <span style={styles.itemName}>{item.name}</span>
                       <span style={styles.itemDetails}>
-                        {item.quantity}x - R$ {(item.price * item.quantity).toFixed(2)}
+                        {item.quantity}x R$ {item.price.toFixed(2)} = R$ {(item.price * item.quantity).toFixed(2)}
                       </span>
                     </div>
                     <button
                       onClick={() => removeFromCart(item.id)}
                       style={styles.removeItemBtn}
+                      title="Remover item"
                     >
-                      <FaTrash size={10} />
+                      <FaTrash size={12} />
                     </button>
                   </div>
                 ))}
@@ -577,27 +747,41 @@ const ChatPanel = () => {
           
           {/* Produtos */}
           <div style={styles.productsSection}>
-            <h4 style={styles.productsTitle}>Produtos Disponíveis</h4>
+            <h4 style={styles.productsTitle}>
+              Produtos Disponíveis {loadingProdutos && '(Carregando...)'}
+            </h4>
             <div style={styles.productsList}>
-              {produtosFiltrados.map(produto => (
-                <div key={produto.id} style={styles.productCard}>
-                  <div style={styles.productInfo}>
-                    <strong style={styles.productName}>{produto.name}</strong>
-                    <div style={styles.productDetails}>
-                      <small>SKU: {produto.sku}</small>
-                      <small>Categoria: {produto.categoria}</small>
-                      <small>Cor: {produto.cor}</small>
+              {produtosFiltrados.length === 0 ? (
+                <p style={styles.emptyCart}>Nenhum produto encontrado</p>
+              ) : (
+                produtosFiltrados.map(produto => (
+                  <div key={produto.id} style={styles.productCard}>
+                    <div style={styles.productInfo}>
+                      <strong style={styles.productName}>{produto.name}</strong>
+                      <div style={styles.productDetails}>
+                        <small>SKU: {produto.sku}</small>
+                        <small>Categoria: {produto.categoria}</small>
+                        {produto.cor !== 'N/A' && <small>Cor: {produto.cor}</small>}
+                        <small style={{ color: produto.estoque < 5 ? '#dc3545' : '#28a745' }}>
+                          Estoque: {produto.estoque}
+                        </small>
+                      </div>
+                      <div style={styles.productPrice}>R$ {produto.price.toFixed(2)}</div>
                     </div>
-                    <div style={styles.productPrice}>R$ {produto.price.toFixed(2)}</div>
+                    <button
+                      onClick={() => addToCart(produto)}
+                      style={{
+                        ...styles.addProductBtn,
+                        opacity: produto.estoque > 0 ? 1 : 0.5,
+                        cursor: produto.estoque > 0 ? 'pointer' : 'not-allowed'
+                      }}
+                      disabled={produto.estoque === 0}
+                    >
+                      <FaPlus size={12} /> {produto.estoque > 0 ? 'Adicionar' : 'Sem estoque'}
+                    </button>
                   </div>
-                  <button
-                    onClick={() => addToCart(produto)}
-                    style={styles.addProductBtn}
-                  >
-                    <FaPlus size={12} /> Adicionar
-                  </button>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
           
@@ -611,7 +795,11 @@ const ChatPanel = () => {
               <button
                 onClick={handleFinalizeSale}
                 disabled={cart.length === 0 || saleStatus === 'processando'}
-                style={styles.finalizeButton}
+                style={{
+                  ...styles.finalizeButton,
+                  opacity: (cart.length === 0 || saleStatus === 'processando') ? 0.6 : 1,
+                  cursor: (cart.length === 0 || saleStatus === 'processando') ? 'not-allowed' : 'pointer'
+                }}
               >
                 {saleStatus === 'processando' ? (
                   'Processando...'
@@ -626,8 +814,11 @@ const ChatPanel = () => {
                 <p style={styles.successText}>✓ Venda criada com sucesso!</p>
                 {showQRCode && vendaId && (
                   <div style={styles.qrBox}>
-                    <QRCode value={vendaId} size={100} />
-                    <small style={styles.qrId}>ID: {vendaId.substring(0, 8)}...</small>
+                    <QRCode 
+                      value={`https://suacomprasmart.com.br/pagamento/${vendaId}`} 
+                      size={120} 
+                    />
+                    <small style={styles.qrId}>Código: {vendaId.substring(0, 8)}...</small>
                   </div>
                 )}
                 <button
@@ -639,12 +830,15 @@ const ChatPanel = () => {
               </div>
             ) : saleStatus === 'estoque_erro' ? (
               <div style={styles.errorBox}>
-                <p style={styles.errorText}>✗ Estoque esgotado</p>
+                <p style={styles.errorText}>✗ Estoque insuficiente</p>
+                <p style={{ fontSize: '12px', color: '#666' }}>
+                  Alguns produtos não estão mais disponíveis.
+                </p>
                 <button
                   onClick={() => setSaleStatus('idle')}
                   style={styles.retryButton}
                 >
-                  Tentar Novamente
+                  Revisar Carrinho
                 </button>
               </div>
             ) : (
@@ -660,7 +854,11 @@ const ChatPanel = () => {
             )}
             
             <div style={styles.secondaryActions}>
-              <button style={styles.whatsappButton}>
+              <button 
+                style={styles.whatsappButton}
+                onClick={enviarWhatsApp}
+                disabled={!vendaId}
+              >
                 <FaWhatsapp /> Enviar no WhatsApp
               </button>
               
@@ -678,7 +876,7 @@ const ChatPanel = () => {
   );
 };
 
-// Estilos completos
+// Estilos
 const styles = {
   container: {
     backgroundColor: '#f5f5f5',
@@ -758,7 +956,7 @@ const styles = {
   },
   chatControls: {
     display: 'flex',
-    gap: '10px',
+    gap: '8px',
   },
   controlButton: {
     backgroundColor: '#f0f0f0',
@@ -770,6 +968,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    transition: 'all 0.2s',
   },
   controlButtonActive: {
     backgroundColor: '#2c5aa0',
@@ -783,11 +982,12 @@ const styles = {
     justifyContent: 'center',
   },
   
-  // Video Preview
+  // Vídeo
   videoPreview: {
-    backgroundColor: '#000000',
     position: 'relative',
-    height: '180px',
+    backgroundColor: '#000000',
+    borderBottom: '1px solid #e8e8e8',
+    height: '300px',
   },
   videoElement: {
     width: '100%',
@@ -797,85 +997,82 @@ const styles = {
   videoOverlay: {
     position: 'absolute',
     bottom: '10px',
-    left: '0',
-    right: '0',
-    textAlign: 'center',
+    left: '50%',
+    transform: 'translateX(-50%)',
   },
   stopVideoBtn: {
-    backgroundColor: 'rgba(220, 53, 69, 0.8)',
+    backgroundColor: '#dc3545',
     color: '#ffffff',
     border: 'none',
-    padding: '6px 12px',
-    borderRadius: '4px',
-    fontSize: '12px',
+    borderRadius: '6px',
+    padding: '8px 16px',
     cursor: 'pointer',
-    display: 'inline-flex',
+    display: 'flex',
     alignItems: 'center',
-    gap: '5px',
+    gap: '8px',
+    fontSize: '14px',
   },
   
-  // Messages
+  // Mensagens
   messagesContainer: {
     flex: 1,
     overflowY: 'auto',
     padding: '20px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '10px',
+    gap: '12px',
   },
   msgConsultor: {
-    backgroundColor: '#eaf2ff',
-    padding: '10px 15px',
-    borderRadius: '12px 12px 12px 4px',
+    alignSelf: 'flex-end',
+    backgroundColor: '#2c5aa0',
+    color: '#ffffff',
+    padding: '12px 16px',
+    borderRadius: '16px 16px 4px 16px',
     maxWidth: '70%',
-    alignSelf: 'flex-start',
-    position: 'relative',
+    wordWrap: 'break-word',
   },
   msgCliente: {
-    backgroundColor: '#e8f5e9',
-    padding: '10px 15px',
-    borderRadius: '12px 12px 4px 12px',
+    alignSelf: 'flex-start',
+    backgroundColor: '#f0f0f0',
+    color: '#333333',
+    padding: '12px 16px',
+    borderRadius: '16px 16px 16px 4px',
     maxWidth: '70%',
-    alignSelf: 'flex-end',
-    position: 'relative',
+    wordWrap: 'break-word',
   },
   msgSystem: {
-    backgroundColor: '#f0f0f0',
-    padding: '8px 12px',
-    borderRadius: '8px',
-    maxWidth: '80%',
     alignSelf: 'center',
+    backgroundColor: '#fff3cd',
+    color: '#856404',
+    padding: '8px 16px',
+    borderRadius: '16px',
     fontSize: '12px',
-    color: '#666666',
-    fontStyle: 'italic',
   },
   msgTime: {
-    fontSize: '10px',
-    color: '#999999',
-    marginTop: '4px',
     display: 'block',
+    fontSize: '10px',
+    opacity: 0.7,
+    marginTop: '4px',
     textAlign: 'right',
   },
-  
-  // Audio e Imagem no Chat
   audioContainer: {
     display: 'flex',
     alignItems: 'center',
-    gap: '10px',
+    gap: '8px',
+    flexWrap: 'wrap',
   },
   audioPlayer: {
-    flex: 1,
-    height: '30px',
+    height: '32px',
+    maxWidth: '200px',
   },
   imageContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '5px',
+    maxWidth: '100%',
   },
   chatImage: {
-    maxWidth: '200px',
+    maxWidth: '100%',
+    maxHeight: '200px',
     borderRadius: '8px',
-    border: '1px solid #dddddd',
+    display: 'block',
   },
   
   // Input de Mensagem
@@ -884,7 +1081,7 @@ const styles = {
     borderTop: '1px solid #e8e8e8',
     display: 'flex',
     alignItems: 'flex-end',
-    gap: '10px',
+    gap: '12px',
   },
   mediaButtons: {
     display: 'flex',
@@ -893,7 +1090,7 @@ const styles = {
   },
   mediaButton: {
     backgroundColor: '#f0f0f0',
-    border: 'none',
+    border: '1px solid #e0e0e0',
     borderRadius: '6px',
     padding: '8px',
     cursor: 'pointer',
@@ -901,6 +1098,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    transition: 'all 0.2s',
   },
   mediaButtonActive: {
     backgroundColor: '#2c5aa0',
@@ -924,17 +1122,13 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '5px',
+    animation: 'pulse 1s infinite',
   },
   recordingDot: {
     width: '6px',
     height: '6px',
     backgroundColor: '#ffffff',
     borderRadius: '50%',
-    animation: 'blink 1s infinite',
-  },
-  '@keyframes blink': {
-    '0%, 100%': { opacity: 1 },
-    '50%': { opacity: 0.3 },
   },
   messageInput: {
     flex: 1,
@@ -957,6 +1151,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    transition: 'opacity 0.2s',
   },
   
   // Sidebar
@@ -969,6 +1164,8 @@ const styles = {
     flexDirection: 'column',
     gap: '20px',
     height: 'fit-content',
+    maxHeight: 'calc(100vh - 200px)',
+    overflowY: 'auto',
   },
   
   // Busca
@@ -989,6 +1186,7 @@ const styles = {
     border: '1px solid #dddddd',
     borderRadius: '8px',
     fontSize: '14px',
+    boxSizing: 'border-box',
   },
   
   // Carrinho
@@ -1029,6 +1227,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '2px',
+    flex: 1,
   },
   itemName: {
     fontSize: '13px',
@@ -1043,7 +1242,9 @@ const styles = {
     border: 'none',
     color: '#dc3545',
     cursor: 'pointer',
-    padding: '4px',
+    padding: '4px 8px',
+    borderRadius: '4px',
+    transition: 'background-color 0.2s',
   },
   cartTotal: {
     display: 'flex',
@@ -1060,7 +1261,7 @@ const styles = {
   
   // Produtos
   productsSection: {
-    maxHeight: '300px',
+    maxHeight: '250px',
     overflowY: 'auto',
   },
   productsTitle: {
@@ -1092,6 +1293,9 @@ const styles = {
     fontSize: '11px',
     color: '#666666',
     marginBottom: '4px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
   },
   productPrice: {
     fontSize: '14px',
@@ -1111,6 +1315,7 @@ const styles = {
     gap: '5px',
     width: '100%',
     justifyContent: 'center',
+    transition: 'opacity 0.2s',
   },
   
   // Divisor
@@ -1139,6 +1344,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
+    transition: 'opacity 0.2s',
   },
   successBox: {
     backgroundColor: '#e8f5e9',
@@ -1157,6 +1363,9 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
     marginBottom: '15px',
+    padding: '15px',
+    backgroundColor: '#ffffff',
+    borderRadius: '8px',
   },
   qrId: {
     color: '#666666',
@@ -1212,6 +1421,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
+    transition: 'opacity 0.2s',
   },
   cancelButton: {
     backgroundColor: '#6c757d',

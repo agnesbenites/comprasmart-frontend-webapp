@@ -1,6 +1,6 @@
 // src/pages/AdminDashboard/pages/AdminLogin.jsx
 import React from "react";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "@contexts/AuthContext";
 
 const AdminLogin = () => {
   const { login, isAuthenticated, isLoading } = useAuth('admin');
