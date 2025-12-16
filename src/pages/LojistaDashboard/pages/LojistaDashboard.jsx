@@ -19,7 +19,7 @@ import PlanosPage from "./planos/Planos.page";
 /* ===================== COMPONENTES ===================== */
 import TrainingManagementPanel from "../components/TrainingManagementPanel";
 import ReportPanelLojista from "../components/ReportPanelLojista";
-import GerenciadorPedidos from "../../shared/components/GerenciadorPedidos";
+import GerenciadorPedidos from "../../../shared/components/GerenciadorPedidos";
 
 /* ===================== ESTILOS ===================== */
 const styles = {
