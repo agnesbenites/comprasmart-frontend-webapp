@@ -1,4 +1,4 @@
-// shared/components/Button.jsx
+// src/shared/components/Button.jsx
 import React from 'react';
 import { COLORS, BORDER_RADIUS } from '../styles/theme';
 
@@ -12,7 +12,18 @@ const Button = ({ children, variant = 'primary', onClick, ...props }) => {
             backgroundColor: COLORS.success,
             color: COLORS.white,
         },
-        // ... outros variants
+        danger: {
+            backgroundColor: COLORS.danger,
+            color: COLORS.white,
+        },
+        warning: {
+            backgroundColor: COLORS.warning,
+            color: COLORS.white,
+        },
+        secondary: {
+            backgroundColor: COLORS.secondary,
+            color: COLORS.white,
+        },
     };
 
     return (

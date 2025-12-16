@@ -1,3 +1,4 @@
+// src/shared/components/GerenciadorPedidos.jsx
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
 
@@ -251,7 +252,7 @@ const GerenciadorPedidos = ({ tipoUsuario = 'vendedor' }) => {
                     ))}
                 </select>
                 <button onClick={carregarPedidos} style={styles.btnAtualizar}>
-                    Atualizar
+                    🔄 Atualizar
                 </button>
             </div>
 
@@ -262,41 +263,35 @@ const GerenciadorPedidos = ({ tipoUsuario = 'vendedor' }) => {
                         <p>Nenhum pedido encontrado</p>
                     </div>
                 ) : (
-                    pedidosFiltrados.map(pedido => {
+                    pedidosFiltrados.map((pedido) => {
                         const statusInfo = getStatusInfo(pedido.status_separacao);
                         return (
                             <div key={pedido.id} style={styles.pedidoCard}>
                                 <div style={styles.pedidoHeader}>
-                                    <span style={styles.pedidoId}>
-                                        #{pedido.id.substring(0, 8)}
-                                    </span>
-                                    <span style={styles.pedidoData}>
-                                        {formatarData(pedido.data_pedido)}
-                                    </span>
+                                    <span style={styles.pedidoId}>#{pedido.id.slice(0, 8)}</span>
+                                    <span style={styles.pedidoData}>{formatarData(pedido.data_pedido)}</span>
                                 </div>
-
-                                <div style={styles.pedidoCliente}>
-                                    {pedido.usuario?.raw_user_meta_data?.nome || 
-                                     pedido.usuario?.email || 
-                                     'Cliente'}
-                                </div>
-
-                                <div style={styles.pedidoValor}>
-                                    {formatarValor(pedido.valor_total)}
-                                </div>
-
-                                <div style={{
-                                    ...styles.pedidoStatus,
-                                    backgroundColor: statusInfo.cor
-                                }}>
-                                    {statusInfo.icon} {statusInfo.label}
-                                </div>
-
-                                <button
-                                    style={styles.btnAtualizarCard}
-                                    onClick={() => abrirModalStatus(pedido)}
+                                
+                                <p style={styles.pedidoCliente}>
+                                    👤 {pedido.usuario?.raw_user_meta_data?.nome || pedido.usuario?.email || 'Cliente'}
+                                </p>
+                                
+                                <p style={styles.pedidoValor}>{formatarValor(pedido.valor_total)}</p>
+                                
+                                <span 
+                                    style={{
+                                        ...styles.pedidoStatus,
+                                        backgroundColor: statusInfo.cor
+                                    }}
                                 >
-                                    Atualizar Status
+                                    {statusInfo.icon} {statusInfo.label}
+                                </span>
+                                
+                                <button
+                                    onClick={() => abrirModalStatus(pedido)}
+                                    style={styles.btnAtualizarCard}
+                                >
+                                    🔄 Atualizar Status
                                 </button>
                             </div>
                         );
@@ -304,31 +299,28 @@ const GerenciadorPedidos = ({ tipoUsuario = 'vendedor' }) => {
                 )}
             </div>
 
-            {/* Modal de Atualizacao de Status */}
+            {/* Modal de Atualização de Status */}
             {modalAberto && pedidoSelecionado && (
-                <div style={styles.modalBackdrop}>
-                    <div style={styles.modal}>
-                        <h3 style={styles.modalTitle}>Atualizar Status do Pedido</h3>
+                <div style={styles.modalBackdrop} onClick={() => setModalAberto(false)}>
+                    <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+                        <h2 style={styles.modalTitle}>Atualizar Status do Pedido</h2>
+                        <p style={styles.modalSubtitle}>Pedido: #{pedidoSelecionado.id.slice(0, 8)}</p>
                         <p style={styles.modalSubtitle}>
-                            Pedido: <strong>#{pedidoSelecionado.id.substring(0, 8)}</strong>
+                            Status atual: {getStatusInfo(pedidoSelecionado.status_separacao).label}
                         </p>
-                        <p style={styles.modalSubtitle}>
-                            Valor: <strong>{formatarValor(pedidoSelecionado.valor_total)}</strong>
-                        </p>
-
+                        
                         <div style={styles.statusOptions}>
-                            {statusDisponiveis.map(status => (
+                            {statusDisponiveis.map((status) => (
                                 <button
                                     key={status.value}
                                     style={{
                                         ...styles.statusOption,
-                                        backgroundColor: pedidoSelecionado.status_separacao === status.value 
+                                        backgroundColor: status.value === pedidoSelecionado.status_separacao 
                                             ? status.cor 
                                             : '#f8f9fa',
-                                        color: pedidoSelecionado.status_separacao === status.value 
+                                        color: status.value === pedidoSelecionado.status_separacao 
                                             ? 'white' 
-                                            : '#333',
-                                        border: `2px solid ${status.cor}`
+                                            : '#333'
                                     }}
                                     onClick={() => atualizarStatus(pedidoSelecionado.id, status.value)}
                                 >
@@ -339,7 +331,7 @@ const GerenciadorPedidos = ({ tipoUsuario = 'vendedor' }) => {
 
                         {!isLojista && (
                             <p style={styles.avisoPermissao}>
-                                * Status "Pago/Cancelado" somente pelo caixa
+                                ℹ️ Apenas o caixa pode marcar como "Pago/Cancelado"
                             </p>
                         )}
 
@@ -585,7 +577,8 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '8px'
+        gap: '8px',
+        border: 'none'
     },
     avisoPermissao: {
         fontSize: '0.8rem',
