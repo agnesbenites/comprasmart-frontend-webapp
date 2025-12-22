@@ -386,10 +386,34 @@ const Landingpage = () => {
           </div>
           
           <div style={styles.footerColumn}>
-            <h4 style={styles.footerTitle}>LINKS RAPIDOS</h4>
-            <a href="/termos" style={styles.footerLink}>Termos de Uso</a>
-            <a href="/privacidade" style={styles.footerLink}>Politica de Privacidade</a>
-            <a href="/contato" style={styles.footerLink}>Contato</a>
+            <h4 style={styles.footerTitle}>LINKS RÁPIDOS</h4>
+            <a 
+              href="https://merciful-keyboard-70e.notion.site/2cfcb8e9243180a08bbbf914d582e8bf" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={styles.footerLink}
+            >
+              📋 Termo de Adesão
+            </a>
+            <a 
+              href="https://merciful-keyboard-70e.notion.site/2d0cb8e9243180938a66c6b53a4aed5b" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={styles.footerLink}
+            >
+              📜 Termos e Condições de Uso
+            </a>
+            <a 
+              href="https://merciful-keyboard-70e.notion.site/2d1cb8e924318015a8b0dea48170d820" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={styles.footerLink}
+            >
+              🔒 Política de Privacidade
+            </a>
+            <a href="/contato" style={styles.footerLink}>
+              📧 Contato
+            </a>
           </div>
           
           <div style={styles.footerColumn}>
