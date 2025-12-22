@@ -15,6 +15,7 @@ import LojistaCadastro from "./LojistaCadastro";
 import LojistaProfile from "./LojistaProfile";
 import IntegracaoVenda from "./IntegracaoVenda";
 import PlanosPage from "./planos/Planos.page";
+import ExcluirContaLojista from './components/ExcluirContaLojista';
 
 /* ===================== COMPONENTES ===================== */
 import TrainingManagementPanel from "../components/TrainingManagementPanel";

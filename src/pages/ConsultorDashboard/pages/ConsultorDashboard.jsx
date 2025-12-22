@@ -19,6 +19,8 @@ import ReviewsPanel from "../components/ReviewsPanel";
 import SalesTable from "../components/SalesTable";
 import StoresPanel from "../components/StoresPanel";
 import TrainingPanel from "../components/TrainingPanel";
+import ExcluirContaConsultor from './components/ExcluirContaConsultor';
+
 
 // --- DADOS E CONSTANTES GLOBAIS ---
 const MOCK_CONSULTOR_INFO = {

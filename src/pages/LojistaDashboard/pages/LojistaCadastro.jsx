@@ -1,12 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createClient } from '@supabase/supabase-js';
+
+// Inicializar Supabase
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 const LojistaCadastro = () => {
   const [configuracoes, setConfiguracoes] = useState({
     webhookUrl: "",
     apiKey: "sk_live_**********************",
     backupAutomatico: true,
-    notificacoesEmail: true
+    notificacoesEmail: true,
+    periodoPagamentoComissao: "mensal"
   });
+  const [loading, setLoading] = useState(false);
+  const [lojistaId, setLojistaId] = useState(null);
+
+  // Buscar ID do lojista logado
+  useEffect(() => {
+    const fetchLojistaId = async () => {
+      try {
+        // Pegar o usuário logado do Auth
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          // Buscar o lojista no banco pelo email
+          const { data, error } = await supabase
+            .from('usuarios')
+            .select('id, periodo_pagamento_comissao')
+            .eq('email', user.email)
+            .eq('tipo', 'lojista')
+            .single();
+
+          if (error) throw error;
+
+          setLojistaId(data.id);
+          
+          // Carregar período salvo anteriormente
+          if (data.periodo_pagamento_comissao) {
+            setConfiguracoes(prev => ({
+              ...prev,
+              periodoPagamentoComissao: data.periodo_pagamento_comissao
+            }));
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao buscar lojista:', error);
+      }
+    };
+
+    fetchLojistaId();
+  }, []);
 
   const handleConfigChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -14,6 +60,38 @@ const LojistaCadastro = () => {
       ...configuracoes,
       [name]: type === 'checkbox' ? checked : value
     });
+  };
+
+  const handleSalvarPeriodoPagamento = async () => {
+    if (!lojistaId) {
+      alert('Erro: Lojista não identificado');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await supabase
+        .from('usuarios')
+        .update({ 
+          periodo_pagamento_comissao: configuracoes.periodoPagamentoComissao,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', lojistaId);
+
+      if (error) throw error;
+
+      alert(`✅ Período de pagamento atualizado com sucesso!\n\n${
+        configuracoes.periodoPagamentoComissao === 'quinzenal' 
+          ? '📅 Quinzenal: Pagamentos nos dias 15 e último dia útil de cada mês' 
+          : '📅 Mensal: Pagamento no último dia útil de cada mês'
+      }`);
+    } catch (error) {
+      console.error('Erro ao salvar:', error);
+      alert('❌ Erro ao salvar período de pagamento. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleIntegracaoERP = () => {
@@ -39,7 +117,6 @@ const LojistaCadastro = () => {
 
   const handleExportarBackup = () => {
     alert("Iniciando exportacao de backup...");
-    // Simulacao de download
     setTimeout(() => {
       alert("Backup exportado com sucesso!");
     }, 2000);
@@ -47,14 +124,67 @@ const LojistaCadastro = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}> Configuracoes Avancadas</h1>
+      <h1 style={styles.title}>⚙️ Configuracoes Avancadas</h1>
       <p style={styles.subtitle}>Gerencie integracoes e configuracoes tecnicas da sua loja</p>
 
       <div style={styles.grid}>
+        {/* ========== PERÍODO DE PAGAMENTO ========== */}
+        <div style={styles.card}>
+          <div style={styles.cardHeader}>
+            <h3 style={styles.cardTitle}>💰 Período de Pagamento de Comissões</h3>
+            <span style={styles.statusBadge}>Configurável</span>
+          </div>
+          <p style={styles.cardDescription}>
+            Define quando os consultores receberão suas comissões pelas vendas realizadas.
+          </p>
+          
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Escolha o período:</label>
+            <select
+              name="periodoPagamentoComissao"
+              value={configuracoes.periodoPagamentoComissao}
+              onChange={handleConfigChange}
+              style={styles.select}
+              disabled={loading}
+            >
+              <option value="quinzenal">Quinzenal (dias 15 e último dia útil)</option>
+              <option value="mensal">Mensal (último dia útil do mês)</option>
+            </select>
+            <small style={styles.helperText}>
+              {configuracoes.periodoPagamentoComissao === 'quinzenal' 
+                ? '✅ Os consultores receberão nos dias 15 e no último dia útil de cada mês'
+                : '✅ Os consultores receberão no último dia útil de cada mês'}
+            </small>
+          </div>
+
+          <div style={styles.infoBox}>
+            <strong>📌 Como funciona:</strong>
+            <ul style={styles.infoList}>
+              <li><strong>Quinzenal:</strong> Pagamentos em 2 datas (15 e último dia útil)</li>
+              <li><strong>Mensal:</strong> Pagamento único no final do mês</li>
+              <li>Comissões são calculadas automaticamente pelo sistema</li>
+              <li>Transferências processadas via Stripe Connect</li>
+            </ul>
+          </div>
+
+          <button 
+            style={{
+              ...styles.primaryButton,
+              opacity: loading ? 0.6 : 1,
+              cursor: loading ? 'not-allowed' : 'pointer'
+            }}
+            onClick={handleSalvarPeriodoPagamento}
+            disabled={loading}
+          >
+            {loading ? '⏳ Salvando...' : '💾 Salvar Período de Pagamento'}
+          </button>
+        </div>
+
+        {/* Resto dos cards... (mantém igual) */}
         {/* Integracao com ERP */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}> Integracao com ERP</h3>
+            <h3 style={styles.cardTitle}>🔗 Integracao com ERP</h3>
             <span style={styles.statusBadge}>Disponivel</span>
           </div>
           <p style={styles.cardDescription}>
@@ -63,29 +193,29 @@ const LojistaCadastro = () => {
           <div style={styles.erpOptions}>
             <div style={styles.erpOption}>
               <strong>SAP</strong>
-              <span style={styles.erpStatus}> Conectado</span>
+              <span style={styles.erpStatus}>✅ Conectado</span>
             </div>
             <div style={styles.erpOption}>
               <strong>TOTVS</strong>
-              <span style={styles.erpStatus}>a Disponivel</span>
+              <span style={styles.erpStatus}>⚠️ Disponivel</span>
             </div>
             <div style={styles.erpOption}>
               <strong>BLING</strong>
-              <span style={styles.erpStatus}> Conectar</span>
+              <span style={styles.erpStatus}>➕ Conectar</span>
             </div>
           </div>
           <button 
             style={styles.primaryButton}
             onClick={handleIntegracaoERP}
           >
-             Configurar Integracao
+            🔧 Configurar Integracao
           </button>
         </div>
 
         {/* API Keys */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}> API Keys</h3>
+            <h3 style={styles.cardTitle}>🔑 API Keys</h3>
             <span style={styles.statusBadge}>Ativa</span>
           </div>
           <p style={styles.cardDescription}>
@@ -99,14 +229,14 @@ const LojistaCadastro = () => {
                 style={styles.copyButton}
                 onClick={() => {
                   navigator.clipboard.writeText(configuracoes.apiKey);
-                  alert("API Key copiada para a area de transferancia!");
+                  alert("API Key copiada!");
                 }}
               >
-                 Copiar
+                📋 Copiar
               </button>
             </div>
             <small style={styles.helperText}>
-              Mantenha esta chave em segredo. Ela fornece acesso completo   sua conta.
+              ⚠️ Mantenha esta chave em segredo.
             </small>
           </div>
           <div style={styles.buttonGroup}>
@@ -114,10 +244,10 @@ const LojistaCadastro = () => {
               style={styles.secondaryButton}
               onClick={handleGerarAPIKey}
             >
-               Gerar Nova Key
+              🔄 Gerar Nova Key
             </button>
             <button style={styles.secondaryButton}>
-               Ver Logs de Uso
+              📊 Ver Logs
             </button>
           </div>
         </div>
@@ -125,7 +255,7 @@ const LojistaCadastro = () => {
         {/* Webhooks */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}> Webhooks</h3>
+            <h3 style={styles.cardTitle}>🔔 Webhooks</h3>
             <span style={styles.statusBadge}>Configuravel</span>
           </div>
           <p style={styles.cardDescription}>
@@ -141,99 +271,34 @@ const LojistaCadastro = () => {
               placeholder="https://sua-api.com/webhook"
               style={styles.input}
             />
-            <small style={styles.helperText}>
-              URL que recebera as notificacoes de eventos
-            </small>
-          </div>
-          <div style={styles.webhookEvents}>
-            <h4 style={styles.sectionSubtitle}>Eventos Disponiveis:</h4>
-            <div style={styles.eventList}>
-              <label style={styles.checkboxLabel}>
-                <input type="checkbox" defaultChecked />
-                 Novas vendas
-              </label>
-              <label style={styles.checkboxLabel}>
-                <input type="checkbox" defaultChecked />
-                 Alteracoes no estoque
-              </label>
-              <label style={styles.checkboxLabel}>
-                <input type="checkbox" />
-                 Clientes novos
-              </label>
-              <label style={styles.checkboxLabel}>
-                <input type="checkbox" />
-                 Pagamentos processados
-              </label>
-            </div>
           </div>
           <button 
             style={styles.primaryButton}
             onClick={handleConfigurarWebhook}
           >
-             Salvar Configuracoes
+            💾 Salvar
           </button>
         </div>
 
-        {/* Backup de Dados */}
+        {/* Backup */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}> Backup de Dados</h3>
+            <h3 style={styles.cardTitle}>🗄️ Backup</h3>
             <span style={styles.statusBadge}>Automatico</span>
           </div>
-          <p style={styles.cardDescription}>
-            Proteja seus dados com backups regulares e exportacoes.
-          </p>
-          <div style={styles.backupInfo}>
-            <div style={styles.backupItem}>
-              <strong>ltimo Backup:</strong>
-              <span>Hoje, 08:30</span>
-            </div>
-            <div style={styles.backupItem}>
-              <strong>Proximo Backup:</strong>
-              <span>Amanha, 08:30</span>
-            </div>
-            <div style={styles.backupItem}>
-              <strong>Tamanho:</strong>
-              <span>45.2 MB</span>
-            </div>
-          </div>
-          <div style={styles.backupOptions}>
-            <label style={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                name="backupAutomatico"
-                checked={configuracoes.backupAutomatico}
-                onChange={handleConfigChange}
-              />
-              Backup automatico diario
-            </label>
-            <label style={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                name="notificacoesEmail"
-                checked={configuracoes.notificacoesEmail}
-                onChange={handleConfigChange}
-              />
-              Notificar por e-mail
-            </label>
-          </div>
-          <div style={styles.buttonGroup}>
-            <button 
-              style={styles.primaryButton}
-              onClick={handleExportarBackup}
-            >
-               Exportar Backup Agora
-            </button>
-            <button style={styles.secondaryButton}>
-              ° Agendar Backup
-            </button>
-          </div>
+          <button 
+            style={styles.primaryButton}
+            onClick={handleExportarBackup}
+          >
+            📥 Exportar Backup
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
+// Estilos (mantém os mesmos)
 const styles = {
   container: {
     padding: "30px",
@@ -289,7 +354,28 @@ const styles = {
     marginBottom: "20px",
     lineHeight: "1.5",
   },
-  // ERP Section
+  select: {
+    width: "100%",
+    padding: "12px 15px",
+    border: "2px solid #e9ecef",
+    borderRadius: "8px",
+    fontSize: "1rem",
+    backgroundColor: "white",
+    cursor: "pointer",
+  },
+  infoBox: {
+    backgroundColor: "#f0f7ff",
+    border: "1px solid #b3d9ff",
+    borderRadius: "8px",
+    padding: "15px",
+    marginBottom: "20px",
+  },
+  infoList: {
+    margin: "10px 0 0 20px",
+    padding: 0,
+    fontSize: "0.9rem",
+    lineHeight: "1.8",
+  },
   erpOptions: {
     display: "flex",
     flexDirection: "column",
@@ -299,23 +385,19 @@ const styles = {
   erpOption: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
     padding: "12px",
     backgroundColor: "#f8f9fa",
     borderRadius: "8px",
-    border: "1px solid #e9ecef",
   },
   erpStatus: {
     fontSize: "0.85rem",
     fontWeight: "600",
   },
-  // API Key Section
   apiKeySection: {
     marginBottom: "20px",
   },
   apiKeyDisplay: {
     display: "flex",
-    alignItems: "center",
     gap: "10px",
     marginBottom: "5px",
   },
@@ -324,11 +406,8 @@ const styles = {
     backgroundColor: "#f8f9fa",
     padding: "10px 15px",
     borderRadius: "6px",
-    border: "1px solid #e9ecef",
     fontSize: "0.9rem",
     fontFamily: "monospace",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
   },
   copyButton: {
     backgroundColor: "#17a2b8",
@@ -336,44 +415,8 @@ const styles = {
     border: "none",
     padding: "8px 12px",
     borderRadius: "6px",
-    fontSize: "0.8rem",
     cursor: "pointer",
-    whiteSpace: "nowrap",
   },
-  // Webhooks Section
-  webhookEvents: {
-    marginBottom: "20px",
-  },
-  sectionSubtitle: {
-    fontSize: "1rem",
-    color: "#495057",
-    marginBottom: "10px",
-  },
-  eventList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "8px",
-  },
-  // Backup Section
-  backupInfo: {
-    backgroundColor: "#f8f9fa",
-    padding: "15px",
-    borderRadius: "8px",
-    marginBottom: "15px",
-  },
-  backupItem: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "5px 0",
-    fontSize: "0.9rem",
-  },
-  backupOptions: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    marginBottom: "20px",
-  },
-  // Common Styles
   formGroup: {
     marginBottom: "20px",
   },
@@ -381,7 +424,6 @@ const styles = {
     display: "block",
     marginBottom: "8px",
     fontWeight: "600",
-    color: "#333",
     fontSize: "0.9rem",
   },
   input: {
@@ -390,7 +432,6 @@ const styles = {
     border: "2px solid #e9ecef",
     borderRadius: "8px",
     fontSize: "1rem",
-    transition: "border-color 0.3s ease",
   },
   helperText: {
     color: "#666",
@@ -398,17 +439,9 @@ const styles = {
     marginTop: "5px",
     display: "block",
   },
-  checkboxLabel: {
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    cursor: "pointer",
-    fontSize: "0.9rem",
-  },
   buttonGroup: {
     display: "flex",
     gap: "10px",
-    flexWrap: "wrap",
   },
   primaryButton: {
     backgroundColor: "#2c5aa0",
@@ -419,8 +452,7 @@ const styles = {
     fontSize: "0.9rem",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "background-color 0.3s ease",
-    flex: 1,
+    width: "100%",
   },
   secondaryButton: {
     backgroundColor: "#6c757d",
@@ -430,38 +462,8 @@ const styles = {
     borderRadius: "8px",
     fontSize: "0.9rem",
     cursor: "pointer",
-    transition: "background-color 0.3s ease",
     flex: 1,
   },
 };
-
-// Hover effects
-Object.assign(styles, {
-  input: {
-    ...styles.input,
-    ":focus": {
-      outline: "none",
-      borderColor: "#2c5aa0",
-    },
-  },
-  primaryButton: {
-    ...styles.primaryButton,
-    ":hover": {
-      backgroundColor: "#1e3d6f",
-    },
-  },
-  secondaryButton: {
-    ...styles.secondaryButton,
-    ":hover": {
-      backgroundColor: "#545b62",
-    },
-  },
-  copyButton: {
-    ...styles.copyButton,
-    ":hover": {
-      backgroundColor: "#138496",
-    },
-  },
-});
 
 export default LojistaCadastro;

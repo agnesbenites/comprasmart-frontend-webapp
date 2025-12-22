@@ -2,6 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { FaStar, FaRegStar, FaFilter } from 'react-icons/fa';
+import { createClient } from '@supabase/supabase-js';
+
+// Inicializar Supabase
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 const CONSULTOR_PRIMARY = "#2c5aa0";
 const CONSULTOR_LIGHT_BG = "#eaf2ff";
@@ -13,83 +20,62 @@ const ReviewsPanel = ({ consultorId }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    carregarAvaliacoes();
-  }, []);
+    if (consultorId) {
+      carregarAvaliacoes();
+    }
+  }, [consultorId]);
 
   const carregarAvaliacoes = async () => {
     setLoading(true);
     try {
-      // TODO: Buscar da API
-      // const response = await fetch(`${API_URL}/api/consultores/${consultorId}/avaliacoes`);
-      
-      // Mock de dados
-      setTimeout(() => {
-        setAvaliacoes(mockAvaliacoes);
-        setLoading(false);
-      }, 500);
+      // Buscar avaliações do consultor no Supabase
+      const { data, error } = await supabase
+        .from('avaliacoes')
+        .select(`
+          id,
+          nota,
+          comentario,
+          created_at,
+          cliente_id,
+          produto_id,
+          loja_id,
+          produtos:produto_id (
+            nome,
+            sku
+          ),
+          lojas:loja_id (
+            nome_fantasia
+          )
+        `)
+        .eq('consultor_id', consultorId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Transformar dados para o formato do componente
+      const avaliacoesFormatadas = data.map(av => ({
+        id: av.id,
+        chamadaId: `CH-${new Date(av.created_at).getFullYear()}-${String(av.id).padStart(3, '0')}`,
+        estrelas: av.nota,
+        comentario: av.comentario || 'Sem comentário',
+        loja: av.lojas?.nome_fantasia || 'Loja não identificada',
+        produtos: av.produtos ? [av.produtos.nome] : ['Produto não identificado'],
+        data: av.created_at.split('T')[0],
+        horario: new Date(av.created_at).toLocaleTimeString('pt-BR', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        }),
+        duracao: '-- min', // Pode calcular se tiver campo de duração
+      }));
+
+      setAvaliacoes(avaliacoesFormatadas);
     } catch (error) {
       console.error('Erro ao carregar avaliacoes:', error);
+      alert('Erro ao carregar avaliações. Tente novamente.');
+    } finally {
       setLoading(false);
     }
   };
-
-  const mockAvaliacoes = [
-    {
-      id: 1,
-      chamadaId: 'CH-2024-001',
-      estrelas: 5,
-      comentario: 'Excelente atendimento! O consultor foi muito atencioso e me ajudou a escolher o produto perfeito. Recomendo!',
-      loja: 'Eletr´nicos Center',
-      produtos: ['Smart TV 55"', 'Soundbar Premium'],
-      data: '2024-12-05',
-      horario: '14:30',
-      duracao: '18 min',
-    },
-    {
-      id: 2,
-      chamadaId: 'CH-2024-002',
-      estrelas: 4,
-      comentario: 'Bom atendimento, apenas demorou um pouco para responder minhas duvidas.',
-      loja: 'Tech Store',
-      produtos: ['Notebook Gamer'],
-      data: '2024-12-03',
-      horario: '10:15',
-      duracao: '25 min',
-    },
-    {
-      id: 3,
-      chamadaId: 'CH-2024-003',
-      estrelas: 5,
-      comentario: 'Profissional muito competente! Tirou todas as minhas duvidas e me passou muita confianca na compra.',
-      loja: 'Eletr´nicos Center',
-      produtos: ['Geladeira Inverter', 'Micro-ondas'],
-      data: '2024-12-01',
-      horario: '16:45',
-      duracao: '22 min',
-    },
-    {
-      id: 4,
-      chamadaId: 'CH-2024-004',
-      estrelas: 3,
-      comentario: 'Atendimento ok, mas esperava mais detalhes sobre o produto.',
-      loja: 'Casa & Decoracao',
-      produtos: ['Sofa 3 Lugares'],
-      data: '2024-11-28',
-      horario: '11:20',
-      duracao: '12 min',
-    },
-    {
-      id: 5,
-      chamadaId: 'CH-2024-005',
-      estrelas: 5,
-      comentario: 'Simplesmente perfeito! Super recomendo este consultor.',
-      loja: 'Tech Store',
-      produtos: ['Air Fryer', 'Liquidificador'],
-      data: '2024-11-25',
-      horario: '09:30',
-      duracao: '15 min',
-    },
-  ];
 
   const calcularEstatisticas = () => {
     const total = avaliacoes.length;
@@ -131,7 +117,7 @@ const ReviewsPanel = ({ consultorId }) => {
     return (
       <div style={styles.loadingContainer}>
         <div style={styles.spinner}></div>
-        <p>Carregando avaliacoes...</p>
+        <p>Carregando avaliações...</p>
       </div>
     );
   }
@@ -141,9 +127,15 @@ const ReviewsPanel = ({ consultorId }) => {
       {/* Header com Estatisticas */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>i Minhas Avaliacoes</h2>
+          <h2 style={styles.title}>⭐ Minhas Avaliações</h2>
           <p style={styles.subtitle}>Veja o feedback dos seus clientes</p>
         </div>
+        <button 
+          onClick={carregarAvaliacoes}
+          style={styles.refreshButton}
+        >
+          🔄 Atualizar
+        </button>
       </div>
 
       {/* Card de Estatisticas Gerais */}
@@ -154,7 +146,7 @@ const ReviewsPanel = ({ consultorId }) => {
             <div style={styles.mediaEstrelas}>
               {renderStars(parseFloat(stats.media))}
             </div>
-            <span style={styles.mediaTotalAvaliacoes}>{stats.total} avaliacoes</span>
+            <span style={styles.mediaTotalAvaliacoes}>{stats.total} avaliações</span>
           </div>
         </div>
 
@@ -165,7 +157,7 @@ const ReviewsPanel = ({ consultorId }) => {
             
             return (
               <div key={estrela} style={styles.barraRow}>
-                <span style={styles.barraLabel}>{estrela} i</span>
+                <span style={styles.barraLabel}>{estrela} ⭐</span>
                 <div style={styles.barraContainer}>
                   <div 
                     style={{
@@ -190,7 +182,7 @@ const ReviewsPanel = ({ consultorId }) => {
             onChange={(e) => setFiltroEstrelas(e.target.value)}
             style={styles.select}
           >
-            <option value="todas">Todas as avaliacoes</option>
+            <option value="todas">Todas as avaliações</option>
             <option value="5">5 estrelas</option>
             <option value="4">4 estrelas</option>
             <option value="3">3 estrelas</option>
@@ -221,18 +213,20 @@ const ReviewsPanel = ({ consultorId }) => {
             <div style={styles.avaliacaoHeader}>
               <div style={styles.chamadaInfo}>
                 <div style={styles.chamadaIdBadge}>
-                   {avaliacao.chamadaId}
+                  🎫 {avaliacao.chamadaId}
                 </div>
                 <div style={styles.dataHoraInfo}>
                   <span style={styles.dataText}>
-                     {new Date(avaliacao.data).toLocaleDateString('pt-BR')}
+                    📅 {new Date(avaliacao.data).toLocaleDateString('pt-BR')}
                   </span>
                   <span style={styles.horarioText}>
-                     {avaliacao.horario}
+                    🕐 {avaliacao.horario}
                   </span>
-                  <span style={styles.duracaoText}>
-                    ± {avaliacao.duracao}
-                  </span>
+                  {avaliacao.duracao !== '-- min' && (
+                    <span style={styles.duracaoText}>
+                      ⏱️ {avaliacao.duracao}
+                    </span>
+                  )}
                 </div>
               </div>
               
@@ -246,11 +240,11 @@ const ReviewsPanel = ({ consultorId }) => {
 
             <div style={styles.avaliacaoFooter}>
               <div style={styles.footerRow}>
-                <span style={styles.footerLabel}> Loja:</span>
+                <span style={styles.footerLabel}>🏪 Loja:</span>
                 <span style={styles.footerValue}>{avaliacao.loja}</span>
               </div>
               <div style={styles.footerRow}>
-                <span style={styles.footerLabel}> Produtos:</span>
+                <span style={styles.footerLabel}>📦 Produtos:</span>
                 <span style={styles.footerValue}>
                   {avaliacao.produtos.join(', ')}
                 </span>
@@ -263,12 +257,12 @@ const ReviewsPanel = ({ consultorId }) => {
       {/* Mensagem quando nao ha avaliacoes */}
       {avaliacoesFiltradas.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>i</div>
-          <p style={styles.emptyTitle}>Nenhuma avaliacao encontrada</p>
+          <div style={styles.emptyIcon}>⭐</div>
+          <p style={styles.emptyTitle}>Nenhuma avaliação encontrada</p>
           <p style={styles.emptySubtitle}>
             {filtroEstrelas !== 'todas' 
               ? 'Tente ajustar os filtros de busca'
-              : 'Voca ainda nao recebeu avaliacoes dos clientes'}
+              : 'Você ainda não recebeu avaliações dos clientes'}
           </p>
         </div>
       )}
@@ -316,6 +310,9 @@ const styles = {
     padding: '25px',
     marginBottom: '25px',
     boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
     fontSize: '1.8rem',
@@ -328,6 +325,16 @@ const styles = {
     color: '#666',
     margin: 0,
   },
+  refreshButton: {
+    backgroundColor: CONSULTOR_PRIMARY,
+    color: 'white',
+    border: 'none',
+    padding: '10px 20px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    fontWeight: '600',
+  },
   statsCard: {
     backgroundColor: 'white',
     borderRadius: '12px',
@@ -337,6 +344,7 @@ const styles = {
     display: 'flex',
     gap: '40px',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   statsLeft: {
     flex: '0 0 auto',
@@ -361,6 +369,7 @@ const styles = {
   },
   statsRight: {
     flex: 1,
+    minWidth: '300px',
     display: 'flex',
     flexDirection: 'column',
     gap: '10px',
@@ -448,6 +457,8 @@ const styles = {
     marginBottom: '15px',
     paddingBottom: '15px',
     borderBottom: '1px solid #e9ecef',
+    flexWrap: 'wrap',
+    gap: '15px',
   },
   chamadaInfo: {
     display: 'flex',
