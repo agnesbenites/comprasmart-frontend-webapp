@@ -3,7 +3,6 @@ import QRCode from 'react-qr-code';
 import { 
   FaUserCircle, 
   FaShoppingCart, 
-  FaWhatsapp, 
   FaTimes, 
   FaSearch,
   FaMicrophone,
@@ -16,7 +15,9 @@ import {
   FaStop,
   FaPlus,
   FaTrash,
-  FaQrcode
+  FaQrcode,
+  FaBars,
+  FaChevronLeft
 } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../../../supabaseClient';
@@ -26,6 +27,9 @@ const API_URL = 'https://plataforma-consultoria-mvp.onrender.com';
 const ChatPanel = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Estado para controlar menu lateral
+  const [menuVisivel, setMenuVisivel] = useState(false);
   
   // Dados do cliente - vem da navegação ou do estado
   const [clienteData, setClienteData] = useState({
@@ -433,9 +437,6 @@ const ChatPanel = () => {
         setVendaId(responseBody.vendaId);
         setShowQRCode(true);
         setSaleStatus('sucesso');
-        
-        // Limpar carrinho após sucesso
-        // setCart([]); // Descomentar se quiser limpar automaticamente
       }
       
     } catch (error) {
@@ -457,7 +458,7 @@ const ChatPanel = () => {
         valorTotal: comVenda ? parseFloat(calculateTotal()) : 0,
         status: comVenda ? 'venda_concluida' : 'sem_venda',
         dataAtendimento: new Date().toISOString(),
-        mensagens: messages.filter(m => m.type !== 'audio') // Não salvar áudios no histórico
+        mensagens: messages.filter(m => m.type !== 'audio')
       };
       
       await fetch(`${API_URL}/api/atendimentos/historico`, {
@@ -515,36 +516,72 @@ const ChatPanel = () => {
     return clienteData.nomeVisivel ? clienteData.nome : `Cliente #${clienteData.id.substring(0, 6)}`;
   };
   
-  // Enviar QR Code pelo WhatsApp
-  const enviarWhatsApp = () => {
-    if (!vendaId) {
-      alert('Finalize a venda primeiro para gerar o QR Code.');
-      return;
+  // Voltar para dashboard
+  const voltarParaDashboard = () => {
+    if (window.confirm('Tem certeza que deseja encerrar este atendimento?')) {
+      navigate('/consultor/dashboard');
     }
-    
-    const mensagem = encodeURIComponent(
-      `Olá! Segue o link para finalizar sua compra:\n\n` +
-      `🛒 Total: R$ ${calculateTotal()}\n` +
-      `📱 Código: ${vendaId.substring(0, 8)}\n\n` +
-      `Acesse: https://suacomprasmart.com.br/pagamento/${vendaId}`
-    );
-    
-    // Usar telefone do cliente se disponível
-    const telefone = clienteData.telefone ? clienteData.telefone.replace(/\D/g, '') : '';
-    const url = telefone 
-      ? `https://wa.me/55${telefone}?text=${mensagem}`
-      : `https://wa.me/?text=${mensagem}`;
-    
-    window.open(url, '_blank');
   };
   
   return (
     <div style={styles.container}>
       
-      {/* Header */}
+      {/* Botão flutuante para mostrar/ocultar menu */}
+      <button 
+        onClick={() => setMenuVisivel(!menuVisivel)}
+        style={styles.menuToggleButton}
+        title={menuVisivel ? "Ocultar menu" : "Mostrar menu"}
+      >
+        {menuVisivel ? <FaChevronLeft /> : <FaBars />}
+      </button>
+      
+      {/* Menu lateral - condicional */}
+      {menuVisivel && (
+        <div style={styles.menuLateral}>
+          <h3 style={styles.menuTitle}>📋 Menu</h3>
+          <button 
+            onClick={() => navigate('/consultor/dashboard')}
+            style={styles.menuButton}
+          >
+            🏠 Voltar ao Dashboard
+          </button>
+          <button 
+            onClick={() => navigate('/consultor/dashboard/fila')}
+            style={styles.menuButton}
+          >
+            👥 Próximo da Fila
+          </button>
+          <button 
+            onClick={() => navigate('/consultor/dashboard/historico')}
+            style={styles.menuButton}
+          >
+            📜 Histórico
+          </button>
+          <div style={styles.menuDivider} />
+          <button 
+            onClick={voltarParaDashboard}
+            style={styles.menuDangerButton}
+          >
+            ❌ Encerrar Atendimento
+          </button>
+        </div>
+      )}
+      
+      {/* Header simplificado */}
       <div style={styles.header}>
         <div style={styles.headerContent}>
-          <h1 style={styles.pageTitle}>Atendimento Ativo</h1>
+          <div style={styles.headerTop}>
+            <h1 style={styles.pageTitle}>Atendimento Ativo</h1>
+            <div style={styles.headerActions}>
+              <button 
+                onClick={() => navigate('/consultor/dashboard')}
+                style={styles.backButton}
+                title="Voltar ao dashboard"
+              >
+                <FaChevronLeft /> Voltar
+              </button>
+            </div>
+          </div>
           <div style={styles.clienteInfo}>
             <FaUserCircle style={styles.avatar} />
             <div>
@@ -556,14 +593,18 @@ const ChatPanel = () => {
       </div>
       
       {/* Conteúdo Principal */}
-      <div style={styles.mainLayout}>
+      <div style={{
+        ...styles.mainLayout,
+        marginLeft: menuVisivel ? '250px' : '30px',
+        transition: 'margin-left 0.3s ease'
+      }}>
         
         {/* Chat */}
         <div style={styles.chatContainer}>
           
           {/* Header do Chat */}
           <div style={styles.chatHeader}>
-            <h3 style={styles.chatTitle}>Chat de Atendimento</h3>
+            <h3 style={styles.chatTitle}>💬 Chat de Atendimento</h3>
             <div style={styles.chatControls}>
               <button
                 style={isOnCall ? styles.controlButtonActive : styles.controlButton}
@@ -582,7 +623,7 @@ const ChatPanel = () => {
             </div>
           </div>
           
-          {/* Vídeo Ativo - CORRIGIDO */}
+          {/* Vídeo Ativo */}
           {isVideoActive && (
             <div style={styles.videoPreview}>
               <video
@@ -697,35 +738,57 @@ const ChatPanel = () => {
         {/* Sidebar de Vendas */}
         <div style={styles.sidebar}>
           
-          {/* Busca */}
-          <div style={styles.searchBox}>
-            <FaSearch style={styles.searchIcon} />
-            <input
-              type="text"
-              placeholder="Buscar por SKU, nome, cor, categoria..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={styles.searchInput}
-            />
+          {/* Busca melhorada */}
+          <div style={styles.searchContainer}>
+            <div style={styles.searchBox}>
+              <FaSearch style={styles.searchIcon} />
+              <input
+                type="text"
+                placeholder="Buscar produtos (nome, SKU, categoria)"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={styles.searchInput}
+              />
+            </div>
+            <small style={styles.searchHelp}>
+              {searchTerm ? `${produtosFiltrados.length} produto(s) encontrado(s)` : 'Digite para buscar produtos'}
+            </small>
           </div>
           
           {/* Carrinho */}
           <div style={styles.cartSection}>
             <h3 style={styles.sectionTitle}>
-              <FaShoppingCart /> Carrinho de Vendas ({cart.length})
+              🛒 Carrinho de Vendas ({cart.length})
             </h3>
             
             {cart.length === 0 ? (
-              <p style={styles.emptyCart}>Carrinho vazio</p>
+              <div style={styles.emptyState}>
+                <p style={styles.emptyText}>Carrinho vazio</p>
+                <p style={styles.emptySubtext}>Adicione produtos da lista abaixo</p>
+              </div>
             ) : (
               <div style={styles.cartItems}>
                 {cart.map(item => (
                   <div key={item.id} style={styles.cartItem}>
                     <div style={styles.cartItemInfo}>
                       <span style={styles.itemName}>{item.name}</span>
-                      <span style={styles.itemDetails}>
-                        {item.quantity}x R$ {item.price.toFixed(2)} = R$ {(item.price * item.quantity).toFixed(2)}
-                      </span>
+                      <div style={styles.itemActions}>
+                        <button 
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          style={styles.quantityButton}
+                        >
+                          -
+                        </button>
+                        <span style={styles.itemQuantity}>{item.quantity}x</span>
+                        <button 
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          style={styles.quantityButton}
+                          disabled={item.quantity >= (item.estoque || 99)}
+                        >
+                          +
+                        </button>
+                        <span style={styles.itemPrice}>R$ {(item.price * item.quantity).toFixed(2)}</span>
+                      </div>
                     </div>
                     <button
                       onClick={() => removeFromCart(item.id)}
@@ -739,46 +802,70 @@ const ChatPanel = () => {
               </div>
             )}
             
-            <div style={styles.cartTotal}>
-              <span>Total:</span>
-              <span style={styles.totalValue}>R$ {calculateTotal()}</span>
-            </div>
+            {cart.length > 0 && (
+              <div style={styles.cartTotal}>
+                <span>Total:</span>
+                <span style={styles.totalValue}>R$ {calculateTotal()}</span>
+              </div>
+            )}
           </div>
           
           {/* Produtos */}
           <div style={styles.productsSection}>
-            <h4 style={styles.productsTitle}>
-              Produtos Disponíveis {loadingProdutos && '(Carregando...)'}
-            </h4>
+            <div style={styles.sectionHeader}>
+              <h4 style={styles.productsTitle}>
+                📦 Produtos Disponíveis 
+                {loadingProdutos && ' (Carregando...)'}
+              </h4>
+              {!loadingProdutos && (
+                <small style={styles.stockInfo}>
+                  {produtosDisponiveis.length} produtos em estoque
+                </small>
+              )}
+            </div>
             <div style={styles.productsList}>
               {produtosFiltrados.length === 0 ? (
-                <p style={styles.emptyCart}>Nenhum produto encontrado</p>
+                <div style={styles.emptyState}>
+                  <p style={styles.emptyText}>Nenhum produto encontrado</p>
+                  <p style={styles.emptySubtext}>Tente outra busca ou limpe o filtro</p>
+                </div>
               ) : (
                 produtosFiltrados.map(produto => (
                   <div key={produto.id} style={styles.productCard}>
-                    <div style={styles.productInfo}>
+                    <div style={styles.productHeader}>
                       <strong style={styles.productName}>{produto.name}</strong>
-                      <div style={styles.productDetails}>
-                        <small>SKU: {produto.sku}</small>
-                        <small>Categoria: {produto.categoria}</small>
-                        {produto.cor !== 'N/A' && <small>Cor: {produto.cor}</small>}
-                        <small style={{ color: produto.estoque < 5 ? '#dc3545' : '#28a745' }}>
-                          Estoque: {produto.estoque}
-                        </small>
+                      <div style={styles.productBadges}>
+                        {produto.estoque < 5 && (
+                          <span style={styles.lowStockBadge}>⚠️ Baixo estoque</span>
+                        )}
                       </div>
-                      <div style={styles.productPrice}>R$ {produto.price.toFixed(2)}</div>
                     </div>
-                    <button
-                      onClick={() => addToCart(produto)}
-                      style={{
-                        ...styles.addProductBtn,
-                        opacity: produto.estoque > 0 ? 1 : 0.5,
-                        cursor: produto.estoque > 0 ? 'pointer' : 'not-allowed'
-                      }}
-                      disabled={produto.estoque === 0}
-                    >
-                      <FaPlus size={12} /> {produto.estoque > 0 ? 'Adicionar' : 'Sem estoque'}
-                    </button>
+                    <div style={styles.productDetails}>
+                      <small>SKU: {produto.sku}</small>
+                      <small>Categoria: {produto.categoria}</small>
+                      {produto.cor !== 'N/A' && <small>Cor: {produto.cor}</small>}
+                      <small style={{ 
+                        color: produto.estoque < 1 ? '#dc3545' : 
+                               produto.estoque < 5 ? '#ffc107' : '#28a745'
+                      }}>
+                        Estoque: {produto.estoque}
+                      </small>
+                    </div>
+                    <div style={styles.productFooter}>
+                      <div style={styles.productPrice}>R$ {produto.price.toFixed(2)}</div>
+                      <button
+                        onClick={() => addToCart(produto)}
+                        style={{
+                          ...styles.addProductBtn,
+                          opacity: produto.estoque > 0 ? 1 : 0.5,
+                          cursor: produto.estoque > 0 ? 'pointer' : 'not-allowed'
+                        }}
+                        disabled={produto.estoque === 0}
+                        title={produto.estoque === 0 ? 'Produto indisponível' : 'Adicionar ao carrinho'}
+                      >
+                        <FaPlus size={12} /> {produto.estoque > 0 ? 'Adicionar' : 'Esgotado'}
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -802,7 +889,7 @@ const ChatPanel = () => {
                 }}
               >
                 {saleStatus === 'processando' ? (
-                  'Processando...'
+                  '🔄 Processando...'
                 ) : (
                   <>
                     <FaQrcode /> Finalizar Venda e Gerar QR Code
@@ -811,7 +898,7 @@ const ChatPanel = () => {
               </button>
             ) : saleStatus === 'sucesso' ? (
               <div style={styles.successBox}>
-                <p style={styles.successText}>✓ Venda criada com sucesso!</p>
+                <p style={styles.successText}>✅ Venda criada com sucesso!</p>
                 {showQRCode && vendaId && (
                   <div style={styles.qrBox}>
                     <QRCode 
@@ -819,6 +906,9 @@ const ChatPanel = () => {
                       size={120} 
                     />
                     <small style={styles.qrId}>Código: {vendaId.substring(0, 8)}...</small>
+                    <p style={styles.qrInstructions}>
+                      Cliente pode pagar escaneando este QR Code
+                    </p>
                   </div>
                 )}
                 <button
@@ -830,7 +920,7 @@ const ChatPanel = () => {
               </div>
             ) : saleStatus === 'estoque_erro' ? (
               <div style={styles.errorBox}>
-                <p style={styles.errorText}>✗ Estoque insuficiente</p>
+                <p style={styles.errorText}>⚠️ Estoque insuficiente</p>
                 <p style={{ fontSize: '12px', color: '#666' }}>
                   Alguns produtos não estão mais disponíveis.
                 </p>
@@ -843,7 +933,7 @@ const ChatPanel = () => {
               </div>
             ) : (
               <div style={styles.errorBox}>
-                <p style={styles.errorText}>✗ Erro na venda</p>
+                <p style={styles.errorText}>❌ Erro na venda</p>
                 <button
                   onClick={() => setSaleStatus('idle')}
                   style={styles.retryButton}
@@ -854,14 +944,6 @@ const ChatPanel = () => {
             )}
             
             <div style={styles.secondaryActions}>
-              <button 
-                style={styles.whatsappButton}
-                onClick={enviarWhatsApp}
-                disabled={!vendaId}
-              >
-                <FaWhatsapp /> Enviar no WhatsApp
-              </button>
-              
               <button
                 onClick={handleEncerrarSemVenda}
                 style={styles.cancelButton}
@@ -882,6 +964,78 @@ const styles = {
     backgroundColor: '#f5f5f5',
     minHeight: '100vh',
     fontFamily: 'Arial, sans-serif',
+    position: 'relative',
+  },
+  
+  // Botão flutuante para menu
+  menuToggleButton: {
+    position: 'fixed',
+    left: '15px',
+    top: '15px',
+    zIndex: 1000,
+    backgroundColor: '#2c5aa0',
+    color: 'white',
+    border: 'none',
+    borderRadius: '50%',
+    width: '40px',
+    height: '40px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+    transition: 'all 0.3s ease',
+  },
+  
+  // Menu lateral
+  menuLateral: {
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    width: '240px',
+    height: '100vh',
+    backgroundColor: '#ffffff',
+    boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
+    zIndex: 999,
+    padding: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  },
+  menuTitle: {
+    color: '#2c5aa0',
+    fontSize: '18px',
+    marginBottom: '20px',
+    paddingBottom: '10px',
+    borderBottom: '1px solid #eee',
+  },
+  menuButton: {
+    backgroundColor: '#f8f9fa',
+    color: '#333',
+    border: '1px solid #ddd',
+    padding: '12px 16px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    textAlign: 'left',
+    fontSize: '14px',
+    transition: 'all 0.2s',
+  },
+  menuDangerButton: {
+    backgroundColor: '#fff5f5',
+    color: '#dc3545',
+    border: '1px solid #f5c6cb',
+    padding: '12px 16px',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    textAlign: 'left',
+    fontSize: '14px',
+    transition: 'all 0.2s',
+    marginTop: '10px',
+  },
+  menuDivider: {
+    height: '1px',
+    backgroundColor: '#eee',
+    margin: '10px 0',
   },
   
   // Header
@@ -890,16 +1044,40 @@ const styles = {
     padding: '20px 30px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
     marginBottom: '20px',
+    transition: 'margin-left 0.3s ease',
   },
   headerContent: {
     maxWidth: '1400px',
     margin: '0 auto',
   },
+  headerTop: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
+  },
   pageTitle: {
     color: '#2c5aa0',
     fontSize: '24px',
     fontWeight: 'bold',
-    marginBottom: '20px',
+    margin: 0,
+  },
+  headerActions: {
+    display: 'flex',
+    gap: '10px',
+  },
+  backButton: {
+    backgroundColor: '#f8f9fa',
+    color: '#666',
+    border: '1px solid #ddd',
+    padding: '8px 16px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14px',
+    transition: 'all 0.2s',
   },
   clienteInfo: {
     display: 'flex',
@@ -930,6 +1108,7 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: '1fr 400px',
     gap: '20px',
+    transition: 'margin-left 0.3s ease',
   },
   
   // Chat Container
@@ -1168,9 +1347,13 @@ const styles = {
     overflowY: 'auto',
   },
   
-  // Busca
+  // Busca melhorada
+  searchContainer: {
+    marginBottom: '10px',
+  },
   searchBox: {
     position: 'relative',
+    marginBottom: '8px',
   },
   searchIcon: {
     position: 'absolute',
@@ -1182,11 +1365,17 @@ const styles = {
   },
   searchInput: {
     width: '100%',
-    padding: '10px 10px 10px 36px',
+    padding: '12px 12px 12px 40px',
     border: '1px solid #dddddd',
     borderRadius: '8px',
     fontSize: '14px',
     boxSizing: 'border-box',
+    transition: 'border-color 0.2s',
+  },
+  searchHelp: {
+    color: '#666',
+    fontSize: '11px',
+    paddingLeft: '5px',
   },
   
   // Carrinho
@@ -1203,14 +1392,24 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
   },
-  emptyCart: {
+  emptyState: {
     textAlign: 'center',
-    color: '#999999',
-    fontSize: '14px',
     padding: '20px 0',
+    backgroundColor: '#f8f9fa',
+    borderRadius: '8px',
+  },
+  emptyText: {
+    color: '#666',
+    fontSize: '14px',
+    margin: '0 0 5px 0',
+  },
+  emptySubtext: {
+    color: '#999',
+    fontSize: '12px',
+    margin: 0,
   },
   cartItems: {
-    maxHeight: '150px',
+    maxHeight: '200px',
     overflowY: 'auto',
     marginBottom: '10px',
   },
@@ -1218,24 +1417,51 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '8px',
+    padding: '10px',
     backgroundColor: '#f8f9fa',
-    borderRadius: '6px',
-    marginBottom: '6px',
+    borderRadius: '8px',
+    marginBottom: '8px',
+    border: '1px solid #eee',
   },
   cartItemInfo: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '2px',
+    gap: '6px',
     flex: 1,
   },
   itemName: {
     fontSize: '13px',
     fontWeight: '500',
+    color: '#333',
   },
-  itemDetails: {
+  itemActions: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  quantityButton: {
+    width: '24px',
+    height: '24px',
+    borderRadius: '4px',
+    border: '1px solid #ddd',
+    backgroundColor: 'white',
+    cursor: 'pointer',
     fontSize: '12px',
-    color: '#666666',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  itemQuantity: {
+    fontSize: '12px',
+    color: '#666',
+    minWidth: '20px',
+    textAlign: 'center',
+  },
+  itemPrice: {
+    fontSize: '12px',
+    fontWeight: 'bold',
+    color: '#28a745',
+    marginLeft: '8px',
   },
   removeItemBtn: {
     backgroundColor: 'transparent',
@@ -1252,6 +1478,7 @@ const styles = {
     alignItems: 'center',
     paddingTop: '10px',
     borderTop: '1px solid #e8e8e8',
+    marginTop: '10px',
   },
   totalValue: {
     fontSize: '18px',
@@ -1261,14 +1488,21 @@ const styles = {
   
   // Produtos
   productsSection: {
-    maxHeight: '250px',
+    maxHeight: '300px',
     overflowY: 'auto',
+  },
+  sectionHeader: {
+    marginBottom: '10px',
   },
   productsTitle: {
     fontSize: '14px',
     fontWeight: '600',
     color: '#666666',
-    margin: '0 0 10px 0',
+    margin: '0 0 5px 0',
+  },
+  stockInfo: {
+    color: '#999',
+    fontSize: '11px',
   },
   productsList: {
     display: 'flex',
@@ -1277,25 +1511,43 @@ const styles = {
   },
   productCard: {
     backgroundColor: '#f8f9fa',
-    padding: '10px',
-    borderRadius: '6px',
+    padding: '12px',
+    borderRadius: '8px',
     border: '1px solid #e8e8e8',
   },
-  productInfo: {
-    marginBottom: '8px',
+  productHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: '6px',
   },
   productName: {
     fontSize: '13px',
     display: 'block',
-    marginBottom: '4px',
+    flex: 1,
+  },
+  productBadges: {
+    marginLeft: '8px',
+  },
+  lowStockBadge: {
+    fontSize: '9px',
+    color: '#ffc107',
+    backgroundColor: '#fff3cd',
+    padding: '2px 6px',
+    borderRadius: '10px',
   },
   productDetails: {
     fontSize: '11px',
     color: '#666666',
-    marginBottom: '4px',
+    marginBottom: '8px',
     display: 'flex',
     flexDirection: 'column',
     gap: '2px',
+  },
+  productFooter: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   productPrice: {
     fontSize: '14px',
@@ -1313,8 +1565,6 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: '5px',
-    width: '100%',
-    justifyContent: 'center',
     transition: 'opacity 0.2s',
   },
   
@@ -1371,6 +1621,11 @@ const styles = {
     color: '#666666',
     fontSize: '11px',
   },
+  qrInstructions: {
+    fontSize: '12px',
+    color: '#666',
+    marginTop: '5px',
+  },
   continueButton: {
     backgroundColor: '#2c5aa0',
     color: '#ffffff',
@@ -1409,20 +1664,6 @@ const styles = {
     flexDirection: 'column',
     gap: '10px',
   },
-  whatsappButton: {
-    backgroundColor: '#25D366',
-    color: '#ffffff',
-    border: 'none',
-    padding: '12px',
-    borderRadius: '8px',
-    fontSize: '14px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px',
-    transition: 'opacity 0.2s',
-  },
   cancelButton: {
     backgroundColor: '#6c757d',
     color: '#ffffff',
@@ -1433,5 +1674,15 @@ const styles = {
     cursor: 'pointer',
   },
 };
+
+// Adicionar animação para o ponto de gravação
+const styleSheet = document.styleSheets[0];
+styleSheet.insertRule(`
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+`, styleSheet.cssRules.length);
 
 export default ChatPanel;

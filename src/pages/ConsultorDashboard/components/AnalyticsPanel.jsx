@@ -25,7 +25,6 @@ const AnalyticsPanel = () => {
         commissionValue: 'R$ 0,00',
         closedSales: 0,
         qrCodesSent: 0,
-        indicatedConsultants: 0,
         rating: 0,
         associatedStores: [],
         associatedSegments: []
@@ -84,12 +83,6 @@ const AnalyticsPanel = () => {
                 .select('segmento:segmentos(nome)')
                 .eq('consultor_id', userId);
             
-            const { data: indicacoes } = await supabase
-                .from('indicacoes')
-                .select('*')
-                .eq('indicador_id', userId)
-                .eq('status', 'ativo');
-            
             const { data: avaliacoes } = await supabase
                 .from('avaliacoes')
                 .select('nota')
@@ -116,7 +109,6 @@ const AnalyticsPanel = () => {
                 commissionValue: `R$ ${totalComissao.toFixed(2).replace('.', ',')}`,
                 closedSales: vendasConcluidas.length,
                 qrCodesSent: vendas?.length || 0,
-                indicatedConsultants: indicacoes?.length || 0,
                 rating: mediaAvaliacao,
                 associatedStores: lojas?.map(l => l.loja?.nome_fantasia).filter(Boolean) || [],
                 associatedSegments: segmentos?.map(s => s.segmento?.nome).filter(Boolean) || []
@@ -161,41 +153,6 @@ const AnalyticsPanel = () => {
         alert('Para gerar um QR Code, vá até a tela de Atendimento e finalize uma venda.');
     };
 
-    const handleNominate = async () => {
-        const nome = prompt('Nome do consultor a indicar:');
-        if (!nome) return;
-        
-        const email = prompt('Email do consultor:');
-        if (!email) return;
-        
-        const telefone = prompt('Telefone do consultor:');
-        if (!telefone) return;
-        
-        try {
-            const { error } = await supabase
-                .from('indicacoes')
-                .insert({
-                    indicador_id: consultorId,
-                    nome_indicado: nome,
-                    email_indicado: email,
-                    telefone_indicado: telefone,
-                    status: 'pendente',
-                    created_at: new Date().toISOString()
-                });
-            
-            if (error) throw error;
-            
-            alert('✅ Indicação enviada com sucesso!');
-            setAnalytics(prev => ({
-                ...prev,
-                indicatedConsultants: prev.indicatedConsultants + 1
-            }));
-            
-        } catch (error) {
-            alert('Erro ao enviar indicação.');
-        }
-    };
-
     return (
         <div style={analyticsStyles.container}>
             
@@ -205,7 +162,6 @@ const AnalyticsPanel = () => {
                 <MetricCard title="Vendas Fechadas (Mês)" value={analytics.closedSales} loading={loading} />
                 <MetricCard title="Comissão (Mês)" value={analytics.commissionValue} loading={loading} color="#28a745" />
                 <MetricCard title="Avaliação Média" value={analytics.rating > 0 ? `${analytics.rating} ⭐` : 'N/A'} loading={loading} />
-                <MetricCard title="Indicações Ativas" value={analytics.indicatedConsultants} loading={loading} />
                 <MetricCard title="QR Codes Enviados" value={analytics.qrCodesSent} loading={loading} />
             </div>
 
@@ -232,7 +188,7 @@ const AnalyticsPanel = () => {
                 📱 Gerar QR Code (Ir para Atendimento)
             </button>
 
-            <h3 style={analyticsStyles.sectionSubtitle}>🏪 Minha Afiliação e Indicações</h3>
+            <h3 style={analyticsStyles.sectionSubtitle}>🏪 Minha Afiliação</h3>
 
             <div style={analyticsStyles.infoGrid}>
                 <div style={analyticsStyles.infoCard}>
@@ -250,12 +206,6 @@ const AnalyticsPanel = () => {
                             ? analytics.associatedSegments.join(', ')
                             : 'Nenhum segmento'}
                     </p>
-                </div>
-                <div style={analyticsStyles.infoCard}>
-                    <h4 style={analyticsStyles.infoTitle}>Indicar Consultor</h4>
-                    <button onClick={handleNominate} style={analyticsStyles.nominateButton}>
-                        👥 Indicar Nova Pessoa
-                    </button>
                 </div>
             </div>
 
@@ -370,7 +320,7 @@ const analyticsStyles = {
     },
     infoGrid: {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: 'repeat(2, 1fr)',
         gap: '20px',
         marginBottom: '30px',
     },
@@ -390,17 +340,6 @@ const analyticsStyles = {
         fontSize: '14px',
         color: '#666',
         margin: 0,
-    },
-    nominateButton: {
-        padding: '10px 16px',
-        backgroundColor: '#ffc107',
-        color: '#333',
-        border: 'none',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontSize: '14px',
-        fontWeight: '600',
-        marginTop: '8px',
     },
     linkText: {
         fontSize: '14px',
