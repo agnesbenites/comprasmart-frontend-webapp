@@ -1,207 +1,237 @@
-// src/pages/AdminDashboard.jsx
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useNotifications } from "../../../contexts/NotificationContext";
-import NotificationBell from "../../../components/NotificationBell";
-import NotificationSender from "../../../components/NotificationSender";
+// src/pages/AdminDashboard/pages/AdminDashboard.jsx
 
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../../../supabaseClient';
+import { FaStore, FaUsers, FaShoppingCart, FaDollarSign, FaExclamationTriangle, FaCheckCircle, FaBan, FaBell } from 'react-icons/fa';
 
-// Componentes do Dashboard
-const StatCard = ({ title, value, icon, color, trend }) => (
-  <div style={{ ...styles.statCard, borderLeft: `4px solid ${color}` }}>
-    <div style={styles.statContent}>
-      <div style={styles.statInfo}>
-        <h3 style={styles.statTitle}>{title}</h3>
-        <p style={styles.statValue}>{value}</p>
-        {trend && <span style={styles.trend}>{trend}</span>}
-      </div>
-      <div style={{ ...styles.statIcon, backgroundColor: color }}>{icon}</div>
-    </div>
-  </div>
-);
-
-const ClientTable = ({ clients, onViewDetails }) => (
-  <div style={styles.tableContainer}>
-    <table style={styles.table}>
-      <thead>
-        <tr>
-          <th style={styles.th}>Cliente</th>
-          <th style={styles.th}>Plano</th>
-          <th style={styles.th}>Status</th>
-          <th style={styles.th}>Expira em</th>
-          <th style={styles.th}>Acoes</th>
-        </tr>
-      </thead>
-      <tbody>
-        {clients.map((client, index) => (
-          <tr key={index} style={styles.tr}>
-            <td style={styles.td}>
-              <div style={styles.clientInfo}>
-                <div style={styles.avatar}>{client.name.charAt(0)}</div>
-                <div>
-                  <strong>{client.name}</strong>
-                  <br />
-                  <small>{client.email}</small>
-                </div>
-              </div>
-            </td>
-            <td style={styles.td}>
-              <span
-                style={{
-                  ...styles.badge,
-                  backgroundColor:
-                    client.plan === "Premium"
-                      ? "#28a745"
-                      : client.plan === "Pro"
-                      ? "#007bff"
-                      : "#6c757d",
-                }}
-              >
-                {client.plan}
-              </span>
-            </td>
-            <td style={styles.td}>
-              <span
-                style={{
-                  ...styles.status,
-                  color:
-                    client.status === "Ativo"
-                      ? "#28a745"
-                      : client.status === "Trial"
-                      ? "#ffc107"
-                      : "#dc3545",
-                }}
-              >
-                — {client.status}
-              </span>
-            </td>
-            <td style={styles.td}>
-              {client.daysLeft > 0 ? (
-                <span style={styles.daysLeft}>{client.daysLeft} dias</span>
-              ) : (
-                <span style={styles.expired}>Expirado</span>
-              )}
-            </td>
-            <td style={styles.td}>
-              <button
-                onClick={() => onViewDetails(client)}
-                style={styles.actionButton}
-              >
-                 Detalhes
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
+const ADMIN_PRIMARY = "#dc3545";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { addNotification } = useNotifications();
-  const [activeTab, setActiveTab] = useState("overview");
-  const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  const [metricas, setMetricas] = useState({
+    lojasAtivas: 0,
+    lojasPendentes: 0,
+    consultoresAtivos: 0,
+    consultoresPendentes: 0,
+    pedidosHoje: 0,
+    receitaMes: 0,
+    usuariosOnline: 0,
+  });
 
-  // Dados mockados
-  const mockData = {
-    stats: {
-      totalClients: 45,
-      activeTrials: 12,
-      expiringSoon: 5,
-      revenue: "R$ 8.240,00",
-    },
-    clients: [
-      {
-        id: 1,
-        name: "Joao Silva",
-        email: "joao@empresa.com",
-        plan: "Trial",
-        status: "Trial",
-        daysLeft: 7,
-        signupDate: "2024-01-15",
-      },
-      {
-        id: 2,
-        name: "Maria Santos",
-        email: "maria@loja.com",
-        plan: "Premium",
-        status: "Ativo",
-        daysLeft: 30,
-        signupDate: "2024-01-10",
-      },
-      {
-        id: 3,
-        name: "Pedro Oliveira",
-        email: "pedro@commerce.com",
-        plan: "Trial",
-        status: "Trial",
-        daysLeft: 2,
-        signupDate: "2024-01-20",
-      },
-      {
-        id: 4,
-        name: "Ana Costa",
-        email: "ana@empresa.com",
-        plan: "Pro",
-        status: "Ativo",
-        daysLeft: 45,
-        signupDate: "2024-01-05",
-      },
-    ],
-  };
+  const [alertas, setAlertas] = useState([]);
+  const [ultimasPendencias, setUltimasPendencias] = useState([]);
+  const [usuariosOnline, setUsuariosOnline] = useState([]);
 
   useEffect(() => {
-    // Simular carregamento de dados
-    setTimeout(() => {
-      setClients(mockData.clients);
+    carregarDados();
+    const interval = setInterval(carregarDados, 30000); // Atualiza a cada 30s
+    return () => clearInterval(interval);
+  }, []);
+
+  const carregarDados = async () => {
+    try {
+      await Promise.all([
+        carregarMetricas(),
+        carregarAlertas(),
+        carregarPendencias(),
+        carregarUsuariosOnline(),
+      ]);
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+    } finally {
       setLoading(false);
+    }
+  };
+
+  const carregarMetricas = async () => {
+    try {
+      // Lojas
+      const { data: lojas } = await supabase
+        .from('lojas_corrigida')
+        .select('status');
       
-      // Adicionar notificacao de boas-vindas
-      addNotification({
-        titulo: 'Bem-vindo ao Dashboard! ',
-        mensagem: 'Sistema administrativo carregado com sucesso.',
-        tipo: 'success'
+      const lojasAtivas = lojas?.filter(l => l.status === 'ativo').length || 0;
+      const lojasPendentes = lojas?.filter(l => l.status === 'pendente').length || 0;
+
+      // Consultores
+      const { data: consultores } = await supabase
+        .from('consultor_perfil')
+        .select('status');
+      
+      const consultoresAtivos = consultores?.filter(c => c.status === 'ativo').length || 0;
+      const consultoresPendentes = consultores?.filter(c => c.status === 'pendente').length || 0;
+
+      // Pedidos hoje
+      const hoje = new Date().toISOString().split('T')[0];
+      const { data: pedidos } = await supabase
+        .from('pedidos')
+        .select('id')
+        .gte('created_at', `${hoje}T00:00:00`);
+      
+      const pedidosHoje = pedidos?.length || 0;
+
+      // Receita do mês
+      const inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
+      const { data: vendas } = await supabase
+        .from('vendas')
+        .select('valor_total')
+        .eq('status', 'concluida')
+        .gte('created_at', inicioMes);
+      
+      const receitaMes = vendas?.reduce((acc, v) => acc + (parseFloat(v.valor_total) || 0), 0) || 0;
+
+      setMetricas({
+        lojasAtivas,
+        lojasPendentes,
+        consultoresAtivos,
+        consultoresPendentes,
+        pedidosHoje,
+        receitaMes,
+        usuariosOnline: Math.floor(Math.random() * 15) + 5, // Mock - implementar real depois
       });
-    }, 1000);
-  }, [addNotification]);
 
-  const handleViewDetails = (client) => {
-    console.log("Ver detalhes:", client);
-    // navigate(`/admin/clientes/${client.id}`);
+    } catch (error) {
+      console.error('Erro ao carregar métricas:', error);
+    }
   };
 
-  const handleAddClient = () => {
-    navigate("/admin/cadastro-cliente");
+  const carregarAlertas = async () => {
+    try {
+      const alertasArray = [];
+
+      // Pagamentos atrasados (mock - implementar com Stripe)
+      alertasArray.push({
+        id: 1,
+        tipo: 'pagamento',
+        gravidade: 'alta',
+        titulo: 'Pagamentos Atrasados',
+        descricao: '3 lojas com pagamento vencido',
+        acao: () => navigate('/admin/financeiro'),
+      });
+
+      // Cadastros pendentes
+      if (metricas.lojasPendentes > 0) {
+        alertasArray.push({
+          id: 2,
+          tipo: 'aprovacao',
+          gravidade: 'media',
+          titulo: 'Cadastros Pendentes',
+          descricao: `${metricas.lojasPendentes} lojas aguardando aprovação`,
+          acao: () => navigate('/admin/lojistas'),
+        });
+      }
+
+      if (metricas.consultoresPendentes > 0) {
+        alertasArray.push({
+          id: 3,
+          tipo: 'aprovacao',
+          gravidade: 'media',
+          titulo: 'Consultores Pendentes',
+          descricao: `${metricas.consultoresPendentes} consultores aguardando aprovação`,
+          acao: () => navigate('/admin/consultores'),
+        });
+      }
+
+      setAlertas(alertasArray);
+
+    } catch (error) {
+      console.error('Erro ao carregar alertas:', error);
+    }
   };
 
-  const handleSendBroadcastNotification = (notificationData) => {
-    // Notificar o admin que a mensagem foi enviada
-    addNotification({
-      titulo: ' Comunicado Enviado',
-      mensagem: `Sua mensagem foi enviada para ${notificationData.destinatarios.join(', ')}`,
-      tipo: 'success'
-    });
+  const carregarPendencias = async () => {
+    try {
+      // Buscar lojas e consultores pendentes
+      const { data: lojas } = await supabase
+        .from('lojas_corrigida')
+        .select('id, nome_fantasia, created_at')
+        .eq('status', 'pendente')
+        .order('created_at', { ascending: false })
+        .limit(5);
 
-    // Aqui voca pode integrar com sua API para enviar para outros usuarios
-    console.log('Enviando notificacao para:', notificationData);
+      const { data: consultores } = await supabase
+        .from('consultor_perfil')
+        .select('id, nome_completo, created_at')
+        .eq('status', 'pendente')
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      const pendencias = [
+        ...(lojas || []).map(l => ({ ...l, tipo: 'loja' })),
+        ...(consultores || []).map(c => ({ ...c, tipo: 'consultor', nome_fantasia: c.nome_completo })),
+      ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
+
+      setUltimasPendencias(pendencias);
+
+    } catch (error) {
+      console.error('Erro ao carregar pendências:', error);
+    }
   };
 
-  const handleExpiringTrialAlert = () => {
-    addNotification({
-      titulo: '° Trial Expirando',
-      mensagem: 'Pedro Oliveira tem 2 dias restantes no trial',
-      tipo: 'warning',
-      destinatario: 'admin'
-    });
+  const carregarUsuariosOnline = async () => {
+    try {
+      // Mock - implementar com tracking real depois
+      setUsuariosOnline([
+        { id: 1, nome: 'Loja Eletrônicos SP', tipo: 'lojista', ultimaAtividade: new Date() },
+        { id: 2, nome: 'João Consultor', tipo: 'consultor', ultimaAtividade: new Date() },
+        { id: 3, nome: 'Magazine Tech', tipo: 'lojista', ultimaAtividade: new Date() },
+      ]);
+    } catch (error) {
+      console.error('Erro ao carregar usuários online:', error);
+    }
+  };
+
+  const handleAprovar = async (id, tipo) => {
+    if (!confirm(`Aprovar ${tipo}?`)) return;
+
+    try {
+      const tabela = tipo === 'loja' ? 'lojas_corrigida' : 'consultor_perfil';
+      
+      const { error } = await supabase
+        .from(tabela)
+        .update({ status: 'ativo' })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      alert('✅ Aprovado com sucesso!');
+      carregarDados();
+
+    } catch (error) {
+      console.error('Erro ao aprovar:', error);
+      alert('❌ Erro ao aprovar');
+    }
+  };
+
+  const handleReprovar = async (id, tipo) => {
+    const motivo = prompt('Motivo da reprovação:');
+    if (!motivo) return;
+
+    try {
+      const tabela = tipo === 'loja' ? 'lojas_corrigida' : 'consultor_perfil';
+      
+      const { error } = await supabase
+        .from(tabela)
+        .update({ status: 'reprovado', motivo_reprovacao: motivo })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      alert('✅ Reprovado!');
+      carregarDados();
+
+    } catch (error) {
+      console.error('Erro ao reprovar:', error);
+      alert('❌ Erro ao reprovar');
+    }
   };
 
   if (loading) {
     return (
       <div style={styles.loadingContainer}>
-        <div style={styles.loadingSpinner}>o</div>
+        <div style={styles.spinner}></div>
         <p>Carregando dashboard...</p>
       </div>
     );
@@ -209,677 +239,482 @@ const AdminDashboard = () => {
 
   return (
     <div style={styles.container}>
-      {/* Header Atualizado com Notificacoes */}
+      {/* Header */}
       <div style={styles.header}>
-        <div style={styles.headerContent}>
-          <div style={styles.headerTitle}>
-            <h1> Dashboard Administrativo</h1>
-            <p>Gestao completa de clientes e trials</p>
+        <div>
+          <h1 style={styles.title}>🔧 Painel Administrativo</h1>
+          <p style={styles.subtitle}>Visão geral da plataforma CompraSmart</p>
+        </div>
+        <div style={styles.headerActions}>
+          <button onClick={() => navigate('/admin/manutencao')} style={styles.manutencaoButton}>
+            🛠️ Manutenção
+          </button>
+          <button onClick={carregarDados} style={styles.refreshButton}>
+            🔄 Atualizar
+          </button>
+        </div>
+      </div>
+
+      {/* Métricas Principais */}
+      <div style={styles.metricsGrid}>
+        <MetricCard
+          icon={<FaStore />}
+          label="Lojas Ativas"
+          value={metricas.lojasAtivas}
+          subtitle={`${metricas.lojasPendentes} pendentes`}
+          color="#2563eb"
+          onClick={() => navigate('/admin/lojistas')}
+        />
+        <MetricCard
+          icon={<FaUsers />}
+          label="Consultores Ativos"
+          value={metricas.consultoresAtivos}
+          subtitle={`${metricas.consultoresPendentes} pendentes`}
+          color="#2c5aa0"
+          onClick={() => navigate('/admin/consultores')}
+        />
+        <MetricCard
+          icon={<FaShoppingCart />}
+          label="Pedidos Hoje"
+          value={metricas.pedidosHoje}
+          subtitle="↑ 12% vs ontem"
+          color="#28a745"
+        />
+        <MetricCard
+          icon={<FaDollarSign />}
+          label="Receita do Mês"
+          value={`R$ ${metricas.receitaMes.toLocaleString('pt-BR')}`}
+          subtitle="↑ 23% vs mês anterior"
+          color="#ffc107"
+        />
+      </div>
+
+      {/* Alertas */}
+      {alertas.length > 0 && (
+        <div style={styles.section}>
+          <h3 style={styles.sectionTitle}>⚠️ Alertas e Problemas</h3>
+          <div style={styles.alertsGrid}>
+            {alertas.map(alerta => (
+              <AlertCard key={alerta.id} alerta={alerta} />
+            ))}
           </div>
-          <div style={styles.headerActions}>
-            {/* Bell de Notificacoes */}
-            <NotificationBell />
-            
-            {/* Botao para enviar notificacoes */}
-            <button 
-              onClick={() => setShowNotificationModal(true)}
-              style={styles.notificationButton}
-            >
-               Enviar Comunicado
-            </button>
-            
-            <button style={styles.primaryButton} onClick={handleAddClient}>
-              O Novo Cliente
-            </button>
-            <button style={styles.secondaryButton}> Configuracoes</button>
+        </div>
+      )}
+
+      {/* Grid de Conteúdo */}
+      <div style={styles.contentGrid}>
+        {/* Usuários Online */}
+        <div style={styles.card}>
+          <h3 style={styles.cardTitle}>👥 Usuários Online ({usuariosOnline.length})</h3>
+          <div style={styles.onlineList}>
+            {usuariosOnline.map(usuario => (
+              <div key={usuario.id} style={styles.onlineItem}>
+                <div style={styles.onlineDot}></div>
+                <div style={styles.onlineInfo}>
+                  <p style={styles.onlineNome}>{usuario.nome}</p>
+                  <p style={styles.onlineTipo}>{usuario.tipo}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Últimas Pendências */}
+        <div style={styles.card}>
+          <h3 style={styles.cardTitle}>⏳ Aprovações Pendentes</h3>
+          <div style={styles.pendenciasList}>
+            {ultimasPendencias.length === 0 ? (
+              <p style={styles.emptyText}>✅ Nenhuma pendência!</p>
+            ) : (
+              ultimasPendencias.map(item => (
+                <div key={`${item.tipo}-${item.id}`} style={styles.pendenciaItem}>
+                  <div style={styles.pendenciaInfo}>
+                    <p style={styles.pendenciaNome}>{item.nome_fantasia}</p>
+                    <p style={styles.pendenciaTipo}>
+                      {item.tipo === 'loja' ? '🏪 Loja' : '👤 Consultor'}
+                    </p>
+                  </div>
+                  <div style={styles.pendenciaActions}>
+                    <button
+                      onClick={() => handleAprovar(item.id, item.tipo)}
+                      style={styles.aprovarButton}
+                      title="Aprovar"
+                    >
+                      <FaCheckCircle />
+                    </button>
+                    <button
+                      onClick={() => handleReprovar(item.id, item.tipo)}
+                      style={styles.reprovarButton}
+                      title="Reprovar"
+                    >
+                      <FaBan />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div style={styles.tabs}>
-        <button
-          style={activeTab === "overview" ? styles.activeTab : styles.tab}
-          onClick={() => setActiveTab("overview")}
-        >
-           Visao Geral
-        </button>
-        <button
-          style={activeTab === "clients" ? styles.activeTab : styles.tab}
-          onClick={() => setActiveTab("clients")}
-        >
-           Clientes
-        </button>
-        <button
-          style={activeTab === "trials" ? styles.activeTab : styles.tab}
-          onClick={() => setActiveTab("trials")}
-        >
-          ° Trials
-        </button>
-        <button
-          style={activeTab === "reports" ? styles.activeTab : styles.tab}
-          onClick={() => setActiveTab("reports")}
-        >
-           Relatorios
-        </button>
-        <button
-          style={activeTab === "notifications" ? styles.activeTab : styles.tab}
-          onClick={() => setActiveTab("notifications")}
-        >
-           Notificacoes
-        </button>
+      {/* Ações Rápidas */}
+      <div style={styles.section}>
+        <h3 style={styles.sectionTitle}>⚡ Ações Rápidas</h3>
+        <div style={styles.actionsGrid}>
+          <ActionButton
+            icon="✅"
+            label="Aprovar Cadastros"
+            onClick={() => navigate('/admin/aprovacoes')}
+          />
+          <ActionButton
+            icon="📧"
+            label="Enviar Notificação"
+            onClick={() => navigate('/admin/notificacoes')}
+          />
+          <ActionButton
+            icon="📊"
+            label="Relatórios"
+            onClick={() => navigate('/admin/relatorios')}
+          />
+          <ActionButton
+            icon="⚙️"
+            label="Configurações"
+            onClick={() => navigate('/admin/configuracoes')}
+          />
+        </div>
       </div>
 
-      {/* Conteudo Principal */}
-      <div style={styles.mainContent}>
-        {activeTab === "overview" && (
-          <>
-            {/* Cards de Estatisticas */}
-            <div style={styles.statsGrid}>
-              <StatCard
-                title="Total de Clientes"
-                value={mockData.stats.totalClients}
-                icon=""
-                color="#007bff"
-                trend="+12%"
-              />
-              <StatCard
-                title="Trials Ativos"
-                value={mockData.stats.activeTrials}
-                icon="°"
-                color="#ffc107"
-                trend="+5"
-              />
-              <StatCard
-                title="Expirando em 7 dias"
-                value={mockData.stats.expiringSoon}
-                icon=" "
-                color="#dc3545"
-                trend="Atencao"
-              />
-              <StatCard
-                title="Receita Mensal"
-                value={mockData.stats.revenue}
-                icon=""
-                color="#28a745"
-                trend="+8%"
-              />
-            </div>
-
-            {/* Graficos e Tabela Rapida */}
-            <div style={styles.overviewGrid}>
-              <div style={styles.chartSection}>
-                <h3> Visao Geral - ltimos 30 dias</h3>
-                <div style={styles.chartPlaceholder}>
-                  <p>Grafico de crescimento de clientes</p>
-                  <div style={styles.barChart}>
-                    {[65, 80, 75, 90, 85, 95].map((height, index) => (
-                      <div
-                        key={index}
-                        style={{
-                          ...styles.bar,
-                          height: `${height}%`,
-                          backgroundColor: index === 5 ? "#007bff" : "#e9ecef",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div style={styles.recentActivity}>
-                <h3> Atividade Recente</h3>
-                <div style={styles.activityList}>
-                  <div style={styles.activityItem}>
-                    <span style={styles.activityIcon}></span>
-                    <div>
-                      <strong>Novo trial iniciado</strong>
-                      <p>Loja Central - 2 horas atras</p>
-                    </div>
-                  </div>
-                  <div style={styles.activityItem}>
-                    <span style={styles.activityIcon}></span>
-                    <div>
-                      <strong>Upgrade para Premium</strong>
-                      <p>Maria Santos - 1 dia atras</p>
-                    </div>
-                  </div>
-                  <div style={styles.activityItem}>
-                    <span style={styles.activityIcon}> </span>
-                    <div>
-                      <strong>Trial expirando</strong>
-                      <p>Pedro Oliveira - 2 dias atras</p>
-                      <button 
-                        onClick={handleExpiringTrialAlert}
-                        style={styles.smallButton}
-                      >
-                        Notificar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        {activeTab === "clients" && (
-          <div style={styles.tabContent}>
-            <div style={styles.tabHeader}>
-              <h2> Gestao de Clientes</h2>
-              <div style={styles.filters}>
-                <select style={styles.filterSelect}>
-                  <option>Todos os Planos</option>
-                  <option>Trial</option>
-                  <option>Premium</option>
-                  <option>Pro</option>
-                </select>
-                <select style={styles.filterSelect}>
-                  <option>Todos os Status</option>
-                  <option>Ativo</option>
-                  <option>Trial</option>
-                  <option>Expirado</option>
-                </select>
-                <input
-                  type="text"
-                  placeholder=" Buscar cliente..."
-                  style={styles.searchInput}
-                />
-              </div>
-            </div>
-            <ClientTable clients={clients} onViewDetails={handleViewDetails} />
-          </div>
-        )}
-
-        {activeTab === "trials" && (
-          <div style={styles.tabContent}>
-            <h2>° Gestao de Trials</h2>
-            <p>Controle de periodos de teste e expiracoes</p>
-            <div style={styles.trialStats}>
-              <div style={styles.trialCard}>
-                <h4>Trials Ativos</h4>
-                <p style={styles.trialNumber}>12</p>
-              </div>
-              <div style={styles.trialCard}>
-                <h4>Expirando esta semana</h4>
-                <p style={styles.trialNumberWarning}>3</p>
-              </div>
-              <div style={styles.trialCard}>
-                <h4>Conversoes</h4>
-                <p style={styles.trialNumberSuccess}>8</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "reports" && (
-          <div style={styles.tabContent}>
-            <h2> Relatorios e Analytics</h2>
-            <p>Relatorios detalhados de performance</p>
-            <div style={styles.reportsGrid}>
-              <div style={styles.reportCard}>
-                <h4> Relatorio de Conversao</h4>
-                <p>Taxa de conversao de trials: 45%</p>
-              </div>
-              <div style={styles.reportCard}>
-                <h4> Receita Mensal</h4>
-                <p>R$ 8.240,00</p>
-              </div>
-              <div style={styles.reportCard}>
-                <h4> Retencao de Clientes</h4>
-                <p>Taxa de 92%</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "notifications" && (
-          <div style={styles.tabContent}>
-            <h2> Centro de Notificacoes</h2>
-            <p>Gerencie e envie notificacoes para seus usuarios</p>
-            
-            <div style={styles.notificationControls}>
-              <button 
-                onClick={() => setShowNotificationModal(true)}
-                style={styles.primaryButton}
-              >
-                 Enviar Novo Comunicado
-              </button>
-              
-              <div style={styles.quickActions}>
-                <h4>Acoes Rapidas:</h4>
-                <button 
-                  onClick={() => {
-                    addNotification({
-                      titulo: ' Nova Atualizacao',
-                      mensagem: 'Sistema atualizado com novas funcionalidades',
-                      tipo: 'info'
-                    });
-                  }}
-                  style={styles.quickButton}
-                >
-                  Anunciar Atualizacao
-                </button>
-                <button 
-                  onClick={() => {
-                    addNotification({
-                      titulo: ' Manutencao Programada',
-                      mensagem: 'Sistema ficara offline domingo  s 02:00',
-                      tipo: 'warning'
-                    });
-                  }}
-                  style={styles.quickButton}
-                >
-                  Aviso de Manutencao
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Modal de Envio de Notificacoes */}
-      <NotificationSender 
-        show={showNotificationModal}
-        onClose={() => setShowNotificationModal(false)}
-        onSend={handleSendBroadcastNotification}
-      />
+      {/* CSS Animation */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}} />
     </div>
   );
 };
 
+// Componentes Auxiliares
+const MetricCard = ({ icon, label, value, subtitle, color, onClick }) => (
+  <div
+    style={{
+      ...styles.metricCard,
+      borderLeft: `4px solid ${color}`,
+      cursor: onClick ? 'pointer' : 'default',
+    }}
+    onClick={onClick}
+  >
+    <div style={{ ...styles.metricIcon, color }}>{icon}</div>
+    <div style={styles.metricContent}>
+      <p style={styles.metricLabel}>{label}</p>
+      <p style={styles.metricValue}>{value}</p>
+      {subtitle && <p style={styles.metricSubtitle}>{subtitle}</p>}
+    </div>
+  </div>
+);
+
+const AlertCard = ({ alerta }) => {
+  const gravidadeColors = {
+    alta: '#dc3545',
+    media: '#ffc107',
+    baixa: '#28a745',
+  };
+
+  return (
+    <div
+      style={{
+        ...styles.alertCard,
+        borderLeft: `4px solid ${gravidadeColors[alerta.gravidade]}`,
+      }}
+      onClick={alerta.acao}
+    >
+      <FaExclamationTriangle color={gravidadeColors[alerta.gravidade]} size={24} />
+      <div style={styles.alertContent}>
+        <p style={styles.alertTitulo}>{alerta.titulo}</p>
+        <p style={styles.alertDescricao}>{alerta.descricao}</p>
+      </div>
+    </div>
+  );
+};
+
+const ActionButton = ({ icon, label, onClick }) => (
+  <button onClick={onClick} style={styles.actionButton}>
+    <span style={styles.actionIcon}>{icon}</span>
+    <span style={styles.actionLabel}>{label}</span>
+  </button>
+);
+
 const styles = {
   container: {
-    minHeight: "100vh",
-    backgroundColor: "#f8f9fa",
-    fontFamily: "Arial, sans-serif",
+    padding: '30px',
+    backgroundColor: '#f8f9fa',
+    minHeight: '100vh',
   },
   loadingContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
-    fontSize: "18px",
-    color: "#666",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
   },
-  loadingSpinner: {
-    fontSize: "40px",
-    marginBottom: "20px",
+  spinner: {
+    width: '50px',
+    height: '50px',
+    border: '4px solid #f3f3f3',
+    borderTop: `4px solid ${ADMIN_PRIMARY}`,
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
   },
   header: {
-    backgroundColor: "white",
-    borderBottom: "1px solid #dee2e6",
-    padding: "20px 0",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '30px',
+    flexWrap: 'wrap',
+    gap: '15px',
   },
-  headerContent: {
-    maxWidth: "1200px",
-    margin: "0 auto",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "0 20px",
+  title: {
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    color: '#333',
+    margin: '0 0 5px 0',
   },
-  headerTitle: {
-    h1: {
-      margin: "0 0 5px 0",
-      color: "#333",
-      fontSize: "28px",
-    },
-    p: {
-      margin: 0,
-      color: "#666",
-      fontSize: "16px",
-    },
+  subtitle: {
+    fontSize: '1rem',
+    color: '#666',
+    margin: 0,
   },
   headerActions: {
-    display: "flex",
-    gap: "15px",
-    alignItems: "center",
+    display: 'flex',
+    gap: '10px',
   },
-  notificationButton: {
-    padding: "12px 20px",
-    backgroundColor: "#17a2b8",
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontWeight: "bold",
+  manutencaoButton: {
+    padding: '10px 20px',
+    backgroundColor: '#ffc107',
+    color: '#333',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
   },
-  primaryButton: {
-    padding: "12px 20px",
-    backgroundColor: "#dc3545",
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontWeight: "bold",
+  refreshButton: {
+    padding: '10px 20px',
+    backgroundColor: ADMIN_PRIMARY,
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '14px',
+    fontWeight: '600',
+    cursor: 'pointer',
   },
-  secondaryButton: {
-    padding: "12px 20px",
-    backgroundColor: "#6c757d",
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
+  metricsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '20px',
+    marginBottom: '30px',
   },
-  tabs: {
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "20px",
-    display: "flex",
-    gap: "10px",
-    borderBottom: "1px solid #dee2e6",
+  metricCard: {
+    backgroundColor: 'white',
+    padding: '25px',
+    borderRadius: '12px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px',
+    transition: 'transform 0.2s',
   },
-  tab: {
-    padding: "12px 20px",
-    backgroundColor: "transparent",
-    border: "none",
-    cursor: "pointer",
-    borderRadius: "6px",
-    fontSize: "14px",
+  metricIcon: {
+    fontSize: '2.5rem',
   },
-  activeTab: {
-    padding: "12px 20px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    cursor: "pointer",
-    borderRadius: "6px",
-    fontSize: "14px",
-    fontWeight: "bold",
+  metricContent: {
+    flex: 1,
   },
-  mainContent: {
-    maxWidth: "1200px",
-    margin: "0 auto",
-    padding: "20px",
+  metricLabel: {
+    fontSize: '0.9rem',
+    color: '#666',
+    margin: '0 0 5px 0',
   },
-  statsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "20px",
-    marginBottom: "30px",
+  metricValue: {
+    fontSize: '2rem',
+    fontWeight: 'bold',
+    color: '#333',
+    margin: '0 0 3px 0',
   },
-  statCard: {
-    backgroundColor: "white",
-    padding: "25px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+  metricSubtitle: {
+    fontSize: '0.85rem',
+    color: '#999',
+    margin: 0,
   },
-  statContent: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+  section: {
+    marginBottom: '30px',
   },
-  statInfo: {
-    h3: {
-      margin: "0 0 8px 0",
-      fontSize: "14px",
-      color: "#666",
-      fontWeight: "normal",
-    },
+  sectionTitle: {
+    fontSize: '1.3rem',
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: '15px',
   },
-  statTitle: {
-    margin: "0 0 8px 0",
-    fontSize: "14px",
-    color: "#666",
-    fontWeight: "normal",
+  alertsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gap: '15px',
   },
-  statValue: {
-    margin: "0 0 5px 0",
-    fontSize: "28px",
-    fontWeight: "bold",
-    color: "#333",
+  alertCard: {
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '12px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
+    cursor: 'pointer',
+    transition: 'transform 0.2s',
   },
-  trend: {
-    fontSize: "12px",
-    color: "#28a745",
-    fontWeight: "bold",
+  alertContent: {
+    flex: 1,
   },
-  statIcon: {
-    width: "50px",
-    height: "50px",
-    borderRadius: "50%",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "20px",
-    color: "white",
+  alertTitulo: {
+    fontSize: '1rem',
+    fontWeight: '600',
+    color: '#333',
+    margin: '0 0 5px 0',
   },
-  overviewGrid: {
-    display: "grid",
-    gridTemplateColumns: "2fr 1fr",
-    gap: "30px",
-    marginBottom: "30px",
+  alertDescricao: {
+    fontSize: '0.9rem',
+    color: '#666',
+    margin: 0,
   },
-  chartSection: {
-    backgroundColor: "white",
-    padding: "25px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-    h3: {
-      margin: "0 0 20px 0",
-      color: "#333",
-    },
+  contentGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+    gap: '20px',
+    marginBottom: '30px',
   },
-  chartPlaceholder: {
-    height: "200px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f8f9fa",
-    borderRadius: "6px",
-    color: "#666",
+  card: {
+    backgroundColor: 'white',
+    padding: '25px',
+    borderRadius: '12px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
   },
-  barChart: {
-    display: "flex",
-    alignItems: "end",
-    height: "120px",
-    gap: "10px",
-    marginTop: "20px",
+  cardTitle: {
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: '20px',
   },
-  bar: {
-    width: "30px",
-    borderRadius: "4px 4px 0 0",
-    transition: "height 0.3s ease",
+  onlineList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
   },
-  recentActivity: {
-    backgroundColor: "white",
-    padding: "25px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-    h3: {
-      margin: "0 0 20px 0",
-      color: "#333",
-    },
+  onlineItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    padding: '10px',
+    backgroundColor: '#f8f9fa',
+    borderRadius: '8px',
   },
-  activityList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
+  onlineDot: {
+    width: '10px',
+    height: '10px',
+    backgroundColor: '#28a745',
+    borderRadius: '50%',
   },
-  activityItem: {
-    display: "flex",
-    alignItems: "center",
-    gap: "15px",
-    padding: "15px",
-    backgroundColor: "#f8f9fa",
-    borderRadius: "6px",
+  onlineInfo: {
+    flex: 1,
   },
-  activityIcon: {
-    fontSize: "20px",
+  onlineNome: {
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    color: '#333',
+    margin: '0 0 3px 0',
   },
-  smallButton: {
-    padding: "4px 8px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "12px",
-    marginTop: "5px",
+  onlineTipo: {
+    fontSize: '0.8rem',
+    color: '#666',
+    margin: 0,
   },
-  tabContent: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+  pendenciasList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
   },
-  tabHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "25px",
+  pendenciaItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '12px',
+    backgroundColor: '#f8f9fa',
+    borderRadius: '8px',
   },
-  filters: {
-    display: "flex",
-    gap: "15px",
-    alignItems: "center",
+  pendenciaInfo: {
+    flex: 1,
   },
-  filterSelect: {
-    padding: "8px 12px",
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    fontSize: "14px",
+  pendenciaNome: {
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    color: '#333',
+    margin: '0 0 3px 0',
   },
-  searchInput: {
-    padding: "8px 12px",
-    border: "1px solid #ddd",
-    borderRadius: "4px",
-    fontSize: "14px",
-    width: "200px",
+  pendenciaTipo: {
+    fontSize: '0.8rem',
+    color: '#666',
+    margin: 0,
   },
-  tableContainer: {
-    overflowX: "auto",
+  pendenciaActions: {
+    display: 'flex',
+    gap: '8px',
   },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
+  aprovarButton: {
+    padding: '8px 12px',
+    backgroundColor: '#28a745',
+    color: 'white',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '16px',
   },
-  th: {
-    padding: "15px",
-    textAlign: "left",
-    borderBottom: "2px solid #dee2e6",
-    fontWeight: "bold",
-    color: "#333",
+  reprovarButton: {
+    padding: '8px 12px',
+    backgroundColor: '#dc3545',
+    color: 'white',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontSize: '16px',
   },
-  tr: {
-    borderBottom: "1px solid #dee2e6",
-    "&:hover": {
-      backgroundColor: "#f8f9fa",
-    },
+  emptyText: {
+    textAlign: 'center',
+    color: '#666',
+    padding: '20px',
   },
-  td: {
-    padding: "15px",
-  },
-  clientInfo: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-  },
-  avatar: {
-    width: "40px",
-    height: "40px",
-    borderRadius: "50%",
-    backgroundColor: "#007bff",
-    color: "white",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontWeight: "bold",
-  },
-  badge: {
-    padding: "4px 8px",
-    borderRadius: "12px",
-    color: "white",
-    fontSize: "12px",
-    fontWeight: "bold",
-  },
-  status: {
-    fontSize: "14px",
-    fontWeight: "bold",
-  },
-  daysLeft: {
-    color: "#28a745",
-    fontWeight: "bold",
-  },
-  expired: {
-    color: "#dc3545",
-    fontWeight: "bold",
+  actionsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '15px',
   },
   actionButton: {
-    padding: "6px 12px",
-    backgroundColor: "#6c757d",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "12px",
+    padding: '20px',
+    backgroundColor: 'white',
+    border: '2px solid #e9ecef',
+    borderRadius: '12px',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '10px',
   },
-  trialStats: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "20px",
-    marginTop: "20px",
+  actionIcon: {
+    fontSize: '2rem',
   },
-  trialCard: {
-    backgroundColor: "#f8f9fa",
-    padding: "20px",
-    borderRadius: "8px",
-    textAlign: "center",
-  },
-  trialNumber: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    color: "#007bff",
-    margin: "10px 0 0 0",
-  },
-  trialNumberWarning: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    color: "#ffc107",
-    margin: "10px 0 0 0",
-  },
-  trialNumberSuccess: {
-    fontSize: "32px",
-    fontWeight: "bold",
-    color: "#28a745",
-    margin: "10px 0 0 0",
-  },
-  reportsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "20px",
-    marginTop: "20px",
-  },
-  reportCard: {
-    backgroundColor: "#f8f9fa",
-    padding: "20px",
-    borderRadius: "8px",
-    borderLeft: "4px solid #007bff",
-  },
-  notificationControls: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-    marginTop: "20px",
-  },
-  quickActions: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  quickButton: {
-    padding: "10px 15px",
-    backgroundColor: "#17a2b8",
-    color: "white",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    fontSize: "14px",
-    width: "200px",
-    textAlign: "left",
+  actionLabel: {
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    color: '#333',
   },
 };
 

@@ -142,9 +142,16 @@ function App() {
       <Route path="/lojista/escolha" element={<LojistaEscolha />} />
 
       {/* Atalho admin */}
-      <Route
-        path="/agnes-admin-2025"
-        element={<Navigate to="/admin/login" replace />}
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<ProtectedAdminRoute />}>
+       <Route index element={<AdminDashboard />} />
+       <Route path="dashboard" element={<AdminDashboard />} />
+       <Route path="lojistas" element={<AdminLojistas />} />
+       <Route path="consultores" element={<AdminConsultores />} />
+       <Route path="manutencao" element={<AdminManutencao />} />
+       <Route path="scores" element={<ScoreStatisticsPanel />} />
+       <Route path="cadastro-vendedor" element={<AdminCadastroVendedor />} />
+       <Route path="aprovacoes" element={<AdminAprovacao />} />
       />
 
       {/* Dashboards protegidos */}
