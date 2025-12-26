@@ -37,12 +37,12 @@ const CONSULTOR_MENU_ITEMS = [
     { title: "  Home", icon: " ", rota: "/consultor/dashboard" },
     { title: " Fila de Atendimento", icon: "", rota: "/consultor/dashboard/fila" },
     { title: " Atendimento Ativo", icon: "", rota: "/consultor/dashboard/chat" },
-    { title: " Historico", icon: "", rota: "/consultor/dashboard/historico" },
+    { title: " Histórico", icon: "", rota: "/consultor/dashboard/historico" },
     { title: " Comissoes", icon: "", rota: "/consultor/dashboard/analytics" },
     { title: " Minhas Lojas", icon: "", rota: "/consultor/dashboard/lojas" },
-    { title: "i Avaliacoes", icon: "i", rota: "/consultor/dashboard/reviews" },
+    { title: "i Avaliações", icon: "i", rota: "/consultor/dashboard/reviews" },
     { title: " Treinamentos", icon: "", rota: "/consultor/dashboard/treinamentos" },
-    { title: " Indicacoes", icon: "", rota: "/consultor/dashboard/indicacoes" },
+    { title: " Indicações", icon: "", rota: "/consultor/dashboard/indicacoes" },
     { title: " Minhas Vendas", icon: "", rota: "/consultor/dashboard/vendas" },
     { title: "  Report", icon: " ", rota: "/consultor/dashboard/report" },
     { title: " Perfil", icon: "", rota: "/consultor/dashboard/profile" },
@@ -114,22 +114,22 @@ export const ConsultorHomePanel = () => {
     const consultorInfo = MOCK_CONSULTOR_INFO;
 
     const atalhos = [
-        { titulo: " Proximo da Fila", descricao: "Iniciar um novo atendimento da fila prioritaria", cor: "bg-blue-500 hover:bg-blue-600", rota: "/consultor/dashboard/fila" },
+        { titulo: " Próximo da Fila", descricao: "Iniciar um novo atendimento da fila prioritária", cor: "bg-blue-500 hover:bg-blue-600", rota: "/consultor/dashboard/fila" },
         { titulo: " Lojas Atendidas", descricao: "Gerenciar minhas lojas e configurar categorias", cor: "bg-green-500 hover:bg-green-600", rota: "/consultor/dashboard/lojas" },
-        { titulo: " Sacar Comissao", descricao: "Ver detalhes de comissao e solicitar saque", cor: "bg-yellow-500 hover:bg-yellow-600", rota: "/consultor/dashboard/analytics" },
+        { titulo: " Sacar Comissão", descricao: "Ver detalhes de comissao e solicitar saque", cor: "bg-yellow-500 hover:bg-yellow-600", rota: "/consultor/dashboard/analytics" },
         { titulo: " Chat Ativo", descricao: "Acessar atendimentos em andamento", cor: "bg-teal-500 hover:bg-teal-600", rota: "/consultor/dashboard/chat" }
     ];
 
     return (
         <div className="max-w-7xl mx-auto">
-            {/* Cabecalho Pessoal e Comissao */}
+            {/* Cabecalho Pessoal e Comissão */}
             <div className="bg-white p-6 rounded-xl shadow-lg mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center">
                 <div className="mb-4 lg:mb-0">
                     <h1 className="text-3xl font-bold text-blue-800 mb-1">
                          Ola, {consultorInfo.nome}!
                     </h1>
                     <p className="text-gray-600 mb-4">
-                        Segmentos de Atuacao: {consultorInfo.segmentos.join(', ')}
+                        Segmentos de Atuação: {consultorInfo.segmentos.join(', ')}
                     </p>
                     <div className="flex items-center">
                         <h3 className="text-lg font-semibold text-gray-700 mr-4">
@@ -143,7 +143,7 @@ export const ConsultorHomePanel = () => {
 
                 {/* Comissionamento */}
                 <div className="text-center bg-green-50 p-4 rounded-xl border-2 border-green-300 min-w-[200px] shadow-inner">
-                    <div className="text-xs text-green-700 font-medium mb-1">Comissao Acumulada</div>
+                    <div className="text-xs text-green-700 font-medium mb-1">Comissão Acumulada</div>
                     <div className="text-3xl font-extrabold text-green-600 mb-3">
                         R$ {consultorInfo.comissaoAcumulada.toFixed(2).replace('.', ',')}
                     </div>
@@ -154,7 +154,7 @@ export const ConsultorHomePanel = () => {
             </div>
 
             {/* Atalhos Rapidos */}
-            <h2 className="text-2xl font-semibold text-blue-800 mb-4"> Acoes de Atendimento</h2>
+            <h2 className="text-2xl font-semibold text-blue-800 mb-4"> Ações de Atendimento</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {atalhos.map((atalho, index) => (
                     <div
@@ -173,8 +173,8 @@ export const ConsultorHomePanel = () => {
             {/* Metricas Chave */}
             <h2 className="text-2xl font-semibold text-blue-800 mb-4"> Performance</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <MetricCard title="Atendimentos (Mas)" value={consultorInfo.atendimentosMes} icon="" color="blue" />
-                <MetricCard title="Rating Medio" value={`${consultorInfo.ratingMedio} / 5.0`} icon="i" color="yellow" />
+                <MetricCard title="Atendimentos (Mês)" value={consultorInfo.atendimentosMes} icon="" color="blue" />
+                <MetricCard title="Rating Médio" value={`${consultorInfo.ratingMedio} / 5.0`} icon="i" color="yellow" />
                 <MetricCard title="Lojas Ativas" value={consultorInfo.lojasAtendidas} icon="" color="teal" />
             </div>
         </div>
