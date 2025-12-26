@@ -13,7 +13,6 @@ import ChatPanel from "../components/ChatPanel";
 import HistoryPanel from "../components/HistoryPanel";
 import ProfilePanel from "../components/ProfilePanel";
 import QueuePanel from "../components/QueuePanel";
-// import ReferralPanel from "../components/ReferralPanel";
 import ReportPanel from "../components/ReportPanel";
 import ReviewsPanel from "../components/ReviewsPanel";
 import SalesTable from "../components/SalesTable";
@@ -40,7 +39,6 @@ const CONSULTOR_MENU_ITEMS = [
     { title: "🏪 Minhas Lojas", icon: "🏪", rota: "/consultor/dashboard/lojas" },
     { title: "⭐ Avaliações", icon: "⭐", rota: "/consultor/dashboard/reviews" },
     { title: "🎓 Treinamentos", icon: "🎓", rota: "/consultor/dashboard/treinamentos" },
-    // { title: "📤 Indicações", icon: "📤", rota: "/consultor/dashboard/indicacoes" },
     { title: "📈 Minhas Vendas", icon: "📈", rota: "/consultor/dashboard/vendas" },
     { title: "📊 Report", icon: "📊", rota: "/consultor/dashboard/report" },
     { title: "👤 Perfil", icon: "👤", rota: "/consultor/dashboard/profile" },
@@ -222,7 +220,6 @@ export default function ConsultorDashboard() {
                 <Route path="dashboard/historico" element={<HistoryPanel />} />
                 <Route path="dashboard/reviews" element={<ReviewsPanel />} />
                 <Route path="dashboard/treinamentos" element={<TrainingPanel />} />
-                // <Route path="dashboard/indicacoes" element={<ReferralPanel />} />
                 <Route path="dashboard/vendas" element={<SalesTable />} />
                 <Route path="dashboard/report" element={<ReportPanel />} />
             </Route>

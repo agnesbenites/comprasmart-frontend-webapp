@@ -14,6 +14,7 @@ import LojistaRelatorios from "./LojistaRelatorios";
 import LojistaCadastro from "./LojistaCadastro";
 import LojistaProfile from "./LojistaProfile";
 import IntegracaoVenda from "./IntegracaoVenda";
+import LojistaIndicacoes from './pages/LojistaIndicacoes';
 import PlanosPage from "./planos/Planos.page";
 import ExcluirContaLojista from '../components/ExcluirContaLojista';
 
@@ -84,6 +85,7 @@ const menuItems = [
   { title: "QR Codes", rota: "qrcode" },
   { title: "Relatórios", rota: "relatorios" },
   { title: "Treinamentos", rota: "treinamentos" },
+  { title: "Indicações", rota: "indicacoes" },
   { title: "Cadastro", rota: "cadastro" },
 ];
 
@@ -171,6 +173,7 @@ export default function LojistaDashboard() {
         <Route path="cadastro" element={<LojistaCadastro />} />
         <Route path="profile" element={<LojistaProfile />} />
         <Route path="report" element={<ReportPanelLojista />} />
+	<Route path="indicacoes" element={<LojistaIndicacoes />} />
       </Route>
 
       {/* Redireciona /lojista para /lojista/dashboard */}
