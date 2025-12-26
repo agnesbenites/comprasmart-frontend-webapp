@@ -204,6 +204,33 @@ const LojistaProfile = () => {
           ))}
         </div>
 
+        {/* Planos e Pagamentos */}
+        <div style={styles.card}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <div>
+              <h3 style={styles.cardTitle}>💳 Planos e Pagamentos</h3>
+              <p style={styles.cardSubtitle}>Gerencie sua assinatura e faturas</p>
+            </div>
+            <button 
+              style={styles.primaryButton}
+              onClick={() => navigate('/lojista/dashboard/pagamentos')}
+            >
+              Gerenciar Plano →
+            </button>
+          </div>
+
+          <div style={{
+            padding: '20px',
+            backgroundColor: '#f0f9ff',
+            borderRadius: '8px',
+            border: '1px solid #bfdbfe'
+          }}>
+            <p style={{ margin: 0, color: '#1e40af', fontSize: '0.95rem' }}>
+              💡 <strong>Dica:</strong> Clique em "Gerenciar Plano" para fazer upgrade, adicionar recursos extras ou visualizar suas faturas.
+            </p>
+          </div>
+        </div>
+
         {/* Configuracoes de Comissao */}
         <div style={styles.card}>
           <h3 style={styles.cardTitle}> Configuracoes de Comissao</h3>

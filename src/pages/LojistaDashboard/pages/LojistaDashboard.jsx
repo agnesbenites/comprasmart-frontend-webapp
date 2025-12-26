@@ -76,16 +76,17 @@ const menuItems = [
   { title: "Dashboard", rota: "" },
   { title: "Pedidos", rota: "pedidos" },
   { title: "Produtos e Estoque", rota: "produtos" },
+  { title: "Integração de Vendas", rota: "integracao" },
   { title: "Usuários", rota: "usuarios" },
   { title: "Vendedores", rota: "vendedores" },
   { title: "Consultores", rota: "consultores" },
   { title: "Filiais", rota: "filiais" },
   { title: "QR Codes", rota: "qrcode" },
-  { title: "Pagamentos", rota: "pagamentos" },
   { title: "Relatórios", rota: "relatorios" },
   { title: "Treinamentos", rota: "treinamentos" },
   { title: "Cadastro", rota: "cadastro" },
 ];
+
 
 /* ===================== LAYOUT ===================== */
 const LojistaDashboardLayout = () => {
@@ -156,6 +157,7 @@ export default function LojistaDashboard() {
       {/* Rota principal do dashboard com layout */}
       <Route path="dashboard" element={<LojistaDashboardLayout />}>
         <Route index element={<LojistaHomePanel />} />
+	<Route path="integracao" element={<IntegracaoVenda />} />
         <Route path="pedidos" element={<GerenciadorPedidos tipoUsuario="lojista" />} />
         <Route path="produtos" element={<ProdutosPage />} />
         <Route path="pagamentos" element={<PlanosPage />} />
@@ -168,7 +170,6 @@ export default function LojistaDashboard() {
         <Route path="treinamentos" element={<TrainingManagementPanel />} />
         <Route path="cadastro" element={<LojistaCadastro />} />
         <Route path="profile" element={<LojistaProfile />} />
-        <Route path="integracao" element={<IntegracaoVenda />} />
         <Route path="report" element={<ReportPanelLojista />} />
       </Route>
 
