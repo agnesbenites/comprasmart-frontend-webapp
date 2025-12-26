@@ -14,7 +14,7 @@ import LojistaRelatorios from "./LojistaRelatorios";
 import LojistaCadastro from "./LojistaCadastro";
 import LojistaProfile from "./LojistaProfile";
 import IntegracaoVenda from "./IntegracaoVenda";
-import LojistaIndicacoes from './pages/LojistaIndicacoes';
+import LojistaIndicacoes from './LojistaIndicacoes';
 import PlanosPage from "./planos/Planos.page";
 import ExcluirContaLojista from '../components/ExcluirContaLojista';
 
