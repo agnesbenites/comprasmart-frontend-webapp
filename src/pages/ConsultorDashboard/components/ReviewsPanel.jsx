@@ -20,62 +20,104 @@ const ReviewsPanel = ({ consultorId }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (consultorId) {
-      carregarAvaliacoes();
-    }
-  }, [consultorId]);
+    const carregarAvaliacoes = async () => {
+      setLoading(true);
+      try {
+        // Se não tiver consultorId, usar dados mock
+        if (!consultorId) {
+          // Dados simulados para demonstração
+          const mockAvaliacoes = [
+            {
+              id: 1,
+              chamadaId: 'CH-2024-001',
+              estrelas: 5,
+              comentario: 'Excelente atendimento! Muito atencioso e conhecedor dos produtos.',
+              loja: 'Eletrônicos Center',
+              produtos: ['Smartphone Samsung Galaxy S24'],
+              data: '2024-12-20',
+              horario: '14:30',
+              duracao: '15 min',
+            },
+            {
+              id: 2,
+              chamadaId: 'CH-2024-002',
+              estrelas: 4,
+              comentario: 'Bom atendimento, mas poderia ser mais rápido.',
+              loja: 'Tech Store',
+              produtos: ['Notebook Dell', 'Mouse Logitech'],
+              data: '2024-12-19',
+              horario: '10:15',
+              duracao: '25 min',
+            },
+            {
+              id: 3,
+              chamadaId: 'CH-2024-003',
+              estrelas: 5,
+              comentario: 'Perfeito! Recomendo!',
+              loja: 'Casa & Decoração',
+              produtos: ['Luminária LED'],
+              data: '2024-12-18',
+              horario: '16:45',
+              duracao: '12 min',
+            },
+          ];
+          
+          setAvaliacoes(mockAvaliacoes);
+          setLoading(false);
+          return;
+        }
 
-  const carregarAvaliacoes = async () => {
-    setLoading(true);
-    try {
-      // Buscar avaliações do consultor no Supabase
-      const { data, error } = await supabase
-        .from('avaliacoes')
-        .select(`
-          id,
-          nota,
-          comentario,
-          created_at,
-          cliente_id,
-          produto_id,
-          loja_id,
-          produtos:produto_id (
-            nome,
-            sku
-          ),
-          lojas:loja_id (
-            nome_fantasia
-          )
-        `)
-        .eq('consultor_id', consultorId)
-        .order('created_at', { ascending: false });
+        // Buscar avaliações do consultor no Supabase
+        const { data, error } = await supabase
+          .from('avaliacoes')
+          .select(`
+            id,
+            nota,
+            comentario,
+            created_at,
+            cliente_id,
+            produto_id,
+            loja_id,
+            produtos:produto_id (
+              nome,
+              sku
+            ),
+            lojas:loja_id (
+              nome_fantasia
+            )
+          `)
+          .eq('consultor_id', consultorId)
+          .order('created_at', { ascending: false });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Transformar dados para o formato do componente
-      const avaliacoesFormatadas = data.map(av => ({
-        id: av.id,
-        chamadaId: `CH-${new Date(av.created_at).getFullYear()}-${String(av.id).padStart(3, '0')}`,
-        estrelas: av.nota,
-        comentario: av.comentario || 'Sem comentário',
-        loja: av.lojas?.nome_fantasia || 'Loja não identificada',
-        produtos: av.produtos ? [av.produtos.nome] : ['Produto não identificado'],
-        data: av.created_at.split('T')[0],
-        horario: new Date(av.created_at).toLocaleTimeString('pt-BR', { 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        }),
-        duracao: '-- min', // Pode calcular se tiver campo de duração
-      }));
+        // Transformar dados para o formato do componente
+        const avaliacoesFormatadas = data.map(av => ({
+          id: av.id,
+          chamadaId: `CH-${new Date(av.created_at).getFullYear()}-${String(av.id).padStart(3, '0')}`,
+          estrelas: av.nota,
+          comentario: av.comentario || 'Sem comentário',
+          loja: av.lojas?.nome_fantasia || 'Loja não identificada',
+          produtos: av.produtos ? [av.produtos.nome] : ['Produto não identificado'],
+          data: av.created_at.split('T')[0],
+          horario: new Date(av.created_at).toLocaleTimeString('pt-BR', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          }),
+          duracao: '-- min',
+        }));
 
-      setAvaliacoes(avaliacoesFormatadas);
-    } catch (error) {
-      console.error('Erro ao carregar avaliacoes:', error);
-      alert('Erro ao carregar avaliações. Tente novamente.');
-    } finally {
-      setLoading(false);
-    }
-  };
+        setAvaliacoes(avaliacoesFormatadas);
+      } catch (error) {
+        console.error('Erro ao carregar avaliações:', error);
+        alert('Erro ao carregar avaliações. Tente novamente.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    carregarAvaliacoes();
+  }, [consultorId]); // ✅ Agora está correto!
 
   const calcularEstatisticas = () => {
     const total = avaliacoes.length;
@@ -122,6 +164,10 @@ const ReviewsPanel = ({ consultorId }) => {
     );
   }
 
+  const recarregarAvaliacoes = () => {
+    window.location.reload();
+  };
+
   return (
     <div style={styles.container}>
       {/* Header com Estatisticas */}
@@ -131,7 +177,7 @@ const ReviewsPanel = ({ consultorId }) => {
           <p style={styles.subtitle}>Veja o feedback dos seus clientes</p>
         </div>
         <button 
-          onClick={carregarAvaliacoes}
+          onClick={recarregarAvaliacoes}
           style={styles.refreshButton}
         >
           🔄 Atualizar
@@ -266,6 +312,14 @@ const ReviewsPanel = ({ consultorId }) => {
           </p>
         </div>
       )}
+
+      {/* CSS para animacao do spinner */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}} />
     </div>
   );
 };

@@ -1,11 +1,11 @@
 // src/pages/ConsultorDashboard/pages/ConsultorDashboard.jsx
-// VERSAO CORRIGIDA - Importa os componentes REAIS da pasta components/
+// VERSÃO CORRIGIDA - Importa os componentes REAIS da pasta components/
 
 import React from "react";
 import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 
 // =============================================================
-// === IMPORTACOES DOS COMPONENTES REAIS ===
+// === IMPORTAÇÕES DOS COMPONENTES REAIS ===
 // =============================================================
 import AnalyticsPanel from "../components/AnalyticsPanel";
 import AttendanceSummaryPanel from "../components/AttendanceSummaryPanel";
@@ -19,33 +19,31 @@ import ReviewsPanel from "../components/ReviewsPanel";
 import SalesTable from "../components/SalesTable";
 import StoresPanel from "../components/StoresPanel";
 import TrainingPanel from "../components/TrainingPanel";
-import ExcluirContaConsultor from '../components/ExcluirContaConsultor';
-
 
 // --- DADOS E CONSTANTES GLOBAIS ---
 const MOCK_CONSULTOR_INFO = {
     nome: "Agnes Consultora",
-    segmentos: ["Eletrodomesticos", "Tecnologia", "Moveis"],
+    segmentos: ["Eletrodomésticos", "Tecnologia", "Móveis"],
     lojasAtendidas: 7,
     comissaoAcumulada: 12500.50,
     atendimentosMes: 45,
     ratingMedio: 4.8,
 };
 
-// Itens de menu com icones de emoji
+// Itens de menu com ícones de emoji
 const CONSULTOR_MENU_ITEMS = [
-    { title: "  Home", icon: " ", rota: "/consultor/dashboard" },
-    { title: " Fila de Atendimento", icon: "", rota: "/consultor/dashboard/fila" },
-    { title: " Atendimento Ativo", icon: "", rota: "/consultor/dashboard/chat" },
-    { title: " Histórico", icon: "", rota: "/consultor/dashboard/historico" },
-    { title: " Comissoes", icon: "", rota: "/consultor/dashboard/analytics" },
-    { title: " Minhas Lojas", icon: "", rota: "/consultor/dashboard/lojas" },
-    { title: "i Avaliações", icon: "i", rota: "/consultor/dashboard/reviews" },
-    { title: " Treinamentos", icon: "", rota: "/consultor/dashboard/treinamentos" },
-    { title: " Indicações", icon: "", rota: "/consultor/dashboard/indicacoes" },
-    { title: " Minhas Vendas", icon: "", rota: "/consultor/dashboard/vendas" },
-    { title: "  Report", icon: " ", rota: "/consultor/dashboard/report" },
-    { title: " Perfil", icon: "", rota: "/consultor/dashboard/profile" },
+    { title: "🏠 Home", icon: "🏠", rota: "/consultor/dashboard" },
+    { title: "👥 Fila de Atendimento", icon: "👥", rota: "/consultor/dashboard/fila" },
+    { title: "💬 Atendimento Ativo", icon: "💬", rota: "/consultor/dashboard/chat" },
+    { title: "📜 Histórico", icon: "📜", rota: "/consultor/dashboard/historico" },
+    { title: "💰 Comissões", icon: "💰", rota: "/consultor/dashboard/analytics" },
+    { title: "🏪 Minhas Lojas", icon: "🏪", rota: "/consultor/dashboard/lojas" },
+    { title: "⭐ Avaliações", icon: "⭐", rota: "/consultor/dashboard/reviews" },
+    { title: "🎓 Treinamentos", icon: "🎓", rota: "/consultor/dashboard/treinamentos" },
+    { title: "📤 Indicações", icon: "📤", rota: "/consultor/dashboard/indicacoes" },
+    { title: "📈 Minhas Vendas", icon: "📈", rota: "/consultor/dashboard/vendas" },
+    { title: "📊 Report", icon: "📊", rota: "/consultor/dashboard/report" },
+    { title: "👤 Perfil", icon: "👤", rota: "/consultor/dashboard/profile" },
 ];
 
 // --- COMPONENTE DE LAYOUT (SIDEBAR) ---
@@ -68,7 +66,7 @@ const DashboardLayout = () => {
             {/* Sidebar */}
             <div className="w-64 bg-white shadow-xl flex-shrink-0">
                 <h2 className="text-2xl font-extrabold text-blue-800 p-6 text-center border-b border-gray-100">
-                    Aut´nomo
+                    Autônomo
                 </h2>
                 <nav className="mt-4">
                     {CONSULTOR_MENU_ITEMS.map((item) => (
@@ -84,7 +82,7 @@ const DashboardLayout = () => {
                 </nav>
             </div>
 
-            {/* Conteudo Principal */}
+            {/* Conteúdo Principal */}
             <main className="flex-grow flex flex-col w-[calc(100%-16rem)] overflow-x-hidden">
                 <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-10">
                     <div>
@@ -95,7 +93,7 @@ const DashboardLayout = () => {
                         to="/consultor/dashboard/profile"
                         className="flex items-center gap-2 p-2 px-4 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
                     >
-                        
+                        <span className="text-lg">👤</span>
                         <span className="text-sm font-medium">Meu Perfil</span>
                     </Link>
                 </header>
@@ -114,26 +112,26 @@ export const ConsultorHomePanel = () => {
     const consultorInfo = MOCK_CONSULTOR_INFO;
 
     const atalhos = [
-        { titulo: " Próximo da Fila", descricao: "Iniciar um novo atendimento da fila prioritária", cor: "bg-blue-500 hover:bg-blue-600", rota: "/consultor/dashboard/fila" },
-        { titulo: " Lojas Atendidas", descricao: "Gerenciar minhas lojas e configurar categorias", cor: "bg-green-500 hover:bg-green-600", rota: "/consultor/dashboard/lojas" },
-        { titulo: " Sacar Comissão", descricao: "Ver detalhes de comissao e solicitar saque", cor: "bg-yellow-500 hover:bg-yellow-600", rota: "/consultor/dashboard/analytics" },
-        { titulo: " Chat Ativo", descricao: "Acessar atendimentos em andamento", cor: "bg-teal-500 hover:bg-teal-600", rota: "/consultor/dashboard/chat" }
+        { titulo: "▶️ Próximo da Fila", descricao: "Iniciar um novo atendimento da fila prioritária", cor: "bg-blue-500 hover:bg-blue-600", rota: "/consultor/dashboard/fila" },
+        { titulo: "🏪 Lojas Atendidas", descricao: "Gerenciar minhas lojas e configurar categorias", cor: "bg-green-500 hover:bg-green-600", rota: "/consultor/dashboard/lojas" },
+        { titulo: "💸 Sacar Comissão", descricao: "Ver detalhes de comissão e solicitar saque", cor: "bg-yellow-500 hover:bg-yellow-600", rota: "/consultor/dashboard/analytics" },
+        { titulo: "💬 Chat Ativo", descricao: "Acessar atendimentos em andamento", cor: "bg-teal-500 hover:bg-teal-600", rota: "/consultor/dashboard/chat" }
     ];
 
     return (
         <div className="max-w-7xl mx-auto">
-            {/* Cabecalho Pessoal e Comissão */}
+            {/* Cabeçalho Pessoal e Comissão */}
             <div className="bg-white p-6 rounded-xl shadow-lg mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center">
                 <div className="mb-4 lg:mb-0">
                     <h1 className="text-3xl font-bold text-blue-800 mb-1">
-                         Ola, {consultorInfo.nome}!
+                        👋 Olá, {consultorInfo.nome}!
                     </h1>
                     <p className="text-gray-600 mb-4">
                         Segmentos de Atuação: {consultorInfo.segmentos.join(', ')}
                     </p>
                     <div className="flex items-center">
                         <h3 className="text-lg font-semibold text-gray-700 mr-4">
-                            <span className="inline mr-2 text-teal-600"></span> Atendendo {consultorInfo.lojasAtendidas} Lojas
+                            <span className="inline mr-2 text-teal-600">✅</span> Atendendo {consultorInfo.lojasAtendidas} Lojas
                         </h3>
                         <button onClick={() => navigate("/consultor/dashboard/lojas")} className="bg-teal-600 text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors hover:bg-teal-700">
                             Ver Detalhes das Lojas
@@ -148,13 +146,13 @@ export const ConsultorHomePanel = () => {
                         R$ {consultorInfo.comissaoAcumulada.toFixed(2).replace('.', ',')}
                     </div>
                     <button onClick={() => navigate("/consultor/dashboard/analytics")} className="w-full bg-green-600 text-white font-bold px-4 py-2 rounded-lg text-sm transition-colors hover:bg-green-700 shadow-md">
-                        <span className="inline mr-2"></span> Sacar Agora
+                        <span className="inline mr-2">💸</span> Sacar Agora
                     </button>
                 </div>
             </div>
 
-            {/* Atalhos Rapidos */}
-            <h2 className="text-2xl font-semibold text-blue-800 mb-4"> Ações de Atendimento</h2>
+            {/* Atalhos Rápidos */}
+            <h2 className="text-2xl font-semibold text-blue-800 mb-4">⚡ Ações de Atendimento</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 {atalhos.map((atalho, index) => (
                     <div
@@ -170,18 +168,18 @@ export const ConsultorHomePanel = () => {
                 ))}
             </div>
 
-            {/* Metricas Chave */}
-            <h2 className="text-2xl font-semibold text-blue-800 mb-4"> Performance</h2>
+            {/* Métricas Chave */}
+            <h2 className="text-2xl font-semibold text-blue-800 mb-4">📊 Performance</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <MetricCard title="Atendimentos (Mês)" value={consultorInfo.atendimentosMes} icon="" color="blue" />
-                <MetricCard title="Rating Médio" value={`${consultorInfo.ratingMedio} / 5.0`} icon="i" color="yellow" />
-                <MetricCard title="Lojas Ativas" value={consultorInfo.lojasAtendidas} icon="" color="teal" />
+                <MetricCard title="Atendimentos (Mês)" value={consultorInfo.atendimentosMes} icon="👥" color="blue" />
+                <MetricCard title="Rating Médio" value={`${consultorInfo.ratingMedio} / 5.0`} icon="⭐" color="yellow" />
+                <MetricCard title="Lojas Ativas" value={consultorInfo.lojasAtendidas} icon="🏪" color="teal" />
             </div>
         </div>
     );
 };
 
-// Componente auxiliar para Metricas
+// Componente auxiliar para Métricas
 const MetricCard = ({ title, value, icon, color }) => {
     const colorClasses = {
         blue: { bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-500' },
