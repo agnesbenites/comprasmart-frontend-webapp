@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import BotaoRelatoriosConciliacao from '../components/BotaoRelatoriosConciliacao';
+import { useLojistaId } from '../../../hooks/useLojistaId';
 
 const IntegracaoVenda = () => {
   const [codigo, setCodigo] = useState('');
@@ -8,6 +10,8 @@ const IntegracaoVenda = () => {
   const [erro, setErro] = useState('');
   const [modoCamera, setModoCamera] = useState(false);
   const inputRef = useRef(null);
+
+  const { lojistaId } = useLojistaId(); // ← ADICIONE ESSA LINHA LOGO APÓS as outras declarações useState (linha ~13)
 
   // Foca no input ao carregar (para leitores de codigo de barras USB)
   useEffect(() => {
@@ -149,10 +153,17 @@ const IntegracaoVenda = () => {
     <div style={styles.container}>
       {/* Header */}
       <div style={styles.header}>
-        <h1 style={styles.title}>Integracao de Venda</h1>
-        <p style={styles.subtitle}>
-          Escaneie o QR Code ou digite o codigo da venda
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <div style={{ textAlign: 'left' }}>
+            <h1 style={styles.title}>Integracao de Venda</h1>
+            <p style={styles.subtitle}>
+              Escaneie o QR Code ou digite o codigo da venda
+            </p>
+          </div>
+          {lojistaId && (
+            <BotaoRelatoriosConciliacao lojistaId={lojistaId} variant="secondary" />
+          )}
+        </div>
       </div>
 
       {/* Area de Busca */}
