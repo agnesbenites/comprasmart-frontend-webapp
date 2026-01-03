@@ -1,1165 +1,652 @@
-// src/pages/LojistaVendedores.jsx
-import React, { useState } from "react";
+// src/pages/LojistaDashboard/pages/LojistaVendedores.jsx
+// DASHBOARD DE PERFORMANCE DOS VENDEDORES
+
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../../supabaseClient';
 
 const LojistaVendedores = () => {
+  const [loading, setLoading] = useState(true);
+  const [periodo, setPeriodo] = useState('mes'); // hoje, semana, mes, ano
+  const [metrics, setMetrics] = useState({
+    totalVendedores: 0,
+    vendedoresAtivos: 0,
+    faturamentoTotal: 0,
+    ticketMedio: 0,
+    totalVendas: 0,
+  });
   const [vendedores, setVendedores] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [vendedorEditando, setVendedorEditando] = useState(null);
-  const [filtroStatus, setFiltroStatus] = useState("todos");
-  const [busca, setBusca] = useState("");
 
-  const [formData, setFormData] = useState({
-    // Dados Pessoais
-    nome: "",
-    email: "",
-    telefone: "",
-    cpf: "",
-    dataNascimento: "",
+  useEffect(() => {
+    carregarDados();
+  }, [periodo]);
 
-    // Dados Profissionais
-    matricula: "",
-    dataAdmissao: "",
-    cargo: "vendedor",
-    filial: "",
-    departamento: "Vendas",
-    comissao: "5",
-    metaMensal: "",
+  const carregarDados = async () => {
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-    // Endereco
-    cep: "",
-    endereco: "",
-    numero: "",
-    complemento: "",
-    cidade: "",
-    estado: "",
+      const { data: loja } = await supabase
+        .from('lojas_corrigida')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
 
-    // Status
-    status: "ativo",
-    observacoes: "",
-  });
+      if (!loja) return;
 
-  // Dados mockados
-  const filiais = [
-    { id: 1, nome: "Matriz - Centro" },
-    { id: 2, nome: "Filial - Shopping" },
-    { id: 3, nome: "Loja Online" },
-  ];
+      // Buscar vendedores
+      const { data: vendedoresData } = await supabase
+        .from('vendedores')
+        .select('*')
+        .eq('id_loja', loja.id);
 
-  const departamentos = [
-    "Vendas",
-    "Atendimento",
-    "Telemarketing",
-    "E-commerce",
-    "Field Sales",
-  ];
+      // Calcular período
+      const dataInicio = calcularDataInicio(periodo);
 
-  const cargos = [
-    { id: "vendedor", nome: " Vendedor", cor: "#007bff" },
-    { id: "supervisor", nome: " Supervisor", cor: "#28a745" },
-    { id: "coordenador", nome: " Coordenador", cor: "#ffc107" },
-    { id: "gerente", nome: " Gerente", cor: "#dc3545" },
-  ];
+      // Buscar vendas do período para cada vendedor
+      const vendedoresComMetricas = await Promise.all(
+        (vendedoresData || []).map(async (vendedor) => {
+          const { data: vendas } = await supabase
+            .from('vendas')
+            .select('*')
+            .eq('id_lojista', loja.id)
+            .eq('id_vendedor', vendedor.id)
+            .gte('created_at', dataInicio);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+          const totalVendas = vendas?.length || 0;
+          const faturamento = vendas?.reduce((sum, v) => sum + parseFloat(v.valor_total || 0), 0) || 0;
+          const ticketMedio = totalVendas > 0 ? faturamento / totalVendas : 0;
 
-  const gerarMatricula = () => {
-    const timestamp = new Date().getTime();
-    return `VEND${timestamp.toString().slice(-6)}`;
-  };
+          // Calcular meta (exemplo: R$ 5000/mês)
+          const meta = 5000;
+          const percMeta = (faturamento / meta) * 100;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const vendedorData = {
-      id: vendedorEditando ? vendedorEditando.id : Date.now(),
-      ...formData,
-      // Gerar matricula automaticamente se for novo vendedor
-      matricula: vendedorEditando ? formData.matricula : gerarMatricula(),
-      dataCriacao: vendedorEditando
-        ? vendedorEditando.dataCriacao
-        : new Date().toISOString(),
-      dataAtualizacao: new Date().toISOString(),
-      // Mock de dados de performance
-      vendasMes: 0,
-      comissaoAcumulada: 0,
-      metaAtingida: false,
-      // Avatar
-      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        formData.nome
-      )}&background=17a2b8&color=fff&size=100`,
-    };
-
-    if (vendedorEditando) {
-      setVendedores((prev) =>
-        prev.map((v) => (v.id === vendedorEditando.id ? vendedorData : v))
+          return {
+            ...vendedor,
+            totalVendas,
+            faturamento,
+            ticketMedio,
+            meta,
+            percMeta,
+          };
+        })
       );
-    } else {
-      setVendedores((prev) => [...prev, vendedorData]);
-    }
 
-    // Reset form
-    setFormData({
-      nome: "",
-      email: "",
-      telefone: "",
-      cpf: "",
-      dataNascimento: "",
-      matricula: "",
-      dataAdmissao: "",
-      cargo: "vendedor",
-      filial: "",
-      departamento: "Vendas",
-      comissao: "5",
-      metaMensal: "",
-      cep: "",
-      endereco: "",
-      numero: "",
-      complemento: "",
-      cidade: "",
-      estado: "",
-      status: "ativo",
-      observacoes: "",
-    });
+      // Ordenar por faturamento
+      vendedoresComMetricas.sort((a, b) => b.faturamento - a.faturamento);
 
-    setShowForm(false);
-    setVendedorEditando(null);
-    alert(
-      vendedorEditando
-        ? "Vendedor atualizado com sucesso!"
-        : "Vendedor cadastrado com sucesso!"
-    );
-  };
+      // Calcular métricas gerais
+      const totalVendedores = vendedoresComMetricas.length;
+      const vendedoresAtivos = vendedoresComMetricas.filter(v => v.ativo).length;
+      const faturamentoTotal = vendedoresComMetricas.reduce((sum, v) => sum + v.faturamento, 0);
+      const totalVendasGeral = vendedoresComMetricas.reduce((sum, v) => sum + v.totalVendas, 0);
+      const ticketMedioGeral = totalVendasGeral > 0 ? faturamentoTotal / totalVendasGeral : 0;
 
-  const handleEditar = (vendedor) => {
-    setFormData(vendedor);
-    setVendedorEditando(vendedor);
-    setShowForm(true);
-  };
+      setMetrics({
+        totalVendedores,
+        vendedoresAtivos,
+        faturamentoTotal,
+        ticketMedio: ticketMedioGeral,
+        totalVendas: totalVendasGeral,
+      });
 
-  const handleExcluir = (id) => {
-    if (window.confirm("Tem certeza que deseja excluir este vendedor?")) {
-      setVendedores((prev) => prev.filter((v) => v.id !== id));
-      alert("Vendedor excluido com sucesso!");
+      setVendedores(vendedoresComMetricas);
+
+    } catch (error) {
+      console.error('Erro:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleCancelar = () => {
-    setShowForm(false);
-    setVendedorEditando(null);
-    setFormData({
-      nome: "",
-      email: "",
-      telefone: "",
-      cpf: "",
-      dataNascimento: "",
-      matricula: "",
-      dataAdmissao: "",
-      cargo: "vendedor",
-      filial: "",
-      departamento: "Vendas",
-      comissao: "5",
-      metaMensal: "",
-      cep: "",
-      endereco: "",
-      numero: "",
-      complemento: "",
-      cidade: "",
-      estado: "",
-      status: "ativo",
-      observacoes: "",
-    });
+  const calcularDataInicio = (periodo) => {
+    const hoje = new Date();
+    switch (periodo) {
+      case 'hoje':
+        hoje.setHours(0, 0, 0, 0);
+        return hoje.toISOString();
+      case 'semana':
+        hoje.setDate(hoje.getDate() - 7);
+        return hoje.toISOString();
+      case 'mes':
+        hoje.setMonth(hoje.getMonth() - 1);
+        return hoje.toISOString();
+      case 'ano':
+        hoje.setFullYear(hoje.getFullYear() - 1);
+        return hoje.toISOString();
+      default:
+        return hoje.toISOString();
+    }
   };
 
-  const handleToggleStatus = (id) => {
-    setVendedores((prev) =>
-      prev.map((v) =>
-        v.id === id
-          ? { ...v, status: v.status === "ativo" ? "inativo" : "ativo" }
-          : v
-      )
+  const getPeriodoLabel = () => {
+    switch (periodo) {
+      case 'hoje': return 'Hoje';
+      case 'semana': return 'Últimos 7 dias';
+      case 'mes': return 'Último mês';
+      case 'ano': return 'Último ano';
+      default: return 'Período';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div style={styles.loadingContainer}>
+        <div style={styles.spinner}></div>
+        <p>Carregando dados dos vendedores...</p>
+      </div>
     );
-  };
-
-  const getCargoInfo = (cargoId) => {
-    return cargos.find((c) => c.id === cargoId) || cargos[0];
-  };
-
-  const getStatusBadge = (status) => {
-    return status === "ativo" ? (
-      <span style={styles.badgeAtivo}> Ativo</span>
-    ) : (
-      <span style={styles.badgeInativo}> Inativo</span>
-    );
-  };
-
-  const getFilialNome = (filialId) => {
-    const filial = filiais.find((f) => f.id.toString() === filialId);
-    return filial ? filial.nome : "Nao definida";
-  };
-
-  const calcularPerformance = (vendas, meta) => {
-    if (!meta || meta === 0) return 0;
-    return Math.min((vendas / meta) * 100, 100);
-  };
-
-  // Filtros
-  const vendedoresFiltrados = vendedores.filter((vendedor) => {
-    const matchStatus =
-      filtroStatus === "todos" || vendedor.status === filtroStatus;
-    const matchBusca =
-      vendedor.nome.toLowerCase().includes(busca.toLowerCase()) ||
-      vendedor.email.toLowerCase().includes(busca.toLowerCase()) ||
-      vendedor.matricula.toLowerCase().includes(busca.toLowerCase());
-    return matchStatus && matchBusca;
-  });
-
-  const estatisticas = {
-    total: vendedores.length,
-    ativos: vendedores.filter((v) => v.status === "ativo").length,
-    metaAtingida: vendedores.filter((v) => v.metaAtingida).length,
-    comissaoTotal: vendedores.reduce(
-      (total, v) => total + parseFloat(v.comissaoAcumulada || 0),
-      0
-    ),
-  };
+  }
 
   return (
     <div style={styles.container}>
-      {/* Header */}
+      {/* HEADER */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}> Vendedores Proprios</h1>
-          <p style={styles.subtitle}>Gerencie sua equipe de vendas interna</p>
+          <h1 style={styles.title}>📊 Performance de Vendedores</h1>
+          <p style={styles.subtitle}>Análise de vendas da equipe - {getPeriodoLabel()}</p>
         </div>
-        <div style={styles.stats}>
-          <div style={styles.statCard}>
-            <span style={styles.statNumber}>{estatisticas.total}</span>
-            <span style={styles.statLabel}>Total</span>
+        <div style={styles.headerRight}>
+          <select value={periodo} onChange={(e) => setPeriodo(e.target.value)} style={styles.select}>
+            <option value="hoje">Hoje</option>
+            <option value="semana">Últimos 7 dias</option>
+            <option value="mes">Último mês</option>
+            <option value="ano">Último ano</option>
+          </select>
+          <button onClick={carregarDados} style={styles.button}>
+            🔄 Atualizar
+          </button>
+        </div>
+      </div>
+
+      {/* CARDS DE MÉTRICAS GERAIS */}
+      <div style={styles.cardsGrid}>
+        <div style={styles.card}>
+          <div style={{...styles.cardIcon, backgroundColor: '#3b82f6'}}>👥</div>
+          <div>
+            <div style={styles.cardLabel}>Vendedores Ativos</div>
+            <div style={styles.cardValue}>{metrics.vendedoresAtivos}</div>
+            <div style={styles.cardSubtext}>de {metrics.totalVendedores} total</div>
           </div>
-          <div style={styles.statCard}>
-            <span style={styles.statNumber}>{estatisticas.ativos}</span>
-            <span style={styles.statLabel}>Ativos</span>
+        </div>
+
+        <div style={styles.card}>
+          <div style={{...styles.cardIcon, backgroundColor: '#10b981'}}>💰</div>
+          <div>
+            <div style={styles.cardLabel}>Faturamento Total</div>
+            <div style={styles.cardValue}>
+              R$ {metrics.faturamentoTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </div>
+            <div style={styles.cardSubtext}>{metrics.totalVendas} vendas</div>
           </div>
-          <div style={styles.statCard}>
-            <span style={styles.statNumber}>{estatisticas.metaAtingida}</span>
-            <span style={styles.statLabel}>Meta Atingida</span>
+        </div>
+
+        <div style={styles.card}>
+          <div style={{...styles.cardIcon, backgroundColor: '#f59e0b'}}>📈</div>
+          <div>
+            <div style={styles.cardLabel}>Ticket Médio</div>
+            <div style={styles.cardValue}>
+              R$ {metrics.ticketMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            </div>
+            <div style={styles.cardSubtext}>por venda</div>
           </div>
-          <div style={styles.statCard}>
-            <span style={styles.statNumber}>
-              R$ {estatisticas.comissaoTotal.toFixed(2)}
-            </span>
-            <span style={styles.statLabel}>Comissao Total</span>
+        </div>
+
+        <div style={styles.card}>
+          <div style={{...styles.cardIcon, backgroundColor: '#8b5cf6'}}>🎯</div>
+          <div>
+            <div style={styles.cardLabel}>Média de Vendas</div>
+            <div style={styles.cardValue}>
+              {metrics.vendedoresAtivos > 0 ? (metrics.totalVendas / metrics.vendedoresAtivos).toFixed(1) : 0}
+            </div>
+            <div style={styles.cardSubtext}>por vendedor</div>
           </div>
         </div>
       </div>
 
-      {/* Filtros e Acoes */}
-      <div style={styles.filters}>
-        <div style={styles.searchBox}>
-          <input
-            type="text"
-            placeholder=" Buscar por nome, email ou matricula..."
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            style={styles.searchInput}
-          />
-        </div>
-
-        <select
-          value={filtroStatus}
-          onChange={(e) => setFiltroStatus(e.target.value)}
-          style={styles.filterSelect}
-        >
-          <option value="todos"> Todos os status</option>
-          <option value="ativo"> Ativos</option>
-          <option value="inativo"> Inativos</option>
-        </select>
-
-        <button style={styles.addButton} onClick={() => setShowForm(true)}>
-          O Novo Vendedor
-        </button>
-      </div>
-
-      {/* Formulario */}
-      {showForm && (
-        <div style={styles.formContainer}>
-          <h2 style={styles.formTitle}>
-            {vendedorEditando ? " Editar Vendedor" : " Novo Vendedor"}
-          </h2>
-
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.formGrid}>
-              {/* Dados Pessoais */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Dados Pessoais</h3>
-
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Nome Completo *</label>
-                  <input
-                    type="text"
-                    name="nome"
-                    value={formData.nome}
-                    onChange={handleInputChange}
-                    style={styles.input}
-                    required
-                  />
+      {/* TOP 5 VENDEDORES - DESTAQUE */}
+      {vendedores.length > 0 && (
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>🏆 Top 5 Vendedores do Período</h2>
+          <div style={styles.top5Grid}>
+            {vendedores.slice(0, 5).map((vendedor, i) => (
+              <div key={vendedor.id} style={styles.top5Card}>
+                <div style={styles.top5Rank}>#{i + 1}</div>
+                <div style={styles.top5Avatar}>{vendedor.nome?.[0]}</div>
+                <div style={styles.top5Name}>{vendedor.nome}</div>
+                <div style={styles.top5Value}>
+                  R$ {vendedor.faturamento.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                 </div>
-
-                <div style={styles.formRow}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Email *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      required
-                    />
-                  </div>
-
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Telefone *</label>
-                    <input
-                      type="tel"
-                      name="telefone"
-                      value={formData.telefone}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      placeholder="(11) 99999-9999"
-                      required
-                    />
-                  </div>
+                <div style={styles.top5Sales}>{vendedor.totalVendas} vendas</div>
+                <div style={styles.progressBar}>
+                  <div 
+                    style={{
+                      ...styles.progressFill, 
+                      width: `${Math.min(vendedor.percMeta, 100)}%`,
+                      backgroundColor: vendedor.percMeta >= 100 ? '#10b981' : vendedor.percMeta >= 70 ? '#f59e0b' : '#ef4444'
+                    }}
+                  ></div>
                 </div>
-
-                <div style={styles.formRow}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>CPF *</label>
-                    <input
-                      type="text"
-                      name="cpf"
-                      value={formData.cpf}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      placeholder="000.000.000-00"
-                      required
-                    />
-                  </div>
-
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Data de Nascimento</label>
-                    <input
-                      type="date"
-                      name="dataNascimento"
-                      value={formData.dataNascimento}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                    />
-                  </div>
-                </div>
-
-                {vendedorEditando && (
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Matricula</label>
-                    <input
-                      type="text"
-                      value={formData.matricula}
-                      style={{ ...styles.input, backgroundColor: "#f8f9fa" }}
-                      readOnly
-                    />
-                    <small style={styles.helpText}>
-                      Matricula gerada automaticamente
-                    </small>
-                  </div>
-                )}
-              </div>
-
-              {/* Dados Profissionais */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Dados Profissionais</h3>
-
-                <div style={styles.formRow}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Data de Admissao *</label>
-                    <input
-                      type="date"
-                      name="dataAdmissao"
-                      value={formData.dataAdmissao}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      required
-                    />
-                  </div>
-
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Cargo *</label>
-                    <select
-                      name="cargo"
-                      value={formData.cargo}
-                      onChange={handleInputChange}
-                      style={styles.select}
-                      required
-                    >
-                      {cargos.map((cargo) => (
-                        <option key={cargo.id} value={cargo.id}>
-                          {cargo.nome}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div style={styles.formRow}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Filial *</label>
-                    <select
-                      name="filial"
-                      value={formData.filial}
-                      onChange={handleInputChange}
-                      style={styles.select}
-                      required
-                    >
-                      <option value="">Selecione uma filial</option>
-                      {filiais.map((filial) => (
-                        <option key={filial.id} value={filial.id}>
-                          {filial.nome}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Departamento</label>
-                    <select
-                      name="departamento"
-                      value={formData.departamento}
-                      onChange={handleInputChange}
-                      style={styles.select}
-                    >
-                      {departamentos.map((depto) => (
-                        <option key={depto} value={depto}>
-                          {depto}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div style={styles.formRow}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Comissao (%) *</label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      name="comissao"
-                      value={formData.comissao}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      required
-                    />
-                  </div>
-
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Meta Mensal (R$)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      name="metaMensal"
-                      value={formData.metaMensal}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      placeholder="0.00"
-                    />
-                  </div>
+                <div style={styles.top5Meta}>
+                  {vendedor.percMeta.toFixed(0)}% da meta
                 </div>
               </div>
-
-              {/* Endereco */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Endereco</h3>
-
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>CEP</label>
-                  <input
-                    type="text"
-                    name="cep"
-                    value={formData.cep}
-                    onChange={handleInputChange}
-                    style={styles.input}
-                    placeholder="00000-000"
-                  />
-                </div>
-
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Endereco</label>
-                  <input
-                    type="text"
-                    name="endereco"
-                    value={formData.endereco}
-                    onChange={handleInputChange}
-                    style={styles.input}
-                  />
-                </div>
-
-                <div style={styles.formRow}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Numero</label>
-                    <input
-                      type="text"
-                      name="numero"
-                      value={formData.numero}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                    />
-                  </div>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Complemento</label>
-                    <input
-                      type="text"
-                      name="complemento"
-                      value={formData.complemento}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                    />
-                  </div>
-                </div>
-
-                <div style={styles.formRow}>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Cidade</label>
-                    <input
-                      type="text"
-                      name="cidade"
-                      value={formData.cidade}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                    />
-                  </div>
-                  <div style={styles.formGroup}>
-                    <label style={styles.label}>Estado</label>
-                    <input
-                      type="text"
-                      name="estado"
-                      value={formData.estado}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      placeholder="SP"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Status e Observacoes */}
-              <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Status e Observacoes</h3>
-
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Status</label>
-                  <select
-                    name="status"
-                    value={formData.status}
-                    onChange={handleInputChange}
-                    style={styles.select}
-                  >
-                    <option value="ativo"> Ativo</option>
-                    <option value="inativo"> Inativo</option>
-                  </select>
-                </div>
-
-                <div style={styles.formGroup}>
-                  <label style={styles.label}>Observacoes</label>
-                  <textarea
-                    name="observacoes"
-                    value={formData.observacoes}
-                    onChange={handleInputChange}
-                    style={styles.textarea}
-                    rows="3"
-                    placeholder="Observacoes adicionais sobre o vendedor..."
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div style={styles.formActions}>
-              <button
-                type="button"
-                onClick={handleCancelar}
-                style={styles.cancelButton}
-              >
-                Cancelar
-              </button>
-              <button type="submit" style={styles.submitButton}>
-                {vendedorEditando ? "Atualizar Vendedor" : "Cadastrar Vendedor"}
-              </button>
-            </div>
-          </form>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Lista de Vendedores */}
-      {!showForm && (
-        <div style={styles.listaContainer}>
-          <h2 style={styles.listaTitle}>
-            Equipe de Vendas ({vendedoresFiltrados.length})
-          </h2>
-
-          {vendedores.length === 0 ? (
-            <div style={styles.emptyState}>
-              <div style={styles.emptyIcon}></div>
-              <h3 style={styles.emptyTitle}>Nenhum vendedor cadastrado</h3>
-              <p style={styles.emptyText}>
-                Comece cadastrando sua equipe de vendas interna.
-              </p>
-              <button
-                style={styles.addButton}
-                onClick={() => setShowForm(true)}
-              >
-                O Adicionar Primeiro Vendedor
-              </button>
+      {/* TABELA COMPLETA DE VENDEDORES */}
+      {vendedores.length > 0 && (
+        <div style={styles.section}>
+          <h2 style={styles.sectionTitle}>📋 Todos os Vendedores</h2>
+          <div style={styles.table}>
+            <div style={styles.tableHeader}>
+              <div style={styles.tableCellRank}>#</div>
+              <div style={styles.tableCellName}>Vendedor</div>
+              <div style={styles.tableCell}>Vendas</div>
+              <div style={styles.tableCell}>Faturamento</div>
+              <div style={styles.tableCell}>Ticket Médio</div>
+              <div style={styles.tableCell}>Meta</div>
+              <div style={styles.tableCell}>Status</div>
             </div>
-          ) : (
-            <div style={styles.vendedoresGrid}>
-              {vendedoresFiltrados.map((vendedor) => {
-                const cargoInfo = getCargoInfo(vendedor.cargo);
-                const performance = calcularPerformance(
-                  vendedor.vendasMes,
-                  vendedor.metaMensal
-                );
-
-                return (
-                  <div key={vendedor.id} style={styles.vendedorCard}>
-                    <div style={styles.vendedorHeader}>
-                      <div style={styles.vendedorAvatar}>
-                        <img
-                          src={vendedor.avatar}
-                          alt={vendedor.nome}
-                          style={styles.avatarImage}
-                        />
-                      </div>
-                      <div style={styles.vendedorInfo}>
-                        <h3 style={styles.vendedorNome}>{vendedor.nome}</h3>
-                        <p style={styles.vendedorEmail}>{vendedor.email}</p>
-                        <p style={styles.vendedorMatricula}>
-                          #{vendedor.matricula}
-                        </p>
-                      </div>
-                      <div style={styles.vendedorBadges}>
-                        <span
-                          style={{
-                            ...styles.cargoBadge,
-                            backgroundColor: cargoInfo.cor + "20",
-                            color: cargoInfo.cor,
-                            borderColor: cargoInfo.cor,
-                          }}
-                        >
-                          {cargoInfo.nome}
-                        </span>
-                        {getStatusBadge(vendedor.status)}
-                      </div>
-                    </div>
-
-                    <div style={styles.vendedorDetalhes}>
-                      <div style={styles.detalheItem}>
-                        <strong>Filial:</strong>{" "}
-                        {getFilialNome(vendedor.filial)}
-                      </div>
-                      <div style={styles.detalheItem}>
-                        <strong>Departamento:</strong> {vendedor.departamento}
-                      </div>
-                      <div style={styles.detalheItem}>
-                        <strong>Comissao:</strong> {vendedor.comissao}%
-                      </div>
-                      <div style={styles.detalheItem}>
-                        <strong>Admissao:</strong>{" "}
-                        {new Date(vendedor.dataAdmissao).toLocaleDateString(
-                          "pt-BR"
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Performance */}
-                    {vendedor.metaMensal && (
-                      <div style={styles.performanceSection}>
-                        <div style={styles.performanceHeader}>
-                          <span> Performance do Mas</span>
-                          <span style={styles.performancePercent}>
-                            {performance.toFixed(1)}%
-                          </span>
-                        </div>
-                        <div style={styles.progressBar}>
-                          <div
-                            style={{
-                              ...styles.progressFill,
-                              width: `${performance}%`,
-                              backgroundColor:
-                                performance >= 100
-                                  ? "#28a745"
-                                  : performance >= 70
-                                  ? "#ffc107"
-                                  : "#dc3545",
-                            }}
-                          />
-                        </div>
-                        <div style={styles.performanceNumbers}>
-                          <span>
-                            Vendas: R${" "}
-                            {vendedor.vendasMes?.toFixed(2) || "0.00"}
-                          </span>
-                          <span>Meta: R$ {vendedor.metaMensal}</span>
-                          <span>
-                            Comissao: R${" "}
-                            {vendedor.comissaoAcumulada?.toFixed(2) || "0.00"}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    <div style={styles.vendedorActions}>
-                      <button
-                        onClick={() => handleToggleStatus(vendedor.id)}
-                        style={
-                          vendedor.status === "ativo"
-                            ? styles.desativarButton
-                            : styles.ativarButton
-                        }
-                      >
-                        {vendedor.status === "ativo"
-                          ? " Desativar"
-                          : " Ativar"}
-                      </button>
-                      <button
-                        onClick={() => handleEditar(vendedor)}
-                        style={styles.editButton}
-                      >
-                         Editar
-                      </button>
-                      <button
-                        onClick={() => handleExcluir(vendedor.id)}
-                        style={styles.deleteButton}
-                      >
-                         Excluir
-                      </button>
+            {vendedores.map((vendedor, i) => (
+              <div key={vendedor.id} style={styles.tableRow}>
+                <div style={styles.tableCellRank}>
+                  <span style={styles.rankBadge}>#{i + 1}</span>
+                </div>
+                <div style={styles.tableCellName}>
+                  <div style={styles.vendedorInfo}>
+                    <div style={styles.miniAvatar}>{vendedor.nome?.[0]}</div>
+                    <div>
+                      <div style={styles.vendedorNome}>{vendedor.nome}</div>
+                      <div style={styles.vendedorEmail}>{vendedor.email}</div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          )}
+                </div>
+                <div style={styles.tableCell}>
+                  <span style={styles.vendasBadge}>{vendedor.totalVendas}</span>
+                </div>
+                <div style={styles.tableCell}>
+                  <span style={styles.faturamentoBadge}>
+                    R$ {vendedor.faturamento.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+                <div style={styles.tableCell}>
+                  R$ {vendedor.ticketMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                </div>
+                <div style={styles.tableCell}>
+                  <div style={styles.metaBar}>
+                    <div 
+                      style={{
+                        ...styles.metaFill,
+                        width: `${Math.min(vendedor.percMeta, 100)}%`,
+                        backgroundColor: vendedor.percMeta >= 100 ? '#10b981' : vendedor.percMeta >= 70 ? '#f59e0b' : '#ef4444'
+                      }}
+                    ></div>
+                  </div>
+                  <div style={styles.metaText}>{vendedor.percMeta.toFixed(0)}%</div>
+                </div>
+                <div style={styles.tableCell}>
+                  <span style={{
+                    ...styles.statusBadge,
+                    backgroundColor: vendedor.ativo ? '#dcfce7' : '#fee2e2',
+                    color: vendedor.ativo ? '#15803d' : '#dc2626'
+                  }}>
+                    {vendedor.ativo ? 'Ativo' : 'Inativo'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* EMPTY STATE */}
+      {vendedores.length === 0 && (
+        <div style={styles.empty}>
+          <p style={styles.emptyIcon}>📊</p>
+          <p style={styles.emptyText}>Nenhum vendedor cadastrado</p>
+          <button style={styles.emptyButton}>+ Cadastrar Primeiro Vendedor</button>
         </div>
       )}
     </div>
   );
 };
 
-// Estilos
 const styles = {
   container: {
-    padding: "30px 20px",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    fontFamily: "Inter, sans-serif",
-    minHeight: "100vh",
-    backgroundColor: "#f8f9fa",
+    padding: '30px',
+    backgroundColor: '#f8f9fa',
+    minHeight: '100vh',
+  },
+  loadingContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '400px',
+    gap: '20px',
+  },
+  spinner: {
+    width: '50px',
+    height: '50px',
+    border: '4px solid #e2e8f0',
+    borderTop: '4px solid #3b82f6',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
   },
   header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: "30px",
-    flexWrap: "wrap",
-    gap: "20px",
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: '30px',
+    flexWrap: 'wrap',
+    gap: '20px',
   },
   title: {
-    fontSize: "2.2rem",
-    color: "#333",
-    marginBottom: "8px",
-    fontWeight: "700",
+    fontSize: '2rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    margin: '0 0 5px 0',
   },
   subtitle: {
-    fontSize: "1.1rem",
-    color: "#666",
+    fontSize: '1rem',
+    color: '#64748b',
     margin: 0,
   },
-  stats: {
-    display: "flex",
-    gap: "15px",
-    flexWrap: "wrap",
-  },
-  statCard: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    textAlign: "center",
-    minWidth: "120px",
-  },
-  statNumber: {
-    display: "block",
-    fontSize: "1.8rem",
-    fontWeight: "bold",
-    color: "#007bff",
-    marginBottom: "5px",
-  },
-  statLabel: {
-    fontSize: "0.9rem",
-    color: "#666",
-    fontWeight: "500",
-  },
-  filters: {
-    display: "flex",
-    gap: "15px",
-    marginBottom: "30px",
-    alignItems: "center",
-    flexWrap: "wrap",
-  },
-  searchBox: {
-    flex: 1,
-    minWidth: "200px",
-  },
-  searchInput: {
-    width: "100%",
-    padding: "12px 16px",
-    border: "2px solid #e0e0e0",
-    borderRadius: "8px",
-    fontSize: "1rem",
-  },
-  filterSelect: {
-    padding: "12px 16px",
-    border: "2px solid #e0e0e0",
-    borderRadius: "8px",
-    fontSize: "1rem",
-    backgroundColor: "white",
-    minWidth: "200px",
-  },
-  addButton: {
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    padding: "12px 20px",
-    borderRadius: "8px",
-    fontSize: "1rem",
-    fontWeight: "600",
-    cursor: "pointer",
-    whiteSpace: "nowrap",
-  },
-  formContainer: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-    marginBottom: "30px",
-  },
-  formTitle: {
-    fontSize: "1.5rem",
-    color: "#333",
-    marginBottom: "25px",
-    fontWeight: "600",
-  },
-  form: {
-    width: "100%",
-  },
-  formGrid: {
-    display: "grid",
-    gap: "30px",
-  },
-  formSection: {
-    padding: "25px",
-    backgroundColor: "#f8f9fa",
-    borderRadius: "8px",
-    border: "1px solid #e9ecef",
-  },
-  sectionTitle: {
-    fontSize: "1.2rem",
-    color: "#333",
-    marginBottom: "20px",
-    fontWeight: "600",
-  },
-  formGroup: {
-    marginBottom: "20px",
-  },
-  formRow: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "15px",
-  },
-  label: {
-    display: "block",
-    marginBottom: "8px",
-    fontWeight: "600",
-    color: "#333",
-    fontSize: "0.95rem",
-  },
-  input: {
-    width: "100%",
-    padding: "12px 16px",
-    border: "2px solid #e0e0e0",
-    borderRadius: "8px",
-    fontSize: "1rem",
-    transition: "border-color 0.3s ease",
-    boxSizing: "border-box",
-  },
-  textarea: {
-    width: "100%",
-    padding: "12px 16px",
-    border: "2px solid #e0e0e0",
-    borderRadius: "8px",
-    fontSize: "1rem",
-    resize: "vertical",
-    minHeight: "80px",
-    boxSizing: "border-box",
+  headerRight: {
+    display: 'flex',
+    gap: '15px',
   },
   select: {
-    width: "100%",
-    padding: "12px 16px",
-    border: "2px solid #e0e0e0",
-    borderRadius: "8px",
-    fontSize: "1rem",
-    backgroundColor: "white",
-    cursor: "pointer",
+    padding: '12px 20px',
+    borderRadius: '8px',
+    border: '1px solid #e2e8f0',
+    fontSize: '1rem',
+    cursor: 'pointer',
+    backgroundColor: 'white',
   },
-  helpText: {
-    fontSize: "0.8rem",
-    color: "#666",
-    marginTop: "5px",
-    display: "block",
+  button: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
   },
-  formActions: {
-    display: "flex",
-    gap: "15px",
-    justifyContent: "flex-end",
-    marginTop: "30px",
-    paddingTop: "20px",
-    borderTop: "1px solid #e9ecef",
+  cardsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '20px',
+    marginBottom: '30px',
   },
-  cancelButton: {
-    backgroundColor: "#6c757d",
-    color: "white",
-    border: "none",
-    padding: "12px 25px",
-    borderRadius: "8px",
-    fontSize: "1rem",
-    fontWeight: "600",
-    cursor: "pointer",
+  card: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '25px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '20px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
   },
-  submitButton: {
-    backgroundColor: "#28a745",
-    color: "white",
-    border: "none",
-    padding: "12px 25px",
-    borderRadius: "8px",
-    fontSize: "1rem",
-    fontWeight: "600",
-    cursor: "pointer",
+  cardIcon: {
+    width: '50px',
+    height: '50px',
+    borderRadius: '10px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.5rem',
   },
-  listaContainer: {
-    backgroundColor: "white",
-    padding: "30px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+  cardLabel: {
+    fontSize: '0.9rem',
+    color: '#64748b',
+    marginBottom: '5px',
   },
-  listaTitle: {
-    fontSize: "1.5rem",
-    color: "#333",
-    marginBottom: "25px",
-    fontWeight: "600",
+  cardValue: {
+    fontSize: '1.8rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: '5px',
   },
-  emptyState: {
-    textAlign: "center",
-    padding: "60px 20px",
+  cardSubtext: {
+    fontSize: '0.85rem',
+    color: '#94a3b8',
   },
-  emptyIcon: {
-    fontSize: "4rem",
-    marginBottom: "20px",
+  section: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '30px',
+    marginBottom: '30px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
   },
-  emptyTitle: {
-    fontSize: "1.5rem",
-    color: "#333",
-    marginBottom: "10px",
+  sectionTitle: {
+    fontSize: '1.3rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: '25px',
   },
-  emptyText: {
-    color: "#666",
-    fontSize: "1.1rem",
-    marginBottom: "30px",
+  top5Grid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '20px',
   },
-  vendedoresGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
-    gap: "20px",
+  top5Card: {
+    backgroundColor: '#f8fafc',
+    border: '2px solid #e2e8f0',
+    borderRadius: '12px',
+    padding: '25px',
+    textAlign: 'center',
+    position: 'relative',
   },
-  vendedorCard: {
-    backgroundColor: "#f8f9fa",
-    padding: "25px",
-    borderRadius: "12px",
-    border: "1px solid #e9ecef",
-    transition: "transform 0.2s ease",
+  top5Rank: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    width: '35px',
+    height: '35px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: '700',
+    fontSize: '0.9rem',
   },
-  vendedorHeader: {
-    display: "flex",
-    gap: "15px",
-    marginBottom: "20px",
+  top5Avatar: {
+    width: '60px',
+    height: '60px',
+    borderRadius: '50%',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '2rem',
+    fontWeight: '700',
+    margin: '0 auto 15px',
   },
-  vendedorAvatar: {
-    flexShrink: 0,
+  top5Name: {
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    color: '#1e293b',
+    marginBottom: '10px',
   },
-  avatarImage: {
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    border: "2px solid #e0e0e0",
+  top5Value: {
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    color: '#10b981',
+    marginBottom: '5px',
   },
-  vendedorInfo: {
-    flex: 1,
-  },
-  vendedorNome: {
-    fontSize: "1.2rem",
-    color: "#333",
-    margin: "0 0 5px 0",
-    fontWeight: "600",
-  },
-  vendedorEmail: {
-    color: "#666",
-    fontSize: "0.9rem",
-    margin: "0 0 5px 0",
-  },
-  vendedorMatricula: {
-    color: "#17a2b8",
-    fontSize: "0.85rem",
-    margin: 0,
-    fontWeight: "500",
-  },
-  vendedorBadges: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-    alignItems: "flex-end",
-  },
-  cargoBadge: {
-    padding: "4px 8px",
-    borderRadius: "12px",
-    fontSize: "0.75rem",
-    fontWeight: "600",
-    border: "1px solid",
-  },
-  badgeAtivo: {
-    backgroundColor: "#d4edda",
-    color: "#155724",
-    padding: "4px 8px",
-    borderRadius: "12px",
-    fontSize: "0.75rem",
-    fontWeight: "600",
-    border: "1px solid #c3e6cb",
-  },
-  badgeInativo: {
-    backgroundColor: "#f8d7da",
-    color: "#721c24",
-    padding: "4px 8px",
-    borderRadius: "12px",
-    fontSize: "0.75rem",
-    fontWeight: "600",
-    border: "1px solid #f5c6cb",
-  },
-  vendedorDetalhes: {
-    marginBottom: "20px",
-  },
-  detalheItem: {
-    margin: "5px 0",
-    fontSize: "0.9rem",
-    color: "#555",
-  },
-  performanceSection: {
-    backgroundColor: "white",
-    padding: "15px",
-    borderRadius: "8px",
-    marginBottom: "20px",
-    border: "1px solid #e9ecef",
-  },
-  performanceHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "10px",
-    fontWeight: "600",
-    fontSize: "0.9rem",
-  },
-  performancePercent: {
-    fontWeight: "bold",
-    fontSize: "1rem",
+  top5Sales: {
+    fontSize: '0.9rem',
+    color: '#64748b',
+    marginBottom: '15px',
   },
   progressBar: {
-    width: "100%",
-    height: "8px",
-    backgroundColor: "#e9ecef",
-    borderRadius: "4px",
-    overflow: "hidden",
-    marginBottom: "10px",
+    width: '100%',
+    height: '8px',
+    backgroundColor: '#e2e8f0',
+    borderRadius: '4px',
+    overflow: 'hidden',
+    marginBottom: '8px',
   },
   progressFill: {
-    height: "100%",
-    borderRadius: "4px",
-    transition: "width 0.3s ease",
+    height: '100%',
+    transition: 'width 0.3s ease',
   },
-  performanceNumbers: {
-    display: "flex",
-    justifyContent: "space-between",
-    fontSize: "0.8rem",
-    color: "#666",
+  top5Meta: {
+    fontSize: '0.85rem',
+    color: '#64748b',
+    fontWeight: '600',
   },
-  vendedorActions: {
-    display: "flex",
-    gap: "8px",
-    flexWrap: "wrap",
+  table: {
+    width: '100%',
   },
-  ativarButton: {
-    backgroundColor: "#28a745",
-    color: "white",
-    border: "none",
-    padding: "6px 12px",
-    borderRadius: "6px",
-    fontSize: "0.8rem",
-    fontWeight: "600",
-    cursor: "pointer",
-    flex: 1,
+  tableHeader: {
+    display: 'grid',
+    gridTemplateColumns: '60px 2fr 100px 150px 130px 120px 100px',
+    gap: '10px',
+    padding: '12px 15px',
+    backgroundColor: '#f8fafc',
+    borderRadius: '8px 8px 0 0',
+    fontWeight: '600',
+    color: '#64748b',
+    fontSize: '0.9rem',
   },
-  desativarButton: {
-    backgroundColor: "#dc3545",
-    color: "white",
-    border: "none",
-    padding: "6px 12px",
-    borderRadius: "6px",
-    fontSize: "0.8rem",
-    fontWeight: "600",
-    cursor: "pointer",
-    flex: 1,
+  tableRow: {
+    display: 'grid',
+    gridTemplateColumns: '60px 2fr 100px 150px 130px 120px 100px',
+    gap: '10px',
+    padding: '15px',
+    borderBottom: '1px solid #e2e8f0',
+    fontSize: '0.95rem',
+    alignItems: 'center',
   },
-  editButton: {
-    backgroundColor: "#ffc107",
-    color: "#212529",
-    border: "none",
-    padding: "6px 12px",
-    borderRadius: "6px",
-    fontSize: "0.8rem",
-    fontWeight: "600",
-    cursor: "pointer",
-    flex: 1,
+  tableCellRank: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  deleteButton: {
-    backgroundColor: "#6c757d",
-    color: "white",
-    border: "none",
-    padding: "6px 12px",
-    borderRadius: "6px",
-    fontSize: "0.8rem",
-    fontWeight: "600",
-    cursor: "pointer",
-    flex: 1,
+  tableCellName: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  tableCell: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  rankBadge: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    padding: '4px 10px',
+    borderRadius: '8px',
+    fontSize: '0.85rem',
+    fontWeight: '700',
+  },
+  vendedorInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  },
+  miniAvatar: {
+    width: '40px',
+    height: '40px',
+    borderRadius: '50%',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.1rem',
+    fontWeight: '700',
+  },
+  vendedorNome: {
+    fontWeight: '600',
+    color: '#1e293b',
+  },
+  vendedorEmail: {
+    fontSize: '0.8rem',
+    color: '#94a3b8',
+  },
+  vendasBadge: {
+    backgroundColor: '#e0f2fe',
+    color: '#0369a1',
+    padding: '6px 14px',
+    borderRadius: '8px',
+    fontWeight: '700',
+    fontSize: '1rem',
+  },
+  faturamentoBadge: {
+    color: '#15803d',
+    fontWeight: '700',
+    fontSize: '1rem',
+  },
+  metaBar: {
+    width: '80px',
+    height: '8px',
+    backgroundColor: '#e2e8f0',
+    borderRadius: '4px',
+    overflow: 'hidden',
+    marginBottom: '4px',
+  },
+  metaFill: {
+    height: '100%',
+    transition: 'width 0.3s ease',
+  },
+  metaText: {
+    fontSize: '0.8rem',
+    color: '#64748b',
+    fontWeight: '600',
+  },
+  statusBadge: {
+    padding: '6px 14px',
+    borderRadius: '8px',
+    fontSize: '0.85rem',
+    fontWeight: '600',
+  },
+  empty: {
+    textAlign: 'center',
+    padding: '80px 20px',
+    backgroundColor: 'white',
+    borderRadius: '12px',
+  },
+  emptyIcon: {
+    fontSize: '5rem',
+    margin: '0 0 20px 0',
+  },
+  emptyText: {
+    fontSize: '1.2rem',
+    color: '#64748b',
+    marginBottom: '30px',
+  },
+  emptyButton: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    padding: '14px 28px',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
   },
 };
 
-export default LojistaVendedores;
+// Animação
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+if (!document.head.querySelector('[data-vendedores-spinner]')) {
+  styleSheet.setAttribute('data-vendedores-spinner', 'true');
+  document.head.appendChild(styleSheet);
+}
 
+export default LojistaVendedores;

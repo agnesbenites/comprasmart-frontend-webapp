@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let isMounted = true;
 
-    // Verificar sessão atual
     const checkSession = async () => {
       try {
         console.log("[AuthContext] Verificando sessão...");
@@ -37,9 +36,7 @@ export const AuthProvider = ({ children }) => {
           console.log("[AuthContext] Usuário encontrado:", session.user.id);
           if (isMounted) {
             setUser(session.user);
-            setLoading(false); // SETA LOADING FALSE AQUI, ANTES do fetchUserProfile
-            
-            // Busca perfil em background (não bloqueia)
+            setLoading(false);
             fetchUserProfile(session.user.id);
           }
         } else {
@@ -62,7 +59,6 @@ export const AuthProvider = ({ children }) => {
 
     checkSession();
 
-    // Escutar mudanças de autenticação
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         console.log("[AuthContext] Auth state changed:", event);
@@ -71,9 +67,7 @@ export const AuthProvider = ({ children }) => {
         
         if (session?.user) {
           setUser(session.user);
-          setLoading(false); // SETA LOADING FALSE IMEDIATAMENTE
-          
-          // Busca perfil em background (não bloqueia)
+          setLoading(false);
           fetchUserProfile(session.user.id);
         } else {
           setUser(null);
@@ -93,19 +87,36 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log("[AuthContext] Buscando perfil do usuário:", userId);
       
-      const { data, error } = await supabase
-        .from('usuarios')
+      // ✅ BUSCA DA LOJA (não de usuarios)
+      const { data: loja, error: lojaError } = await supabase
+        .from('lojas_corrigida')
         .select('*')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single();
 
-      if (error) {
-        console.warn("[AuthContext] Perfil não encontrado:", error.message);
+      if (lojaError) {
+        console.warn("[AuthContext] Loja não encontrada:", lojaError.message);
+        
+        // Se não for loja, tenta buscar de outros tipos de usuário
+        const { data: usuario, error: usuarioError } = await supabase
+          .from('usuarios')
+          .select('*')
+          .eq('id', userId)
+          .single();
+          
+        if (!usuarioError && usuario) {
+          console.log("[AuthContext] Usuário encontrado (não-lojista):", usuario);
+          setUserProfile(usuario);
+        }
         return;
       }
       
-      console.log("[AuthContext] Perfil encontrado:", data);
-      setUserProfile(data);
+      console.log("[AuthContext] Loja encontrada:", loja);
+      setUserProfile({
+        ...loja,
+        tipo: 'loja', // ✅ Marca como loja
+        plano: loja.plano,
+      });
     } catch (error) {
       console.error("[AuthContext] Erro ao buscar perfil:", error);
     }
@@ -124,7 +135,6 @@ export const AuthProvider = ({ children }) => {
       if (error) throw error;
       
       console.log("[AuthContext] Login bem-sucedido");
-      // Não precisa setar loading false aqui, o onAuthStateChange faz isso
       return { success: true, user: data.user };
     } catch (error) {
       console.error("[AuthContext] Erro no login:", error);
@@ -169,6 +179,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     user,
     userProfile,
+    profile: userProfile, // ✅ Alias para compatibilidade
     loading,
     login,
     signup,
@@ -179,11 +190,12 @@ export const AuthProvider = ({ children }) => {
   // Debug
   useEffect(() => {
     console.log("[AuthContext] Estado atual:", { 
-      user: user?.id || 'null', 
+      user: user?.id || 'null',
+      profile: userProfile,
       loading, 
       isAuthenticated: !!user 
     });
-  }, [user, loading]);
+  }, [user, userProfile, loading]);
 
   return (
     <AuthContext.Provider value={value}>

@@ -1,9 +1,11 @@
-// src/pages/LojistaProfile.jsx
+// src/pages/LojistaDashboard/pages/LojistaProfile.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../supabaseClient"; // ← ADICIONAR IMPORT
 
 const LojistaProfile = () => {
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // ← NOVO ESTADO
   
   const [empresa, setEmpresa] = useState({
     nome: "Empresa Teste Compra Smart",
@@ -19,7 +21,6 @@ const LojistaProfile = () => {
     percentualGlobal: 8.0
   });
 
-  // CARTOES - Conforme sua imagem
   const [cartoes, setCartoes] = useState([
     {
       id: 1,
@@ -39,11 +40,10 @@ const LojistaProfile = () => {
     pushVendas: true
   });
 
-  // Segmentos da empresa (exemplo Kalunga)
   const [segmentos, setSegmentos] = useState([
     {
       id: 1,
-      nome: " Material Escritorio",
+      nome: "📝 Material Escritorio",
       produtos: ["Canetas", "Lapis", "Borracha", "Pinceis"],
       qrCode: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=segmento-1-escritorio",
       corredor: "A1",
@@ -51,7 +51,7 @@ const LojistaProfile = () => {
     },
     {
       id: 2,
-      nome: " Informatica",
+      nome: "💻 Informatica",
       produtos: ["Notebooks", "Tablets", "Acessorios"],
       qrCode: "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=segmento-2-informatica",
       corredor: "B2",
@@ -93,40 +93,74 @@ const LojistaProfile = () => {
 
   const copiarLinkQRCode = (segmento) => {
     navigator.clipboard.writeText(`https://comprasmart.com/segmento/${segmento.id}`);
-    alert("Link copiado para a area de transferancia!");
+    alert("Link copiado para a area de transferencia!");
   };
 
-  // FUNCAO DE LOGOUT
-  const handleLogout = () => {
-    if (window.confirm("Tem certeza que deseja sair?")) {
-      // Limpar dados do localStorage
-      localStorage.removeItem('token');
-      localStorage.removeItem('userRole');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('lojistaId');
+  // ========================================
+  // FUNÇÃO DE LOGOUT CORRIGIDA
+  // ========================================
+  const handleLogout = async () => {
+    try {
+      // Fazer logout no Supabase
+      await supabase.auth.signOut();
       
-      // Redirecionar para a pagina de login
-      navigate('/entrar');
+      // Limpar localStorage
+      localStorage.clear();
+      
+      // Redirecionar para login
+      navigate('/entrar', { replace: true });
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      alert('Erro ao sair. Tente novamente.');
     }
+  };
+
+  const confirmarLogout = () => {
+    setShowLogoutModal(false);
+    handleLogout();
   };
 
   return (
     <div style={styles.container}>
+      {/* MODAL DE LOGOUT */}
+      {showLogoutModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <h3 style={styles.modalTitle}>Confirmar Saída</h3>
+            <p style={styles.modalText}>Tem certeza que deseja sair?</p>
+            <div style={styles.modalButtons}>
+              <button 
+                onClick={() => setShowLogoutModal(false)} 
+                style={styles.modalButtonCancel}
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={confirmarLogout} 
+                style={styles.modalButtonConfirm}
+              >
+                Sair
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* HEADER COM LOGOUT */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}> Perfil do Administrador</h1>
+          <h1 style={styles.title}>👤 Perfil do Administrador</h1>
           <p style={styles.subtitle}>Gerencie suas informacoes e configuracoes da empresa</p>
         </div>
-        <button onClick={handleLogout} style={styles.logoutButton}>
-           Sair
+        <button onClick={() => setShowLogoutModal(true)} style={styles.logoutButton}>
+          🚪 Sair
         </button>
       </div>
 
       <div style={styles.grid}>
         {/* Dados da Empresa */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}> Dados da Empresa</h3>
+          <h3 style={styles.cardTitle}>🏢 Dados da Empresa</h3>
           <form>
             <div style={styles.formGroup}>
               <label style={styles.label}>Nome da Empresa</label>
@@ -177,18 +211,18 @@ const LojistaProfile = () => {
               style={styles.primaryButton}
               onClick={() => salvarConfiguracoes("Dados da empresa")}
             >
-               Salvar Dados
+              💾 Salvar Dados
             </button>
           </form>
         </div>
 
-        {/* Cartoes Cadastrados - CONFORME SUA IMAGEM */}
+        {/* Cartoes Cadastrados */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}> Cartoes de Credito</h3>
+          <h3 style={styles.cardTitle}>💳 Cartoes de Credito</h3>
           
           {cartoes.map(cartao => (
             <div key={cartao.id} style={styles.cartaoItem}>
-              <div style={styles.cartaoIcon}></div>
+              <div style={styles.cartaoIcon}>💳</div>
               <div style={styles.cartaoInfo}>
                 <div style={styles.cartaoBandeira}>
                   <strong>VISA **** {cartao.ultimosDigitos}</strong>
@@ -208,7 +242,7 @@ const LojistaProfile = () => {
         <div style={styles.card}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <div>
-              <h3 style={styles.cardTitle}>💳 Planos e Pagamentos</h3>
+              <h3 style={styles.cardTitle}>💎 Planos e Pagamentos</h3>
               <p style={styles.cardSubtitle}>Gerencie sua assinatura e faturas</p>
             </div>
             <button 
@@ -233,7 +267,7 @@ const LojistaProfile = () => {
 
         {/* Configuracoes de Comissao */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}> Configuracoes de Comissao</h3>
+          <h3 style={styles.cardTitle}>💰 Configuracoes de Comissao</h3>
           
           <div style={styles.formGroup}>
             <label style={styles.label}>Tipo de Comissao</label>
@@ -287,13 +321,13 @@ const LojistaProfile = () => {
             style={styles.primaryButton}
             onClick={() => salvarConfiguracoes("Configuracoes de comissao")}
           >
-             Salvar Configuracoes
+            💾 Salvar Configuracoes
           </button>
         </div>
 
         {/* Segmentos e QR Codes */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}> Segmentos da Loja</h3>
+          <h3 style={styles.cardTitle}>🏪 Segmentos da Loja</h3>
           <p style={styles.cardSubtitle}>QR Codes para cada setor</p>
           
           <div style={styles.segmentosGrid}>
@@ -315,13 +349,13 @@ const LojistaProfile = () => {
                       style={styles.smallButton}
                       onClick={() => baixarQRCode(segmento)}
                     >
-                       Baixar
+                      ⬇️ Baixar
                     </button>
                     <button 
                       style={styles.smallButtonSecondary}
                       onClick={() => copiarLinkQRCode(segmento)}
                     >
-                       Copiar
+                      📋 Copiar
                     </button>
                   </div>
                 </div>
@@ -332,7 +366,7 @@ const LojistaProfile = () => {
 
         {/* Configuracoes de Notificacao */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}> Preferancias de Notificacao</h3>
+          <h3 style={styles.cardTitle}>🔔 Preferencias de Notificacao</h3>
           
           <div style={styles.notificacoesList}>
             <label style={styles.checkboxLabel}>
@@ -372,9 +406,9 @@ const LojistaProfile = () => {
           <button 
             type="button" 
             style={styles.primaryButton}
-            onClick={() => salvarConfiguracoes("Preferancias de notificacao")}
+            onClick={() => salvarConfiguracoes("Preferencias de notificacao")}
           >
-             Salvar Preferancias
+            💾 Salvar Preferencias
           </button>
         </div>
       </div>
@@ -420,6 +454,62 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 0.3s ease",
     boxShadow: "0 2px 8px rgba(220, 53, 69, 0.3)",
+  },
+  // MODAL STYLES
+  modalOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 9999,
+  },
+  modal: {
+    backgroundColor: "white",
+    padding: "30px",
+    borderRadius: "12px",
+    boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+    maxWidth: "400px",
+    width: "90%",
+  },
+  modalTitle: {
+    fontSize: "1.5rem",
+    marginBottom: "15px",
+    color: "#333",
+  },
+  modalText: {
+    fontSize: "1rem",
+    color: "#666",
+    marginBottom: "25px",
+  },
+  modalButtons: {
+    display: "flex",
+    gap: "10px",
+    justifyContent: "flex-end",
+  },
+  modalButtonCancel: {
+    backgroundColor: "#6c757d",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "6px",
+    fontSize: "1rem",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  modalButtonConfirm: {
+    backgroundColor: "#dc3545",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "6px",
+    fontSize: "1rem",
+    fontWeight: "600",
+    cursor: "pointer",
   },
   grid: {
     display: "grid",
@@ -518,7 +608,6 @@ const styles = {
     transition: "background-color 0.3s ease",
     width: "100%",
   },
-  // CARTOES
   cartaoItem: {
     display: "flex",
     alignItems: "flex-start",
@@ -556,7 +645,6 @@ const styles = {
     fontWeight: "600",
     display: "inline-block"
   },
-  // Segmentos e QR Codes
   segmentosGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",

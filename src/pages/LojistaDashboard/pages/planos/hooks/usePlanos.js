@@ -1,6 +1,7 @@
 // src/pages/LojistaDashboard/pages/planos/hooks/usePlanos.js
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../../../../../contexts/AuthContext";
+import { usePlano } from "../../../../../contexts/PlanoContext";
 import { PLANS_DETAILS, ADDONS_DETAILS, STRIPE_LINKS, AVAILABLE_UPGRADES } from "../planos.constants";
 
 /**
@@ -9,6 +10,7 @@ import { PLANS_DETAILS, ADDONS_DETAILS, STRIPE_LINKS, AVAILABLE_UPGRADES } from 
  */
 export const usePlanos = () => {
   const { user, profile } = useAuth();
+  const { plano: planoAtualTipo } = usePlano(); // ✅ USAR O PLANOCONTEXT
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,6 +27,19 @@ export const usePlanos = () => {
   });
 
   /* =========================
+     MAPEAR PLANO DO BANCO PARA NOME DISPLAY
+  ========================== */
+  const mapearPlano = (planoDb) => {
+    const mapa = {
+      'basic': 'Plano Basico',
+      'basico': 'Plano Basico',
+      'pro': 'Plano Pro',
+      'enterprise': 'Plano Enterprise',
+    };
+    return mapa[planoDb?.toLowerCase()] || 'Plano Basico';
+  };
+
+  /* =========================
      CARREGAR DADOS
   ========================== */
   const carregarDados = useCallback(async () => {
@@ -32,10 +47,8 @@ export const usePlanos = () => {
       setLoading(true);
       setError(null);
 
-      // Busca o plano do usuário (por enquanto usa dados locais/mock)
-      // TODO: Quando tiver backend, buscar de /api/lojista/{id}/plano
-      
-      const planoNome = profile?.plano || localStorage.getItem("lojistaPlano") || "Plano Basico";
+      // ✅ USAR O PLANO DO PLANOCONTEXT
+      const planoNome = mapearPlano(planoAtualTipo);
       const planoInfo = PLANS_DETAILS[planoNome] || PLANS_DETAILS["Plano Basico"];
       
       setPlanoAtual({
@@ -69,7 +82,6 @@ export const usePlanos = () => {
       })));
 
       // Faturas (mock por enquanto)
-      // TODO: Buscar de /api/stripe/lojista/{id}/faturas
       setFaturas([]);
 
     } catch (err) {
@@ -78,7 +90,7 @@ export const usePlanos = () => {
     } finally {
       setLoading(false);
     }
-  }, [profile]);
+  }, [planoAtualTipo]);
 
   /* =========================
      MODAL
@@ -98,14 +110,12 @@ export const usePlanos = () => {
     const link = item?.stripeLink || item?.link;
     
     if (link) {
-      // Salva informações para quando voltar do Stripe
       localStorage.setItem("stripe_redirect_pending", JSON.stringify({
         itemId: item.id,
         itemNome: item.nome,
         timestamp: Date.now(),
       }));
       
-      // Redireciona para o Stripe
       window.location.href = link;
     } else {
       setError("Link de pagamento não encontrado.");
@@ -120,14 +130,6 @@ export const usePlanos = () => {
   const abrirPortalStripe = async () => {
     try {
       setLoading(true);
-      
-      // TODO: Chamar API para criar sessão do portal
-      // const response = await api.post("/api/stripe/portal-session", {
-      //   customerId: profile.stripeCustomerId,
-      //   returnUrl: window.location.href,
-      // });
-      // window.location.href = response.data.url;
-      
       setError("Portal do Stripe ainda não configurado. Entre em contato com o suporte.");
     } catch (err) {
       setError("Erro ao abrir portal do Stripe.");
@@ -142,8 +144,6 @@ export const usePlanos = () => {
   const criarContaStripe = async () => {
     try {
       setLoading(true);
-      
-      // TODO: Chamar API para criar conta Stripe Connect
       setSuccess("Conta Stripe será configurada em breve!");
     } catch (err) {
       setError("Erro ao criar conta Stripe.");
@@ -157,17 +157,14 @@ export const usePlanos = () => {
   ========================== */
   const baixarFatura = (faturaId) => {
     console.log("Baixar fatura:", faturaId);
-    // TODO: Implementar download
   };
 
   const visualizarFatura = (faturaId) => {
     console.log("Visualizar fatura:", faturaId);
-    // TODO: Implementar visualização
   };
 
   const enviarFaturaPorEmail = async (faturaId) => {
     try {
-      // TODO: Chamar API
       setSuccess("Fatura enviada por e-mail!");
     } catch (err) {
       setError("Erro ao enviar fatura.");
@@ -178,17 +175,12 @@ export const usePlanos = () => {
      VERIFICAR RETORNO DO STRIPE
   ========================== */
   useEffect(() => {
-    // Verifica se está voltando do Stripe (success ou cancel)
     const urlParams = new URLSearchParams(window.location.search);
     const stripeStatus = urlParams.get("stripe_status") || urlParams.get("success");
     
     if (stripeStatus === "success" || stripeStatus === "true") {
       setSuccess("🎉 Pagamento realizado com sucesso! Seu plano foi atualizado.");
-      
-      // Limpa o localStorage
       localStorage.removeItem("stripe_redirect_pending");
-      
-      // Remove query params da URL
       window.history.replaceState({}, document.title, window.location.pathname);
     } else if (stripeStatus === "cancel" || stripeStatus === "false") {
       setError("Pagamento cancelado. Você pode tentar novamente.");

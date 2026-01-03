@@ -1,370 +1,883 @@
-import React, { useState } from 'react';
+// src/pages/LojistaDashboard/pages/LojistaUsuarios.jsx
+// PÁGINA UNIFICADA COM TODAS AS FUNCIONALIDADES
 
-const styles = {
-    pageContainer: {
-        minHeight: '100vh',
-        backgroundColor: '#f9fafb',
-        padding: '32px',
-        fontFamily: 'Arial, sans-serif',
-    },
-    title: {
-        fontSize: '30px',
-        fontWeight: 'bold',
-        color: '#2c5aa0',
-        borderBottom: '2px solid #2c5aa0',
-        paddingBottom: '8px',
-        marginBottom: '16px',
-    },
-    subtitle: {
-        fontSize: '18px',
-        color: '#6b7280',
-        marginBottom: '32px',
-    },
-    sectionCard: {
-        backgroundColor: 'white',
-        padding: '24px',
-        borderRadius: '12px',
-        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-        border: '1px solid #e5e7eb',
-        marginBottom: '32px',
-    },
-    cardTitle: {
-        fontSize: '20px',
-        fontWeight: 'bold',
-        color: '#2c5aa0',
-        marginBottom: '16px',
-        borderBottom: '1px solid #e5e7eb',
-        paddingBottom: '8px',
-    },
-    formRow: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '16px',
-        alignItems: 'end',
-        marginBottom: '24px',
-    },
-    formGroup: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    label: {
-        display: 'block',
-        fontSize: '14px',
-        fontWeight: '500',
-        color: '#374151',
-        marginBottom: '4px',
-    },
-    input: {
-        width: '100%',
-        padding: '12px',
-        border: '1px solid #d1d5db',
-        borderRadius: '8px',
-        fontSize: '14px',
-        outline: 'none',
-    },
-    buttonPrimary: {
-        padding: '12px 16px',
-        backgroundColor: '#2c5aa0',
-        color: 'white',
-        fontWeight: '600',
-        borderRadius: '8px',
-        border: 'none',
-        cursor: 'pointer',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        transition: 'all 0.15s',
-    },
-    tableContainer: {
-        overflowX: 'auto',
-    },
-    table: {
-        width: '100%',
-        borderCollapse: 'collapse',
-    },
-    tableHeader: {
-        backgroundColor: '#f9fafb',
-    },
-    th: {
-        padding: '12px 24px',
-        textAlign: 'left',
-        fontSize: '12px',
-        fontWeight: '500',
-        color: '#6b7280',
-        textTransform: 'uppercase',
-        letterSpacing: '0.05em',
-        borderBottom: '1px solid #e5e7eb',
-    },
-    td: {
-        padding: '16px 24px',
-        fontSize: '14px',
-        borderBottom: '1px solid #e5e7eb',
-    },
-    badge: {
-        padding: '4px 8px',
-        fontSize: '12px',
-        fontWeight: '600',
-        borderRadius: '9999px',
-        display: 'inline-block',
-    },
-    badgeSuccess: {
-        backgroundColor: '#d1fae5',
-        color: '#065f46',
-    },
-    badgeWarning: {
-        backgroundColor: '#fef3c7',
-        color: '#92400e',
-    },
-    badgeDanger: {
-        backgroundColor: '#fee2e2',
-        color: '#991b1b',
-    },
-    buttonSmall: {
-        padding: '6px 12px',
-        fontSize: '12px',
-        fontWeight: '600',
-        borderRadius: '8px',
-        border: 'none',
-        cursor: 'pointer',
-        transition: 'all 0.15s',
-    },
-    buttonGreen: {
-        backgroundColor: '#10b981',
-        color: 'white',
-    },
-    buttonRed: {
-        backgroundColor: '#ef4444',
-        color: 'white',
-    },
-};
-
-const initialUsers = [
-    { id: 1, nome: 'Ana Paula Matos', email: 'ana.matos@lojista.com', perfil: 'Admin Lojista', filial: 'Matriz', status: 'ativo' },
-    { id: 2, nome: 'Joao Silva', email: 'joao.silva@lojista.com', perfil: 'Vendedor', filial: 'Loja Centro - SP', status: 'ativo' },
-    { id: 3, nome: 'Carla Dias', email: 'carla.dias@lojista.com', perfil: 'Vendedor', filial: 'Filial Online', status: 'ativo' },
-    { id: 4, nome: 'Pedro Costa', email: 'pedro.costa@lojista.com', perfil: 'Admin Lojista', filial: 'Matriz', status: 'inativo' },
-];
-
-const initialConsultores = [
-    { id: 101, nome: 'Marcus Vinicius (Consultor Externo)', email: 'marcus.v@consultor.com', status: 'pendente' },
-    { id: 102, nome: 'Juliana Lima (Consultora Externa)', email: 'juliana.l@consultor.com', status: 'aprovado' },
-];
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../../supabaseClient';
 
 const LojistaUsuarios = () => {
-    const [usuarios, setUsuarios] = useState(initialUsers);
-    const [consultores, setConsultores] = useState(initialConsultores);
-    const [novoNome, setNovoNome] = useState('');
-    const [novoEmail, setNovoEmail] = useState('');
-    const [novoPerfil, setNovoPerfil] = useState('Vendedor');
-    const [novaFilial, setNovaFilial] = useState('Loja Centro - SP');
-    const [filiaisMock] = useState(['Matriz', 'Loja Centro - SP', 'Filial Online', 'Quiosque Shopping']);
+  const [activeTab, setActiveTab] = useState('admins');
+  const [loading, setLoading] = useState(false);
+  const [lojaId, setLojaId] = useState(null);
+  
+  const [admins, setAdmins] = useState([]);
+  const [vendedores, setVendedores] = useState([]);
+  const [consultores, setConsultores] = useState([]);
 
-    const handleAddUser = () => {
-        if (novoNome && novoEmail) {
-            const newUser = {
-                id: Date.now(),
-                nome: novoNome,
-                email: novoEmail,
-                perfil: novoPerfil,
-                filial: novoPerfil === 'Vendedor' ? novaFilial : 'Matriz',
-                status: 'ativo'
-            };
-            setUsuarios([...usuarios, newUser]);
-            setNovoNome('');
-            setNovoEmail('');
-        }
-    };
+  // Modals
+  const [modalAddAdmin, setModalAddAdmin] = useState(false);
+  const [modalAddVendedor, setModalAddVendedor] = useState(false);
+  const [formData, setFormData] = useState({});
 
-    const handleToggleStatus = (id) => {
-        setUsuarios(usuarios.map(u =>
-            u.id === id ? { ...u, status: u.status === 'ativo' ? 'inativo' : 'ativo' } : u
-        ));
-    };
+  useEffect(() => {
+    carregarDados();
+  }, [activeTab]);
 
-    const handleAprovarConsultor = (id) => {
-        setConsultores(consultores.map(c => 
-            c.id === id ? { ...c, status: 'aprovado' } : c
-        ));
-    };
+  const carregarDados = async () => {
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('[LojistaUsuarios] 1. User autenticado:', user?.id);
+      
+      if (!user) {
+        console.error('[LojistaUsuarios] Nenhum usuário autenticado!');
+        return;
+      }
 
-    const handleRecusarConsultor = (id) => {
-        setConsultores(consultores.map(c => 
-            c.id === id ? { ...c, status: 'recusado' } : c
-        ));
-    };
-    
-    const renderStatusBadge = (status) => {
-        const badgeStyle = { ...styles.badge };
+      const { data: loja, error: lojaError } = await supabase
+        .from('lojas_corrigida')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+
+      console.log('[LojistaUsuarios] 2. Loja encontrada:', loja);
+      console.log('[LojistaUsuarios] 2a. Erro ao buscar loja:', lojaError);
+
+      if (!loja) {
+        console.error('[LojistaUsuarios] ERRO: Nenhuma loja encontrada para este usuário!');
+        alert('❌ Erro: Você não está vinculado a nenhuma loja!');
+        return;
+      }
+      
+      setLojaId(loja.id);
+      console.log('[LojistaUsuarios] 3. LojaId setado:', loja.id);
+
+      if (activeTab === 'admins') {
+        console.log('[LojistaUsuarios] 4. Buscando admins da loja:', loja.id);
         
-        switch (status) {
-            case 'ativo': 
-                return <span style={{...badgeStyle, ...styles.badgeSuccess}}>Ativo</span>;
-            case 'inativo': 
-                return <span style={{...badgeStyle, ...styles.badgeDanger}}>Inativo</span>;
-            case 'pendente': 
-                return <span style={{...badgeStyle, ...styles.badgeWarning}}>Aguardando</span>;
-            case 'aprovado': 
-                return <span style={{...badgeStyle, ...styles.badgeSuccess}}>Aprovado</span>;
-            case 'recusado': 
-                return <span style={{...badgeStyle, ...styles.badgeDanger}}>Recusado</span>;
-            default: 
-                return <span style={badgeStyle}>{status}</span>;
-        }
+        const { data, error } = await supabase
+          .from('usuarios')
+          .select('*')
+          .eq('loja_id', loja.id)
+          .in('tipo', ['proprietario', 'gerente_geral', 'gerente_vendas', 'supervisor', 'coordenador']);
+        
+        console.log('[LojistaUsuarios] 5. Admins encontrados:', data);
+        console.log('[LojistaUsuarios] 5a. Erro ao buscar admins:', error);
+        
+        setAdmins(data || []);
+      }
+
+      if (activeTab === 'vendedores') {
+        console.log('[LojistaUsuarios] 4. Buscando vendedores da loja:', loja.id);
+        
+        const { data, error } = await supabase
+          .from('vendedores')
+          .select('*')
+          .eq('loja_id', loja.id);  // ✅ CORRETO: loja_id
+        
+        console.log('[LojistaUsuarios] 5. Vendedores encontrados:', data);
+        console.log('[LojistaUsuarios] 5a. Erro ao buscar vendedores:', error);
+        
+        setVendedores(data || []);
+      }
+
+      if (activeTab === 'consultores') {
+        const { data } = await supabase
+          .from('loja_consultor')
+          .select(`
+            *,
+            consultor:id_consultor (
+              id,
+              nome,
+              email
+            )
+          `)
+          .eq('id_loja', loja.id)
+          .eq('status', 'aprovado');
+        
+        setConsultores(data || []);
+      }
+
+    } catch (error) {
+      console.error('Erro:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Formatar nome do tipo para exibição
+  const formatarTipo = (tipo) => {
+    const tipos = {
+      'proprietario': 'Proprietário',
+      'gerente_geral': 'Gerente Geral',
+      'gerente_vendas': 'Gerente de Vendas',
+      'supervisor': 'Supervisor',
+      'coordenador': 'Coordenador',
     };
+    return tipos[tipo] || tipo;
+  };
 
-    return (
-        <div style={styles.pageContainer}>
-            <h1 style={styles.title}> Gestao de Usuarios e Acessos</h1>
-            <p style={styles.subtitle}>Controle quem pode acessar o painel e quais permissoes cada usuario possui.</p>
+  // ============================================
+  // ADMINS - FUNÇÕES
+  // ============================================
+  const handleAddAdmin = async (e) => {
+    e.preventDefault();
+    
+    console.log('[AddAdmin] 1. Iniciando cadastro...');
+    console.log('[AddAdmin] 2. LojaId atual:', lojaId);
+    console.log('[AddAdmin] 3. FormData:', formData);
+    
+    if (!lojaId) {
+      alert('❌ ERRO: ID da loja não encontrado! Recarregue a página.');
+      console.error('[AddAdmin] ERRO CRÍTICO: lojaId está null!');
+      return;
+    }
+    
+    try {
+      const uuid = crypto.randomUUID();
+      console.log('[AddAdmin] 4. UUID gerado:', uuid);
+      
+      const novoAdmin = {
+        id: uuid,
+        nome: formData.nome,
+        email: formData.email,
+        tipo: formData.tipo || 'gerente_geral',
+        loja_id: lojaId,
+        ativo: true,
+      };
+      
+      console.log('[AddAdmin] 5. Objeto a ser inserido:', novoAdmin);
+      
+      const { data, error } = await supabase
+        .from('usuarios')
+        .insert([novoAdmin]);
 
-            {/* Cadastro de Novo Usuario Interno */}
-            <section style={styles.sectionCard}>
-                <h2 style={styles.cardTitle}>O Adicionar Usuario Interno (Lojista/Vendedor)</h2>
-                <div style={styles.formRow}>
-                    <div style={{...styles.formGroup, gridColumn: 'span 2'}}>
-                        <label style={styles.label}>Nome</label>
-                        <input 
-                            type="text" 
-                            value={novoNome} 
-                            onChange={(e) => setNovoNome(e.target.value)} 
-                            placeholder="Nome completo" 
-                            style={styles.input} 
-                        />
-                    </div>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Email</label>
-                        <input 
-                            type="email" 
-                            value={novoEmail} 
-                            onChange={(e) => setNovoEmail(e.target.value)} 
-                            placeholder="email@lojista.com" 
-                            style={styles.input} 
-                        />
-                    </div>
-                    <div style={styles.formGroup}>
-                        <label style={styles.label}>Perfil</label>
-                        <select 
-                            value={novoPerfil} 
-                            onChange={(e) => setNovoPerfil(e.target.value)} 
-                            style={styles.input}
-                        >
-                            <option value="Admin Lojista">Admin Lojista</option>
-                            <option value="Vendedor">Vendedor</option>
-                        </select>
-                    </div>
-                    {novoPerfil === 'Vendedor' && (
-                        <div style={styles.formGroup}>
-                            <label style={styles.label}>Filial/Unidade</label>
-                            <select 
-                                value={novaFilial} 
-                                onChange={(e) => setNovaFilial(e.target.value)} 
-                                style={styles.input}
-                            >
-                                {filiaisMock.map(filial => (
-                                    <option key={filial} value={filial}>{filial}</option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
-                    <button onClick={handleAddUser} style={styles.buttonPrimary}>
-                        Salvar Usuario
-                    </button>
-                </div>
-            </section>
+      console.log('[AddAdmin] 6. Resultado da inserção:', data);
+      console.log('[AddAdmin] 6a. Erro da inserção:', error);
 
-            {/* Tabela de Usuarios Internos */}
-            <section style={styles.sectionCard}>
-                <h2 style={styles.cardTitle}> Equipe Interna ({usuarios.length})</h2>
-                <div style={styles.tableContainer}>
-                    <table style={styles.table}>
-                        <thead style={styles.tableHeader}>
-                            <tr>
-                                <th style={styles.th}>Nome</th>
-                                <th style={styles.th}>Email</th>
-                                <th style={styles.th}>Perfil</th>
-                                <th style={styles.th}>Filial</th>
-                                <th style={{...styles.th, textAlign: 'center'}}>Status</th>
-                                <th style={{...styles.th, textAlign: 'center'}}>Acoes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {usuarios.map(user => (
-                                <tr key={user.id}>
-                                    <td style={{...styles.td, fontWeight: '500', color: '#111827'}}>{user.nome}</td>
-                                    <td style={{...styles.td, color: '#6b7280'}}>{user.email}</td>
-                                    <td style={{...styles.td, fontWeight: '600'}}>{user.perfil}</td>
-                                    <td style={{...styles.td, color: '#6b7280'}}>{user.filial}</td>
-                                    <td style={{...styles.td, textAlign: 'center'}}>{renderStatusBadge(user.status)}</td>
-                                    <td style={{...styles.td, textAlign: 'center'}}>
-                                        <button 
-                                            onClick={() => handleToggleStatus(user.id)}
-                                            style={{
-                                                ...styles.buttonSmall,
-                                                backgroundColor: user.status === 'ativo' ? '#dc3545' : '#17a2b8',
-                                                color: 'white'
-                                            }}
-                                        >
-                                            {user.status === 'ativo' ? 'Desativar' : 'Ativar'}
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+      if (error) throw error;
+      
+      alert('✅ Administrador adicionado com sucesso!');
+      setModalAddAdmin(false);
+      setFormData({});
+      carregarDados();
+    } catch (error) {
+      console.error('[AddAdmin] ERRO CAPTURADO:', error);
+      alert('❌ Erro ao adicionar administrador: ' + error.message);
+    }
+  };
 
-            {/* Aprovacao de Consultores */}
-            <section style={styles.sectionCard}>
-                <h2 style={styles.cardTitle}> Solicitacoes de Consultores Externos ({consultores.filter(c => c.status === 'pendente').length})</h2>
-                <p style={{color: '#6b7280', marginBottom: '16px', fontSize: '14px'}}>
-                    Aprove ou recuse os consultores da plataforma que desejam vender seus produtos em parceria.
-                </p>
-                
-                <div style={styles.tableContainer}>
-                    <table style={styles.table}>
-                        <thead style={styles.tableHeader}>
-                            <tr>
-                                <th style={styles.th}>Nome do Consultor</th>
-                                <th style={styles.th}>Email</th>
-                                <th style={{...styles.th, textAlign: 'center'}}>Status da Parceria</th>
-                                <th style={{...styles.th, textAlign: 'center'}}>Acoes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {consultores.map(consultor => (
-                                <tr key={consultor.id}>
-                                    <td style={{...styles.td, fontWeight: '500', color: '#111827'}}>{consultor.nome}</td>
-                                    <td style={{...styles.td, color: '#6b7280'}}>{consultor.email}</td>
-                                    <td style={{...styles.td, textAlign: 'center'}}>{renderStatusBadge(consultor.status)}</td>
-                                    <td style={{...styles.td, textAlign: 'center'}}>
-                                        {consultor.status === 'pendente' ? (
-                                            <div style={{display: 'flex', gap: '8px', justifyContent: 'center'}}>
-                                                <button 
-                                                    onClick={() => handleAprovarConsultor(consultor.id)}
-                                                    style={{...styles.buttonSmall, ...styles.buttonGreen}}
-                                                >
-                                                    Aprovar
-                                                </button>
-                                                <button 
-                                                    onClick={() => handleRecusarConsultor(consultor.id)}
-                                                    style={{...styles.buttonSmall, ...styles.buttonRed}}
-                                                >
-                                                    Recusar
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <span style={{color: '#6b7280', fontSize: '12px'}}>
-                                                Parceria {consultor.status === 'aprovado' ? 'Ativa' : 'Recusada'}
-                                            </span>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+  const handleDeleteAdmin = async (adminId) => {
+    if (!confirm('Deseja realmente excluir este administrador?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('usuarios')
+        .delete()
+        .eq('id', adminId);
+
+      if (error) throw error;
+      
+      alert('✅ Administrador excluído!');
+      carregarDados();
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('❌ Erro ao excluir');
+    }
+  };
+
+  const handleToggleAdminStatus = async (adminId, currentStatus) => {
+    try {
+      const { error } = await supabase
+        .from('usuarios')
+        .update({ ativo: !currentStatus })
+        .eq('id', adminId);
+
+      if (error) throw error;
+      
+      alert(`✅ Status alterado para ${!currentStatus ? 'Ativo' : 'Inativo'}!`);
+      carregarDados();
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('❌ Erro ao alterar status');
+    }
+  };
+
+  // ============================================
+  // VENDEDORES - FUNÇÕES
+  // ============================================
+  const handleAddVendedor = async (e) => {
+    e.preventDefault();
+    
+    console.log('[AddVendedor] 1. Iniciando cadastro...');
+    console.log('[AddVendedor] 2. LojaId atual:', lojaId);
+    console.log('[AddVendedor] 3. FormData:', formData);
+    
+    if (!lojaId) {
+      alert('❌ ERRO: ID da loja não encontrado! Recarregue a página.');
+      console.error('[AddVendedor] ERRO CRÍTICO: lojaId está null!');
+      return;
+    }
+    
+    try {
+      const novoVendedor = {
+        // NÃO gerar ID manualmente - o banco gera automaticamente
+        nome: formData.nome,
+        email: formData.email,
+        telefone: formData.telefone || null,
+        loja_id: lojaId,  // ✅ CORRETO: loja_id (não id_loja)
+        ativo: true,
+      };
+      
+      console.log('[AddVendedor] 4. Objeto a ser inserido:', novoVendedor);
+      
+      const { data, error } = await supabase
+        .from('vendedores')
+        .insert([novoVendedor]);
+
+      console.log('[AddVendedor] 5. Resultado da inserção:', data);
+      console.log('[AddVendedor] 5a. Erro da inserção:', error);
+
+      if (error) throw error;
+      
+      alert('✅ Vendedor adicionado com sucesso!');
+      setModalAddVendedor(false);
+      setFormData({});
+      carregarDados();
+    } catch (error) {
+      console.error('[AddVendedor] ERRO CAPTURADO:', error);
+      alert('❌ Erro ao adicionar vendedor: ' + error.message);
+    }
+  };
+
+  const handleDeleteVendedor = async (vendedorId) => {
+    if (!confirm('Deseja realmente excluir este vendedor?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('vendedores')
+        .delete()
+        .eq('id', vendedorId);
+
+      if (error) throw error;
+      
+      alert('✅ Vendedor excluído!');
+      carregarDados();
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('❌ Erro ao excluir');
+    }
+  };
+
+  const handleToggleVendedorStatus = async (vendedorId, currentStatus) => {
+    try {
+      const { error } = await supabase
+        .from('vendedores')
+        .update({ ativo: !currentStatus })
+        .eq('id', vendedorId);
+
+      if (error) throw error;
+      
+      alert(`✅ Vendedor ${!currentStatus ? 'ativado' : 'desativado'}!`);
+      carregarDados();
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('❌ Erro ao alterar status');
+    }
+  };
+
+  // ============================================
+  // CONSULTORES - FUNÇÕES
+  // ============================================
+  const handleRemoverConsultor = async (vinculoId) => {
+    if (!confirm('Deseja realmente remover este consultor?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('loja_consultor')
+        .update({ status: 'removido' })
+        .eq('id', vinculoId);
+
+      if (error) throw error;
+      
+      alert('✅ Consultor removido!');
+      carregarDados();
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('❌ Erro ao remover consultor');
+    }
+  };
+
+  // ============================================
+  // RENDERS
+  // ============================================
+  const renderAdmins = () => (
+    <div>
+      <div style={styles.sectionHeader}>
+        <h2>👤 Administradores da Loja</h2>
+        <button style={styles.btnPrimary} onClick={() => {
+          setFormData({});
+          setModalAddAdmin(true);
+        }}>
+          + Adicionar Admin
+        </button>
+      </div>
+
+      {admins.length === 0 ? (
+        <div style={styles.empty}>
+          <p>Nenhum administrador cadastrado</p>
         </div>
-    );
+      ) : (
+        <div style={styles.table}>
+          <div style={styles.tableHeader}>
+            <div>Nome</div>
+            <div>Email</div>
+            <div>Perfil</div>
+            <div>Status</div>
+            <div>Ações</div>
+          </div>
+          {admins.map((admin) => (
+            <div key={admin.id} style={styles.tableRow}>
+              <div>{admin.nome}</div>
+              <div>{admin.email}</div>
+              <div><span style={styles.badge}>{formatarTipo(admin.tipo)}</span></div>
+              <div>
+                <span style={{...styles.badge, backgroundColor: admin.ativo ? '#10b981' : '#ef4444'}}>
+                  {admin.ativo ? 'Ativo' : 'Inativo'}
+                </span>
+              </div>
+              <div style={styles.actionsCell}>
+                <button 
+                  style={styles.btnAction}
+                  onClick={() => handleToggleAdminStatus(admin.id, admin.ativo)}
+                >
+                  {admin.ativo ? 'Desativar' : 'Ativar'}
+                </button>
+                <button 
+                  style={styles.btnDanger}
+                  onClick={() => handleDeleteAdmin(admin.id)}
+                >
+                  Excluir
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  const renderVendedores = () => (
+    <div>
+      <div style={styles.sectionHeader}>
+        <h2>🛍️ Vendedores Próprios</h2>
+        <button style={styles.btnPrimary} onClick={() => {
+          setFormData({});
+          setModalAddVendedor(true);
+        }}>
+          + Adicionar Vendedor
+        </button>
+      </div>
+
+      {vendedores.length === 0 ? (
+        <div style={styles.empty}>
+          <p>Nenhum vendedor cadastrado</p>
+        </div>
+      ) : (
+        <div style={styles.cardsGrid}>
+          {vendedores.map((vendedor) => (
+            <div key={vendedor.id} style={styles.card}>
+              <div style={styles.cardHeader}>
+                <div style={styles.avatar}>{vendedor.nome?.[0]}</div>
+                <div>
+                  <div style={styles.cardName}>{vendedor.nome}</div>
+                  <div style={styles.cardEmail}>{vendedor.email}</div>
+                  <div style={styles.cardPhone}>{vendedor.telefone}</div>
+                </div>
+              </div>
+              <div style={styles.cardActions}>
+                <button 
+                  style={styles.btnAction}
+                  onClick={() => handleToggleVendedorStatus(vendedor.id, vendedor.ativo)}
+                >
+                  {vendedor.ativo ? 'Desativar' : 'Ativar'}
+                </button>
+                <button 
+                  style={styles.btnDanger}
+                  onClick={() => handleDeleteVendedor(vendedor.id)}
+                >
+                  Excluir
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  const renderConsultores = () => (
+    <div>
+      <div style={styles.sectionHeader}>
+        <h2>🤝 Consultores Externos</h2>
+        <p style={styles.sectionSubtitle}>Consultores aprovados para vender em sua loja</p>
+      </div>
+
+      {consultores.length === 0 ? (
+        <div style={styles.empty}>
+          <p>Nenhum consultor vinculado</p>
+        </div>
+      ) : (
+        <div style={styles.cardsGrid}>
+          {consultores.map((vinculo) => {
+            const consultor = vinculo.consultor;
+            if (!consultor) return null;
+            
+            return (
+              <div key={vinculo.id} style={styles.card}>
+                <div style={styles.cardHeader}>
+                  <div style={styles.avatarGreen}>{consultor.nome?.[0] || 'C'}</div>
+                  <div>
+                    <div style={styles.cardName}>{consultor.nome || 'Consultor'}</div>
+                    <div style={styles.cardEmail}>{consultor.email || 'N/A'}</div>
+                  </div>
+                </div>
+                <div style={styles.cardActions}>
+                  <button 
+                    style={styles.btnDanger}
+                    onClick={() => handleRemoverConsultor(vinculo.id)}
+                  >
+                    Remover
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div style={styles.container}>
+      <div style={styles.header}>
+        <h1 style={styles.title}>👥 Gestão de Equipe</h1>
+        <p style={styles.subtitle}>Gerencie administradores, vendedores e consultores</p>
+      </div>
+
+      {/* TABS */}
+      <div style={styles.tabs}>
+        <button
+          onClick={() => setActiveTab('admins')}
+          style={{...styles.tab, ...(activeTab === 'admins' ? styles.tabActive : {})}}
+        >
+          👤 Administradores
+        </button>
+        <button
+          onClick={() => setActiveTab('vendedores')}
+          style={{...styles.tab, ...(activeTab === 'vendedores' ? styles.tabActive : {})}}
+        >
+          🛍️ Vendedores
+        </button>
+        <button
+          onClick={() => setActiveTab('consultores')}
+          style={{...styles.tab, ...(activeTab === 'consultores' ? styles.tabActive : {})}}
+        >
+          🤝 Consultores
+        </button>
+      </div>
+
+      {/* CONTEÚDO */}
+      <div style={styles.content}>
+        {loading ? (
+          <div style={styles.loading}>
+            <div style={styles.spinner}></div>
+            <p>Carregando...</p>
+          </div>
+        ) : (
+          <>
+            {activeTab === 'admins' && renderAdmins()}
+            {activeTab === 'vendedores' && renderVendedores()}
+            {activeTab === 'consultores' && renderConsultores()}
+          </>
+        )}
+      </div>
+
+      {/* MODAL ADD ADMIN */}
+      {modalAddAdmin && (
+        <div style={styles.modalOverlay} onClick={() => setModalAddAdmin(false)}>
+          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <h2 style={styles.modalTitle}>Adicionar Administrador</h2>
+            <form onSubmit={handleAddAdmin}>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Nome Completo *</label>
+                <input
+                  type="text"
+                  style={styles.input}
+                  value={formData.nome || ''}
+                  onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                  required
+                />
+              </div>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Email *</label>
+                <input
+                  type="email"
+                  style={styles.input}
+                  value={formData.email || ''}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  required
+                />
+              </div>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Perfil *</label>
+                <select
+                  style={styles.input}
+                  value={formData.tipo || 'gerente_geral'}
+                  onChange={(e) => setFormData({...formData, tipo: e.target.value})}
+                >
+                  <option value="proprietario">Proprietário</option>
+                  <option value="gerente_geral">Gerente Geral</option>
+                  <option value="gerente_vendas">Gerente de Vendas</option>
+                  <option value="supervisor">Supervisor</option>
+                  <option value="coordenador">Coordenador</option>
+                </select>
+              </div>
+              <div style={styles.modalActions}>
+                <button type="button" style={styles.btnSecondary} onClick={() => setModalAddAdmin(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" style={styles.btnPrimary}>
+                  Adicionar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL ADD VENDEDOR */}
+      {modalAddVendedor && (
+        <div style={styles.modalOverlay} onClick={() => setModalAddVendedor(false)}>
+          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <h2 style={styles.modalTitle}>Adicionar Vendedor</h2>
+            <form onSubmit={handleAddVendedor}>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Nome Completo *</label>
+                <input
+                  type="text"
+                  style={styles.input}
+                  value={formData.nome || ''}
+                  onChange={(e) => setFormData({...formData, nome: e.target.value})}
+                  required
+                />
+              </div>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Email *</label>
+                <input
+                  type="email"
+                  style={styles.input}
+                  value={formData.email || ''}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  required
+                />
+              </div>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>Telefone</label>
+                <input
+                  type="tel"
+                  style={styles.input}
+                  value={formData.telefone || ''}
+                  onChange={(e) => setFormData({...formData, telefone: e.target.value})}
+                  placeholder="(11) 99999-9999"
+                />
+              </div>
+              <div style={styles.modalActions}>
+                <button type="button" style={styles.btnSecondary} onClick={() => setModalAddVendedor(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" style={styles.btnPrimary}>
+                  Adicionar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
+
+const styles = {
+  container: {
+    padding: '30px',
+    backgroundColor: '#f8f9fa',
+    minHeight: '100vh',
+  },
+  header: {
+    marginBottom: '30px',
+  },
+  title: {
+    fontSize: '2rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    margin: '0 0 5px 0',
+  },
+  subtitle: {
+    fontSize: '1rem',
+    color: '#64748b',
+    margin: 0,
+  },
+  tabs: {
+    display: 'flex',
+    gap: '10px',
+    marginBottom: '30px',
+    borderBottom: '2px solid #e2e8f0',
+  },
+  tab: {
+    padding: '12px 24px',
+    backgroundColor: 'transparent',
+    border: 'none',
+    borderBottom: '3px solid transparent',
+    color: '#64748b',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  tabActive: {
+    color: '#3b82f6',
+    borderBottomColor: '#3b82f6',
+  },
+  content: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '30px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+  },
+  sectionHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '30px',
+  },
+  sectionSubtitle: {
+    fontSize: '0.9rem',
+    color: '#64748b',
+    marginTop: '5px',
+  },
+  btnPrimary: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  btnSecondary: {
+    backgroundColor: '#e2e8f0',
+    color: '#475569',
+    border: 'none',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+  },
+  btnAction: {
+    backgroundColor: '#f1f5f9',
+    color: '#475569',
+    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '6px',
+    fontSize: '0.9rem',
+    cursor: 'pointer',
+  },
+  btnDanger: {
+    backgroundColor: '#fef2f2',
+    color: '#dc2626',
+    border: 'none',
+    padding: '8px 16px',
+    borderRadius: '6px',
+    fontSize: '0.9rem',
+    cursor: 'pointer',
+  },
+  loading: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '60px 20px',
+    gap: '20px',
+  },
+  spinner: {
+    width: '50px',
+    height: '50px',
+    border: '4px solid #e2e8f0',
+    borderTop: '4px solid #3b82f6',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+  },
+  empty: {
+    textAlign: 'center',
+    padding: '60px 20px',
+  },
+  table: {
+    width: '100%',
+  },
+  tableHeader: {
+    display: 'grid',
+    gridTemplateColumns: '2fr 2fr 1fr 1fr 1.5fr',
+    gap: '10px',
+    padding: '12px 15px',
+    backgroundColor: '#f8fafc',
+    borderRadius: '8px 8px 0 0',
+    fontWeight: '600',
+    color: '#64748b',
+    fontSize: '0.9rem',
+  },
+  tableRow: {
+    display: 'grid',
+    gridTemplateColumns: '2fr 2fr 1fr 1fr 1.5fr',
+    gap: '10px',
+    padding: '12px 15px',
+    borderBottom: '1px solid #e2e8f0',
+    fontSize: '0.95rem',
+    alignItems: 'center',
+  },
+  actionsCell: {
+    display: 'flex',
+    gap: '8px',
+  },
+  badge: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    padding: '4px 12px',
+    borderRadius: '12px',
+    fontSize: '0.85rem',
+    fontWeight: '600',
+  },
+  cardsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '20px',
+  },
+  card: {
+    backgroundColor: '#f8fafc',
+    border: '2px solid #e2e8f0',
+    borderRadius: '12px',
+    padding: '20px',
+  },
+  cardHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
+    marginBottom: '20px',
+  },
+  avatar: {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.5rem',
+    fontWeight: '700',
+  },
+  avatarGreen: {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%',
+    backgroundColor: '#10b981',
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '1.5rem',
+    fontWeight: '700',
+  },
+  cardName: {
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    color: '#1e293b',
+  },
+  cardEmail: {
+    fontSize: '0.85rem',
+    color: '#64748b',
+  },
+  cardPhone: {
+    fontSize: '0.85rem',
+    color: '#94a3b8',
+  },
+  cardActions: {
+    display: 'flex',
+    gap: '10px',
+  },
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  },
+  modal: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '30px',
+    maxWidth: '500px',
+    width: '90%',
+    maxHeight: '90vh',
+    overflowY: 'auto',
+  },
+  modalTitle: {
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: '25px',
+  },
+  formGroup: {
+    marginBottom: '20px',
+  },
+  label: {
+    display: 'block',
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    color: '#475569',
+    marginBottom: '8px',
+  },
+  input: {
+    width: '100%',
+    padding: '12px',
+    border: '1px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    boxSizing: 'border-box',
+  },
+  modalActions: {
+    display: 'flex',
+    gap: '15px',
+    justifyContent: 'flex-end',
+    marginTop: '30px',
+  },
+};
+
+// Animação
+const styleSheet = document.createElement("style");
+styleSheet.innerText = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+if (!document.head.querySelector('[data-usuarios-spinner]')) {
+  styleSheet.setAttribute('data-usuarios-spinner', 'true');
+  document.head.appendChild(styleSheet);
+}
 
 export default LojistaUsuarios;

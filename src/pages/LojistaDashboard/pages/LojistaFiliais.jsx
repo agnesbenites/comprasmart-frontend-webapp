@@ -1,4 +1,5 @@
 // src/pages/LojistaFiliais.jsx
+// VERSÃO COM HORÁRIO DE FUNCIONAMENTO
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +9,6 @@ const LojistaFiliais = () => {
   const [editingFilial, setEditingFilial] = useState(null);
   const [filiais, setFiliais] = useState([]);
 
-  // Dados mockados - depois virao do backend
   const [formData, setFormData] = useState({
     nome: "",
     tipo: "fisica",
@@ -23,16 +23,19 @@ const LojistaFiliais = () => {
     cidade: "",
     estado: "",
     status: "ativa",
+    // NOVOS CAMPOS DE HORÁRIO
+    horarioAbertura: "08:00",
+    horarioFechamento: "18:00",
+    diasFuncionamento: ["segunda", "terca", "quarta", "quinta", "sexta", "sabado"],
   });
 
-  // Limites por plano (exemplo)
   const limitesPlano = {
     "app-only": 1,
     "complete-online": 3,
-    offline: 999, // ilimitado
+    offline: 999,
   };
 
-  const planoAtual = "complete-online"; // Isso vira do perfil do usuario
+  const planoAtual = "complete-online";
   const limiteAtual = limitesPlano[planoAtual];
   const filiaisCadastradas = filiais.length;
 
@@ -44,35 +47,35 @@ const LojistaFiliais = () => {
     }));
   };
 
+  const handleDiaChange = (dia) => {
+    setFormData((prev) => {
+      const dias = prev.diasFuncionamento.includes(dia)
+        ? prev.diasFuncionamento.filter(d => d !== dia)
+        : [...prev.diasFuncionamento, dia];
+      return { ...prev, diasFuncionamento: dias };
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (filiaisCadastradas >= limiteAtual && !editingFilial) {
-      alert(
-        `Seu plano permite apenas ${limiteAtual} filial(is). Faca upgrade para adicionar mais.`
-      );
+      alert(`Seu plano permite apenas ${limiteAtual} filial(is). Faça upgrade para adicionar mais.`);
       return;
     }
 
     const filialData = {
       id: editingFilial ? editingFilial.id : Date.now(),
       ...formData,
-      dataCadastro: editingFilial
-        ? editingFilial.dataCadastro
-        : new Date().toISOString(),
+      dataCadastro: editingFilial ? editingFilial.dataCadastro : new Date().toISOString(),
     };
 
     if (editingFilial) {
-      // Editar filial existente
-      setFiliais((prev) =>
-        prev.map((f) => (f.id === editingFilial.id ? filialData : f))
-      );
+      setFiliais((prev) => prev.map((f) => (f.id === editingFilial.id ? filialData : f)));
     } else {
-      // Adicionar nova filial
       setFiliais((prev) => [...prev, filialData]);
     }
 
-    // Reset form
     setFormData({
       nome: "",
       tipo: "fisica",
@@ -87,15 +90,14 @@ const LojistaFiliais = () => {
       cidade: "",
       estado: "",
       status: "ativa",
+      horarioAbertura: "08:00",
+      horarioFechamento: "18:00",
+      diasFuncionamento: ["segunda", "terca", "quarta", "quinta", "sexta", "sabado"],
     });
 
     setShowForm(false);
     setEditingFilial(null);
-    alert(
-      editingFilial
-        ? "Filial atualizada com sucesso!"
-        : "Filial cadastrada com sucesso!"
-    );
+    alert(editingFilial ? "Filial atualizada com sucesso!" : "Filial cadastrada com sucesso!");
   };
 
   const handleEdit = (filial) => {
@@ -107,7 +109,7 @@ const LojistaFiliais = () => {
   const handleDelete = (id) => {
     if (window.confirm("Tem certeza que deseja excluir esta filial?")) {
       setFiliais((prev) => prev.filter((f) => f.id !== id));
-      alert("Filial excluida com sucesso!");
+      alert("Filial excluída com sucesso!");
     }
   };
 
@@ -128,66 +130,74 @@ const LojistaFiliais = () => {
       cidade: "",
       estado: "",
       status: "ativa",
+      horarioAbertura: "08:00",
+      horarioFechamento: "18:00",
+      diasFuncionamento: ["segunda", "terca", "quarta", "quinta", "sexta", "sabado"],
     });
   };
 
   const getStatusBadge = (status) => {
-    const styles = {
-      ativa: {
-        backgroundColor: "#d4edda",
-        color: "#155724",
-        borderColor: "#c3e6cb",
-      },
-      inativa: {
-        backgroundColor: "#f8d7da",
-        color: "#721c24",
-        borderColor: "#f5c6cb",
-      },
+    const badgeStyles = {
+      ativa: { backgroundColor: "#d4edda", color: "#155724", borderColor: "#c3e6cb" },
+      inativa: { backgroundColor: "#f8d7da", color: "#721c24", borderColor: "#f5c6cb" },
     };
 
     return (
-      <span
-        style={{
-          ...styles[status],
-          padding: "4px 12px",
-          borderRadius: "20px",
-          fontSize: "0.8rem",
-          fontWeight: "600",
-          border: "1px solid",
-        }}
-      >
-        {status === "ativa" ? " Ativa" : " Inativa"}
+      <span style={{ ...badgeStyles[status], padding: "4px 12px", borderRadius: "20px", fontSize: "0.8rem", fontWeight: "600", border: "1px solid" }}>
+        {status === "ativa" ? "✅ Ativa" : "❌ Inativa"}
       </span>
     );
   };
 
   const getTipoBadge = (tipo) => {
     return (
-      <span
-        style={{
-          backgroundColor: tipo === "fisica" ? "#e7f3ff" : "#fff3cd",
-          color: tipo === "fisica" ? "#004085" : "#856404",
-          padding: "4px 12px",
-          borderRadius: "20px",
-          fontSize: "0.8rem",
-          fontWeight: "600",
-          border: `1px solid ${tipo === "fisica" ? "#b8daff" : "#ffeaa7"}`,
-        }}
-      >
-        {tipo === "fisica" ? " Fisica" : " Virtual"}
+      <span style={{
+        backgroundColor: tipo === "fisica" ? "#e7f3ff" : "#fff3cd",
+        color: tipo === "fisica" ? "#004085" : "#856404",
+        padding: "4px 12px",
+        borderRadius: "20px",
+        fontSize: "0.8rem",
+        fontWeight: "600",
+        border: `1px solid ${tipo === "fisica" ? "#b8daff" : "#ffeaa7"}`,
+      }}>
+        {tipo === "fisica" ? "🏪 Física" : "💻 Virtual"}
       </span>
     );
   };
 
+  const formatarHorario = (abertura, fechamento) => {
+    return `${abertura} às ${fechamento}`;
+  };
+
+  const formatarDias = (dias) => {
+    const diasAbrev = {
+      segunda: "Seg",
+      terca: "Ter",
+      quarta: "Qua",
+      quinta: "Qui",
+      sexta: "Sex",
+      sabado: "Sáb",
+      domingo: "Dom"
+    };
+    return dias.map(d => diasAbrev[d]).join(", ");
+  };
+
+  const diasDaSemana = [
+    { value: "segunda", label: "Segunda-feira" },
+    { value: "terca", label: "Terça-feira" },
+    { value: "quarta", label: "Quarta-feira" },
+    { value: "quinta", label: "Quinta-feira" },
+    { value: "sexta", label: "Sexta-feira" },
+    { value: "sabado", label: "Sábado" },
+    { value: "domingo", label: "Domingo" },
+  ];
+
   return (
     <div style={styles.container}>
-      {/* Header */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}> Gestao de Filiais</h1>
-          <p style={styles.subtitle}>
-            Gerencie todas as suas lojas fisicas e virtuais
-          </p>
+          <h1 style={styles.title}>🏪 Gestão de Filiais</h1>
+          <p style={styles.subtitle}>Gerencie todas as suas lojas físicas e virtuais</p>
         </div>
         <div style={styles.stats}>
           <div style={styles.statCard}>
@@ -199,324 +209,238 @@ const LojistaFiliais = () => {
             <span style={styles.statLabel}>Limite do Plano</span>
           </div>
           <div style={styles.statCard}>
-            <span style={styles.statNumber}>
-              {limiteAtual === 999 ? "ˆ" : limiteAtual - filiaisCadastradas}
-            </span>
-            <span style={styles.statLabel}>Disponiveis</span>
+            <span style={styles.statNumber}>{limiteAtual === 999 ? "∞" : limiteAtual - filiaisCadastradas}</span>
+            <span style={styles.statLabel}>Disponíveis</span>
           </div>
         </div>
       </div>
 
-      {/* Alertas de Limite */}
       {filiaisCadastradas >= limiteAtual && limiteAtual !== 999 && (
         <div style={styles.alert}>
-            Voca atingiu o limite do seu plano.
-          <button
-            style={styles.upgradeButton}
-            onClick={() => navigate("/para-lojistas")}
-          >
+          ⚠️ Você atingiu o limite do seu plano.
+          <button style={styles.upgradeButton} onClick={() => navigate("/para-lojistas")}>
             Fazer Upgrade
           </button>
         </div>
       )}
 
-      {/* Botao Adicionar */}
       {!showForm && filiaisCadastradas < limiteAtual && (
         <button style={styles.addButton} onClick={() => setShowForm(true)}>
-          O Adicionar Nova Filial
+          ➕ Adicionar Nova Filial
         </button>
       )}
 
-      {/* Formulario */}
       {showForm && (
         <div style={styles.formContainer}>
-          <h2 style={styles.formTitle}>
-            {editingFilial ? " Editar Filial" : " Nova Filial"}
-          </h2>
+          <h2 style={styles.formTitle}>{editingFilial ? "✏️ Editar Filial" : "➕ Nova Filial"}</h2>
 
           <form onSubmit={handleSubmit} style={styles.form}>
             <div style={styles.formGrid}>
-              {/* Dados Basicos */}
+              {/* Dados Básicos */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Dados Basicos</h3>
+                <h3 style={styles.sectionTitle}>📋 Dados Básicos</h3>
 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>Nome da Filial *</label>
-                  <input
-                    type="text"
-                    name="nome"
-                    value={formData.nome}
-                    onChange={handleInputChange}
-                    style={styles.input}
-                    required
-                  />
+                  <input type="text" name="nome" value={formData.nome} onChange={handleInputChange} style={styles.input} required />
                 </div>
 
                 <div style={styles.formRow}>
                   <div style={styles.formGroup}>
                     <label style={styles.label}>Tipo *</label>
-                    <select
-                      name="tipo"
-                      value={formData.tipo}
-                      onChange={handleInputChange}
-                      style={styles.select}
-                      required
-                    >
-                      <option value="fisica"> Loja Fisica</option>
-                      <option value="virtual"> Loja Virtual</option>
+                    <select name="tipo" value={formData.tipo} onChange={handleInputChange} style={styles.select} required>
+                      <option value="fisica">🏪 Loja Física</option>
+                      <option value="virtual">💻 Loja Virtual</option>
                     </select>
                   </div>
 
                   <div style={styles.formGroup}>
                     <label style={styles.label}>Status *</label>
-                    <select
-                      name="status"
-                      value={formData.status}
-                      onChange={handleInputChange}
-                      style={styles.select}
-                      required
-                    >
-                      <option value="ativa"> Ativa</option>
-                      <option value="inativa"> Inativa</option>
+                    <select name="status" value={formData.status} onChange={handleInputChange} style={styles.select} required>
+                      <option value="ativa">✅ Ativa</option>
+                      <option value="inativa">❌ Inativa</option>
                     </select>
                   </div>
                 </div>
 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>CNPJ</label>
-                  <input
-                    type="text"
-                    name="cnpj"
-                    value={formData.cnpj}
-                    onChange={handleInputChange}
-                    style={styles.input}
-                    placeholder="00.000.000/0000-00"
-                  />
+                  <input type="text" name="cnpj" value={formData.cnpj} onChange={handleInputChange} style={styles.input} placeholder="00.000.000/0000-00" />
+                </div>
+              </div>
+
+              {/* Horário de Funcionamento */}
+              <div style={styles.formSection}>
+                <h3 style={styles.sectionTitle}>🕐 Horário de Funcionamento</h3>
+
+                <div style={styles.formRow}>
+                  <div style={styles.formGroup}>
+                    <label style={styles.label}>Horário de Abertura *</label>
+                    <input type="time" name="horarioAbertura" value={formData.horarioAbertura} onChange={handleInputChange} style={styles.input} required />
+                  </div>
+
+                  <div style={styles.formGroup}>
+                    <label style={styles.label}>Horário de Fechamento *</label>
+                    <input type="time" name="horarioFechamento" value={formData.horarioFechamento} onChange={handleInputChange} style={styles.input} required />
+                  </div>
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Dias de Funcionamento *</label>
+                  <div style={styles.diasGrid}>
+                    {diasDaSemana.map((dia) => (
+                      <label key={dia.value} style={styles.diaCheckbox}>
+                        <input
+                          type="checkbox"
+                          checked={formData.diasFuncionamento.includes(dia.value)}
+                          onChange={() => handleDiaChange(dia.value)}
+                          style={styles.checkbox}
+                        />
+                        <span style={styles.diaLabel}>{dia.label}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               {/* Contato */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>Contato</h3>
+                <h3 style={styles.sectionTitle}>📞 Contato</h3>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Responsavel *</label>
-                  <input
-                    type="text"
-                    name="responsavel"
-                    value={formData.responsavel}
-                    onChange={handleInputChange}
-                    style={styles.input}
-                    required
-                  />
+                  <label style={styles.label}>Responsável *</label>
+                  <input type="text" name="responsavel" value={formData.responsavel} onChange={handleInputChange} style={styles.input} required />
                 </div>
 
                 <div style={styles.formRow}>
                   <div style={styles.formGroup}>
                     <label style={styles.label}>Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                    />
+                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} style={styles.input} />
                   </div>
 
                   <div style={styles.formGroup}>
                     <label style={styles.label}>Telefone *</label>
-                    <input
-                      type="tel"
-                      name="telefone"
-                      value={formData.telefone}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      placeholder="(11) 99999-9999"
-                      required
-                    />
+                    <input type="tel" name="telefone" value={formData.telefone} onChange={handleInputChange} style={styles.input} placeholder="(00) 00000-0000" required />
                   </div>
                 </div>
               </div>
 
-              {/* Endereco (apenas para fisicas) */}
-              {formData.tipo === "fisica" && (
-                <div style={styles.formSection}>
-                  <h3 style={styles.sectionTitle}>Endereco</h3>
+              {/* Endereço */}
+              <div style={styles.formSection}>
+                <h3 style={styles.sectionTitle}>📍 Endereço</h3>
 
+                <div style={styles.formRow}>
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>CEP</label>
-                    <input
-                      type="text"
-                      name="cep"
-                      value={formData.cep}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                      placeholder="00000-000"
-                    />
+                    <label style={styles.label}>CEP *</label>
+                    <input type="text" name="cep" value={formData.cep} onChange={handleInputChange} style={styles.input} placeholder="00000-000" required />
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Endereco</label>
-                    <input
-                      type="text"
-                      name="endereco"
-                      value={formData.endereco}
-                      onChange={handleInputChange}
-                      style={styles.input}
-                    />
-                  </div>
-
-                  <div style={styles.formRow}>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label}>Numero</label>
-                      <input
-                        type="text"
-                        name="numero"
-                        value={formData.numero}
-                        onChange={handleInputChange}
-                        style={styles.input}
-                      />
-                    </div>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label}>Complemento</label>
-                      <input
-                        type="text"
-                        name="complemento"
-                        value={formData.complemento}
-                        onChange={handleInputChange}
-                        style={styles.input}
-                      />
-                    </div>
-                  </div>
-
-                  <div style={styles.formRow}>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label}>Cidade</label>
-                      <input
-                        type="text"
-                        name="cidade"
-                        value={formData.cidade}
-                        onChange={handleInputChange}
-                        style={styles.input}
-                      />
-                    </div>
-                    <div style={styles.formGroup}>
-                      <label style={styles.label}>Estado</label>
-                      <input
-                        type="text"
-                        name="estado"
-                        value={formData.estado}
-                        onChange={handleInputChange}
-                        style={styles.input}
-                        placeholder="SP"
-                      />
-                    </div>
+                    <label style={styles.label}>Número *</label>
+                    <input type="text" name="numero" value={formData.numero} onChange={handleInputChange} style={styles.input} required />
                   </div>
                 </div>
-              )}
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Endereço *</label>
+                  <input type="text" name="endereco" value={formData.endereco} onChange={handleInputChange} style={styles.input} required />
+                </div>
+
+                <div style={styles.formGroup}>
+                  <label style={styles.label}>Complemento</label>
+                  <input type="text" name="complemento" value={formData.complemento} onChange={handleInputChange} style={styles.input} />
+                </div>
+
+                <div style={styles.formRow}>
+                  <div style={styles.formGroup}>
+                    <label style={styles.label}>Cidade *</label>
+                    <input type="text" name="cidade" value={formData.cidade} onChange={handleInputChange} style={styles.input} required />
+                  </div>
+
+                  <div style={styles.formGroup}>
+                    <label style={styles.label}>Estado *</label>
+                    <select name="estado" value={formData.estado} onChange={handleInputChange} style={styles.select} required>
+                      <option value="">Selecione</option>
+                      <option value="SP">São Paulo</option>
+                      <option value="RJ">Rio de Janeiro</option>
+                      <option value="MG">Minas Gerais</option>
+                      {/* Adicionar outros estados */}
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div style={styles.formActions}>
-              <button
-                type="button"
-                onClick={handleCancel}
-                style={styles.cancelButton}
-              >
-                Cancelar
-              </button>
-              <button type="submit" style={styles.submitButton}>
-                {editingFilial ? "Atualizar Filial" : "Cadastrar Filial"}
-              </button>
+              <button type="button" onClick={handleCancel} style={styles.cancelButton}>❌ Cancelar</button>
+              <button type="submit" style={styles.submitButton}>✅ {editingFilial ? "Atualizar" : "Cadastrar"}</button>
             </div>
           </form>
         </div>
       )}
 
       {/* Lista de Filiais */}
-      {!showForm && (
+      {filiais.length > 0 && (
         <div style={styles.listaContainer}>
-          <h2 style={styles.listaTitle}>
-            Minhas Filiais ({filiaisCadastradas})
-          </h2>
+          <h2 style={styles.listaTitle}>📋 Filiais Cadastradas ({filiais.length})</h2>
 
-          {filiais.length === 0 ? (
-            <div style={styles.emptyState}>
-              <div style={styles.emptyIcon}></div>
-              <h3 style={styles.emptyTitle}>Nenhuma filial cadastrada</h3>
-              <p style={styles.emptyText}>
-                Comece cadastrando sua primeira filial para gerenciar suas
-                lojas.
-              </p>
-              <button
-                style={styles.addButton}
-                onClick={() => setShowForm(true)}
-              >
-                O Adicionar Primeira Filial
-              </button>
-            </div>
-          ) : (
-            <div style={styles.filiaisGrid}>
-              {filiais.map((filial) => (
-                <div key={filial.id} style={styles.filialCard}>
-                  <div style={styles.filialHeader}>
-                    <h3 style={styles.filialNome}>{filial.nome}</h3>
-                    <div style={styles.filialBadges}>
-                      {getTipoBadge(filial.tipo)}
-                      {getStatusBadge(filial.status)}
-                    </div>
-                  </div>
-
-                  <div style={styles.filialInfo}>
-                    <p style={styles.filialResponsavel}>
-                      <strong>Responsavel:</strong> {filial.responsavel}
-                    </p>
-                    <p style={styles.filialContato}>
-                      <strong>Contato:</strong> {filial.telefone}
-                      {filial.email && ` * ${filial.email}`}
-                    </p>
-
-                    {filial.tipo === "fisica" && filial.endereco && (
-                      <p style={styles.filialEndereco}>
-                        <strong>Endereco:</strong> {filial.endereco},{" "}
-                        {filial.numero}
-                        {filial.complemento && ` - ${filial.complemento}`}
-                        {filial.cidade && `, ${filial.cidade}-${filial.estado}`}
-                      </p>
-                    )}
-
-                    <p style={styles.filialData}>
-                      <strong>Cadastrada em:</strong>{" "}
-                      {new Date(filial.dataCadastro).toLocaleDateString(
-                        "pt-BR"
-                      )}
-                    </p>
-                  </div>
-
-                  <div style={styles.filialActions}>
-                    <button
-                      onClick={() => handleEdit(filial)}
-                      style={styles.editButton}
-                    >
-                       Editar
-                    </button>
-                    <button
-                      onClick={() => handleDelete(filial.id)}
-                      style={styles.deleteButton}
-                    >
-                       Excluir
-                    </button>
+          <div style={styles.filiaisGrid}>
+            {filiais.map((filial) => (
+              <div key={filial.id} style={styles.filialCard}>
+                <div style={styles.filialHeader}>
+                  <h3 style={styles.filialNome}>{filial.nome}</h3>
+                  <div style={styles.filialBadges}>
+                    {getTipoBadge(filial.tipo)}
+                    {getStatusBadge(filial.status)}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+
+                <div style={styles.filialInfo}>
+                  <p style={styles.filialResponsavel}>👤 <strong>Responsável:</strong> {filial.responsavel}</p>
+                  
+                  {filial.email && <p style={styles.filialContato}>✉️ {filial.email}</p>}
+                  <p style={styles.filialContato}>📞 {filial.telefone}</p>
+                  
+                  <p style={styles.filialEndereco}>
+                    📍 {filial.endereco}, {filial.numero}
+                    {filial.complemento && ` - ${filial.complemento}`}
+                    <br />
+                    {filial.cidade}/{filial.estado} - CEP: {filial.cep}
+                  </p>
+
+                  {/* HORÁRIO DE FUNCIONAMENTO */}
+                  <div style={styles.horarioBox}>
+                    <p style={styles.horarioLabel}>🕐 Horário de Funcionamento:</p>
+                    <p style={styles.horarioTexto}>{formatarHorario(filial.horarioAbertura, filial.horarioFechamento)}</p>
+                    <p style={styles.diasTexto}>📅 {formatarDias(filial.diasFuncionamento)}</p>
+                  </div>
+
+                  <p style={styles.filialData}>
+                    📅 Cadastrada em: {new Date(filial.dataCadastro).toLocaleDateString("pt-BR")}
+                  </p>
+                </div>
+
+                <div style={styles.filialActions}>
+                  <button onClick={() => handleEdit(filial)} style={styles.editButton}>✏️ Editar</button>
+                  <button onClick={() => handleDelete(filial.id)} style={styles.deleteButton}>🗑️ Excluir</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {filiais.length === 0 && !showForm && (
+        <div style={styles.emptyState}>
+          <p style={styles.emptyIcon}>🏪</p>
+          <h2 style={styles.emptyTitle}>Nenhuma filial cadastrada</h2>
+          <p style={styles.emptyText}>Clique no botão acima para adicionar sua primeira filial</p>
         </div>
       )}
     </div>
   );
 };
 
-// Estilos profissionais
 const styles = {
   container: {
     padding: "30px 20px",
@@ -668,6 +592,31 @@ const styles = {
     backgroundColor: "white",
     cursor: "pointer",
   },
+  diasGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "12px",
+  },
+  diaCheckbox: {
+    display: "flex",
+    alignItems: "center",
+    padding: "10px",
+    backgroundColor: "white",
+    borderRadius: "6px",
+    border: "2px solid #e0e0e0",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+  },
+  checkbox: {
+    marginRight: "10px",
+    width: "18px",
+    height: "18px",
+    cursor: "pointer",
+  },
+  diaLabel: {
+    fontSize: "0.95rem",
+    color: "#333",
+  },
   formActions: {
     display: "flex",
     gap: "15px",
@@ -711,6 +660,8 @@ const styles = {
   emptyState: {
     textAlign: "center",
     padding: "60px 20px",
+    backgroundColor: "white",
+    borderRadius: "12px",
   },
   emptyIcon: {
     fontSize: "4rem",
@@ -774,6 +725,30 @@ const styles = {
     color: "#555",
     fontSize: "0.95rem",
   },
+  horarioBox: {
+    backgroundColor: "#e7f3ff",
+    padding: "12px",
+    borderRadius: "8px",
+    margin: "12px 0",
+    border: "1px solid #b8daff",
+  },
+  horarioLabel: {
+    margin: "0 0 8px 0",
+    fontWeight: "600",
+    color: "#004085",
+    fontSize: "0.9rem",
+  },
+  horarioTexto: {
+    margin: "4px 0",
+    color: "#004085",
+    fontSize: "0.95rem",
+    fontWeight: "500",
+  },
+  diasTexto: {
+    margin: "4px 0",
+    color: "#004085",
+    fontSize: "0.85rem",
+  },
   filialData: {
     margin: "8px 0",
     color: "#666",
@@ -808,4 +783,3 @@ const styles = {
 };
 
 export default LojistaFiliais;
-

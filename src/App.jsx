@@ -1,7 +1,8 @@
 // src/App.jsx
 import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
+import { PlanoProvider } from './contexts/PlanoContext';
 
 import Landingpage from "./pages/Landingpage";
 import LoginPage from "./pages/LoginPage";
@@ -89,37 +90,39 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Landingpage />} />
-      <Route path="/entrar" element={<LoginsPanel />} />
-      <Route path="/login" element={<LoginsPanel />} />
-      <Route path="/login-page" element={<LoginPage />} />
-      <Route path="/termos" element={<TermsPage />} />
-      <Route path="/privacidade" element={<TermsPage />} />
-      <Route path="/aguardando-aprovacao" element={<AwaitingApproval />} />
-      <Route path="/aprovacoes" element={<ApprovalsPage />} />
-      <Route path="/aplicativo-confirmacao" element={<AplicativoConfirmacao />} />
-      <Route path="/callback" element={<SupabaseCallback />} />
+      <PlanoProvider>
+        <Routes>
+          <Route path="/" element={<Landingpage />} />
+          <Route path="/entrar" element={<LoginsPanel />} />
+          <Route path="/login" element={<LoginsPanel />} />
+          <Route path="/login-page" element={<LoginPage />} />
+          <Route path="/termos" element={<TermsPage />} />
+          <Route path="/privacidade" element={<TermsPage />} />
+          <Route path="/aguardando-aprovacao" element={<AwaitingApproval />} />
+          <Route path="/aprovacoes" element={<ApprovalsPage />} />
+          <Route path="/aplicativo-confirmacao" element={<AplicativoConfirmacao />} />
+          <Route path="/callback" element={<SupabaseCallback />} />
 
-      <Route path="/consultor/cadastro" element={<RegisterPage />} />
-      <Route path="/lojista/cadastro" element={<LojistaRegisterPage />} />
-      <Route path="/vendedor/cadastro" element={<VendedorRegisterPage />} />
+          <Route path="/consultor/cadastro" element={<RegisterPage />} />
+          <Route path="/lojista/cadastro" element={<LojistaRegisterPage />} />
+          <Route path="/vendedor/cadastro" element={<VendedorRegisterPage />} />
 
-      <Route path="/consultor/login" element={<ConsultorLogin />} />
-      <Route path="/lojista/login" element={<LojistaLogin />} />
-      <Route path="/vendedor/login" element={<VendedorLogin />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/lojista/escolha" element={<LojistaEscolha />} />
+          <Route path="/consultor/login" element={<ConsultorLogin />} />
+          <Route path="/lojista/login" element={<LojistaLogin />} />
+          <Route path="/vendedor/login" element={<VendedorLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/lojista/escolha" element={<LojistaEscolha />} />
 
-      <Route path="/agnes-admin-2025" element={<Navigate to="/admin/login" replace />} />
+          <Route path="/agnes-admin-2025" element={<Navigate to="/admin/login" replace />} />
 
-      <Route path="/consultor/dashboard/*" element={<ProtectedRoute><ConsultorDashboard /></ProtectedRoute>} />
-      <Route path="/lojista/*" element={<ProtectedRoute><LojistaDashboard /></ProtectedRoute>} />
-      <Route path="/vendedor/*" element={<ProtectedRoute><VendedorDashboard /></ProtectedRoute>} />
-      <Route path="/admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/consultor/dashboard/*" element={<ProtectedRoute><ConsultorDashboard /></ProtectedRoute>} />
+          <Route path="/lojista/*" element={<ProtectedRoute><LojistaDashboard /></ProtectedRoute>} />
+          <Route path="/vendedor/*" element={<ProtectedRoute><VendedorDashboard /></ProtectedRoute>} />
+          <Route path="/admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
 
-      <Route path="*" element={<h1 style={{ textAlign: "center" }}>404 - Pagina nao encontrada</h1>} />
-    </Routes>
+          <Route path="*" element={<h1 style={{ textAlign: "center" }}>404 - Pagina nao encontrada</h1>} />
+        </Routes>
+      </PlanoProvider>
   );
 }
 
