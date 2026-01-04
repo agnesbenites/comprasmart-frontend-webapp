@@ -1,5 +1,5 @@
 // src/services/lojista.service.js
-import { supabase } from "@/supabaseClient";
+import { supabase } from "../supabaseClient";
 
 /* =====================================================
    📤 UPLOAD DE DOCUMENTO

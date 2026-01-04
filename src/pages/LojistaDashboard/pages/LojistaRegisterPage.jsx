@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BiometricValidation from "../../../components/BiometricValidation";
-import { cadastrarLojista } from "../../../service/lojista.service";
+import { cadastrarLojista } from "../../../services/lojista.service";
 
 // Links do Stripe para os planos
 const STRIPE_LINKS = {

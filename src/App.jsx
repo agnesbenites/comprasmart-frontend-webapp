@@ -11,6 +11,7 @@ import TermsPage from "./pages/TermsPage";
 import AwaitingApproval from "./pages/AwaitingApproval";
 import ApprovalsPage from "./pages/ApprovalsPage";
 import AplicativoConfirmacao from "./pages/AplicativoConfirmacao";
+import MarketingOnboarding from "./pages/Onboarding/MarketingOnboarding"; // ✅ NOVO
 
 import RegisterPage from "./pages/RegisterPage";
 import LojistaRegisterPage from "./pages/LojistaDashboard/pages/LojistaRegisterPage";
@@ -23,7 +24,7 @@ import AdminLogin from "./pages/AdminDashboard/pages/AdminLogin";
 import LojistaEscolha from "./pages/LojistaDashboard/pages/LojistaEscolha";
 
 import ConsultorDashboard from "./pages/ConsultorDashboard/pages/ConsultorDashboard";
-import LojistaDashboard from "./pages/LojistaDashboard/pages/LojistaDashboard";
+import LojistaDashboard from "./pages/LojistaDashboard/LojistaDashboard"; // ✅ CORRIGIDO
 import VendedorDashboard from "./pages/VendedorDashboard/pages/VendedorDashboard";
 import AdminDashboard from "./pages/AdminDashboard/pages/AdminDashboard";
 
@@ -90,39 +91,47 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
 
 function App() {
   return (
-      <PlanoProvider>
-        <Routes>
-          <Route path="/" element={<Landingpage />} />
-          <Route path="/entrar" element={<LoginsPanel />} />
-          <Route path="/login" element={<LoginsPanel />} />
-          <Route path="/login-page" element={<LoginPage />} />
-          <Route path="/termos" element={<TermsPage />} />
-          <Route path="/privacidade" element={<TermsPage />} />
-          <Route path="/aguardando-aprovacao" element={<AwaitingApproval />} />
-          <Route path="/aprovacoes" element={<ApprovalsPage />} />
-          <Route path="/aplicativo-confirmacao" element={<AplicativoConfirmacao />} />
-          <Route path="/callback" element={<SupabaseCallback />} />
+    <PlanoProvider>
+      <Routes>
+        {/* Página inicial - Onboarding */}
+        <Route path="/" element={<Navigate to="/onboarding" replace />} />
+        <Route path="/onboarding" element={<MarketingOnboarding />} />
+        <Route path="/cadastro/lojista" element={<LojistaRegisterPage />} />
 
-          <Route path="/consultor/cadastro" element={<RegisterPage />} />
-          <Route path="/lojista/cadastro" element={<LojistaRegisterPage />} />
-          <Route path="/vendedor/cadastro" element={<VendedorRegisterPage />} />
+        {/* Páginas públicas */}
+        <Route path="/entrar" element={<LoginsPanel />} />
+        <Route path="/login" element={<LoginsPanel />} />
+        <Route path="/login-page" element={<LoginPage />} />
+        <Route path="/termos" element={<TermsPage />} />
+        <Route path="/privacidade" element={<TermsPage />} />
+        <Route path="/aguardando-aprovacao" element={<AwaitingApproval />} />
+        <Route path="/aprovacoes" element={<ApprovalsPage />} />
+        <Route path="/aplicativo-confirmacao" element={<AplicativoConfirmacao />} />
+        <Route path="/callback" element={<SupabaseCallback />} />
 
-          <Route path="/consultor/login" element={<ConsultorLogin />} />
-          <Route path="/lojista/login" element={<LojistaLogin />} />
-          <Route path="/vendedor/login" element={<VendedorLogin />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/lojista/escolha" element={<LojistaEscolha />} />
+        {/* Cadastros */}
+        <Route path="/consultor/cadastro" element={<RegisterPage />} />
+        <Route path="/lojista/cadastro" element={<LojistaRegisterPage />} />
+        <Route path="/vendedor/cadastro" element={<VendedorRegisterPage />} />
 
-          <Route path="/agnes-admin-2025" element={<Navigate to="/admin/login" replace />} />
+        {/* Logins */}
+        <Route path="/consultor/login" element={<ConsultorLogin />} />
+        <Route path="/lojista/login" element={<LojistaLogin />} />
+        <Route path="/vendedor/login" element={<VendedorLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/lojista/escolha" element={<LojistaEscolha />} />
+        <Route path="/agnes-admin-2025" element={<Navigate to="/admin/login" replace />} />
 
-          <Route path="/consultor/dashboard/*" element={<ProtectedRoute><ConsultorDashboard /></ProtectedRoute>} />
-          <Route path="/lojista/*" element={<ProtectedRoute><LojistaDashboard /></ProtectedRoute>} />
-          <Route path="/vendedor/*" element={<ProtectedRoute><VendedorDashboard /></ProtectedRoute>} />
-          <Route path="/admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+        {/* Dashboards protegidos */}
+        <Route path="/consultor/dashboard/*" element={<ProtectedRoute><ConsultorDashboard /></ProtectedRoute>} />
+        <Route path="/lojista/*" element={<ProtectedRoute><LojistaDashboard /></ProtectedRoute>} />
+        <Route path="/vendedor/*" element={<ProtectedRoute><VendedorDashboard /></ProtectedRoute>} />
+        <Route path="/admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
 
-          <Route path="*" element={<h1 style={{ textAlign: "center" }}>404 - Pagina nao encontrada</h1>} />
-        </Routes>
-      </PlanoProvider>
+        {/* 404 */}
+        <Route path="*" element={<h1 style={{ textAlign: "center" }}>404 - Pagina nao encontrada</h1>} />
+      </Routes>
+    </PlanoProvider>
   );
 }
 

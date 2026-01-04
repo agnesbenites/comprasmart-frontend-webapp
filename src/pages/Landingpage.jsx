@@ -1,5 +1,5 @@
 // app-frontend/src/pages/Landingpage.jsx
-// Landing Page da Compra Smart - VERSAO COM IMAGENS SEPARADAS
+// Landing Page da Compra Smart - COM ONBOARDING
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -87,13 +87,18 @@ const Landingpage = () => {
     window.location.href = stripeLink; 
   };
 
-
   return (
     <div style={styles.container}>
       {/* HEADER/NAVBAR */}
       <header style={styles.header}>
         <div style={styles.headerContent}>
           <div style={styles.logo}>
+            {/* ✅ LOGO ADICIONADO */}
+            <img 
+              src="/img/logo.png" 
+              alt="Compra Smart Logo" 
+              style={styles.logoImage}
+            />
             <h1 style={styles.logoText}>
               COMPRA <span style={styles.logoSmart}>SMART</span>
             </h1>
@@ -105,22 +110,47 @@ const Landingpage = () => {
             <a href="/contato" style={styles.navLink}>Contato</a>
           </nav>
 
-          <button 
-            onClick={() => navigate('/entrar')}
-            style={styles.loginButton}
-          >
-            LOGIN
-          </button>
+          {/* ✅ BOTÕES ATUALIZADOS */}
+          <div style={styles.headerButtons}>
+            <button 
+              onClick={() => navigate('/onboarding')}
+              style={styles.onboardingButton}
+            >
+              🚀 COMEÇAR AGORA
+            </button>
+            <button 
+              onClick={() => navigate('/entrar')}
+              style={styles.loginButton}
+            >
+              LOGIN
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* HERO SECTION - TELA CHEIA */}
+      {/* HERO SECTION - TELA CHEIA COM CTA */}
       <section style={styles.hero}>
         <img 
           src="/img/hero-banner.png" 
           alt="Compra Smart - Uma forma facil de unir vendas locais" 
           style={styles.heroBannerImage}
         />
+        
+        {/* ✅ CTA OVERLAY NO HERO */}
+        <div style={styles.heroOverlay}>
+          <h2 style={styles.heroTitle}>
+            Transforme Vendas em Receita
+          </h2>
+          <p style={styles.heroSubtitle}>
+            O Uber das Vendas: Atendimento Humanizado + Liquidez de Estoque
+          </p>
+          <button 
+            onClick={() => navigate('/onboarding')}
+            style={styles.heroCTA}
+          >
+            🎯 Ver Como Funciona
+          </button>
+        </div>
       </section>
 
       {/* BENEFICIOS PARA LOJISTAS */}
@@ -195,264 +225,158 @@ const Landingpage = () => {
         <h2 style={styles.sectionTitle}>O Que Oferecemos?</h2>
         
         <div style={styles.offerings}>
-          {/* LOJISTAS */}
           <OfferingCard
             title="Lojistas"
             icon={<FaStore size={40} color="#5DADE2" />}
-            features={[
-              "Painel com metricas",
-              "Gestao de equipes, estoque, integracoes com ERP",
-              "Campanhas de marketing",
-              "Valores acessiveis",
-              "Conexao entre Cliente Certo com Consultor Especializado"
-            ]}
             color="#5DADE2"
-          />
-
-          {/* CLIENTES */}
-          <OfferingCard
-            title="Clientes"
-            icon={<FaShoppingCart size={40} color="#48C9B0" />}
             features={[
-              "Ache consultores que te ajudam a fazer a escolha certa",
-              "Conheca lojas proximas de voce",
-              "Deixe seu carrinho pronto para pagar na loja e retire o produto",
-              "Compre com a certeza de que sabe tudo sobre o produto"
+              "Multiplique seu alcance com consultores especializados",
+              "Dashboards completos de vendas e performance",
+              "Gestao simplificada de produtos e estoque",
+              "Marketing e campanhas inteligentes"
             ]}
-            color="#48C9B0"
           />
-
-          {/* CONSULTORES */}
+          
           <OfferingCard
             title="Consultores"
-            icon={<FaUserTie size={40} color="#F7DC6F" />}
+            icon={<FaUserTie size={40} color="#48C9B0" />}
+            color="#48C9B0"
             features={[
-              "Trabalhe em segmentos que voce realmente conhece",
-              "Atenda quantos clientes quiser, de onde quiser",
-              "Nao precisa ser empreendedor ou lojista",
-              "Plataforma facil e intuitiva para todos"
+              "Trabalhe quando e onde quiser",
+              "Comissoes justas por cada venda",
+              "Suporte completo em tempo real",
+              "Treinamentos e certificacoes gratuitas"
             ]}
-            color="#F7DC6F"
+          />
+          
+          <OfferingCard
+            title="Clientes"
+            icon={<FaShoppingCart size={40} color="#F4D03F" />}
+            color="#F4D03F"
+            features={[
+              "Atendimento personalizado e humanizado",
+              "Descubra lojas proximas de voce",
+              "Ofertas exclusivas e descontos",
+              "Experiencia de compra superior"
+            ]}
           />
         </div>
       </section>
 
-      {/* NOSSOS PLANOS */}
-      <section id="planos" style={{...styles.section, backgroundColor: '#ECF0F1', maxWidth: '100%', padding: '80px 20px'}}>
-        <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-          <h2 style={styles.sectionTitle}>Nossos Planos</h2>
-
-          {/* Clientes */}
-          <div style={styles.planContainer}>
-            <h3 style={styles.planCategory}>Clientes</h3>
-            <div style={{...styles.freePlanCard, backgroundColor: '#5DADE2'}}>
-              <h4 style={styles.planPrice}>R$ 0</h4>
-              <p style={styles.planCTA}>BAIXE O APP</p>
-              <FaMobileAlt style={styles.planIcon} />
-              <p style={styles.planDescription}>
-                Encontre as lojas com os produtos que voce precisa na sua regiao
-              </p>
-              <p style={styles.planNote}>DISPONIVEL SOMENTE PARA MOBILE</p>
-              <button 
-                onClick={() => window.open('https://play.google.com/store', '_blank')}
-                style={styles.downloadButton}
-              >
-                BAIXAR NA PLAY STORE
-              </button>
-            </div>
-          </div>
-
-          {/* Consultores */}
-          <div style={styles.planContainer}>
-            <h3 style={styles.planCategory}>Consultores</h3>
-            <div style={{...styles.freePlanCard, backgroundColor: '#5B5B5B'}}>
-              <h4 style={styles.planPrice}>R$ 0</h4>
-              <p style={styles.planCTA}>ACESSE O SITE E CADASTRE-SE</p>
-              <p style={styles.planDescription}>
-                Necessario cadastrar-se tambem no Stripe para receber comissoes
-              </p>
-              <p style={styles.planNote}>DISPONIVEL SOMENTE WEB APP</p>
-              <button 
-                onClick={() => navigate('/entrar')}
-                style={styles.signupButton}
-              >
-                <FaDesktop /> ACESSAR AGORA
-              </button>
-            </div>
-          </div>
-
-          {/* Lojistas - 3 Planos */}
-          <div style={styles.planContainer}>
-            <h3 style={styles.planCategory}>Lojistas</h3>
-            <div style={styles.lojistasPlans}>
-              
-              {/* BASICO */}
-              <PlanCard
-                name="BASICO"
-                price="R$ 99,90"
-                period="POR MES"
-                description="Ideal para pequenos negocios ou que tenham produtos personalizados"
-                features={[
-                  "Chat para mensagens ilimitado",
-                  "Analytics e metricas simples",
-                  "Cadastre ate 100 produtos",
-                  "Cadastre ate 2 filiais"
-                ]}
-                color="#2C3E50"
-                onBuy={() => handleStripeCheckout(STRIPE_URLS.BASICO)}
-              />
-
-              {/* PRO */}
-              <PlanCard
-                name="PRO"
-                price="R$ 199,90"
-                period="POR MES"
-                description="Para negocios em expansao que precisam de mais recursos"
-                features={[
-                  "Chat ilimitado + 6 video chamadas/mes",
-                  "Analytics e metricas detalhadas",
-                  "Cadastre ate 500 produtos",
-                  "Cadastre ate 5 filiais"
-                ]}
-                color="#2C3E50"
-                highlighted
-                onBuy={() => handleStripeCheckout(STRIPE_URLS.PRO)}
-              />
-
-              {/* ENTERPRISE */}
-              <PlanCard
-                name="ENTERPRISE"
-                price="R$ 499,00"
-                period="POR MES"
-                description="Para negocios consolidados com equipe grande"
-                features={[
-                  "Todos os tipos de mensagem ilimitados",
-                  "Analytics e metricas avancadas",
-                  "Cadastre ate 1000 produtos",
-                  "Ate 30 filiais + Integracao ERP"
-                ]}
-                color="#2C3E50"
-                onBuy={() => handleStripeCheckout(STRIPE_URLS.ENTERPRISE)}
-              />
-            </div>
-          </div>
-
-          {/* PACOTES ADICIONAIS */}
-          <div style={styles.adicionaisSection}>
-            <div style={styles.adicionaisCard}>
-              <div style={styles.adicionaisIcon}>
-                <FaPlus size={30} color="#F4D03F" />
-              </div>
-              <div style={styles.adicionaisContent}>
-                <h3 style={styles.adicionaisTitulo}>Quer mais recursos?</h3>
-                <p style={styles.adicionaisTexto}>
-                  Alem dos planos, oferecemos <strong>pacotes adicionais</strong> para potencializar ainda mais seu negocio:
-                </p>
-                <div style={styles.adicionaisLista}>
-                  <div style={styles.adicionalItem}>
-                    <FaBullhorn color="#5DADE2" size={20} />
-                    <span><strong>Campanhas de Marketing</strong> - Destaque seus produtos para mais clientes</span>
-                  </div>
-                  <div style={styles.adicionalItem}>
-                    <FaUsers color="#48C9B0" size={20} />
-                    <span><strong>Consultores Extras</strong> - Aumente sua equipe de vendas</span>
-                  </div>
-                  <div style={styles.adicionalItem}>
-                    <FaChartLine color="#F7DC6F" size={20} />
-                    <span><strong>Relatorios Avancados</strong> - Insights detalhados do seu negocio</span>
-                  </div>
-                  <div style={styles.adicionalItem}>
-                    <FaBox color="#E74C3C" size={20} />
-                    <span><strong>Produtos Extras</strong> - Cadastre mais itens no catalogo</span>
-                  </div>
-                </div>
-                <p style={styles.adicionaisNota}>
-                  &#128161; Acesse a <strong>pagina de Pagamentos</strong> dentro da sua Dashboard para ver todos os pacotes disponiveis e contratar!
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* PLANOS */}
+      <section style={styles.section} id="planos">
+        <h2 style={styles.sectionTitle}>Escolha Seu Plano</h2>
+        <p style={styles.sectionSubtitle}>
+          Planos flexiveis para lojas de todos os tamanhos
+        </p>
+        
+        <div style={styles.plansGrid}>
+          <PlanCard
+            name="BASICO"
+            price="R$ 50"
+            period="por mes"
+            description="Ideal para pequenos negocios"
+            color="#1A2332"
+            features={[
+              "Ate 100 produtos",
+              "10 consultores disponiveis",
+              "Dashboard basico",
+              "Suporte por email"
+            ]}
+            onBuy={() => handleStripeCheckout(STRIPE_URLS.BASICO)}
+          />
+          
+          <PlanCard
+            name="PRO"
+            price="R$ 150"
+            period="por mes"
+            description="Para negocios em crescimento"
+            color="#2C3E50"
+            highlighted
+            features={[
+              "Ate 1000 produtos",
+              "30 consultores disponiveis",
+              "Dashboard avancado",
+              "Suporte prioritario",
+              "Integracao com ERPs"
+            ]}
+            onBuy={() => handleStripeCheckout(STRIPE_URLS.PRO)}
+          />
+          
+          <PlanCard
+            name="ENTERPRISE"
+            price="R$ 360"
+            period="por mes"
+            description="Solucao completa para grandes redes"
+            color="#34495E"
+            features={[
+              "Produtos ilimitados",
+              "Consultores ilimitados",
+              "BI e Analytics avancado",
+              "Suporte VIP 24/7",
+              "API personalizada",
+              "Multi-filiais"
+            ]}
+            onBuy={() => handleStripeCheckout(STRIPE_URLS.ENTERPRISE)}
+          />
         </div>
       </section>
 
       {/* FOOTER */}
       <footer style={styles.footer}>
         <div style={styles.footerContent}>
-          <div style={styles.footerColumn}>
+          <div style={styles.footerSection}>
             <h4 style={styles.footerTitle}>COMPRA SMART</h4>
             <p style={styles.footerText}>
-              Conectando lojas locais, consultores especializados e clientes inteligentes.
+              Conectando lojistas, consultores e clientes de forma inteligente.
             </p>
           </div>
           
-          <div style={styles.footerColumn}>
-            <h4 style={styles.footerTitle}>LINKS RÁPIDOS</h4>
-            <a 
-              href="https://merciful-keyboard-70e.notion.site/2cfcb8e9243180a08bbbf914d582e8bf" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={styles.footerLink}
-            >
-              📋 Termo de Adesão
-            </a>
-            <a 
-              href="https://merciful-keyboard-70e.notion.site/2d0cb8e9243180938a66c6b53a4aed5b" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={styles.footerLink}
-            >
-              📜 Termos e Condições de Uso
-            </a>
-            <a 
-              href="https://merciful-keyboard-70e.notion.site/2d1cb8e924318015a8b0dea48170d820" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={styles.footerLink}
-            >
-              🔒 Política de Privacidade
-            </a>
-            <a href="/contato" style={styles.footerLink}>
-              📧 Contato
-            </a>
+          <div style={styles.footerSection}>
+            <h4 style={styles.footerTitle}>Links Rapidos</h4>
+            <a href="#funcionalidades" style={styles.footerLink}>Funcionalidades</a>
+            <a href="#planos" style={styles.footerLink}>Planos</a>
+            <a href="/termos" style={styles.footerLink}>Termos de Uso</a>
+            <a href="/privacidade" style={styles.footerLink}>Privacidade</a>
           </div>
           
-          <div style={styles.footerColumn}>
-            <h4 style={styles.footerTitle}>ACESSO</h4>
-            <button onClick={() => navigate('/entrar')} style={styles.footerLink}>
-              Login Lojista
-            </button>
-            <button onClick={() => navigate('/entrar')} style={styles.footerLink}>
-              Login Consultor
+          <div style={styles.footerSection}>
+            <h4 style={styles.footerTitle}>Comece Agora</h4>
+            <button 
+              onClick={() => navigate('/onboarding')}
+              style={styles.footerButton}
+            >
+              🚀 Criar Conta Grátis
             </button>
           </div>
         </div>
         
         <div style={styles.footerBottom}>
-          <p>&#169; {new Date().getFullYear()} Compra Smart. Todos os direitos reservados.</p>
+          <p style={styles.footerCopy}>
+            © 2024 Compra Smart. Todos os direitos reservados.
+          </p>
         </div>
       </footer>
     </div>
   );
 };
 
-// ====================================================================
-// ESTILOS
-// ====================================================================
+// --- ESTILOS ---
+
 const styles = {
   container: {
-    fontFamily: "'Poppins', sans-serif",
-    color: '#2C3E50',
-    overflowX: 'hidden',
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    backgroundColor: '#f8f9fa',
   },
   
-  // Header/Navbar
+  // HEADER
   header: {
     backgroundColor: '#1A2332',
-    padding: '15px 20px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+    padding: '15px 0',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
   },
   headerContent: {
     maxWidth: '1200px',
@@ -460,403 +384,293 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: '0 20px',
   },
-  logo: {},
+  logo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px',
+  },
+  logoImage: { // ✅ NOVO
+    height: '40px',
+    width: 'auto',
+  },
   logoText: {
-    fontSize: '1.5rem',
+    fontSize: '1.8rem',
     fontWeight: '800',
     color: 'white',
     margin: 0,
   },
   logoSmart: {
     color: '#F4D03F',
-    fontStyle: 'italic',
   },
   nav: {
     display: 'flex',
-    gap: '25px',
-    alignItems: 'center',
+    gap: '30px',
   },
   navLink: {
-    color: '#E0E0E0',
+    color: 'white',
     textDecoration: 'none',
-    fontSize: '0.95rem',
+    fontSize: '1rem',
     fontWeight: '500',
-    transition: 'color 0.2s',
+    transition: 'color 0.3s',
   },
-  loginButton: {
+  headerButtons: { // ✅ NOVO
+    display: 'flex',
+    gap: '15px',
+  },
+  onboardingButton: { // ✅ NOVO
     backgroundColor: '#F4D03F',
     color: '#1A2332',
-    padding: '10px 20px',
-    borderRadius: '8px',
     border: 'none',
-    fontWeight: 'bold',
+    padding: '12px 28px',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '700',
     cursor: 'pointer',
+    transition: 'all 0.3s',
+    boxShadow: '0 4px 12px rgba(244, 208, 63, 0.3)',
+  },
+  loginButton: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    border: '2px solid white',
+    padding: '10px 25px',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s',
   },
   
-  // Hero - TELA CHEIA
+  // HERO
   hero: {
+    position: 'relative',
     width: '100%',
-    margin: '0',
-    backgroundColor: '#A8E6CF', 
+    minHeight: '600px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '0',
+    overflow: 'hidden',
   },
   heroBannerImage: {
-    width: '100%', 
+    width: '100%',
     height: 'auto',
     display: 'block',
     objectFit: 'cover',
   },
+  heroOverlay: { // ✅ NOVO
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'rgba(26, 35, 50, 0.85)',
+    padding: '50px 60px',
+    borderRadius: '20px',
+    backdropFilter: 'blur(10px)',
+    boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+  },
+  heroTitle: {
+    fontSize: '3rem',
+    fontWeight: '800',
+    margin: '0 0 15px 0',
+    color: '#F4D03F',
+  },
+  heroSubtitle: {
+    fontSize: '1.3rem',
+    margin: '0 0 30px 0',
+    color: 'white',
+  },
+  heroCTA: { // ✅ NOVO
+    backgroundColor: '#F4D03F',
+    color: '#1A2332',
+    border: 'none',
+    padding: '16px 40px',
+    borderRadius: '12px',
+    fontSize: '1.2rem',
+    fontWeight: '700',
+    cursor: 'pointer',
+    boxShadow: '0 6px 20px rgba(244, 208, 63, 0.4)',
+    transition: 'all 0.3s',
+  },
   
-  // Secao de Beneficios - LOJISTAS (fundo claro)
+  // BENEFICIOS
   beneficiosSection: {
-    width: '100%',
+    backgroundColor: '#fff',
+    padding: '60px 20px',
+  },
+  beneficiosSectionAlt: {
     backgroundColor: '#f8f9fa',
     padding: '60px 20px',
-    margin: '0',
   },
-  
-  // Secao de Beneficios - CONSULTORES (fundo branco)
-  beneficiosSectionAlt: {
-    width: '100%',
-    backgroundColor: '#ffffff',
-    padding: '60px 20px',
-    margin: '0',
-  },
-  
   beneficiosWrapper: {
-    maxWidth: '1000px',
+    maxWidth: '1200px',
     margin: '0 auto',
-    display: 'flex',
-    justifyContent: 'center',
   },
-  
   beneficiosImage: {
     width: '100%',
-    maxWidth: '900px',
     height: 'auto',
-    display: 'block',
-    borderRadius: '12px',
-    boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
-    transition: 'transform 0.3s ease',
+    borderRadius: '15px',
   },
-
-  // Secao Padrao
+  
+  // SECTIONS
   section: {
     padding: '80px 20px',
     maxWidth: '1200px',
     margin: '0 auto',
-    textAlign: 'center',
   },
   sectionTitle: {
     fontSize: '2.5rem',
     fontWeight: '800',
+    textAlign: 'center',
     color: '#1A2332',
-    marginBottom: '15px',
+    marginBottom: '20px',
   },
   sectionSubtitle: {
-    fontSize: '1.1rem',
+    fontSize: '1.2rem',
+    textAlign: 'center',
     color: '#666',
     marginBottom: '50px',
   },
-
-  // Features (QUEM SOMOS)
+  
+  // FEATURES
   features: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
     gap: '20px',
-    marginTop: '40px',
   },
   featureCard: {
-    padding: '30px',
-    borderRadius: '15px',
+    padding: '25px',
+    borderRadius: '12px',
     boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
   },
   featureText: {
-    fontSize: '1.1rem',
-    color: '#2C3E50',
-    margin: 0,
-    textAlign: 'center',
-    fontWeight: '500',
+    fontSize: '1rem',
+    color: '#1A2332',
+    lineHeight: '1.6',
   },
   
-  // Reasons (POR QUE FAZEMOS)
+  // REASONS
   reasons: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
-    marginTop: '40px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '20px',
   },
   reasonCard: {
-    padding: '25px 40px',
-    borderRadius: '15px',
-    color: 'white',
+    padding: '25px',
     boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-    transition: 'transform 0.3s',
   },
   reasonText: {
-    fontSize: '1.05rem',
-    margin: 0,
+    fontSize: '1rem',
+    color: 'white',
+    lineHeight: '1.6',
   },
   
-  // Offerings (O QUE OFERECEMOS)
+  // OFFERINGS
   offerings: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
     gap: '30px',
-    marginTop: '50px',
   },
   offeringCard: {
+    backgroundColor: 'white',
     padding: '30px',
     borderRadius: '15px',
-    border: '4px solid',
-    backgroundColor: 'white',
-    textAlign: 'center',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+    border: '3px solid',
+    boxShadow: '0 6px 20px rgba(0,0,0,0.1)',
   },
   offeringIcon: {
-    marginBottom: '20px',
+    marginBottom: '15px',
   },
   offeringTitle: {
-    fontSize: '1.8rem',
-    fontWeight: 'bold',
-    color: '#2C5AA0',
-    marginBottom: '20px',
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    marginBottom: '15px',
+    color: '#1A2332',
   },
   offeringList: {
     listStyle: 'none',
     padding: 0,
-    textAlign: 'left',
   },
   offeringItem: {
-    fontSize: '1rem',
-    marginBottom: '12px',
-    color: '#2C3E50',
     display: 'flex',
     alignItems: 'center',
-  },
-  
-  // Plans (NOSSOS PLANOS)
-  planContainer: {
-    marginBottom: '60px',
-  },
-  planCategory: {
-    fontSize: '1.8rem',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#2C5AA0',
-    marginBottom: '30px',
-  },
-  
-  // Planos R$ 0,00 (CLIENTE & CONSULTOR)
-  freePlanCard: {
-    maxWidth: '500px',
-    margin: '0 auto',
-    padding: '40px',
-    borderRadius: '20px',
-    textAlign: 'center',
-    color: 'white',
-    boxShadow: '0 8px 20px rgba(0,0,0,0.15)',
-  },
-  planPrice: {
-    fontSize: '3rem',
-    fontWeight: 'bold',
-    margin: '0 0 10px 0',
-  },
-  planCTA: {
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-  },
-  planIcon: {
-    fontSize: '5rem',
-    margin: '20px 0',
-  },
-  planDescription: {
-    fontSize: '1rem',
     marginBottom: '10px',
+    fontSize: '0.95rem',
+    color: '#666',
   },
-  planNote: {
-    fontSize: '0.85rem',
-    color: '#F7DC6F',
-    marginBottom: '20px',
-    fontWeight: 'bold',
-  },
-  downloadButton: {
-    padding: '15px 30px',
-    backgroundColor: '#F7DC6F',
-    color: '#2C3E50',
-    border: 'none',
-    borderRadius: '30px',
-    fontSize: '1rem',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    marginTop: '10px',
-  },
-  signupButton: {
-    padding: '15px 30px',
-    backgroundColor: '#F7DC6F',
-    color: '#2C3E50',
-    border: 'none',
-    borderRadius: '30px',
-    fontSize: '1rem',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    marginTop: '10px',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '10px',
-  },
-
-  // Plan Cards (Lojistas)
-  lojistasPlans: {
+  
+  // PLANS
+  plansGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
     gap: '30px',
-    alignItems: 'stretch',
+    maxWidth: '1100px',
+    margin: '0 auto',
   },
   planCard: {
-    padding: '35px 25px',
+    padding: '40px 30px',
     borderRadius: '20px',
     color: 'white',
-    backgroundColor: '#2C3E50',
-    transition: 'all 0.3s',
-    border: '3px solid transparent',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
     position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    textAlign: 'left',
+    transition: 'all 0.3s',
   },
   tag: {
     position: 'absolute',
-    top: '0',
-    right: '0',
+    top: '-15px',
+    right: '20px',
     backgroundColor: '#F4D03F',
     color: '#1A2332',
-    padding: '5px 15px',
+    padding: '6px 16px',
+    borderRadius: '20px',
     fontSize: '0.75rem',
-    fontWeight: 'bold',
-    borderRadius: '0 17px 0 17px',
+    fontWeight: '700',
   },
   planName: {
-    fontSize: '1.6rem',
-    fontWeight: 'bold',
-    marginBottom: '10px',
-    color: '#F4D03F',
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    marginBottom: '15px',
   },
   planPriceValue: {
-    fontSize: '2.5rem',
-    fontWeight: 'bold',
-    margin: '0',
-    color: 'white',
+    fontSize: '3rem',
+    fontWeight: '800',
+    margin: '10px 0',
   },
   planPeriod: {
-    fontSize: '0.9rem',
-    marginBottom: '20px',
-    color: '#BDC3C7',
+    fontSize: '1rem',
+    opacity: 0.8,
+    marginBottom: '15px',
   },
   planDesc: {
     fontSize: '0.95rem',
     marginBottom: '25px',
-    lineHeight: 1.5,
-    color: '#ECF0F1',
+    opacity: 0.9,
   },
   planFeatures: {
     listStyle: 'none',
     padding: 0,
     marginBottom: '30px',
-    flexGrow: 1,
   },
   planFeature: {
-    fontSize: '0.9rem',
-    marginBottom: '12px',
     display: 'flex',
     alignItems: 'center',
-    color: '#ECF0F1',
+    marginBottom: '12px',
+    fontSize: '0.95rem',
   },
   planButton: {
     width: '100%',
     padding: '15px',
     border: 'none',
-    borderRadius: '8px',
-    fontSize: '1.1rem',
-    fontWeight: 'bold',
+    borderRadius: '10px',
+    fontSize: '1rem',
+    fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s',
-    marginTop: '20px',
-  },
-
-  // PACOTES ADICIONAIS
-  adicionaisSection: {
-    marginTop: '60px',
-  },
-  adicionaisCard: {
-    backgroundColor: 'white',
-    borderRadius: '20px',
-    padding: '40px',
-    boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
-    display: 'flex',
-    gap: '30px',
-    alignItems: 'flex-start',
-    border: '3px solid #F4D03F',
-  },
-  adicionaisIcon: {
-    width: '70px',
-    height: '70px',
-    backgroundColor: '#1A2332',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  adicionaisContent: {
-    flex: 1,
-    textAlign: 'left',
-  },
-  adicionaisTitulo: {
-    fontSize: '1.6rem',
-    fontWeight: 'bold',
-    color: '#1A2332',
-    marginBottom: '15px',
-    marginTop: 0,
-  },
-  adicionaisTexto: {
-    fontSize: '1rem',
-    color: '#666',
-    marginBottom: '20px',
-    lineHeight: 1.6,
-  },
-  adicionaisLista: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '15px',
-    marginBottom: '25px',
-  },
-  adicionalItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    padding: '12px 15px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '10px',
-    fontSize: '0.95rem',
-  },
-  adicionaisNota: {
-    fontSize: '0.95rem',
-    color: '#2C5AA0',
-    backgroundColor: '#e3f2fd',
-    padding: '15px 20px',
-    borderRadius: '10px',
-    marginTop: '10px',
-    marginBottom: 0,
   },
   
-  // Footer
+  // FOOTER
   footer: {
     backgroundColor: '#1A2332',
     color: 'white',
@@ -866,42 +680,52 @@ const styles = {
     maxWidth: '1200px',
     margin: '0 auto',
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
     gap: '40px',
     marginBottom: '40px',
   },
-  footerColumn: {
+  footerSection: {
     display: 'flex',
     flexDirection: 'column',
+    gap: '15px',
   },
   footerTitle: {
     fontSize: '1.2rem',
-    fontWeight: 'bold',
-    marginBottom: '20px',
+    fontWeight: '700',
     color: '#F4D03F',
+    marginBottom: '10px',
   },
   footerText: {
     fontSize: '0.95rem',
-    lineHeight: 1.6,
-    color: '#BDC3C7',
+    lineHeight: '1.6',
+    opacity: 0.8,
   },
   footerLink: {
-    color: '#BDC3C7',
+    color: 'white',
     textDecoration: 'none',
-    marginBottom: '10px',
     fontSize: '0.95rem',
-    cursor: 'pointer',
+    opacity: 0.8,
+    transition: 'opacity 0.3s',
+  },
+  footerButton: {
+    backgroundColor: '#F4D03F',
+    color: '#1A2332',
     border: 'none',
-    background: 'none',
-    padding: 0,
-    textAlign: 'left',
+    padding: '12px 24px',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '700',
+    cursor: 'pointer',
+    width: 'fit-content',
   },
   footerBottom: {
-    textAlign: 'center',
+    borderTop: '1px solid rgba(255,255,255,0.1)',
     paddingTop: '20px',
-    borderTop: '1px solid #34495E',
-    color: '#95A5A6',
+    textAlign: 'center',
+  },
+  footerCopy: {
     fontSize: '0.9rem',
+    opacity: 0.6,
   },
 };
 

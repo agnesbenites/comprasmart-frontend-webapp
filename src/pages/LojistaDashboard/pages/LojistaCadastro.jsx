@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from '@supabase/supabase-js';
+import { useEmailBoasVindas } from "../../../services/emailService";
 
 // Inicializar Supabase
 const supabase = createClient(
@@ -17,6 +18,9 @@ const LojistaCadastro = () => {
   });
   const [loading, setLoading] = useState(false);
   const [lojistaId, setLojistaId] = useState(null);
+  const [lojistaInfo, setLojistaInfo] = useState(null); // ✅ NOVO
+  
+  const { enviar: enviarEmailBoasVindas } = useEmailBoasVindas(); // ✅ NOVO
 
   // Buscar ID do lojista logado
   useEffect(() => {
@@ -26,17 +30,28 @@ const LojistaCadastro = () => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
-          // Buscar o lojista no banco pelo email
+          // ✅ ATUALIZADO - Buscar mais informações
           const { data, error } = await supabase
             .from('usuarios')
-            .select('id, periodo_pagamento_comissao')
+            .select('id, nome, email, periodo_pagamento_comissao')
             .eq('email', user.email)
             .eq('tipo', 'lojista')
             .single();
 
-          if (error) throw error;
+          if (error) {
+            console.warn('Erro ao buscar lojista:', error);
+            return;
+          }
 
           setLojistaId(data.id);
+          
+          // ✅ NOVO - Salvar informações completas
+          setLojistaInfo({
+            id: data.id,
+            nome: data.nome || user.email.split('@')[0],
+            email: data.email,
+            plano: 'basic', // Pode buscar de lojas_corrigida se necessário
+          });
           
           // Carregar período salvo anteriormente
           if (data.periodo_pagamento_comissao) {
@@ -94,6 +109,36 @@ const LojistaCadastro = () => {
     }
   };
 
+  // ✅ NOVA FUNÇÃO - Enviar e-mail de boas-vindas
+  const handleEnviarEmailBoasVindas = async () => {
+    if (!lojistaInfo) {
+      alert('❌ Informações do lojista não carregadas');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const resultado = await enviarEmailBoasVindas({
+        nome: lojistaInfo.nome || 'Lojista',
+        email: lojistaInfo.email,
+        plano: lojistaInfo.plano || 'basic',
+        nomeEmpresa: lojistaInfo.nome || 'Sua Empresa',
+      });
+
+      if (resultado.success) {
+        alert('✅ E-mail de boas-vindas enviado com sucesso!\n\nVerifique sua caixa de entrada.');
+      } else {
+        alert(`⚠️ E-mail registrado mas ainda não foi enviado.\n\nMotivo: ${resultado.message}\n\nSerá enviado em breve automaticamente.`);
+      }
+    } catch (error) {
+      console.error('Erro ao enviar e-mail:', error);
+      alert('❌ Erro ao enviar e-mail: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleIntegracaoERP = () => {
     alert("Redirecionando para configuracao de ERP...");
   };
@@ -126,6 +171,24 @@ const LojistaCadastro = () => {
     <div style={styles.container}>
       <h1 style={styles.title}>⚙️ Configuracoes Avancadas</h1>
       <p style={styles.subtitle}>Gerencie integracoes e configuracoes tecnicas da sua loja</p>
+
+      {/* ✅ NOVO - Informações do Lojista */}
+      {lojistaInfo && (
+        <div style={styles.infoBar}>
+          <span>👤 <strong>{lojistaInfo.nome}</strong></span>
+          <span>📧 {lojistaInfo.email}</span>
+          <span style={{
+            backgroundColor: '#3b82f6',
+            color: 'white',
+            padding: '4px 12px',
+            borderRadius: '12px',
+            fontSize: '0.85rem',
+            fontWeight: '600'
+          }}>
+            {lojistaInfo.plano?.toUpperCase() || 'BASIC'}
+          </span>
+        </div>
+      )}
 
       <div style={styles.grid}>
         {/* ========== PERÍODO DE PAGAMENTO ========== */}
@@ -180,7 +243,43 @@ const LojistaCadastro = () => {
           </button>
         </div>
 
-        {/* Resto dos cards... (mantém igual) */}
+        {/* ✅ NOVO CARD - E-mail de Boas-Vindas */}
+        <div style={styles.card}>
+          <div style={styles.cardHeader}>
+            <h3 style={styles.cardTitle}>📧 Manual de Uso</h3>
+            <span style={{...styles.statusBadge, backgroundColor: '#fef3c7', color: '#92400e'}}>
+              Por E-mail
+            </span>
+          </div>
+          <p style={styles.cardDescription}>
+            Receba o guia completo de uso da plataforma personalizado para o seu plano.
+          </p>
+
+          <div style={styles.infoBox}>
+            <strong>📨 O que você receberá:</strong>
+            <ul style={styles.infoList}>
+              <li>Manual personalizado para o Plano <strong>{lojistaInfo?.plano?.toUpperCase() || 'BASIC'}</strong></li>
+              <li>3 passos essenciais para começar</li>
+              <li>Dicas de ROI e liquidez de estoque</li>
+              <li>Links diretos para funcionalidades</li>
+              <li>Suporte prioritário por e-mail</li>
+            </ul>
+          </div>
+
+          <button 
+            style={{
+              ...styles.primaryButton,
+              backgroundColor: '#10b981',
+              opacity: loading || !lojistaInfo ? 0.6 : 1,
+              cursor: loading || !lojistaInfo ? 'not-allowed' : 'pointer'
+            }}
+            onClick={handleEnviarEmailBoasVindas}
+            disabled={loading || !lojistaInfo}
+          >
+            {loading ? '📤 Enviando...' : '📧 Receber Manual por E-mail'}
+          </button>
+        </div>
+
         {/* Integracao com ERP */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
@@ -286,6 +385,9 @@ const LojistaCadastro = () => {
             <h3 style={styles.cardTitle}>🗄️ Backup</h3>
             <span style={styles.statusBadge}>Automatico</span>
           </div>
+          <p style={styles.cardDescription}>
+            Exporte todos os dados da sua loja para backup externo.
+          </p>
           <button 
             style={styles.primaryButton}
             onClick={handleExportarBackup}
@@ -298,7 +400,7 @@ const LojistaCadastro = () => {
   );
 };
 
-// Estilos (mantém os mesmos)
+// Estilos
 const styles = {
   container: {
     padding: "30px",
@@ -314,7 +416,18 @@ const styles = {
   subtitle: {
     color: "#666",
     fontSize: "1.1rem",
-    marginBottom: "30px",
+    marginBottom: "20px",
+  },
+  infoBar: { // ✅ NOVO
+    display: 'flex',
+    gap: '20px',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: '15px 25px',
+    borderRadius: '12px',
+    marginBottom: '25px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+    fontSize: '0.95rem',
   },
   grid: {
     display: "grid",
@@ -453,6 +566,7 @@ const styles = {
     fontWeight: "600",
     cursor: "pointer",
     width: "100%",
+    transition: 'all 0.2s',
   },
   secondaryButton: {
     backgroundColor: "#6c757d",
