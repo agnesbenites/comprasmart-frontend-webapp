@@ -94,6 +94,12 @@ const Landingpage = () => {
       <header style={styles.header}>
         <div style={styles.headerContent}>
           <div style={styles.logo}>
+            {/* ✅ LOGO */}
+            <img 
+              src="/img/logo.png" 
+              alt="Compra Smart Logo" 
+              style={styles.logoImage}
+            />
             <h1 style={styles.logoText}>
               COMPRA <span style={styles.logoSmart}>SMART</span>
             </h1>
@@ -105,12 +111,21 @@ const Landingpage = () => {
             <a href="/contato" style={styles.navLink}>Contato</a>
           </nav>
 
-          <button 
-            onClick={() => navigate('/entrar')}
-            style={styles.loginButton}
-          >
-            LOGIN
-          </button>
+          {/* ✅ BOTÕES */}
+          <div style={styles.headerButtons}>
+            <button 
+              onClick={() => navigate('/onboarding')}
+              style={styles.onboardingButton}
+            >
+              🚀 COMEÇAR AGORA
+            </button>
+            <button 
+              onClick={() => navigate('/entrar')}
+              style={styles.loginButton}
+            >
+              LOGIN
+            </button>
+          </div>
         </div>
       </header>
 
@@ -466,7 +481,7 @@ const styles = {
   // Header/Navbar
   header: {
     backgroundColor: '#1A2332',
-    padding: '15px 20px',
+    padding: '22px 20px', // ✅ AUMENTADO
     boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
     position: 'sticky',
     top: 0,
@@ -479,9 +494,17 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  logo: {},
+  logo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+  },
+  logoImage: { // ✅ NOVO
+    height: '48px',
+    width: 'auto',
+  },
   logoText: {
-    fontSize: '1.5rem',
+    fontSize: '2rem', // ✅ AUMENTADO de 1.5rem
     fontWeight: '800',
     color: 'white',
     margin: 0,
@@ -492,24 +515,43 @@ const styles = {
   },
   nav: {
     display: 'flex',
-    gap: '25px',
+    gap: '30px',
     alignItems: 'center',
   },
   navLink: {
     color: '#E0E0E0',
     textDecoration: 'none',
-    fontSize: '0.95rem',
+    fontSize: '1.05rem', // ✅ AUMENTADO de 0.95rem
     fontWeight: '500',
     transition: 'color 0.2s',
   },
-  loginButton: {
+  headerButtons: { // ✅ NOVO
+    display: 'flex',
+    gap: '12px',
+    alignItems: 'center',
+  },
+  onboardingButton: { // ✅ NOVO
     backgroundColor: '#F4D03F',
     color: '#1A2332',
-    padding: '10px 20px',
+    padding: '12px 28px',
     borderRadius: '8px',
     border: 'none',
-    fontWeight: 'bold',
+    fontSize: '1.05rem',
+    fontWeight: '700',
     cursor: 'pointer',
+    boxShadow: '0 4px 12px rgba(244, 208, 63, 0.3)',
+    transition: 'all 0.3s',
+  },
+  loginButton: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    border: '2px solid white',
+    padding: '10px 24px',
+    borderRadius: '8px',
+    fontWeight: '600',
+    fontSize: '1.05rem', // ✅ AUMENTADO
+    cursor: 'pointer',
+    transition: 'all 0.3s',
   },
   
   // Hero - TELA CHEIA

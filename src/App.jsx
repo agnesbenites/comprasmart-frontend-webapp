@@ -12,6 +12,7 @@ import AwaitingApproval from "./pages/AwaitingApproval";
 import ApprovalsPage from "./pages/ApprovalsPage";
 import AplicativoConfirmacao from "./pages/AplicativoConfirmacao";
 import MarketingOnboarding from "./pages/Onboarding/MarketingOnboarding";
+import PlanQuiz from "./pages/Quiz/PlanQuiz";
 
 import RegisterPage from "./pages/RegisterPage";
 import LojistaRegisterPage from "./pages/LojistaDashboard/pages/LojistaRegisterPage";
@@ -98,6 +99,9 @@ function App() {
         
         {/* Onboarding é uma rota separada */}
         <Route path="/onboarding" element={<MarketingOnboarding />} />
+        
+        {/* Quiz - Descubra Seu Plano Ideal */}
+        <Route path="/quiz" element={<PlanQuiz />} />
         
         {/* Cadastro */}
         <Route path="/cadastro/lojista" element={<LojistaRegisterPage />} />

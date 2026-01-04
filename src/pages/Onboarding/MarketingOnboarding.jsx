@@ -1,11 +1,11 @@
 // src/pages/Onboarding/MarketingOnboarding.jsx
-// FLUXO CORRETO: Slides → Comparativo de Planos → Cadastro
+// VERSÃO FINAL CORRETA - Planos + Addons
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const MarketingOnboarding = () => {
-  const [etapa, setEtapa] = useState('slides'); // 'slides' ou 'planos'
+  const [etapa, setEtapa] = useState('slides'); // 'slides', 'planos', 'addons'
   const [slideAtual, setSlideAtual] = useState(0);
   const [faturamentoEstimado, setFaturamentoEstimado] = useState('');
   const [planoSelecionado, setPlanoSelecionado] = useState(null);
@@ -80,18 +80,23 @@ const MarketingOnboarding = () => {
     }
   ];
 
+  // ✅ PLANOS CORRETOS
   const planos = [
     {
       id: 'basic',
       nome: 'BÁSICO',
-      preco: 50,
+      preco: 99.90,
       descricao: 'Ideal para pequenos negócios',
       features: [
-        'Até 100 produtos',
-        '10 consultores disponíveis',
-        'Dashboard básico',
-        'Suporte por email',
-        'Edição de produtos: 24h de trava'
+        '📦 Até 100 produtos',
+        '👥 10 consultores disponíveis',
+        '🏢 1 Filial + Matriz',
+        '👤 5 vendedores',
+        '⏰ Edição após 24h',
+        '💬 Texto, áudio e imagens',
+        '📊 Analytics mensal',
+        '📍 Marketing: 5km',
+        '📁 Atualização CSV'
       ],
       cor: '#1A2332',
       stripeUrl: 'https://buy.stripe.com/00w7sL2z6ceE11cd8ZgQE01',
@@ -99,16 +104,19 @@ const MarketingOnboarding = () => {
     {
       id: 'pro',
       nome: 'PRO',
-      preco: 150,
+      preco: 199.90,
       descricao: 'Para negócios em crescimento',
       features: [
-        'Até 1.000 produtos',
-        '30 consultores disponíveis',
-        'SLA de 5 minutos (Transbordo)',
-        'Dashboard avançado',
-        'Suporte prioritário',
-        'Integração ERP semanal',
-        'Edição de produtos: 12h de trava'
+        '📦 Até 500 produtos',
+        '👥 30 consultores disponíveis',
+        '🏢 5 Filiais + Matriz',
+        '👤 20 vendedores',
+        '⏰ Edição após 12h',
+        '💬 Texto, áudio, imagens e vídeo (15s)',
+        '📞 6 videochamadas/mês',
+        '🔄 Integração ERP mensal',
+        '📊 Analytics semanal e mensal',
+        '📍 Marketing: 10km'
       ],
       cor: '#2C3E50',
       destaque: true,
@@ -117,22 +125,72 @@ const MarketingOnboarding = () => {
     {
       id: 'enterprise',
       nome: 'ENTERPRISE',
-      preco: 360,
+      preco: 499.00,
       descricao: 'Solução completa para grandes redes',
       features: [
-        'Produtos ilimitados',
-        'Consultores ilimitados',
-        'BI de Liquidez de Estoque',
-        'Missões de venda automáticas',
-        'Dashboard ROI completo',
-        'Suporte VIP 24/7',
-        'API personalizada',
-        'Multi-filiais',
-        'Integração real-time',
-        'Edição de produtos: 4h de trava'
+        '📦 Produtos ILIMITADOS',
+        '👥 80 consultores disponíveis',
+        '🏢 29 Filiais + Matriz',
+        '👤 60 vendedores',
+        '⏰ Edição após 4h',
+        '💬 Texto, áudio, imagens e vídeo (15s)',
+        '📞 Videochamadas ILIMITADAS',
+        '🔄 Integração ERP automática',
+        '📊 Analytics diário e mensal',
+        '📍 Marketing: 20km',
+        '🤖 BI de Liquidez de Estoque'
       ],
       cor: '#34495E',
-      stripeUrl: 'https://buy.stripe.com/3cI3cv2z6fqQaBM8SJgQE03',
+      stripeUrl: 'https://buy.stripe.com/6oU28r5LiemMaBM8SJgQE0a',
+    }
+  ];
+
+  // ✅ ADDONS CORRETOS
+  const addons = [
+    {
+      id: 'pacote-basic',
+      nome: 'Pacote Basic+',
+      preco: 49.90,
+      descricao: '+1 Filial, +2 Vendedores, +20 Produtos',
+      disponivel: ['basic'],
+      stripeUrl: 'https://buy.stripe.com/aFa28rehOdiIfW60mdgQE04',
+      icon: '📦'
+    },
+    {
+      id: 'produtos-adicionais',
+      nome: 'Produtos Adicionais',
+      preco: 'Sob consulta',
+      descricao: 'Pacotes extras de produtos',
+      disponivel: ['basic', 'pro'],
+      stripeUrl: 'https://buy.stripe.com/eVqeVd2z66Uk5hs9WNgQE09',
+      icon: '📦'
+    },
+    {
+      id: 'filial-adicional',
+      nome: 'Filial Adicional',
+      preco: 'Sob consulta',
+      descricao: 'Expanda para mais localidades',
+      disponivel: ['basic', 'pro', 'enterprise'],
+      stripeUrl: 'https://buy.stripe.com/7sY28r6PmguUcJUglbgQE06',
+      icon: '🏢'
+    },
+    {
+      id: 'vendedor-adicional',
+      nome: 'Vendedor Adicional',
+      preco: 'Sob consulta',
+      descricao: 'Aumente seu time de vendas',
+      disponivel: ['basic', 'pro', 'enterprise'],
+      stripeUrl: 'https://buy.stripe.com/6oU4gz6Pm1A0cJUed3gQE05',
+      icon: '👤'
+    },
+    {
+      id: 'modulo-erp',
+      nome: 'Módulo ERP',
+      preco: 'Sob consulta',
+      descricao: 'Integração automática com seu ERP',
+      disponivel: ['basic', 'pro'], // Enterprise já tem
+      stripeUrl: 'https://buy.stripe.com/3cI9ATc9G7YodNYfh7gQE08',
+      icon: '🔄'
     }
   ];
 
@@ -142,7 +200,6 @@ const MarketingOnboarding = () => {
     if (slideAtual < slides.length - 1) {
       setSlideAtual(slideAtual + 1);
     } else {
-      // ✅ DEPOIS DO ÚLTIMO SLIDE → VAI PARA COMPARATIVO DE PLANOS
       setEtapa('planos');
     }
   };
@@ -154,13 +211,13 @@ const MarketingOnboarding = () => {
   };
 
   const selecionarPlano = (plano) => {
-    setPlanoSelecionado(plano.id);
-    
-    // Salvar no localStorage
-    localStorage.setItem('planoEscolhido', plano.id);
+    setPlanoSelecionado(plano);
+    setEtapa('addons');
+  };
+
+  const finalizarEscolha = () => {
+    localStorage.setItem('planoEscolhido', planoSelecionado.id);
     localStorage.setItem('faturamentoEstimado', faturamentoEstimado);
-    
-    // ✅ IR PARA CADASTRO
     navigate('/cadastro/lojista');
   };
 
@@ -169,10 +226,17 @@ const MarketingOnboarding = () => {
     setSlideAtual(slides.length - 1);
   };
 
+  const voltarParaPlanos = () => {
+    setEtapa('planos');
+  };
+
+  const voltarParaHome = () => {
+    navigate('/');
+  };
+
   const calcularROI = () => {
     const faturamento = parseFloat(faturamentoEstimado.replace(/\D/g, '')) || 0;
     const receitaRecuperada = faturamento * 0.3;
-
     return {
       receitaRecuperada,
       roiBasic: (receitaRecuperada / 50).toFixed(1),
@@ -202,6 +266,11 @@ const MarketingOnboarding = () => {
         ...styles.container,
         background: `linear-gradient(135deg, ${slideAtualData.color}15 0%, ${slideAtualData.color}30 100%)`,
       }}>
+        {/* Botão Voltar Home */}
+        <button onClick={voltarParaHome} style={styles.voltarHome}>
+          ← Voltar para Home
+        </button>
+
         {/* Barra de progresso */}
         <div style={styles.progressContainer}>
           <div style={styles.progressBar}>
@@ -219,7 +288,6 @@ const MarketingOnboarding = () => {
 
         {/* Conteúdo principal */}
         <div style={styles.content}>
-          {/* Badge */}
           <div style={{
             ...styles.badge,
             backgroundColor: slideAtualData.color,
@@ -227,19 +295,14 @@ const MarketingOnboarding = () => {
             {slideAtualData.badge}
           </div>
 
-          {/* Ícone */}
           <div style={styles.iconContainer}>
             <span style={styles.icon}>{slideAtualData.icon}</span>
           </div>
 
-          {/* Título */}
           <h1 style={styles.title}>{slideAtualData.title}</h1>
           <h2 style={styles.subtitle}>{slideAtualData.subtitle}</h2>
-
-          {/* Descrição */}
           <p style={styles.description}>{slideAtualData.description}</p>
 
-          {/* Benefits ou Calculadora */}
           {slideAtualData.mostrarCalculadora ? (
             <div style={styles.calculadoraContainer}>
               <div style={styles.inputGroup}>
@@ -271,7 +334,6 @@ const MarketingOnboarding = () => {
             </ul>
           )}
 
-          {/* Navegação */}
           <div style={styles.navigation}>
             {slideAtual > 0 && (
               <button onClick={slideAnterior} style={styles.buttonSecondary}>
@@ -290,17 +352,14 @@ const MarketingOnboarding = () => {
             </button>
           </div>
 
-          {/* Contador de slides */}
           <div style={styles.slideCounter}>
             {slideAtual + 1} / {slides.length}
           </div>
 
-          {/* Botão pular */}
           <button onClick={() => setEtapa('planos')} style={styles.skipButton}>
             Pular para escolha de planos →
           </button>
 
-          {/* Tagline */}
           <div style={styles.tagline}>
             🚚 Profissionais Sob Demanda Para Suas Vendas
           </div>
@@ -310,84 +369,149 @@ const MarketingOnboarding = () => {
   }
 
   // ========== RENDERIZAÇÃO DO COMPARATIVO DE PLANOS ==========
-  return (
-    <div style={styles.planosContainer}>
-      <div style={styles.planosHeader}>
-        <button onClick={voltarParaSlides} style={styles.backButton}>
-          ← Voltar para apresentação
+  if (etapa === 'planos') {
+    return (
+      <div style={styles.planosContainer}>
+        <button onClick={voltarParaHome} style={styles.voltarHome}>
+          ← Voltar para Home
         </button>
-        
-        <h1 style={styles.planosTitle}>Escolha Seu Plano</h1>
-        <p style={styles.planosSubtitle}>
-          Planos flexíveis para lojas de todos os tamanhos
-        </p>
 
-        {faturamentoEstimado && (
-          <div style={styles.roiInfo}>
-            <p style={styles.roiInfoTexto}>
-              💰 Com faturamento de <strong>{formatarMoeda(parseFloat(faturamentoEstimado))}/mês</strong>,
-              você pode recuperar até <strong>{formatarMoeda(roi.receitaRecuperada)}</strong> em vendas perdidas!
-            </p>
-          </div>
-        )}
-      </div>
+        <div style={styles.planosHeader}>
+          <button onClick={voltarParaSlides} style={styles.backButton}>
+            ← Voltar para apresentação
+          </button>
+          
+          <h1 style={styles.planosTitle}>Escolha Seu Plano</h1>
+          <p style={styles.planosSubtitle}>
+            Planos flexíveis para lojas de todos os tamanhos
+          </p>
 
-      <div style={styles.planosGrid}>
-        {planos.map((plano) => (
-          <div
-            key={plano.id}
-            style={{
-              ...styles.planoCard,
-              backgroundColor: plano.cor,
-              transform: plano.destaque ? 'scale(1.05)' : 'scale(1)',
-              border: plano.destaque ? '3px solid #F4D03F' : 'none',
-            }}
-          >
-            {plano.destaque && <div style={styles.planoTag}>MAIS POPULAR</div>}
-
-            <h3 style={styles.planoNome}>{plano.nome}</h3>
-            <div style={styles.planoPreco}>
-              <span style={styles.planoPrecoValor}>R$ {plano.preco}</span>
-              <span style={styles.planoPrecoPeriodo}>/mês</span>
+          {faturamentoEstimado && (
+            <div style={styles.roiInfo}>
+              <p style={styles.roiInfoTexto}>
+                💰 Com faturamento de <strong>{formatarMoeda(parseFloat(faturamentoEstimado))}/mês</strong>,
+                você pode recuperar até <strong>{formatarMoeda(roi.receitaRecuperada)}</strong> em vendas perdidas!
+              </p>
             </div>
-            <p style={styles.planoDescricao}>{plano.descricao}</p>
+          )}
+        </div>
 
-            {faturamentoEstimado && (
-              <div style={styles.planoROI}>
-                <div style={styles.planoROIValor}>
-                  ROI: {plano.id === 'basic' ? roi.roiBasic : plano.id === 'pro' ? roi.roiPro : roi.roiEnterprise}x
-                </div>
-                <div style={styles.planoROITexto}>
-                  Retorno sobre investimento
-                </div>
-              </div>
-            )}
-
-            <ul style={styles.planoFeatures}>
-              {plano.features.map((feature, idx) => (
-                <li key={idx} style={styles.planoFeature}>
-                  ✅ {feature}
-                </li>
-              ))}
-            </ul>
-
-            <button
-              onClick={() => selecionarPlano(plano)}
+        <div style={styles.planosGrid}>
+          {planos.map((plano) => (
+            <div
+              key={plano.id}
               style={{
-                ...styles.planoButton,
-                backgroundColor: plano.destaque ? '#F4D03F' : '#5DADE2',
-                color: plano.destaque ? '#1A2332' : 'white',
+                ...styles.planoCard,
+                backgroundColor: plano.cor,
+                transform: plano.destaque ? 'scale(1.05)' : 'scale(1)',
+                border: plano.destaque ? '3px solid #F4D03F' : 'none',
               }}
             >
-              Escolher {plano.nome}
-            </button>
-          </div>
-        ))}
+              {plano.destaque && <div style={styles.planoTag}>MAIS POPULAR</div>}
+
+              <h3 style={styles.planoNome}>{plano.nome}</h3>
+              <div style={styles.planoPreco}>
+                <span style={styles.planoPrecoValor}>R$ {plano.preco}</span>
+                <span style={styles.planoPrecoPeriodo}>/mês</span>
+              </div>
+              <p style={styles.planoDescricao}>{plano.descricao}</p>
+
+              {faturamentoEstimado && (
+                <div style={styles.planoROI}>
+                  <div style={styles.planoROIValor}>
+                    ROI: {plano.id === 'basic' ? roi.roiBasic : plano.id === 'pro' ? roi.roiPro : roi.roiEnterprise}x
+                  </div>
+                  <div style={styles.planoROITexto}>
+                    Retorno sobre investimento
+                  </div>
+                </div>
+              )}
+
+              <ul style={styles.planoFeatures}>
+                {plano.features.map((feature, idx) => (
+                  <li key={idx} style={styles.planoFeature}>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={() => selecionarPlano(plano)}
+                style={{
+                  ...styles.planoButton,
+                  backgroundColor: plano.destaque ? '#F4D03F' : '#5DADE2',
+                  color: plano.destaque ? '#1A2332' : 'white',
+                }}
+              >
+                Escolher {plano.nome}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div style={styles.planosFooter}>
+          <p style={styles.planosFooterTexto}>
+            💳 Pagamento processado via Stripe • 🔒 100% seguro
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ========== RENDERIZAÇÃO DOS ADDONS ==========
+  return (
+    <div style={styles.addonsContainer}>
+      <button onClick={voltarParaHome} style={styles.voltarHome}>
+        ← Voltar para Home
+      </button>
+
+      <div style={styles.addonsHeader}>
+        <button onClick={voltarParaPlanos} style={styles.backButton}>
+          ← Voltar para planos
+        </button>
+        
+        <h1 style={styles.addonsTitle}>
+          Você escolheu: <span style={{color: '#F4D03F'}}>{planoSelecionado.nome}</span>
+        </h1>
+        <p style={styles.addonsSubtitle}>
+          Personalize seu plano com recursos adicionais
+        </p>
       </div>
 
-      <div style={styles.planosFooter}>
-        <p style={styles.planosFooterTexto}>
-          💳 Pagamento processado via Stripe • ✅ Cancele quando quiser • 🔒 100% seguro
+      <div style={styles.addonsGrid}>
+        {addons
+          .filter(addon => addon.disponivel.includes(planoSelecionado.id))
+          .map((addon) => (
+            <div key={addon.id} style={styles.addonCard}>
+              <div style={styles.addonIcon}>{addon.icon}</div>
+              <h3 style={styles.addonNome}>{addon.nome}</h3>
+              <div style={styles.addonPreco}>
+                {typeof addon.preco === 'number' 
+                  ? `R$ ${addon.preco.toFixed(2).replace('.', ',')}`
+                  : addon.preco
+                }
+              </div>
+              <p style={styles.addonDescricao}>{addon.descricao}</p>
+              
+              <a
+                href={addon.stripeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={styles.addonButton}
+              >
+                Adicionar
+              </a>
+            </div>
+          ))}
+      </div>
+
+      <div style={styles.finalizarContainer}>
+        <button onClick={finalizarEscolha} style={styles.finalizarButton}>
+          Continuar para Cadastro →
+        </button>
+        
+        <p style={styles.finalizarTexto}>
+          Você pode adicionar recursos extras a qualquer momento no dashboard
         </p>
       </div>
     </div>
@@ -396,7 +520,6 @@ const MarketingOnboarding = () => {
 
 // ========== ESTILOS ==========
 const styles = {
-  // ... (mantenho os estilos anteriores dos slides)
   container: {
     minHeight: '100vh',
     display: 'flex',
@@ -406,6 +529,20 @@ const styles = {
     padding: '20px',
     fontFamily: "'Inter', -apple-system, sans-serif",
     transition: 'background 0.6s ease-in-out',
+    position: 'relative',
+  },
+  
+  voltarHome: {
+    position: 'fixed',
+    top: '20px',
+    left: '20px',
+    backgroundColor: 'transparent',
+    border: 'none',
+    color: '#64748b',
+    fontSize: '1rem',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    zIndex: 1001,
   },
   
   progressContainer: {
@@ -439,6 +576,7 @@ const styles = {
     padding: '50px 40px',
     boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
+    marginTop: '60px',
   },
   
   badge: {
@@ -591,7 +729,7 @@ const styles = {
     fontStyle: 'italic',
   },
   
-  // ========== ESTILOS DOS PLANOS ==========
+  // PLANOS
   planosContainer: {
     minHeight: '100vh',
     backgroundColor: '#f8f9fa',
@@ -724,8 +862,8 @@ const styles = {
   },
   
   planoFeature: {
-    fontSize: '0.95rem',
-    marginBottom: '12px',
+    fontSize: '0.9rem',
+    marginBottom: '10px',
     lineHeight: '1.6',
   },
   
@@ -748,6 +886,116 @@ const styles = {
   },
   
   planosFooterTexto: {
+    fontSize: '0.95rem',
+    color: '#64748b',
+  },
+  
+  // ADDONS
+  addonsContainer: {
+    minHeight: '100vh',
+    backgroundColor: '#f8f9fa',
+    padding: '40px 20px',
+    fontFamily: "'Inter', sans-serif",
+  },
+  
+  addonsHeader: {
+    maxWidth: '1200px',
+    margin: '0 auto 50px',
+    textAlign: 'center',
+  },
+  
+  addonsTitle: {
+    fontSize: '2.5rem',
+    fontWeight: '800',
+    color: '#1e293b',
+    marginBottom: '15px',
+  },
+  
+  addonsSubtitle: {
+    fontSize: '1.2rem',
+    color: '#64748b',
+    marginBottom: '30px',
+  },
+  
+  addonsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+    gap: '25px',
+    maxWidth: '1200px',
+    margin: '0 auto 50px',
+  },
+  
+  addonCard: {
+    backgroundColor: 'white',
+    padding: '30px',
+    borderRadius: '16px',
+    boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+    textAlign: 'center',
+    border: '2px solid #e2e8f0',
+    transition: 'all 0.3s',
+  },
+  
+  addonIcon: {
+    fontSize: '3rem',
+    marginBottom: '15px',
+  },
+  
+  addonNome: {
+    fontSize: '1.3rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: '10px',
+  },
+  
+  addonPreco: {
+    fontSize: '1.8rem',
+    fontWeight: '800',
+    color: '#3b82f6',
+    marginBottom: '15px',
+  },
+  
+  addonDescricao: {
+    fontSize: '0.95rem',
+    color: '#64748b',
+    marginBottom: '20px',
+    lineHeight: '1.6',
+  },
+  
+  addonButton: {
+    display: 'inline-block',
+    width: '100%',
+    padding: '12px',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '1rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    transition: 'all 0.3s',
+  },
+  
+  finalizarContainer: {
+    textAlign: 'center',
+    maxWidth: '600px',
+    margin: '0 auto',
+  },
+  
+  finalizarButton: {
+    backgroundColor: '#F4D03F',
+    color: '#1A2332',
+    border: 'none',
+    padding: '18px 50px',
+    borderRadius: '12px',
+    fontSize: '1.2rem',
+    fontWeight: '800',
+    cursor: 'pointer',
+    boxShadow: '0 6px 20px rgba(244, 208, 63, 0.4)',
+    marginBottom: '20px',
+  },
+  
+  finalizarTexto: {
     fontSize: '0.95rem',
     color: '#64748b',
   },
