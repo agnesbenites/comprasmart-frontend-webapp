@@ -97,7 +97,7 @@ const Landingpage = () => {
               Entrar
             </button>
             <button onClick={() => navigate('/cadastro')} style={styles.navButton}>
-              Começar Grátis
+              Começar Agora
             </button>
           </nav>
         </div>
@@ -122,7 +122,7 @@ const Landingpage = () => {
                 style={styles.heroCTAPrimary}
               >
                 <FaRocket style={{marginRight: 8}} />
-                Começar Agora Grátis
+                Começar Agora
               </button>
               <button 
                 onClick={scrollToPlanos} 
@@ -156,7 +156,6 @@ const Landingpage = () => {
               alt="Consultora Vendendo Online" 
               style={styles.heroImage}
               onError={(e) => {
-                // Se não achar imagem, esconde o container
                 e.target.parentElement.style.display = 'none';
               }}
             />
@@ -230,7 +229,17 @@ const Landingpage = () => {
         </div>
       </section>
 
-      {/* BENEFÍCIOS */}
+      {/* BENEFÍCIOS - IMAGEM SOLICITADA */}
+      <section style={{...styles.section, textAlign: 'center'}}>
+        <h2 style={styles.sectionTitle}>Benefícios Lojistas e Consultores</h2>
+        <img 
+          src="/img/beneficios-lojistas-consultores.png" 
+          alt="Benefícios Lojistas e Consultores" 
+          style={{ width: '100%', maxWidth: '1000px', borderRadius: '15px', marginTop: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}
+        />
+      </section>
+
+      {/* BENEFÍCIOS (ÍCONES) */}
       <section id="beneficios" style={styles.benefitsSection}>
         <h2 style={styles.sectionTitle}>Por Que Escolher a Compra Smart?</h2>
         
@@ -289,11 +298,10 @@ const Landingpage = () => {
       <section id="planos" style={styles.plansSection}>
         <h2 style={styles.sectionTitle}>Escolha Seu Plano</h2>
         <p style={styles.sectionSubtitle}>
-          Comece grátis e evolua conforme sua loja cresce
+          Comece agora e evolua conforme sua loja cresce
         </p>
         
         <div style={styles.plansGrid}>
-          {/* PLANO BÁSICO */}
           <PlanCard 
             name="Básico"
             price="R$ 99,90"
@@ -311,7 +319,6 @@ const Landingpage = () => {
             onBuy={() => handleStripeCheckout(STRIPE_URLS.BASICO)}
           />
 
-          {/* PLANO PRO */}
           <PlanCard 
             name="Pro"
             price="R$ 199,90"
@@ -333,7 +340,6 @@ const Landingpage = () => {
             onBuy={() => handleStripeCheckout(STRIPE_URLS.PRO)}
           />
 
-          {/* PLANO ENTERPRISE */}
           <PlanCard 
             name="Enterprise"
             price="R$ 499,00"
@@ -358,44 +364,10 @@ const Landingpage = () => {
 
         <div style={styles.plansFooter}>
           <p style={styles.plansFooterText}>
-            🎁 <strong>30 dias grátis</strong> em todos os planos • 
+            🎁 <strong>Teste por 30 dias</strong> em todos os planos • 
             💳 Sem compromisso • 
             🚫 Cancele quando quiser
           </p>
-        </div>
-      </section>
-
-      {/* DEPOIMENTOS */}
-      <section style={styles.testimonialsSection}>
-        <h2 style={styles.sectionTitle}>O Que Dizem Nossos Clientes</h2>
-        
-        <div style={styles.testimonialsGrid}>
-          <div style={styles.testimonialCard}>
-            <p style={styles.testimonialText}>
-              "Aumentamos nossas vendas em 40% no primeiro mês! Os consultores são incríveis e trouxeram clientes que nunca chegariam até nossa loja física."
-            </p>
-            <div style={styles.testimonialAuthor}>
-              <strong>Maria Silva</strong> - Boutique Elegância
-            </div>
-          </div>
-
-          <div style={styles.testimonialCard}>
-            <p style={styles.testimonialText}>
-              "Como consultor, consigo trabalhar de casa e ganhar muito mais do que ganhava em loja. A plataforma é super fácil de usar!"
-            </p>
-            <div style={styles.testimonialAuthor}>
-              <strong>João Santos</strong> - Consultor Premium
-            </div>
-          </div>
-
-          <div style={styles.testimonialCard}>
-            <p style={styles.testimonialText}>
-              "Adorei poder comprar com atendimento personalizado sem sair de casa. A consultora me ajudou a escolher o produto perfeito!"
-            </p>
-            <div style={styles.testimonialAuthor}>
-              <strong>Ana Paula</strong> - Cliente Satisfeita
-            </div>
-          </div>
         </div>
       </section>
 
@@ -405,7 +377,7 @@ const Landingpage = () => {
           Pronto para Aumentar Suas Vendas?
         </h2>
         <p style={styles.finalCTASubtitle}>
-          Comece grátis hoje e veja sua loja crescer
+          Comece agora hoje e veja sua loja crescer
         </p>
         <div style={styles.finalCTAButtons}>
           <button 
@@ -413,7 +385,7 @@ const Landingpage = () => {
             style={styles.finalCTAButton}
           >
             <FaRocket style={{marginRight: 8}} />
-            Começar Agora Grátis
+            Começar Agora
           </button>
           <button 
             onClick={scrollToPlanos} 
@@ -471,7 +443,6 @@ const styles = {
     minHeight: '100vh',
   },
 
-  // HEADER
   header: {
     backgroundColor: '#1A2332',
     padding: '20px 40px',
@@ -545,7 +516,6 @@ const styles = {
     boxShadow: '0 4px 10px rgba(244, 208, 63, 0.3)',
   },
 
-  // HERO - TEXTO + IMAGEM
   hero: {
     background: 'linear-gradient(135deg, #1A2332 0%, #34495E 100%)',
     padding: '80px 40px',
@@ -630,7 +600,6 @@ const styles = {
     boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
   },
 
-  // NÚMEROS
   numbers: {
     display: 'flex',
     justifyContent: 'space-around',
@@ -652,7 +621,7 @@ const styles = {
   numberValue: {
     fontSize: '48px',
     fontWeight: '900',
-    color: '#F4D03F',
+    color: '#B7950B', // Amarelo ocre com contraste para o fundo branco
     marginBottom: '10px',
   },
   numberLabel: {
@@ -660,7 +629,6 @@ const styles = {
     color: '#7F8C8D',
   },
 
-  // SECTIONS GERAIS
   section: {
     padding: '80px 40px',
     maxWidth: '1200px',
@@ -680,7 +648,6 @@ const styles = {
     marginBottom: '60px',
   },
 
-  // COMO FUNCIONA
   stepsContainer: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
@@ -721,7 +688,6 @@ const styles = {
     lineHeight: '1.6',
   },
 
-  // BENEFÍCIOS
   benefitsSection: {
     backgroundColor: '#F8F9FA',
     padding: '80px 40px',
@@ -753,7 +719,6 @@ const styles = {
     lineHeight: '1.6',
   },
 
-  // PLANOS
   plansSection: {
     backgroundColor: 'white',
     padding: '80px 40px',
@@ -842,37 +807,6 @@ const styles = {
     color: '#7F8C8D',
   },
 
-  // DEPOIMENTOS
-  testimonialsSection: {
-    padding: '80px 40px',
-    maxWidth: '1200px',
-    margin: '0 auto',
-    backgroundColor: '#F8F9FA',
-  },
-  testimonialsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '40px',
-  },
-  testimonialCard: {
-    backgroundColor: 'white',
-    padding: '40px',
-    borderRadius: '15px',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
-  },
-  testimonialText: {
-    fontSize: '16px',
-    fontStyle: 'italic',
-    color: '#34495E',
-    lineHeight: '1.8',
-    marginBottom: '20px',
-  },
-  testimonialAuthor: {
-    fontSize: '14px',
-    color: '#7F8C8D',
-  },
-
-  // CTA FINAL
   finalCTA: {
     background: 'linear-gradient(135deg, #1A2332 0%, #34495E 100%)',
     padding: '80px 40px',
@@ -919,7 +853,6 @@ const styles = {
     cursor: 'pointer',
   },
 
-  // FOOTER
   footer: {
     backgroundColor: '#1A2332',
     color: '#ECF0F1',
