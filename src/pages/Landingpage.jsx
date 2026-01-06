@@ -93,6 +93,9 @@ const Landingpage = () => {
             >
               🎯 Descubra Seu Plano
             </button>
+            <button onClick={() => navigate('/login')} style={styles.loginButton}>
+              Entrar
+            </button>
             <button onClick={() => navigate('/cadastro')} style={styles.navButton}>
               Começar Grátis
             </button>
@@ -517,6 +520,17 @@ const styles = {
     cursor: 'pointer',
     transition: 'all 0.3s',
     boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+  },
+  loginButton: {
+    backgroundColor: 'transparent',
+    color: '#ECF0F1',
+    border: '2px solid #ECF0F1',
+    padding: '10px 20px',
+    fontSize: '14px',
+    fontWeight: '600',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.3s',
   },
   navButton: {
     backgroundColor: '#F4D03F',
