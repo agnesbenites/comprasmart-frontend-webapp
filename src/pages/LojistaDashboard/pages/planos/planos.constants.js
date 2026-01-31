@@ -46,7 +46,7 @@ export const PLANS_DETAILS = {
 
   "Plano Enterprise": {
     nome: "Plano Enterprise",
-    valor: 360.00,
+    valor: 499.90, // ✅ CORRIGIDO DE 360 PARA 499.90
     recursos: [
       "Filiais Ilimitadas",
       "Vendedores Ilimitados",
