@@ -1,4 +1,4 @@
-// src/pages/LojistaDashboard/LojistaDashboard.jsx - CORRIGIDO
+// src/pages/LojistaDashboard/LojistaDashboard.jsx - VERSÃO FINAL CORRIGIDA
 import React from "react";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ import LojistaCupom from "./pages/LojistaCupom";
 import LojistaLive from "./pages/LojistaLive";
 import PlanosPage from "./pages/planos/Planos.page";
 import DashboardEnterprise from "./pages/DashboardEnterprise";
-import IntegracaoERP from "./pages/IntegracaoERP"; // ✅ NOVO
+import NotificacoesPage from "./pages/NotificacoesPage"; // ✅ NOVO
 
 /* ===================== COMPONENTES ===================== */
 import MenuLateral from "./components/MenuLateral";
@@ -115,7 +115,6 @@ export default function LojistaDashboard() {
       <Route path="dashboard" element={<LojistaDashboardLayout />}>
         <Route index element={<LojistaHomePanel />} />
         <Route path="integracao" element={<IntegracaoVenda />} />
-        <Route path="integracao-erp" element={<IntegracaoERP />} /> {/* ✅ NOVO */}
         <Route path="pedidos" element={<GerenciadorPedidos tipoUsuario="lojista" />} />
         <Route path="produtos" element={<ProdutosPage />} />
         <Route path="pagamentos" element={<PlanosPage />} />
@@ -123,7 +122,8 @@ export default function LojistaDashboard() {
         <Route path="vendedores" element={<LojistaVendedores />} />
         <Route path="consultores" element={<LojistaConsultorConfig />} />
         <Route path="filiais" element={<LojistaFiliais />} />
-        <Route path="qrcode" element={<LojistaQRCode />} />
+        <Route path="qrcode" element={<LojistaQRCode />} /> {/* ✅ SEM HÍFEN */}
+        <Route path="notificacoes" element={<NotificacoesPage />} /> {/* ✅ NOVO */}
         <Route path="relatorios" element={<LojistaRelatorios />} />
         <Route path="treinamentos" element={<TrainingManagementPanel />} />
         <Route path="cadastro" element={<LojistaCadastro />} />
@@ -135,10 +135,10 @@ export default function LojistaDashboard() {
         <Route path="enterprise" element={<DashboardEnterprise />} />
       </Route>
 
-      {/* ✅ CORRIGIDO - Redireciona /lojista para /lojista/dashboard com CAMINHO ABSOLUTO */}
+      {/* ✅ Redireciona /lojista para /lojista/dashboard com CAMINHO ABSOLUTO */}
       <Route index element={<Navigate to="/lojista/dashboard" replace />} />
       
-      {/* ✅ CORRIGIDO - Qualquer rota não encontrada vai para dashboard com CAMINHO ABSOLUTO */}
+      {/* ✅ Qualquer rota não encontrada vai para dashboard com CAMINHO ABSOLUTO */}
       <Route path="*" element={<Navigate to="/lojista/dashboard" replace />} />
     </Routes>
   );

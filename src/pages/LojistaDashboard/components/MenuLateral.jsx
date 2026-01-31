@@ -1,6 +1,4 @@
-// src/pages/LojistaDashboard/components/MenuLateral.jsx
-// Menu atualizado: SEM Indicações + COM Cupom e Live
-
+// src/pages/LojistaDashboard/components/MenuLateral.jsx - VERSÃO FINAL
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { usePlano } from '../../../contexts/PlanoContext';
@@ -23,6 +21,12 @@ const MenuLateral = () => {
       requiredPlan: null,
     },
     {
+      path: '/lojista/dashboard/pedidos',
+      label: 'Pedidos',
+      icon: '🛒',
+      requiredPlan: null,
+    },
+    {
       path: '/lojista/dashboard/usuarios',
       label: 'Equipe',
       icon: '👥',
@@ -41,9 +45,39 @@ const MenuLateral = () => {
       requiredPlan: null,
     },
     {
+      path: '/lojista/dashboard/filiais',
+      label: 'Filiais',
+      icon: '🏢',
+      requiredPlan: null,
+    },
+    {
+      path: '/lojista/dashboard/qrcode',
+      label: 'QR Codes',
+      icon: '📱',
+      requiredPlan: null,
+    },
+    {
+      path: '/lojista/dashboard/notificacoes',
+      label: 'Notificações',
+      icon: '🔔',
+      requiredPlan: null,
+    },
+    {
       path: '/lojista/dashboard/relatorios',
       label: 'Relatórios',
       icon: '📊',
+      requiredPlan: null,
+    },
+    {
+      path: '/lojista/dashboard/treinamentos',
+      label: 'Treinamentos',
+      icon: '🎓',
+      requiredPlan: null,
+    },
+    {
+      path: '/lojista/dashboard/pagamentos',
+      label: 'Planos e Pagamentos',
+      icon: '💳',
       requiredPlan: null,
     },
     {
@@ -63,32 +97,8 @@ const MenuLateral = () => {
       badgeColor: '#f59e0b',
     },
     {
-      path: '/lojista/dashboard/qr-codes',
-      label: 'QR Codes',
-      icon: '📱',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/filiais',
-      label: 'Filiais',
-      icon: '🏢',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/treinamentos',
-      label: 'Treinamentos',
-      icon: '🎓',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/notificacoes',
-      label: 'Notificações',
-      icon: '🔔',
-      requiredPlan: null,
-    },
-    {
       path: '/lojista/dashboard/cadastro',
-      label: 'Cadastro',
+      label: 'Configurações',
       icon: '⚙️',
       requiredPlan: null,
     },
@@ -115,7 +125,8 @@ const MenuLateral = () => {
 
   const canAccessItem = (item) => {
     if (!item.requiredPlan) return true;
-    return plano === item.requiredPlan;
+    const planoNormalizado = plano?.toLowerCase().replace('plano ', '');
+    return planoNormalizado === item.requiredPlan?.toLowerCase();
   };
 
   return (
