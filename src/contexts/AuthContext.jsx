@@ -1,4 +1,4 @@
-// src/contexts/AuthContext.jsx
+// src/contexts/AuthContext.jsx - CORRIGIDO
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 
@@ -163,16 +163,66 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      console.log("[AuthContext] Fazendo logout...");
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      console.log("=".repeat(50));
+      console.log("🚪 [LOGOUT] Iniciando logout completo...");
+      console.log("=".repeat(50));
       
+      // 1. Logout no Supabase Auth
+      console.log("1️⃣ Deslogando do Supabase...");
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error("❌ Erro no signOut:", error);
+        throw error;
+      }
+      console.log("✅ SignOut concluído");
+      
+      // 2. Limpar states do React
+      console.log("2️⃣ Limpando states...");
       setUser(null);
       setUserProfile(null);
+      console.log("✅ States limpos");
       
-      window.location.href = '/entrar';
+      // 3. Limpar localStorage COMPLETAMENTE
+      console.log("3️⃣ Limpando localStorage...");
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) keysToRemove.push(key);
+      }
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      console.log("✅ localStorage limpo:", keysToRemove.length, "chaves removidas");
+      
+      // 4. Limpar sessionStorage
+      console.log("4️⃣ Limpando sessionStorage...");
+      sessionStorage.clear();
+      console.log("✅ sessionStorage limpo");
+      
+      // 5. Limpar cookies do Supabase
+      console.log("5️⃣ Limpando cookies...");
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+      console.log("✅ Cookies limpos");
+      
+      console.log("=".repeat(50));
+      console.log("✅ [LOGOUT] Logout completo! Redirecionando...");
+      console.log("=".repeat(50));
+      
+      // 6. Redirecionar com reload forçado
+      setTimeout(() => {
+        window.location.href = '/lojista/login';
+      }, 500);
+      
     } catch (error) {
-      console.error("[AuthContext] Erro ao fazer logout:", error);
+      console.error("❌ [LOGOUT] Erro ao fazer logout:", error);
+      // Mesmo com erro, limpa tudo e redireciona
+      setUser(null);
+      setUserProfile(null);
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = '/lojista/login';
     }
   };
 
@@ -191,7 +241,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     console.log("[AuthContext] Estado atual:", { 
       user: user?.id || 'null',
-      profile: userProfile,
+      profile: userProfile?.nome || 'null',
       loading, 
       isAuthenticated: !!user 
     });
