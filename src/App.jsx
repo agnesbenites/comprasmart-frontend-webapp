@@ -1,4 +1,4 @@
-// src/App.jsx
+// src/App.jsx - CORRIGIDO COM STRIPE SUCCESS
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
@@ -13,6 +13,7 @@ import ApprovalsPage from "./pages/ApprovalsPage";
 import AplicativoConfirmacao from "./pages/AplicativoConfirmacao";
 import MarketingOnboarding from "./pages/Onboarding/MarketingOnboarding";
 import PlanQuiz from "./pages/Quiz/PlanQuiz";
+import StripeSuccess from "./pages/StripeSuccess"; // ✅ NOVO
 
 import RegisterPage from "./pages/RegisterPage";
 import LojistaRegisterPage from "./pages/LojistaDashboard/pages/LojistaRegisterPage";
@@ -94,7 +95,7 @@ function App() {
   return (
     <PlanoProvider>
       <Routes>
-        {/* ✅ PÁGINA INICIAL É A LANDING */}
+        {/* PÁGINA INICIAL É A LANDING */}
         <Route path="/" element={<Landingpage />} />
         
         {/* Onboarding é uma rota separada */}
@@ -102,6 +103,9 @@ function App() {
         
         {/* Quiz - Descubra Seu Plano Ideal */}
         <Route path="/quiz" element={<PlanQuiz />} />
+        
+        {/* ✅ STRIPE SUCCESS - NOVO */}
+        <Route path="/stripe-success" element={<StripeSuccess />} />
         
         {/* Cadastro */}
         <Route path="/cadastro/lojista" element={<LojistaRegisterPage />} />

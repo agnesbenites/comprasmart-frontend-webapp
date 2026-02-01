@@ -129,7 +129,7 @@ const LojistaRegisterPage = () => {
     {
       id: "enterprise",
       nome: "Enterprise",
-      preco: "R$ 799",
+      preco: "R$ 499",
       periodo: "/mês",
       cor: "#28a745",
       recursos: [
@@ -450,25 +450,33 @@ const LojistaRegisterPage = () => {
       });
 
       if (resultado.success) {
-        // Salva dados temporários para após o pagamento
-        localStorage.setItem("cadastro_lojista_pendente", JSON.stringify({
+        // ✅ Salva dados temporários para após o pagamento (incluindo senha)
+        localStorage.setItem("cadastro_pendente", JSON.stringify({
+          email: tipoPessoa === "PJ" ? dadosPJ.emailRepresentante : dadosPF.email,
+          senha: acesso.senha,
+          plano: planoSelecionado,
           lojaId: resultado.loja.id,
           userId: resultado.user.id,
-          plano: planoSelecionado,
-          email: tipoPessoa === "PJ" ? dadosPJ.emailRepresentante : dadosPF.email,
+          timestamp: Date.now()
         }));
 
-        // Redireciona para o Stripe Checkout
-        const stripeUrl = STRIPE_LINKS[planoSelecionado];
+        // ✅ Configura URLs de retorno do Stripe
+        const baseUrl = window.location.origin;
+        const successUrl = `${baseUrl}/stripe-success?success=true`;
+        const cancelUrl = `${baseUrl}/cadastro/lojista`;
         
-        if (stripeUrl) {
+        // ✅ Adiciona parâmetros de retorno na URL do Stripe
+        const stripeBaseUrl = STRIPE_LINKS[planoSelecionado];
+        const stripeUrl = `${stripeBaseUrl}?success_url=${encodeURIComponent(successUrl)}&cancel_url=${encodeURIComponent(cancelUrl)}`;
+        
+        if (stripeBaseUrl) {
           alert(
             `✅ Cadastro realizado com sucesso!\n\n` +
             `Você será redirecionado para o pagamento do plano ${PLANOS.find(p => p.id === planoSelecionado)?.nome}.\n\n` +
             `Após o pagamento, seu acesso será liberado automaticamente.`
           );
           
-          // Redireciona para o Stripe
+          // Redireciona para o Stripe com URLs de retorno
           window.location.href = stripeUrl;
         } else {
           // Plano gratuito ou erro - vai direto pro login
@@ -755,7 +763,7 @@ const LojistaRegisterPage = () => {
                 <div style={styles.row}>
                   <div style={{...styles.inputGroup, flex: 3}}>
                     <label style={styles.label}>Cidade *</label>
-                    <input type="text" name="cidade" value={endereco.cidade} onChange={handleChangeEndereco} style={styles.input} />
+                      <input type="text" name="cidade" value={endereco.cidade} onChange={handleChangeEndereco} style={styles.input} />
                   </div>
                   <div style={{...styles.inputGroup, flex: 1}}>
                     <label style={styles.label}>Estado *</label>
