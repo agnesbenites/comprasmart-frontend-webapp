@@ -2,7 +2,7 @@
 // Context de autenticação com validação de sessão
 
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { supabase } from "../services/supabaseClient";
+import { supabase } from "../supabaseClient";
 
 const AuthContext = createContext({});
 

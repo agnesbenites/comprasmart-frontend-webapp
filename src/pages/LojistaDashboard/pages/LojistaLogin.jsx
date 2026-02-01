@@ -3,11 +3,11 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../../services/supabaseClient";
+import { supabase } from "../../../supabaseClient";
 
 const LojistaLogin = () => {
   const navigate = useNavigate();
-  const [loginType, setLoginType] = useState("email"); // email ou cnpj
+  const [loginType, setLoginType] = useState("email");
   const [formData, setFormData] = useState({
     email: "",
     cnpj: "",
@@ -17,7 +17,6 @@ const LojistaLogin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Limpa qualquer sessão antiga ao montar o componente
     clearOldSession();
   }, []);
 
@@ -26,7 +25,6 @@ const LojistaLogin = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (session) {
-        // Verifica se a sessão expirou
         const expiresAt = session.expires_at;
         const now = Math.floor(Date.now() / 1000);
         
@@ -64,7 +62,6 @@ const LojistaLogin = () => {
     try {
       let email = formData.email;
 
-      // Se login por CNPJ, busca o email
       if (loginType === "cnpj") {
         if (!formData.cnpj || formData.cnpj.replace(/\D/g, "").length !== 14) {
           setErro("CNPJ inválido");
@@ -95,10 +92,8 @@ const LojistaLogin = () => {
         return;
       }
 
-      // Limpa sessão antiga antes de fazer login
       await supabase.auth.signOut();
 
-      // Faz login
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
         email,
         password: formData.senha,
@@ -114,7 +109,6 @@ const LojistaLogin = () => {
         return;
       }
 
-      // Busca dados da loja
       const { data: loja, error: lojaError } = await supabase
         .from("lojas_corrigida")
         .select("*")
@@ -127,14 +121,12 @@ const LojistaLogin = () => {
         return;
       }
 
-      // Verifica status
       if (loja.status !== "ativa") {
         setErro("Conta inativa. Entre em contato com o suporte.");
         setLoading(false);
         return;
       }
 
-      // Atualiza metadata do usuário
       await supabase.auth.updateUser({
         data: {
           role: "lojista",
@@ -143,7 +135,6 @@ const LojistaLogin = () => {
         },
       });
 
-      // Redireciona para o dashboard
       navigate("/lojista/dashboard");
     } catch (error) {
       console.error("Erro no login:", error);
@@ -161,7 +152,6 @@ const LojistaLogin = () => {
           <p style={styles.subtitle}>Acesse seu painel administrativo</p>
         </div>
 
-        {/* Toggle Email/CNPJ */}
         <div style={styles.toggleGroup}>
           <button
             type="button"
@@ -264,7 +254,6 @@ const LojistaLogin = () => {
   );
 };
 
-// Styles
 const styles = {
   container: {
     minHeight: "100vh",
