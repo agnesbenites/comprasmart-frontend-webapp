@@ -1,4 +1,4 @@
-// src/pages/LojistaDashboard/pages/planos/hooks/usePlanos.js
+// src/pages/LojistaDashboard/pages/planos/hooks/usePlanos.js - CORRIGIDO
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "../../../../../contexts/AuthContext";
 import { usePlano } from "../../../../../contexts/PlanoContext";
@@ -10,7 +10,7 @@ import { PLANS_DETAILS, ADDONS_DETAILS, STRIPE_LINKS, AVAILABLE_UPGRADES } from 
  */
 export const usePlanos = () => {
   const { user, profile } = useAuth();
-  const { plano: planoAtualTipo } = usePlano(); // ✅ USAR O PLANOCONTEXT
+  const { plano: planoAtualTipo } = usePlano();
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,10 +33,48 @@ export const usePlanos = () => {
     const mapa = {
       'basic': 'Plano Basico',
       'basico': 'Plano Basico',
+      'básico': 'Plano Basico',
       'pro': 'Plano Pro',
       'enterprise': 'Plano Enterprise',
     };
     return mapa[planoDb?.toLowerCase()] || 'Plano Basico';
+  };
+
+  /* =========================
+     FILTRAR ADDONS POR PLANO ✅ NOVO
+  ========================== */
+  const filtrarAddonsPorPlano = (todosAddons, planoNome) => {
+    if (!todosAddons || !planoNome) return [];
+
+    return todosAddons.filter(addon => {
+      const nomeAddon = addon.nome?.toLowerCase() || '';
+      
+      // PLANO BÁSICO - só pode comprar "Basic Adicional"
+      if (planoNome === 'Plano Basico') {
+        return nomeAddon.includes('basic') || nomeAddon.includes('básico');
+      }
+
+      // PLANO PRO - pode comprar: vendedor, produtos, filial, ERP
+      if (planoNome === 'Plano Pro') {
+        return (
+          nomeAddon.includes('vendedor') ||
+          nomeAddon.includes('produtos') ||
+          nomeAddon.includes('filial') ||
+          nomeAddon.includes('erp')
+        );
+      }
+
+      // PLANO ENTERPRISE - pode comprar: vendedor, produtos, filial (NÃO ERP)
+      if (planoNome === 'Plano Enterprise') {
+        return (
+          nomeAddon.includes('vendedor') ||
+          nomeAddon.includes('produtos') ||
+          nomeAddon.includes('filial')
+        ) && !nomeAddon.includes('erp'); // Enterprise NÃO precisa de ERP adicional
+      }
+
+      return false;
+    });
   };
 
   /* =========================
@@ -74,12 +112,15 @@ export const usePlanos = () => {
       }
       setAvailableUpgrades(upgradesDisponiveis);
 
-      // Carrega add-ons disponíveis
-      setAddons(ADDONS_DETAILS.map((addon, index) => ({
+      // ✅ FILTRAR add-ons disponíveis baseado no plano
+      const todosAddons = ADDONS_DETAILS.map((addon, index) => ({
         id: index + 1,
         ...addon,
         ativo: false,
-      })));
+      }));
+
+      const addonsFiltrados = filtrarAddonsPorPlano(todosAddons, planoNome);
+      setAddons(addonsFiltrados);
 
       // Faturas (mock por enquanto)
       setFaturas([]);
