@@ -1,182 +1,374 @@
 // src/pages/LojistaDashboard/pages/LojistaLogin.jsx
+// Login de Lojista com limpeza de sessão
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@contexts/AuthContext";
+import { supabase } from "../../../services/supabaseClient";
 
 const LojistaLogin = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated, loading: authLoading } = useAuth();
-
-  const [etapa, setEtapa] = useState("cnpj");
-  const [cnpj, setCnpj] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginType, setLoginType] = useState("email"); // email ou cnpj
+  const [formData, setFormData] = useState({
+    email: "",
+    cnpj: "",
+    senha: "",
+  });
+  const [erro, setErro] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  // Redireciona se já autenticado
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/lojista/dashboard', { replace: true });
-    }
-  }, [isAuthenticated, navigate]);
+    // Limpa qualquer sessão antiga ao montar o componente
+    clearOldSession();
+  }, []);
 
-  // Valida CNPJ
-  const handleCNPJSubmit = (e) => {
-    e.preventDefault();
-    if (!cnpj) return;
-
-    setLoading(true);
-    setError("");
-
-    setTimeout(() => {
-      const cnpjLimpo = cnpj.replace(/\D/g, '');
-      if (cnpjLimpo.length === 14) {
-        localStorage.setItem("lojistaCNPJ", cnpj);
-        localStorage.setItem("lojistaNome", `Empresa ${cnpjLimpo.substring(0, 6)}`);
-        setEtapa("login");
-        setError("");
-      } else {
-        setError("CNPJ inválido. Deve conter 14 dígitos.");
-      }
-      setLoading(false);
-    }, 800);
-  };
-
-  // Login com Supabase
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
+  const clearOldSession = async () => {
     try {
-      const result = await login(email, password);
-
-      if (result.success) {
-        navigate('/lojista/dashboard', { replace: true });
-      } else {
-        setError(result.error || "Erro ao fazer login");
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session) {
+        // Verifica se a sessão expirou
+        const expiresAt = session.expires_at;
+        const now = Math.floor(Date.now() / 1000);
+        
+        if (expiresAt && expiresAt < now) {
+          console.log("Limpando sessão expirada...");
+          await supabase.auth.signOut();
+          localStorage.clear();
+        }
       }
     } catch (error) {
-      setError("Erro inesperado. Tente novamente.");
+      console.error("Erro ao limpar sessão:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const formatarCNPJ = (valor) => {
+    return valor
+      .replace(/\D/g, "")
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1/$2")
+      .replace(/(\d{4})(\d)/, "$1-$2")
+      .substring(0, 18);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErro("");
+    setLoading(true);
+
+    try {
+      let email = formData.email;
+
+      // Se login por CNPJ, busca o email
+      if (loginType === "cnpj") {
+        if (!formData.cnpj || formData.cnpj.replace(/\D/g, "").length !== 14) {
+          setErro("CNPJ inválido");
+          setLoading(false);
+          return;
+        }
+
+        const cnpjLimpo = formData.cnpj.replace(/\D/g, "");
+
+        const { data: loja, error: lojaError } = await supabase
+          .from("lojas_corrigida")
+          .select("email")
+          .eq("cnpj", cnpjLimpo)
+          .single();
+
+        if (lojaError || !loja) {
+          setErro("CNPJ não encontrado");
+          setLoading(false);
+          return;
+        }
+
+        email = loja.email;
+      }
+
+      if (!formData.senha) {
+        setErro("Digite sua senha");
+        setLoading(false);
+        return;
+      }
+
+      // Limpa sessão antiga antes de fazer login
+      await supabase.auth.signOut();
+
+      // Faz login
+      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password: formData.senha,
+      });
+
+      if (loginError) {
+        if (loginError.message.includes("Invalid")) {
+          setErro("Email ou senha incorretos");
+        } else {
+          setErro(loginError.message);
+        }
+        setLoading(false);
+        return;
+      }
+
+      // Busca dados da loja
+      const { data: loja, error: lojaError } = await supabase
+        .from("lojas_corrigida")
+        .select("*")
+        .eq("user_id", loginData.user.id)
+        .single();
+
+      if (lojaError || !loja) {
+        setErro("Loja não encontrada");
+        setLoading(false);
+        return;
+      }
+
+      // Verifica status
+      if (loja.status !== "ativa") {
+        setErro("Conta inativa. Entre em contato com o suporte.");
+        setLoading(false);
+        return;
+      }
+
+      // Atualiza metadata do usuário
+      await supabase.auth.updateUser({
+        data: {
+          role: "lojista",
+          loja_id: loja.id,
+          plano: loja.plano,
+        },
+      });
+
+      // Redireciona para o dashboard
+      navigate("/lojista/dashboard");
+    } catch (error) {
+      console.error("Erro no login:", error);
+      setErro("Erro ao fazer login. Tente novamente.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Trocar CNPJ
-  const trocarCNPJ = () => {
-    localStorage.removeItem('lojistaCNPJ');
-    localStorage.removeItem('lojistaNome');
-    setCnpj("");
-    setEmail("");
-    setPassword("");
-    setEtapa("cnpj");
-    setError("");
-  };
-
-  if (authLoading) {
-    return (
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <p style={styles.loadingText}>⏳ Carregando...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={styles.title}>🏪 Login Lojista</h2>
+        <div style={styles.header}>
+          <h1 style={styles.title}>🏪 Login Lojista</h1>
+          <p style={styles.subtitle}>Acesse seu painel administrativo</p>
+        </div>
 
-        {etapa === "cnpj" ? (
-          <form onSubmit={handleCNPJSubmit}>
+        {/* Toggle Email/CNPJ */}
+        <div style={styles.toggleGroup}>
+          <button
+            type="button"
+            onClick={() => setLoginType("email")}
+            style={{
+              ...styles.toggleButton,
+              backgroundColor: loginType === "email" ? "#28a745" : "#f8f9fa",
+              color: loginType === "email" ? "white" : "#666",
+            }}
+          >
+            📧 Email
+          </button>
+          <button
+            type="button"
+            onClick={() => setLoginType("cnpj")}
+            style={{
+              ...styles.toggleButton,
+              backgroundColor: loginType === "cnpj" ? "#28a745" : "#f8f9fa",
+              color: loginType === "cnpj" ? "white" : "#666",
+            }}
+          >
+            🏢 CNPJ
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} style={styles.form}>
+          {loginType === "email" ? (
             <div style={styles.inputGroup}>
-              <label style={styles.label}>CNPJ da Empresa:</label>
+              <label style={styles.label}>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="seu@email.com"
+                style={styles.input}
+                required
+              />
+            </div>
+          ) : (
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>CNPJ</label>
               <input
                 type="text"
-                value={cnpj}
-                onChange={(e) => setCnpj(e.target.value)}
+                name="cnpj"
+                value={formData.cnpj}
+                onChange={(e) =>
+                  setFormData({ ...formData, cnpj: formatarCNPJ(e.target.value) })
+                }
                 placeholder="00.000.000/0000-00"
                 style={styles.input}
                 maxLength={18}
                 required
-                disabled={loading}
               />
             </div>
+          )}
 
-            {error && <div style={styles.error}>{error}</div>}
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Senha</label>
+            <input
+              type="password"
+              name="senha"
+              value={formData.senha}
+              onChange={handleChange}
+              placeholder="••••••••"
+              style={styles.input}
+              required
+            />
+          </div>
 
-            <button type="submit" style={styles.button} disabled={loading}>
-              {loading ? "⏳ Verificando..." : "Continuar →"}
-            </button>
-          </form>
-        ) : (
-          <>
-            <div style={styles.cnpjInfo}>
-              <p>CNPJ: {cnpj}</p>
-              <button onClick={trocarCNPJ} style={styles.smallButton}>Trocar CNPJ</button>
-            </div>
+          {erro && <div style={styles.erro}>❌ {erro}</div>}
 
-            <form onSubmit={handleLogin}>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>E-mail:</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="seu@email.com"
-                  style={styles.input}
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Senha:</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="XXXXX"
-                  style={styles.input}
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              {error && <div style={styles.error}>{error}</div>}
-
-              <button type="submit" style={styles.button} disabled={loading}>
-                {loading ? "⏳ Entrando..." : "🔐 Entrar"}
-              </button>
-            </form>
-          </>
-        )}
+          <button
+            type="submit"
+            style={{ ...styles.button, opacity: loading ? 0.6 : 1 }}
+            disabled={loading}
+          >
+            {loading ? "⏳ Entrando..." : "Entrar"}
+          </button>
+        </form>
 
         <div style={styles.footer}>
-          <a href="/entrar" style={styles.link}>← Voltar</a>
+          <button
+            type="button"
+            onClick={() => navigate("/lojista/recuperar-senha")}
+            style={styles.linkButton}
+          >
+            Esqueceu a senha?
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/cadastro/lojista")}
+            style={styles.linkButton}
+          >
+            Criar conta
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
+// Styles
 const styles = {
-  container: { minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", backgroundColor: "#f5f5f5" },
-  card: { backgroundColor: "white", padding: "40px", borderRadius: "12px", boxShadow: "0 10px 30px rgba(0,0,0,0.1)", maxWidth: "400px", width: "100%" },
-  title: { textAlign: "center", color: "#2c5aa0", marginBottom: "30px", fontSize: "1.8rem", fontWeight: "700" },
-  loadingText: { textAlign: "center", color: "#666", fontSize: "1.1rem" },
-  inputGroup: { marginBottom: "20px" },
-  label: { display: "block", marginBottom: "8px", fontWeight: "600", color: "#333", fontSize: "0.9rem" },
-  input: { width: "100%", padding: "12px 15px", border: "2px solid #e9ecef", borderRadius: "8px", fontSize: "1rem" },
-  error: { backgroundColor: "#f8d7da", color: "#721c24", padding: "10px", borderRadius: "8px", marginBottom: "20px", textAlign: "center" },
-  button: { width: "100%", padding: "15px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", fontWeight: "600", cursor: "pointer" },
-  cnpjInfo: { backgroundColor: "#d4edda", padding: "15px", borderRadius: "8px", marginBottom: "20px", textAlign: "center" },
-  smallButton: { marginTop: "10px", padding: "5px 10px", backgroundColor: "transparent", color: "#28a745", border: "1px solid #28a745", borderRadius: "4px", fontSize: "12px", cursor: "pointer" },
-  footer: { textAlign: "center", marginTop: "20px" },
-  link: { color: "#2c5aa0", textDecoration: "none", fontSize: "14px" }
+  container: {
+    minHeight: "100vh",
+    backgroundColor: "#f8f9fa",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+  },
+  card: {
+    maxWidth: "450px",
+    width: "100%",
+    backgroundColor: "white",
+    borderRadius: "12px",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+    padding: "32px",
+  },
+  header: {
+    textAlign: "center",
+    marginBottom: "32px",
+  },
+  title: {
+    fontSize: "1.8rem",
+    fontWeight: "700",
+    color: "#28a745",
+    marginBottom: "8px",
+  },
+  subtitle: {
+    fontSize: "0.95rem",
+    color: "#666",
+  },
+  toggleGroup: {
+    display: "flex",
+    gap: "12px",
+    marginBottom: "24px",
+  },
+  toggleButton: {
+    flex: 1,
+    padding: "12px",
+    border: "2px solid #e0e0e0",
+    borderRadius: "8px",
+    fontSize: "0.95rem",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "all 0.2s",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+  },
+  inputGroup: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+  label: {
+    fontSize: "0.9rem",
+    fontWeight: "600",
+    color: "#333",
+  },
+  input: {
+    padding: "12px 16px",
+    fontSize: "1rem",
+    border: "2px solid #e0e0e0",
+    borderRadius: "8px",
+    outline: "none",
+    transition: "border-color 0.2s",
+  },
+  erro: {
+    padding: "12px",
+    backgroundColor: "#ffebee",
+    color: "#c62828",
+    borderRadius: "8px",
+    fontSize: "0.9rem",
+    border: "1px solid #ef9a9a",
+  },
+  button: {
+    padding: "14px",
+    backgroundColor: "#28a745",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "1.1rem",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.2s",
+  },
+  footer: {
+    marginTop: "24px",
+    display: "flex",
+    justifyContent: "space-between",
+    paddingTop: "20px",
+    borderTop: "1px solid #e0e0e0",
+  },
+  linkButton: {
+    background: "none",
+    border: "none",
+    color: "#28a745",
+    fontSize: "0.9rem",
+    fontWeight: "600",
+    cursor: "pointer",
+    textDecoration: "underline",
+  },
 };
 
 export default LojistaLogin;
