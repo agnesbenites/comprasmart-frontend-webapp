@@ -1,4 +1,4 @@
-// src/pages/LojistaDashboard/LojistaDashboard.jsx
+// src/pages/LojistaDashboard/LojistaDashboard.jsx - VERSÃO FINAL CORRIGIDA
 import React from "react";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 
@@ -14,14 +14,14 @@ import LojistaRelatorios from "./pages/LojistaRelatorios";
 import LojistaCadastro from "./pages/LojistaCadastro";
 import LojistaProfile from "./pages/LojistaProfile";
 import IntegracaoVenda from "./pages/IntegracaoVenda";
-import LojistaCupom from "./pages/LojistaCupom"; // ✅ NOVO
-import LojistaLive from "./pages/LojistaLive"; // ✅ NOVO
+import LojistaCupom from "./pages/LojistaCupom";
+import LojistaLive from "./pages/LojistaLive";
 import PlanosPage from "./pages/planos/Planos.page";
-import DashboardEnterprise from "./pages/DashboardEnterprise"; // ✅ ENTERPRISE
-// ❌ REMOVIDO: import LojistaIndicacoes from './pages/LojistaIndicacoes';
+import DashboardEnterprise from "./pages/DashboardEnterprise";
+import NotificacoesPage from "./pages/NotificacoesPage"; // ✅ NOVO
 
 /* ===================== COMPONENTES ===================== */
-import MenuLateral from "./components/MenuLateral"; // ✅ USANDO MENU LATERAL
+import MenuLateral from "./components/MenuLateral";
 import TrainingManagementPanel from "./components/TrainingManagementPanel";
 import ReportPanelLojista from "./components/ReportPanelLojista";
 import GerenciadorPedidos from "../../shared/components/GerenciadorPedidos";
@@ -122,29 +122,24 @@ export default function LojistaDashboard() {
         <Route path="vendedores" element={<LojistaVendedores />} />
         <Route path="consultores" element={<LojistaConsultorConfig />} />
         <Route path="filiais" element={<LojistaFiliais />} />
-        <Route path="qrcode" element={<LojistaQRCode />} />
+        <Route path="qrcode" element={<LojistaQRCode />} /> {/* ✅ SEM HÍFEN */}
+        <Route path="notificacoes" element={<NotificacoesPage />} /> {/* ✅ NOVO */}
         <Route path="relatorios" element={<LojistaRelatorios />} />
         <Route path="treinamentos" element={<TrainingManagementPanel />} />
         <Route path="cadastro" element={<LojistaCadastro />} />
         <Route path="profile" element={<LojistaProfile />} />
         <Route path="meu-perfil" element={<LojistaProfile />} />
         <Route path="report" element={<ReportPanelLojista />} />
-        
-        {/* ✅ NOVAS ROTAS */}
         <Route path="cupom" element={<LojistaCupom />} />
         <Route path="live" element={<LojistaLive />} />
-        
-        {/* ✅ ENTERPRISE */}
         <Route path="enterprise" element={<DashboardEnterprise />} />
-        
-        {/* ❌ REMOVIDO: indicacoes */}
       </Route>
 
-      {/* Redireciona /lojista para /lojista/dashboard */}
-      <Route index element={<Navigate to="dashboard" replace />} />
+      {/* ✅ Redireciona /lojista para /lojista/dashboard com CAMINHO ABSOLUTO */}
+      <Route index element={<Navigate to="/lojista/dashboard" replace />} />
       
-      {/* Qualquer rota não encontrada vai para dashboard */}
-      <Route path="*" element={<Navigate to="dashboard" replace />} />
+      {/* ✅ Qualquer rota não encontrada vai para dashboard com CAMINHO ABSOLUTO */}
+      <Route path="*" element={<Navigate to="/lojista/dashboard" replace />} />
     </Routes>
   );
 }

@@ -10,7 +10,7 @@ import { PLANS_DETAILS, ADDONS_DETAILS, STRIPE_LINKS, AVAILABLE_UPGRADES } from 
  */
 export const usePlanos = () => {
   const { user, profile } = useAuth();
-  const { plano: planoAtualTipo } = usePlano(); // ✅ USAR O PLANOCONTEXT
+  const { plano: planoAtualTipo } = usePlano();
   
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,6 +33,7 @@ export const usePlanos = () => {
     const mapa = {
       'basic': 'Plano Basico',
       'basico': 'Plano Basico',
+      'básico': 'Plano Basico',
       'pro': 'Plano Pro',
       'enterprise': 'Plano Enterprise',
     };
@@ -69,7 +70,7 @@ export const usePlanos = () => {
           nomeAddon.includes('vendedor') ||
           nomeAddon.includes('produtos') ||
           nomeAddon.includes('filial')
-        ) && !nomeAddon.includes('erp');
+        ) && !nomeAddon.includes('erp'); // Enterprise NÃO precisa de ERP adicional
       }
 
       return false;

@@ -1,4 +1,4 @@
-// LojistaRelatorios_BASIC.jsx
+// LojistaRelatorios_BASIC.jsx - COM BOTÃO DE EXPORTAR
 // PLANO BASIC - Funcionalidades base (R$ 50/mês)
 
 import React, { useState, useEffect } from "react";
@@ -9,7 +9,10 @@ const STRIPE_COLOR = "#635bff";
 
 const LojistaRelatoriosBasic = () => {
     const [periodo, setPeriodo] = useState("mensal");
+    const [tipoExportacao, setTipoExportacao] = useState("TUDO"); // ✅ NOVO ESTADO
+    const [formatoExportacao, setFormatoExportacao] = useState("CSV"); // ✅ NOVO ESTADO
     const [loading, setLoading] = useState(false);
+    const [exportando, setExportando] = useState(false); // ✅ NOVO ESTADO
     const [lojaId, setLojaId] = useState(null);
    
     const [boughtCampaign, setBoughtCampaign] = useState({
@@ -93,14 +96,15 @@ const LojistaRelatoriosBasic = () => {
            
             const consultores = metricasData?.filter(m => m.tipo_entidade === 'consultor').map(m => ({
                 id: m.id_entidade,
+                nome: m.nome_entidade || 'Consultor',
                 clientesAtendidos: m.clientes_atendidos || 0,
                 vendasGeradas: parseFloat(m.vendas_geradas || 0),
                 comissao: parseFloat(m.comissao_paga || 0)
             })) || [];
 
-            const vendedores = metricasData?.filter(m => m.tipo_entidade === 'vendedor').map(m => ({ 
+            const vendedores = metricasData?.filter(m => m.tipo_entidade === 'vendedor').map(m => ({
                 id: m.id_entidade,
-                nome: "Vendedor " + m.id_entidade.substring(0, 8),
+                nome: m.nome_entidade || 'Vendedor',
                 clientesAtendidos: m.clientes_atendidos || 0,
                 vendasGeradas: parseFloat(m.vendas_geradas || 0),
                 comissao: parseFloat(m.comissao_paga || 0)
@@ -111,12 +115,14 @@ const LojistaRelatoriosBasic = () => {
                 .from('campanhas')
                 .select('*')
                 .eq('id_lojista', lojaId);
-
+           
             const campanhasFormatadas = campanhasData?.map(c => ({
                 id: c.id,
                 nome: c.nome,
-                periodo: c.data_inicio + " a " + c.data_fim,
-                vendasCampanha: 0,
+                dataInicio: c.data_inicio,
+                dataFim: c.data_fim,
+                investimento: 0,
+                receita: 0,
                 roi: 0,
                 status: c.status,
             })) || [];
@@ -155,46 +161,55 @@ const LojistaRelatoriosBasic = () => {
         return headers + '\n' + rows;
     };
 
-    const handleExport = (tipo) => {
+    // ✅ NOVA FUNÇÃO - Botão de Exportar
+    const handleExportarClick = () => {
+        setExportando(true);
+        
         let exportData = [];
-        let filename = "relatorio_" + tipo + "_" + periodo + ".csv";
+        let filename = `relatorio_${tipoExportacao}_${periodo}_${new Date().getTime()}.csv`;
 
-        if (tipo === "TUDO") {
+        if (tipoExportacao === "TUDO") {
             exportData = [
                 ...dataRelatorios.consultores.map(c => ({...c, tipo_relatorio: "Consultor"})),       
                 ...dataRelatorios.vendedores.map(v => ({...v, tipo_relatorio: "Vendedor"})),
                 ...dataRelatorios.campanhas.map(c => ({...c, tipo_relatorio: "Campanha"})),
                 ...dataRelatorios.vendas.map(v => ({...v, tipo_relatorio: "Venda"})),
             ];
-        } else if (tipo === "VENDEDORES") {
+        } else if (tipoExportacao === "VENDEDORES") {
             exportData = dataRelatorios.vendedores;
-        } else if (tipo === "CONSULTORES") {
+        } else if (tipoExportacao === "CONSULTORES") {
             exportData = dataRelatorios.consultores;
-        } else if (tipo === "CAMPANHAS") {
+        } else if (tipoExportacao === "CAMPANHAS") {
             exportData = dataRelatorios.campanhas;
-        } else if (tipo === "VENDAS") {
+        } else if (tipoExportacao === "VENDAS") {
             exportData = dataRelatorios.vendas;
         }
        
         if (exportData.length === 0) {
-            console.warn("Nenhum dado para exportar: " + tipo);
+            alert("Nenhum dado disponível para exportar!");
+            setExportando(false);
             return;
         }
 
-        const csvString = convertToCSV(exportData);
-        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-       
-        if (link.download !== undefined) {
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", filename);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        console.log("Exportacao de " + tipo + " concluida!");
+        // Simular delay de processamento
+        setTimeout(() => {
+            const csvString = convertToCSV(exportData);
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+           
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            console.log("Exportação de " + tipoExportacao + " concluída!");
+            setExportando(false);
+        }, 500);
     };
 
     const handleConfigurarCampanha = async (e) => {
@@ -232,7 +247,7 @@ const LojistaRelatoriosBasic = () => {
         if (isConsultorPlataforma) {
             return (
                 <tr key={p.id}>
-                    <td style={styles.td}><strong>{p.id.substring(0, 8)}...</strong></td>
+                    <td style={styles.td}><strong>{p.nome || p.id.substring(0, 8) + '...'}</strong></td>
                     <td style={styles.tdCenter}>{p.clientesAtendidos}</td>
                     <td style={styles.tdRight}>R$ {p.vendasGeradas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                     <td style={styles.tdRight}>R$ {p.comissao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
@@ -271,7 +286,7 @@ const LojistaRelatoriosBasic = () => {
                     <table style={styles.table}>
                         <thead>
                             <tr style={{ backgroundColor: "#f8f9fa" }}>
-                                <th style={styles.th}>{isConsultorPlataforma ? 'Consultor ID' : 'Vendedor'}</th>
+                                <th style={styles.th}>{isConsultorPlataforma ? 'Consultor' : 'Vendedor'}</th>
                                 <th style={styles.thCenter}>Clientes</th>
                                 <th style={styles.thRight}>Vendas</th>
                                 <th style={styles.thRight}>Comissão</th>
@@ -318,8 +333,6 @@ const LojistaRelatoriosBasic = () => {
         const descontoTexto = configCampanha.descontoAtivo ? boughtCampaign.baseDiscount + "% Ativo" : "NÃO";
         const cupomTexto = configCampanha.cupomAtivo ? "SIM" : "NÃO";
         const tituloCard = configCampanha.nome ? "✅ Campanha Ativa" : "⚙️ Configurar Campanha";
-        const descontoStatusColor = configCampanha.descontoAtivo ? '#2e7d32' : '#dc3545';
-        const cupomStatusColor = configCampanha.cupomAtivo ? '#2e7d32' : '#dc3545';
         
         return (
             <div style={styles.card}>
@@ -351,13 +364,12 @@ const LojistaRelatoriosBasic = () => {
                             type="text"
                             value={configCampanha.nome}
                             onChange={(e) => setConfigCampanha({...configCampanha, nome: e.target.value})}
-                            placeholder="Ex: Mês do Cliente 2026"
                             style={styles.input}
                             required
                         />
                     </div>
-                    <div style={styles.dateGrid}>
-                        <div>
+                    <div style={styles.formRow}>
+                        <div style={styles.formGroup}>
                             <label style={styles.label}>Data Início:</label>
                             <input
                                 type="date"
@@ -367,7 +379,7 @@ const LojistaRelatoriosBasic = () => {
                                 required
                             />
                         </div>
-                        <div>
+                        <div style={styles.formGroup}>
                             <label style={styles.label}>Data Fim:</label>
                             <input
                                 type="date"
@@ -379,31 +391,25 @@ const LojistaRelatoriosBasic = () => {
                         </div>
                     </div>
                     <div style={styles.checkboxGroup}>
-                        <label style={styles.checkboxLabel}>       
+                        <label style={styles.checkboxLabel}>
                             <input
                                 type="checkbox"
                                 checked={configCampanha.descontoAtivo}
                                 onChange={(e) => setConfigCampanha({...configCampanha, descontoAtivo: e.target.checked})}
                             />
-                            <span>Desconto Base ({boughtCampaign.baseDiscount}%): </span>
-                            <strong style={{ color: descontoStatusColor }}>
-                                {configCampanha.descontoAtivo ? 'ATIVO' : 'INATIVO'}
-                            </strong>
+                            Ativar Desconto Base ({boughtCampaign.baseDiscount}%)
                         </label>
-                        <label style={styles.checkboxLabel}>       
+                        <label style={styles.checkboxLabel}>
                             <input
                                 type="checkbox"
                                 checked={configCampanha.cupomAtivo}
                                 onChange={(e) => setConfigCampanha({...configCampanha, cupomAtivo: e.target.checked})}
                             />
-                            <span>Cupom Condicional: </span>
-                            <strong style={{ color: cupomStatusColor }}>
-                                {configCampanha.cupomAtivo ? 'ATIVO' : 'INATIVO'}
-                            </strong>
+                            Ativar Cupom de Desconto
                         </label>
                     </div>
-                    <button type="submit" style={styles.button}>
-                        💾 Salvar e Ativar Campanha
+                    <button type="submit" style={styles.submitButton}>
+                        💾 Salvar Campanha
                     </button>
                 </form>
             </div>
@@ -411,7 +417,7 @@ const LojistaRelatoriosBasic = () => {
     };
 
     const showCampaignConfig = boughtCampaign.isPaid && boughtCampaign.remainingDays > 0;
-
+   
     return (
         <div style={styles.container}>
             <div style={styles.header}>
@@ -419,22 +425,66 @@ const LojistaRelatoriosBasic = () => {
                 <span style={styles.planBadge}>PLANO BASIC</span>
             </div>
            
-            <div style={styles.filters}>
-                <select value={periodo} onChange={(e) => setPeriodo(e.target.value)} disabled={loading} style={styles.select}>
-                    <option value="diario">📅 Diário</option>
-                    <option value="semanal">📅 Semanal</option>
-                    <option value="mensal">📅 Mensal</option>
-                    <option value="anual">📅 Anual</option>
-                </select>
+            {/* ✅ NOVA SEÇÃO DE EXPORTAÇÃO */}
+            <div style={styles.exportSection}>
+                <div style={styles.exportFilters}>
+                    <div style={styles.filterGroup}>
+                        <label style={styles.filterLabel}>Período:</label>
+                        <select 
+                            value={periodo} 
+                            onChange={(e) => setPeriodo(e.target.value)} 
+                            disabled={loading}
+                            style={styles.select}
+                        >
+                            <option value="diario">📅 Diário</option>
+                            <option value="semanal">📅 Semanal</option>
+                            <option value="mensal">📅 Mensal</option>
+                            <option value="anual">📅 Anual</option>
+                        </select>
+                    </div>
 
-                <select onChange={(e) => handleExport(e.target.value)} defaultValue="" disabled={loading} style={styles.select}>
-                    <option value="" disabled>📥 Exportar...</option>
-                    <option value="TUDO">📦 Todos os Dados</option>
-                    <option value="VENDEDORES">👥 Vendedores</option>
-                    <option value="CONSULTORES">🤝 Consultores</option>
-                    <option value="CAMPANHAS">📢 Campanhas</option>
-                    <option value="VENDAS">💰 Vendas</option>
-                </select>
+                    <div style={styles.filterGroup}>
+                        <label style={styles.filterLabel}>Exportar:</label>
+                        <select 
+                            value={tipoExportacao}
+                            onChange={(e) => setTipoExportacao(e.target.value)}
+                            disabled={loading}
+                            style={styles.select}
+                        >
+                            <option value="TUDO">📦 Todos os Dados</option>
+                            <option value="VENDEDORES">👥 Vendedores</option>
+                            <option value="CONSULTORES">🤝 Consultores</option>
+                            <option value="CAMPANHAS">📢 Campanhas</option>
+                            <option value="VENDAS">💰 Vendas</option>
+                        </select>
+                    </div>
+
+                    <div style={styles.filterGroup}>
+                        <label style={styles.filterLabel}>Formato:</label>
+                        <select 
+                            value={formatoExportacao}
+                            onChange={(e) => setFormatoExportacao(e.target.value)}
+                            disabled={loading}
+                            style={styles.select}
+                        >
+                            <option value="CSV">📄 CSV</option>
+                            <option value="EXCEL">📊 Excel (Em breve)</option>
+                            <option value="PDF">📕 PDF (Em breve)</option>
+                        </select>
+                    </div>
+
+                    <button 
+                        onClick={handleExportarClick}
+                        disabled={loading || exportando}
+                        style={{
+                            ...styles.exportButton,
+                            opacity: (loading || exportando) ? 0.6 : 1,
+                            cursor: (loading || exportando) ? 'not-allowed' : 'pointer'
+                        }}
+                    >
+                        {exportando ? '⏳ Exportando...' : '📥 Exportar Relatório'}
+                    </button>
+                </div>
             </div>
 
             {loading && (
@@ -487,10 +537,30 @@ const styles = {
         fontSize: '0.85rem',
         fontWeight: '600'
     },
-    filters: { 
-        display: "flex", 
-        gap: "20px", 
-        marginBottom: "30px" 
+    // ✅ NOVOS ESTILOS PARA EXPORTAÇÃO
+    exportSection: {
+        backgroundColor: 'white',
+        padding: '25px',
+        borderRadius: '12px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+        marginBottom: '30px'
+    },
+    exportFilters: {
+        display: 'flex',
+        gap: '20px',
+        alignItems: 'flex-end',
+        flexWrap: 'wrap'
+    },
+    filterGroup: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+        minWidth: '180px'
+    },
+    filterLabel: {
+        fontSize: '0.9rem',
+        fontWeight: '600',
+        color: '#475569'
     },
     select: {
         padding: '10px 15px',
@@ -499,6 +569,18 @@ const styles = {
         fontSize: '1rem',
         cursor: 'pointer',
         backgroundColor: 'white'
+    },
+    exportButton: {
+        padding: '12px 24px',
+        borderRadius: '8px',
+        border: 'none',
+        backgroundColor: '#10b981',
+        color: 'white',
+        fontSize: '1rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+        transition: 'all 0.2s',
+        boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)'
     },
     grid: { 
         display: "grid", 
@@ -560,138 +642,126 @@ const styles = {
     },
     td: { 
         padding: "12px", 
-        borderBottom: "1px solid #eee" 
+        textAlign: "left", 
+        borderBottom: "1px solid #f0f0f0",
+        color: '#333'
     },
     tdCenter: { 
         padding: "12px", 
         textAlign: "center", 
-        borderBottom: "1px solid #eee" 
+        borderBottom: "1px solid #f0f0f0",
+        color: '#333'
     },
     tdRight: { 
         padding: "12px", 
         textAlign: "right", 
-        borderBottom: "1px solid #eee" 
+        borderBottom: "1px solid #f0f0f0",
+        color: '#333'
     },
-    loading: { 
-        textAlign: 'center', 
-        padding: '80px 20px', 
-        color: '#666',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '20px'
+    loading: {
+        textAlign: "center",
+        padding: "40px",
+        color: "#666"
+    },
+    noData: {
+        textAlign: "center",
+        padding: "40px",
+        color: "#999"
     },
     spinner: {
-        width: '50px',
-        height: '50px',
-        border: '4px solid #e2e8f0',
+        width: '40px',
+        height: '40px',
+        margin: '0 auto 15px',
+        border: '4px solid #f3f3f3',
         borderTop: '4px solid #3b82f6',
         borderRadius: '50%',
         animation: 'spin 1s linear infinite'
     },
-    noData: { 
-        textAlign: 'center', 
-        padding: '50px', 
-        color: '#999' 
+    centerBox: {
+        textAlign: 'center',
+        padding: '30px'
     },
-    input: { 
-        width: "100%", 
-        padding: "10px 12px", 
-        margin: "10px 0", 
-        borderRadius: "8px", 
-        border: "1px solid #e2e8f0", 
-        boxSizing: "border-box",
-        fontSize: '1rem'
+    promptText: {
+        fontSize: '1.1rem',
+        color: '#666',
+        marginBottom: '25px',
+        lineHeight: '1.6'
     },
-    button: { 
-        padding: "12px 30px", 
-        backgroundColor: "#2e7d32", 
-        color: "white", 
-        border: "none", 
-        borderRadius: "8px", 
-        cursor: "pointer", 
-        fontWeight: "600",
-        fontSize: '1rem',
-        marginTop: '10px'
-    },
-    stripeButton: { 
-        padding: "12px 30px", 
-        backgroundColor: STRIPE_COLOR, 
-        color: "white", 
-        border: "none", 
-        borderRadius: "8px", 
-        cursor: "pointer", 
-        textDecoration: "none", 
-        display: "inline-block",
+    stripeButton: {
+        display: 'inline-block',
+        padding: '14px 28px',
+        backgroundColor: STRIPE_COLOR,
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '8px',
         fontWeight: '600',
-        fontSize: '1rem'
+        fontSize: '1rem',
+        transition: 'opacity 0.2s'
     },
     summaryBox: {
+        backgroundColor: '#f8f9fa',
         padding: '20px',
-        backgroundColor: '#e3f2fd',
-        border: '2px solid #1565c0',
         borderRadius: '8px',
-        marginBottom: '20px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '15px'
+        marginBottom: '25px'
     },
     summaryItem: {
-        margin: '0',
-        fontSize: '0.95rem'
+        margin: '10px 0',
+        fontSize: '1rem',
+        color: '#333'
     },
     summaryValue: {
-        fontWeight: 'normal',
-        color: '#333'
+        fontWeight: '600',
+        color: '#2c5aa0',
+        marginLeft: '10px'
+    },
+    formGroup: {
+        marginBottom: '20px'
+    },
+    formRow: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '20px'
     },
     label: {
         display: 'block',
-        marginBottom: '5px',
+        marginBottom: '8px',
         fontWeight: '600',
-        fontSize: '14px',
-        color: '#475569'
+        color: '#333',
+        fontSize: '0.9rem'
     },
-    formGroup: {
-        marginBottom: '15px'
-    },
-    dateGrid: {
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '15px',
-        marginBottom: '15px'
+    input: {
+        width: '100%',
+        padding: '10px 15px',
+        borderRadius: '8px',
+        border: '1px solid #e2e8f0',
+        fontSize: '1rem',
+        boxSizing: 'border-box'
     },
     checkboxGroup: {
         display: 'flex',
-        gap: '20px',
-        marginBottom: '15px'
+        flexDirection: 'column',
+        gap: '12px',
+        marginBottom: '20px'
     },
     checkboxLabel: {
         display: 'flex',
         alignItems: 'center',
-        gap: '10px'
+        gap: '10px',
+        fontSize: '0.95rem',
+        cursor: 'pointer'
     },
-    centerBox: {
-        padding: '20px',
-        textAlign: 'center'
-    },
-    promptText: {
-        fontSize: '1.1rem',
-        marginBottom: '20px',
-        color: '#475569'
+    submitButton: {
+        width: '100%',
+        padding: '14px',
+        borderRadius: '8px',
+        border: 'none',
+        backgroundColor: '#2e7d32',
+        color: 'white',
+        fontSize: '1rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+        transition: 'opacity 0.2s'
     }
 };
-
-// Animação do spinner
-const styleSheet = document.createElement("style");
-styleSheet.innerText = `
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
-if (!document.head.querySelector('[data-relatorios-spinner]')) {
-  styleSheet.setAttribute('data-relatorios-spinner', 'true');
-  document.head.appendChild(styleSheet);
-}
 
 export default LojistaRelatoriosBasic;
