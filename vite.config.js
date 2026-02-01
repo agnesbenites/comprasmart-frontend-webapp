@@ -18,6 +18,15 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    // ✅ NOVO: Proxy para Supabase (evita bloqueio)
+    proxy: {
+      '/supabase': {
+        target: 'https://vluxffbornnlxcenqmzp.supabase.co',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/supabase/, ''),
+        secure: true,
+      },
+    },
   },
 
   build: {
@@ -28,6 +37,15 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
+      },
+    },
+    // ✅ NOVO: Otimizações de build
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          supabase: ['@supabase/supabase-js'],
+        },
       },
     },
   },
