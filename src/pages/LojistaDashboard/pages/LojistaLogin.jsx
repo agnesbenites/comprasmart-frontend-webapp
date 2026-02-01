@@ -1,5 +1,5 @@
 // src/pages/LojistaDashboard/pages/LojistaLogin.jsx
-// Login de Lojista com limpeza de sessão
+// Login com limpeza automática de sessão
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,31 +17,27 @@ const LojistaLogin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    clearOldSession();
+    // Limpa sessão antiga ao carregar
+    cleanOldSession();
   }, []);
 
-  const clearOldSession = async () => {
+  const cleanOldSession = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      // Limpar localStorage de dados antigos
+      const keysToRemove = [
+        'cadastro_pendente',
+        'cadastro_lojista_pendente',
+        'lojistaCNPJ',
+        'lojistaNome',
+        'plano',
+      ];
       
-      if (session) {
-        const expiresAt = session.expires_at;
-        const now = Math.floor(Date.now() / 1000);
-        
-        if (expiresAt && expiresAt < now) {
-          console.log("Limpando sessão expirada...");
-          await supabase.auth.signOut();
-          localStorage.clear();
-        }
-      }
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+      });
     } catch (error) {
       console.error("Erro ao limpar sessão:", error);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
   };
 
   const formatarCNPJ = (valor) => {
@@ -62,6 +58,7 @@ const LojistaLogin = () => {
     try {
       let email = formData.email;
 
+      // Se login por CNPJ, buscar email
       if (loginType === "cnpj") {
         if (!formData.cnpj || formData.cnpj.replace(/\D/g, "").length !== 14) {
           setErro("CNPJ inválido");
@@ -92,8 +89,11 @@ const LojistaLogin = () => {
         return;
       }
 
+      // Limpar sessão antiga
       await supabase.auth.signOut();
+      await cleanOldSession();
 
+      // Fazer login
       const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
         email,
         password: formData.senha,
@@ -109,6 +109,7 @@ const LojistaLogin = () => {
         return;
       }
 
+      // Buscar dados da loja
       const { data: loja, error: lojaError } = await supabase
         .from("lojas_corrigida")
         .select("*")
@@ -121,12 +122,14 @@ const LojistaLogin = () => {
         return;
       }
 
+      // Verificar status
       if (loja.status !== "ativa") {
         setErro("Conta inativa. Entre em contato com o suporte.");
         setLoading(false);
         return;
       }
 
+      // Atualizar metadata
       await supabase.auth.updateUser({
         data: {
           role: "lojista",
@@ -135,6 +138,7 @@ const LojistaLogin = () => {
         },
       });
 
+      // Redirecionar
       navigate("/lojista/dashboard");
     } catch (error) {
       console.error("Erro no login:", error);
@@ -183,9 +187,8 @@ const LojistaLogin = () => {
               <label style={styles.label}>Email</label>
               <input
                 type="email"
-                name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="seu@email.com"
                 style={styles.input}
                 required
@@ -196,11 +199,8 @@ const LojistaLogin = () => {
               <label style={styles.label}>CNPJ</label>
               <input
                 type="text"
-                name="cnpj"
                 value={formData.cnpj}
-                onChange={(e) =>
-                  setFormData({ ...formData, cnpj: formatarCNPJ(e.target.value) })
-                }
+                onChange={(e) => setFormData({ ...formData, cnpj: formatarCNPJ(e.target.value) })}
                 placeholder="00.000.000/0000-00"
                 style={styles.input}
                 maxLength={18}
@@ -213,9 +213,8 @@ const LojistaLogin = () => {
             <label style={styles.label}>Senha</label>
             <input
               type="password"
-              name="senha"
               value={formData.senha}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
               placeholder="••••••••"
               style={styles.input}
               required

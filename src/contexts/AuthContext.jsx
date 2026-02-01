@@ -1,5 +1,5 @@
 // src/contexts/AuthContext.jsx
-// Context de autenticação com validação de sessão
+// Context de autenticação ROBUSTO com limpeza automática
 
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { supabase } from "../supabaseClient";
@@ -17,116 +17,198 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [sessionChecked, setSessionChecked] = useState(false);
 
   useEffect(() => {
-    // Verifica sessão inicial
-    checkSession();
+    // 1. Verificar sessão ao montar
+    initializeAuth();
 
-    // Listener para mudanças de autenticação
-    const { data: authListener } = supabase.auth.onAuthStateChange(
+    // 2. Listener para mudanças de autenticação
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log("Auth event:", event);
+        console.log("🔐 Auth event:", event);
         
-        if (event === "SIGNED_IN" && session) {
-          setUser(session.user);
-        } else if (event === "SIGNED_OUT") {
-          setUser(null);
-        } else if (event === "TOKEN_REFRESHED") {
+        if (event === "SIGNED_IN") {
+          console.log("✅ Usuário logado:", session?.user?.email);
           setUser(session?.user || null);
-        } else if (event === "USER_UPDATED") {
+          setLoading(false);
+        } 
+        else if (event === "SIGNED_OUT") {
+          console.log("🚪 Usuário deslogado");
+          await cleanupSession();
+          setUser(null);
+          setLoading(false);
+        } 
+        else if (event === "TOKEN_REFRESHED") {
+          console.log("🔄 Token renovado");
           setUser(session?.user || null);
         }
-        
-        setLoading(false);
+        else if (event === "USER_UPDATED") {
+          console.log("👤 Usuário atualizado");
+          setUser(session?.user || null);
+        }
       }
     );
 
     return () => {
-      authListener?.subscription?.unsubscribe();
+      subscription?.unsubscribe();
     };
   }, []);
 
-  const checkSession = async () => {
+  // Inicializa autenticação com limpeza automática
+  const initializeAuth = async () => {
     try {
-      // Pega a sessão atual
+      console.log("🔍 Verificando sessão...");
+      
+      // Pegar sessão atual
       const { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
-        console.error("Erro ao verificar sessão:", error);
-        // Limpa sessão inválida
-        await supabase.auth.signOut();
+        console.error("❌ Erro ao verificar sessão:", error);
+        await cleanupSession();
         setUser(null);
         setLoading(false);
+        setSessionChecked(true);
         return;
       }
 
       if (session && session.user) {
-        // Verifica se a sessão não expirou
+        // Verificar se a sessão expirou
         const expiresAt = session.expires_at;
         const now = Math.floor(Date.now() / 1000);
         
         if (expiresAt && expiresAt < now) {
-          console.log("Sessão expirada, fazendo logout...");
-          await supabase.auth.signOut();
+          console.log("⏰ Sessão expirada, limpando...");
+          await cleanupSession();
           setUser(null);
         } else {
-          console.log("Sessão válida encontrada:", session.user.email);
+          console.log("✅ Sessão válida:", session.user.email);
           setUser(session.user);
         }
       } else {
-        console.log("Nenhuma sessão encontrada");
+        console.log("ℹ️ Nenhuma sessão encontrada");
+        await cleanupSession(); // Limpa qualquer lixo
         setUser(null);
       }
     } catch (error) {
-      console.error("Erro ao verificar sessão:", error);
+      console.error("❌ Erro na inicialização:", error);
+      await cleanupSession();
       setUser(null);
     } finally {
       setLoading(false);
+      setSessionChecked(true);
     }
   };
 
+  // Limpa sessão e localStorage
+  const cleanupSession = async () => {
+    try {
+      // Fazer signOut no Supabase
+      await supabase.auth.signOut();
+      
+      // Limpar localStorage (apenas chaves específicas)
+      const keysToRemove = [
+        'cadastro_pendente',
+        'cadastro_lojista_pendente',
+        'lojistaCNPJ',
+        'lojistaNome',
+        'plano',
+      ];
+      
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+      });
+      
+      console.log("🧹 Sessão limpa");
+    } catch (error) {
+      console.error("Erro ao limpar sessão:", error);
+    }
+  };
+
+  // Login
   const signIn = async (email, password) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      // Limpar qualquer sessão antiga primeiro
+      await cleanupSession();
+      
+      // Fazer novo login
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) throw error;
-    
-    setUser(data.user);
-    return data;
+      if (error) throw error;
+      
+      console.log("✅ Login bem-sucedido:", data.user.email);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      console.error("❌ Erro no login:", error);
+      throw error;
+    }
   };
 
+  // Registro
   const signUp = async (email, password, metadata = {}) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: metadata,
-      },
-    });
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: metadata,
+        },
+      });
 
-    if (error) throw error;
-    return data;
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error("❌ Erro no registro:", error);
+      throw error;
+    }
   };
 
+  // Logout
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-    
-    setUser(null);
-    
-    // Limpa localStorage
-    localStorage.removeItem("cadastro_pendente");
-    localStorage.removeItem("cadastro_lojista_pendente");
+    try {
+      await cleanupSession();
+      setUser(null);
+      console.log("🚪 Logout realizado");
+    } catch (error) {
+      console.error("❌ Erro no logout:", error);
+      throw error;
+    }
+  };
+
+  // Refresh manual da sessão
+  const refreshSession = async () => {
+    try {
+      const { data: { session }, error } = await supabase.auth.refreshSession();
+      
+      if (error) throw error;
+      
+      if (session && session.user) {
+        setUser(session.user);
+        console.log("🔄 Sessão renovada");
+        return session;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("❌ Erro ao renovar sessão:", error);
+      await cleanupSession();
+      setUser(null);
+      throw error;
+    }
   };
 
   const value = {
     user,
     loading,
+    sessionChecked,
     signIn,
     signUp,
     signOut,
+    refreshSession,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
