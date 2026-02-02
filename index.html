@@ -6,6 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Compra Smart - Sistema Inteligente de Consultoria" />
     <title>Compra Smart</title>
+    
+    <!-- BLOQUEAR CLOUDFLARE BEACON -->
+    <script>
+      (function() {
+        // Bloquear injeção do Cloudflare Web Analytics
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+              if (node.tagName === 'SCRIPT' && 
+                  (node.src && (node.src.includes('cloudflareinsights') || 
+                   node.src.includes('beacon.min.js')))) {
+                console.log('🚫 Bloqueando Cloudflare Beacon:', node.src);
+                node.remove();
+              }
+            });
+          });
+        });
+        
+        observer.observe(document.documentElement, {
+          childList: true,
+          subtree: true
+        });
+        
+        // Prevenir que o beacon seja adicionado via appendChild
+        const originalAppendChild = Element.prototype.appendChild;
+        Element.prototype.appendChild = function(node) {
+          if (node.tagName === 'SCRIPT' && 
+              node.src && 
+              (node.src.includes('cloudflareinsights') || 
+               node.src.includes('beacon'))) {
+            console.log('🚫 Bloqueando appendChild do beacon');
+            return node;
+          }
+          return originalAppendChild.call(this, node);
+        };
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
