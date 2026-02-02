@@ -1,0 +1,7 @@
+# Cloudflare Pages - Redirects com proxy Supabase
+
+# Proxy para Supabase (evita bloqueio de CORS/AdBlock)
+/api/supabase/*  https://vluxffbornnlxcenqmzp.supabase.co/:splat  200
+
+# SPA fallback - todas as rotas retornam index.html
+/*  /index.html  200
