@@ -1,12 +1,15 @@
 // src/pages/LojistaDashboard/pages/LojistaLogin.jsx
-// Login com limpeza automática de sessão
+// Login DEFINITIVO - Usa AuthContext corretamente
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 import { supabase } from "../../../supabaseClient";
 
 const LojistaLogin = () => {
   const navigate = useNavigate();
+  const { signIn } = useAuth();
+  
   const [loginType, setLoginType] = useState("email");
   const [formData, setFormData] = useState({
     email: "",
@@ -15,30 +18,6 @@ const LojistaLogin = () => {
   });
   const [erro, setErro] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    // Limpa sessão antiga ao carregar
-    cleanOldSession();
-  }, []);
-
-  const cleanOldSession = async () => {
-    try {
-      // Limpar localStorage de dados antigos
-      const keysToRemove = [
-        'cadastro_pendente',
-        'cadastro_lojista_pendente',
-        'lojistaCNPJ',
-        'lojistaNome',
-        'plano',
-      ];
-      
-      keysToRemove.forEach(key => {
-        localStorage.removeItem(key);
-      });
-    } catch (error) {
-      console.error("Erro ao limpar sessão:", error);
-    }
-  };
 
   const formatarCNPJ = (valor) => {
     return valor
@@ -89,31 +68,14 @@ const LojistaLogin = () => {
         return;
       }
 
-      // Limpar sessão antiga
-      await supabase.auth.signOut();
-      await cleanOldSession();
-
-      // Fazer login
-      const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
-        email,
-        password: formData.senha,
-      });
-
-      if (loginError) {
-        if (loginError.message.includes("Invalid")) {
-          setErro("Email ou senha incorretos");
-        } else {
-          setErro(loginError.message);
-        }
-        setLoading(false);
-        return;
-      }
+      // ✅ USA O AuthContext
+      const { user } = await signIn(email, formData.senha);
 
       // Buscar dados da loja
       const { data: loja, error: lojaError } = await supabase
         .from("lojas_corrigida")
         .select("*")
-        .eq("user_id", loginData.user.id)
+        .eq("user_id", user.id)
         .single();
 
       if (lojaError || !loja) {
@@ -138,11 +100,18 @@ const LojistaLogin = () => {
         },
       });
 
+      console.log("✅ Login completo, redirecionando...");
+      
       // Redirecionar
       navigate("/lojista/dashboard");
     } catch (error) {
       console.error("Erro no login:", error);
-      setErro("Erro ao fazer login. Tente novamente.");
+      
+      if (error.message?.includes("Invalid")) {
+        setErro("Email ou senha incorretos");
+      } else {
+        setErro(error.message || "Erro ao fazer login. Tente novamente.");
+      }
     } finally {
       setLoading(false);
     }
