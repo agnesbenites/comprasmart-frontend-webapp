@@ -6,7 +6,7 @@ import { supabase } from '../supabaseClient';
 const StripeSuccess = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [status, setStatus] = useState('processing'); // processing, success, error
+  const [status, setStatus] = useState('processing');
 
   useEffect(() => {
     handleStripeReturn();
@@ -14,7 +14,6 @@ const StripeSuccess = () => {
 
   const handleStripeReturn = async () => {
     try {
-      // 1. Verificar se foi sucesso
       const success = searchParams.get('success');
       if (success !== 'true') {
         setStatus('error');
@@ -22,7 +21,6 @@ const StripeSuccess = () => {
         return;
       }
 
-      // 2. Pegar dados do localStorage (salvos no cadastro)
       const cadastroData = localStorage.getItem('cadastro_pendente');
       if (!cadastroData) {
         setStatus('error');
@@ -32,7 +30,6 @@ const StripeSuccess = () => {
 
       const { email, senha, plano } = JSON.parse(cadastroData);
 
-      // 3. Ativar a conta no banco
       const { error: updateError } = await supabase
         .from('lojas_corrigida')
         .update({
@@ -49,7 +46,6 @@ const StripeSuccess = () => {
         return;
       }
 
-      // 4. Fazer login automático
       const { data, error: loginError } = await supabase.auth.signInWithPassword({
         email: email,
         password: senha,
@@ -62,10 +58,16 @@ const StripeSuccess = () => {
         return;
       }
 
-      // 5. Limpar dados temporários
+      // Atualizar metadata com role
+      await supabase.auth.updateUser({
+        data: {
+          role: 'lojista',
+          plano: plano,
+        },
+      });
+
       localStorage.removeItem('cadastro_pendente');
 
-      // 6. Redirecionar para dashboard
       setStatus('success');
       setTimeout(() => {
         navigate('/lojista/dashboard', { replace: true });
