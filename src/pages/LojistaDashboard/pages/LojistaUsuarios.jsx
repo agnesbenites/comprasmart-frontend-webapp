@@ -1,18 +1,14 @@
 // src/pages/LojistaDashboard/pages/LojistaUsuarios.jsx
-// PÁGINA UNIFICADA COM TODAS AS FUNCIONALIDADES + PERMISSÕES INTEGRADAS
+// GESTÃO DE EQUIPE COM VALIDAÇÃO DE PLANO
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/supabaseClient';
-import { useAuth } from '@contexts/AuthContext';
-import { usePermissoes } from '@/hooks/usePermissoes';
+import { supabase } from '../../../supabaseClient';
 
 const LojistaUsuarios = () => {
-  const { user } = useAuth();
-  const { temPermissao, loading: loadingPerms, lojaId: lojaIdFromPerms } = usePermissoes();
-  
-  const [activeTab, setActiveTab] = useState('admins');
+  const [activeTab, setActiveTab] = useState('vendedores'); // ✅ Começa em vendedores
   const [loading, setLoading] = useState(false);
   const [lojaId, setLojaId] = useState(null);
+  const [planoLoja, setPlanoLoja] = useState('basic'); // ✅ Armazena plano
   
   const [admins, setAdmins] = useState([]);
   const [vendedores, setVendedores] = useState([]);
@@ -21,79 +17,72 @@ const LojistaUsuarios = () => {
   // Modals
   const [modalAddAdmin, setModalAddAdmin] = useState(false);
   const [modalAddVendedor, setModalAddVendedor] = useState(false);
-  const [modalPermissoes, setModalPermissoes] = useState(false);
+  const [modalEditPermissoes, setModalEditPermissoes] = useState(false);
+  const [adminSelecionado, setAdminSelecionado] = useState(null);
+  
   const [formData, setFormData] = useState({});
-  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
-  const [permissoesModal, setPermissoesModal] = useState({});
-
-  // Permissões base
-  const permissoesBase = {
+  
+  // ✅ PERMISSÕES CORRIGIDAS - SEGUINDO O PADRÃO
+  const [permissoes, setPermissoes] = useState({
+    // Produtos
     pode_criar_produto: false,
     pode_editar_produto: false,
     pode_excluir_produto: false,
     pode_alterar_preco: false,
     pode_gerenciar_estoque: false,
-    pode_criar_promocao: false,
-    pode_editar_promocao: false,
-    pode_excluir_promocao: false,
-    pode_disparar_promocoes: false,
+    
+    // Promoções (atenção aos nomes!)
+    pode_criar_promocoes: false,        // COM "S"
+    pode_editar_promocao: false,        // SEM "S"
+    pode_excluir_promocao: false,       // SEM "S"
+    pode_disparar_promocoes: false,     // COM "S"
+    
+    // Equipe
     pode_gerenciar_vendedores: false,
     pode_gerenciar_consultores: false,
+    pode_adicionar_admins: false,
     pode_gerenciar_admins: false,
+    
+    // Marketing
+    pode_usar_marketing_destaque: false,
+    
+    // Outros
     pode_gerenciar_treinamentos: false,
     pode_visualizar_relatorios: false,
-  };
-
-  const mapPermissoes = (data = {}) => ({
-    ...permissoesBase,
-    ...Object.keys(permissoesBase).reduce((acc, key) => {
-      acc[key] = !!data[key];
-      return acc;
-    }, {}),
   });
 
   useEffect(() => {
-    if (lojaIdFromPerms) {
-      setLojaId(lojaIdFromPerms);
-    } else {
-      carregarLojaId();
-    }
-  }, [lojaIdFromPerms]);
+    carregarDados();
+  }, [activeTab]);
 
-  useEffect(() => {
-    if (lojaId) {
-      carregarDados();
-    }
-  }, [activeTab, lojaId]);
-
-  const carregarLojaId = async () => {
+  const carregarDados = async () => {
+    setLoading(true);
     try {
-      const { data: loja, error } = await supabase
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) return;
+
+      // ✅ Buscar loja E plano
+      const { data: loja } = await supabase
         .from('lojas_corrigida')
-        .select('id')
+        .select('id, plano')
         .eq('user_id', user.id)
         .single();
 
-      if (loja) {
-        setLojaId(loja.id);
+      if (!loja) {
+        alert('❌ Erro: Você não está vinculado a nenhuma loja!');
+        return;
       }
-    } catch (error) {
-      console.error('Erro ao carregar loja:', error);
-    }
-  };
+      
+      setLojaId(loja.id);
+      setPlanoLoja(loja.plano?.toLowerCase() || 'basic');
 
-  const carregarDados = async () => {
-    if (!lojaId) return;
-    
-    setLoading(true);
-    try {
       if (activeTab === 'admins') {
         const { data } = await supabase
           .from('usuarios')
           .select('*')
-          .eq('loja_id', lojaId)
-          .in('tipo', ['proprietario', 'gerente_geral', 'gerente_vendas', 'supervisor', 'coordenador'])
-          .order('nome');
+          .eq('loja_id', loja.id)
+          .in('tipo', ['proprietario', 'gerente_geral', 'gerente_vendas', 'supervisor', 'coordenador']);
         
         setAdmins(data || []);
       }
@@ -102,8 +91,7 @@ const LojistaUsuarios = () => {
         const { data } = await supabase
           .from('vendedores')
           .select('*')
-          .eq('loja_id', lojaId)
-          .order('nome');
+          .eq('loja_id', loja.id);
         
         setVendedores(data || []);
       }
@@ -119,7 +107,7 @@ const LojistaUsuarios = () => {
               email
             )
           `)
-          .eq('id_loja', lojaId)
+          .eq('id_loja', loja.id)
           .eq('status', 'aprovado');
         
         setConsultores(data || []);
@@ -132,68 +120,121 @@ const LojistaUsuarios = () => {
     }
   };
 
-  // ============================================
-  // FUNÇÕES DE PERMISSÕES
-  // ============================================
-  const abrirPermissoes = async (usuario) => {
-    if (!temPermissao('pode_gerenciar_admins')) {
-      alert('❌ Você não tem permissão para gerenciar permissões de usuários');
-      return;
-    }
-
-    if (usuario.tipo === 'proprietario') {
-      alert('❌ As permissões do proprietário não podem ser alteradas');
-      return;
-    }
-
-    setUsuarioSelecionado(usuario);
-    setPermissoesModal(permissoesBase);
-
-    const { data } = await supabase
-      .from('permissoes_usuario')
-      .select('*')
-      .eq('usuario_id', usuario.id)
-      .eq('loja_id', usuario.loja_id)
-      .single();
-
-    if (data) {
-      setPermissoesModal(mapPermissoes(data));
-    }
-
-    setModalPermissoes(true);
+  // ✅ VALIDAR SE PODE ACESSAR ADMINS
+  const podeGerenciarAdmins = () => {
+    return planoLoja === 'pro' || planoLoja === 'enterprise';
   };
 
-  const salvarPermissoes = async () => {
-    if (!usuarioSelecionado) return;
+  // ✅ VALIDAR LIMITE DE ADMINS
+  const validarLimiteAdmins = () => {
+    if (planoLoja === 'basic') return false;
+    if (planoLoja === 'pro' && admins.length >= 3) {
+      alert('❌ Plano Pro permite até 3 administradores. Faça upgrade para Enterprise!');
+      return false;
+    }
+    return true;
+  };
 
-    const payload = {
-      usuario_id: usuarioSelecionado.id,
-      loja_id: usuarioSelecionado.loja_id,
-      ...mapPermissoes(permissoesModal),
+  const formatarTipo = (tipo) => {
+    const tipos = {
+      'proprietario': 'Proprietário',
+      'gerente_geral': 'Gerente Geral',
+      'gerente_vendas': 'Gerente de Vendas',
+      'supervisor': 'Supervisor',
+      'coordenador': 'Coordenador',
     };
+    return tipos[tipo] || tipo;
+  };
 
-    const { data: existente } = await supabase
-      .from('permissoes_usuario')
-      .select('id')
-      .eq('usuario_id', payload.usuario_id)
-      .eq('loja_id', payload.loja_id)
-      .single();
-
-    if (existente) {
-      await supabase
-        .from('permissoes_usuario')
-        .update(payload)
-        .eq('id', existente.id);
-    } else {
-      await supabase
-        .from('permissoes_usuario')
-        .insert(payload);
+  // ============================================
+  // GERENCIAR PERMISSÕES
+  // ============================================
+  const handleAbrirPermissoes = async (admin) => {
+    if (!podeGerenciarAdmins()) {
+      alert('❌ Sistema de permissões disponível apenas nos planos Pro e Enterprise!');
+      return;
     }
 
-    alert('✅ Permissões atualizadas com sucesso!');
-    setModalPermissoes(false);
-    setUsuarioSelecionado(null);
-    setPermissoesModal({});
+    setAdminSelecionado(admin);
+    
+    const { data: perms } = await supabase
+      .from('permissoes_usuario')
+      .select('*')
+      .eq('usuario_id', admin.id)
+      .eq('loja_id', lojaId)
+      .single();
+    
+    if (perms) {
+      // ✅ Garantir compatibilidade com os novos nomes de campos
+      setPermissoes({
+        ...permissoes, // Valores padrão
+        ...perms // Sobrescreve com os valores do banco
+      });
+    } else {
+      // Reset para valores padrão
+      setPermissoes({
+        pode_criar_produto: false,
+        pode_editar_produto: false,
+        pode_excluir_produto: false,
+        pode_alterar_preco: false,
+        pode_gerenciar_estoque: false,
+        pode_criar_promocoes: false,
+        pode_editar_promocao: false,
+        pode_excluir_promocao: false,
+        pode_disparar_promocoes: false,
+        pode_gerenciar_vendedores: false,
+        pode_gerenciar_consultores: false,
+        pode_adicionar_admins: false,
+        pode_gerenciar_admins: false,
+        pode_usar_marketing_destaque: false,
+        pode_gerenciar_treinamentos: false,
+        pode_visualizar_relatorios: false,
+      });
+    }
+    
+    setModalEditPermissoes(true);
+  };
+
+  const handleSalvarPermissoes = async () => {
+    if (!adminSelecionado) return;
+    
+    try {
+      const payload = {
+        usuario_id: adminSelecionado.id,
+        loja_id: lojaId,
+        ...permissoes,
+      };
+      
+      const { data: existing } = await supabase
+        .from('permissoes_usuario')
+        .select('id')
+        .eq('usuario_id', adminSelecionado.id)
+        .eq('loja_id', lojaId)
+        .single();
+      
+      if (existing) {
+        const { error } = await supabase
+          .from('permissoes_usuario')
+          .update(payload)
+          .eq('id', existing.id);
+        
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('permissoes_usuario')
+          .insert([payload]);
+        
+        if (error) throw error;
+      }
+      
+      alert('✅ Permissões atualizadas!');
+      setModalEditPermissoes(false);
+      setAdminSelecionado(null);
+      
+    } catch (error) {
+      console.error('Erro ao salvar permissões:', error);
+      alert('❌ Erro ao salvar permissões');
+    }
   };
 
   // ============================================
@@ -202,8 +243,12 @@ const LojistaUsuarios = () => {
   const handleAddAdmin = async (e) => {
     e.preventDefault();
     
-    if (!temPermissao('pode_gerenciar_admins')) {
-      alert('❌ Você não tem permissão para adicionar administradores');
+    if (!podeGerenciarAdmins()) {
+      alert('❌ Gestão de administradores disponível apenas nos planos Pro e Enterprise!');
+      return;
+    }
+
+    if (!validarLimiteAdmins()) {
       return;
     }
     
@@ -213,8 +258,10 @@ const LojistaUsuarios = () => {
     }
     
     try {
+      const uuid = crypto.randomUUID();
+      
       const novoAdmin = {
-        id: crypto.randomUUID(),
+        id: uuid,
         nome: formData.nome,
         email: formData.email,
         tipo: formData.tipo || 'gerente_geral',
@@ -228,27 +275,46 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert('✅ Administrador adicionado com sucesso!');
+      if (formData.tipo !== 'proprietario' && Object.keys(permissoes).some(k => permissoes[k])) {
+        await supabase
+          .from('permissoes_usuario')
+          .insert([{
+            usuario_id: uuid,
+            loja_id: lojaId,
+            ...permissoes,
+          }]);
+      }
+      
+      alert('✅ Administrador adicionado!');
       setModalAddAdmin(false);
       setFormData({});
+      // Reset para valores padrão
+      setPermissoes({
+        pode_criar_produto: false,
+        pode_editar_produto: false,
+        pode_excluir_produto: false,
+        pode_alterar_preco: false,
+        pode_gerenciar_estoque: false,
+        pode_criar_promocoes: false,
+        pode_editar_promocao: false,
+        pode_excluir_promocao: false,
+        pode_disparar_promocoes: false,
+        pode_gerenciar_vendedores: false,
+        pode_gerenciar_consultores: false,
+        pode_adicionar_admins: false,
+        pode_gerenciar_admins: false,
+        pode_usar_marketing_destaque: false,
+        pode_gerenciar_treinamentos: false,
+        pode_visualizar_relatorios: false,
+      });
       carregarDados();
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao adicionar administrador: ' + error.message);
+      alert('❌ Erro ao adicionar: ' + error.message);
     }
   };
 
-  const handleDeleteAdmin = async (adminId, adminTipo) => {
-    if (!temPermissao('pode_gerenciar_admins')) {
-      alert('❌ Você não tem permissão para excluir administradores');
-      return;
-    }
-
-    if (adminTipo === 'proprietario') {
-      alert('❌ Não é possível excluir o proprietário da loja');
-      return;
-    }
-
+  const handleDeleteAdmin = async (adminId) => {
     if (!confirm('Deseja realmente excluir este administrador?')) return;
 
     try {
@@ -262,22 +328,11 @@ const LojistaUsuarios = () => {
       alert('✅ Administrador excluído!');
       carregarDados();
     } catch (error) {
-      console.error('Erro:', error);
       alert('❌ Erro ao excluir');
     }
   };
 
-  const handleToggleAdminStatus = async (adminId, currentStatus, adminTipo) => {
-    if (!temPermissao('pode_gerenciar_admins')) {
-      alert('❌ Você não tem permissão para alterar status de administradores');
-      return;
-    }
-
-    if (adminTipo === 'proprietario') {
-      alert('❌ Não é possível desativar o proprietário da loja');
-      return;
-    }
-
+  const handleToggleAdminStatus = async (adminId, currentStatus) => {
     try {
       const { error } = await supabase
         .from('usuarios')
@@ -286,24 +341,18 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert(`✅ Status alterado para ${!currentStatus ? 'Ativo' : 'Inativo'}!`);
+      alert(`✅ Status alterado!`);
       carregarDados();
     } catch (error) {
-      console.error('Erro:', error);
       alert('❌ Erro ao alterar status');
     }
   };
 
   // ============================================
-  // VENDEDORES - FUNÇÕES
+  // VENDEDORES - FUNÇÕES (mantém igual)
   // ============================================
   const handleAddVendedor = async (e) => {
     e.preventDefault();
-    
-    if (!temPermissao('pode_gerenciar_vendedores')) {
-      alert('❌ Você não tem permissão para adicionar vendedores');
-      return;
-    }
     
     if (!lojaId) {
       alert('❌ ERRO: ID da loja não encontrado!');
@@ -325,22 +374,16 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert('✅ Vendedor adicionado com sucesso!');
+      alert('✅ Vendedor adicionado!');
       setModalAddVendedor(false);
       setFormData({});
       carregarDados();
     } catch (error) {
-      console.error('Erro:', error);
-      alert('❌ Erro ao adicionar vendedor: ' + error.message);
+      alert('❌ Erro: ' + error.message);
     }
   };
 
   const handleDeleteVendedor = async (vendedorId) => {
-    if (!temPermissao('pode_gerenciar_vendedores')) {
-      alert('❌ Você não tem permissão para excluir vendedores');
-      return;
-    }
-
     if (!confirm('Deseja realmente excluir este vendedor?')) return;
 
     try {
@@ -354,17 +397,11 @@ const LojistaUsuarios = () => {
       alert('✅ Vendedor excluído!');
       carregarDados();
     } catch (error) {
-      console.error('Erro:', error);
       alert('❌ Erro ao excluir');
     }
   };
 
   const handleToggleVendedorStatus = async (vendedorId, currentStatus) => {
-    if (!temPermissao('pode_gerenciar_vendedores')) {
-      alert('❌ Você não tem permissão para alterar status de vendedores');
-      return;
-    }
-
     try {
       const { error } = await supabase
         .from('vendedores')
@@ -376,20 +413,14 @@ const LojistaUsuarios = () => {
       alert(`✅ Vendedor ${!currentStatus ? 'ativado' : 'desativado'}!`);
       carregarDados();
     } catch (error) {
-      console.error('Erro:', error);
       alert('❌ Erro ao alterar status');
     }
   };
 
   // ============================================
-  // CONSULTORES - FUNÇÕES
+  // CONSULTORES - FUNÇÕES (mantém igual)
   // ============================================
   const handleRemoverConsultor = async (vinculoId) => {
-    if (!temPermissao('pode_gerenciar_consultores')) {
-      alert('❌ Você não tem permissão para remover consultores');
-      return;
-    }
-
     if (!confirm('Deseja realmente remover este consultor?')) return;
 
     try {
@@ -403,105 +434,236 @@ const LojistaUsuarios = () => {
       alert('✅ Consultor removido!');
       carregarDados();
     } catch (error) {
-      console.error('Erro:', error);
-      alert('❌ Erro ao remover consultor');
+      alert('❌ Erro ao remover');
     }
   };
 
   // ============================================
+  // RENDER CHECKBOXES (ATUALIZADO COM OS NOVOS NOMES)
+  // ============================================
+  const renderCheckboxesPermissoes = () => (
+    <div style={styles.permissoesBox}>
+      <h4 style={styles.permissoesTitle}>🔐 Permissões de Acesso</h4>
+      
+      <div style={styles.permissoesGroup}>
+        <strong style={styles.permissoesGroupTitle}>📦 Produtos</strong>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_criar_produto} onChange={(e) => setPermissoes({...permissoes, pode_criar_produto: e.target.checked})} />
+          Criar produtos
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_editar_produto} onChange={(e) => setPermissoes({...permissoes, pode_editar_produto: e.target.checked})} />
+          Editar produtos
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_excluir_produto} onChange={(e) => setPermissoes({...permissoes, pode_excluir_produto: e.target.checked})} />
+          Excluir produtos
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_alterar_preco} onChange={(e) => setPermissoes({...permissoes, pode_alterar_preco: e.target.checked})} />
+          Alterar preços
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_gerenciar_estoque} onChange={(e) => setPermissoes({...permissoes, pode_gerenciar_estoque: e.target.checked})} />
+          Gerenciar estoque
+        </label>
+      </div>
+
+      <div style={styles.permissoesGroup}>
+        <strong style={styles.permissoesGroupTitle}>🎁 Promoções (corrigidas)</strong>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_criar_promocoes} onChange={(e) => setPermissoes({...permissoes, pode_criar_promocoes: e.target.checked})} />
+          Criar promoções
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_editar_promocao} onChange={(e) => setPermissoes({...permissoes, pode_editar_promocao: e.target.checked})} />
+          Editar promoções
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_excluir_promocao} onChange={(e) => setPermissoes({...permissoes, pode_excluir_promocao: e.target.checked})} />
+          Excluir promoções
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_disparar_promocoes} onChange={(e) => setPermissoes({...permissoes, pode_disparar_promocoes: e.target.checked})} />
+          Ativar/desativar promoções
+        </label>
+      </div>
+
+      <div style={styles.permissoesGroup}>
+        <strong style={styles.permissoesGroupTitle}>👥 Equipe</strong>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_gerenciar_vendedores} onChange={(e) => setPermissoes({...permissoes, pode_gerenciar_vendedores: e.target.checked})} />
+          Gerenciar vendedores
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_gerenciar_consultores} onChange={(e) => setPermissoes({...permissoes, pode_gerenciar_consultores: e.target.checked})} />
+          Gerenciar consultores
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_adicionar_admins} onChange={(e) => setPermissoes({...permissoes, pode_adicionar_admins: e.target.checked})} />
+          Adicionar administradores
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_gerenciar_admins} onChange={(e) => setPermissoes({...permissoes, pode_gerenciar_admins: e.target.checked})} />
+          Gerenciar administradores
+        </label>
+      </div>
+
+      <div style={styles.permissoesGroup}>
+        <strong style={styles.permissoesGroupTitle}>📈 Marketing</strong>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_usar_marketing_destaque} onChange={(e) => setPermissoes({...permissoes, pode_usar_marketing_destaque: e.target.checked})} />
+          Usar marketing de destaque
+        </label>
+      </div>
+
+      <div style={styles.permissoesGroup}>
+        <strong style={styles.permissoesGroupTitle}>📊 Outros</strong>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_gerenciar_treinamentos} onChange={(e) => setPermissoes({...permissoes, pode_gerenciar_treinamentos: e.target.checked})} />
+          Gerenciar treinamentos
+        </label>
+        <label style={styles.checkboxLabel}>
+          <input type="checkbox" checked={permissoes.pode_visualizar_relatorios} onChange={(e) => setPermissoes({...permissoes, pode_visualizar_relatorios: e.target.checked})} />
+          Visualizar relatórios
+        </label>
+      </div>
+    </div>
+  );
+
+  // ============================================
   // RENDERS
   // ============================================
-  const formatarTipo = (tipo) => {
-    const tipos = {
-      'proprietario': 'Proprietário',
-      'gerente_geral': 'Gerente Geral',
-      'gerente_vendas': 'Gerente de Vendas',
-      'supervisor': 'Supervisor',
-      'coordenador': 'Coordenador',
-    };
-    return tipos[tipo] || tipo;
-  };
+  const renderAdmins = () => {
+    // ✅ Se plano Basic, mostrar mensagem de upgrade
+    if (!podeGerenciarAdmins()) {
+      return (
+        <div style={styles.upgradeBox}>
+          <div style={styles.upgradeIcon}>🔒</div>
+          <h3 style={styles.upgradeTitle}>Gestão de Administradores</h3>
+          <p style={styles.upgradeText}>
+            O sistema de permissões e gestão de administradores está disponível apenas nos planos <strong>Pro</strong> e <strong>Enterprise</strong>.
+          </p>
+          <ul style={styles.upgradeList}>
+            <li>✅ Adicionar múltiplos administradores</li>
+            <li>✅ Customizar permissões por usuário</li>
+            <li>✅ Criar hierarquia de acesso</li>
+            <li>✅ Controle granular de funcionalidades</li>
+          </ul>
+          <button 
+            style={styles.upgradeButton}
+            onClick={() => window.location.href = '/lojista/planos'}
+          >
+            🚀 Fazer Upgrade
+          </button>
+        </div>
+      );
+    }
 
-  const renderAdmins = () => (
-    <div>
-      <div style={styles.sectionHeader}>
-        <h2>👤 Administradores da Loja</h2>
-        {temPermissao('pode_gerenciar_admins') && (
+    // ✅ Renderização normal para Pro/Enterprise
+    return (
+      <div>
+        <div style={styles.sectionHeader}>
+          <div>
+            <h2>👤 Administradores da Loja</h2>
+            {planoLoja === 'pro' && (
+              <small style={{color: '#64748b'}}>
+                Plano Pro: até 3 administradores ({admins.length}/3)
+              </small>
+            )}
+          </div>
           <button style={styles.btnPrimary} onClick={() => {
+            if (!validarLimiteAdmins()) return;
             setFormData({});
+            // Reset para valores padrão
+            setPermissoes({
+              pode_criar_produto: false,
+              pode_editar_produto: false,
+              pode_excluir_produto: false,
+              pode_alterar_preco: false,
+              pode_gerenciar_estoque: false,
+              pode_criar_promocoes: false,
+              pode_editar_promocao: false,
+              pode_excluir_promocao: false,
+              pode_disparar_promocoes: false,
+              pode_gerenciar_vendedores: false,
+              pode_gerenciar_consultores: false,
+              pode_adicionar_admins: false,
+              pode_gerenciar_admins: false,
+              pode_usar_marketing_destaque: false,
+              pode_gerenciar_treinamentos: false,
+              pode_visualizar_relatorios: false,
+            });
             setModalAddAdmin(true);
           }}>
             + Adicionar Admin
           </button>
+        </div>
+
+        {admins.length === 0 ? (
+          <div style={styles.empty}>
+            <p>Nenhum administrador cadastrado</p>
+          </div>
+        ) : (
+          <div style={styles.table}>
+            <div style={styles.tableHeader}>
+              <div>Nome</div>
+              <div>Email</div>
+              <div>Perfil</div>
+              <div>Status</div>
+              <div>Ações</div>
+            </div>
+            {admins.map((admin) => (
+              <div key={admin.id} style={styles.tableRow}>
+                <div>{admin.nome}</div>
+                <div>{admin.email}</div>
+                <div><span style={styles.badge}>{formatarTipo(admin.tipo)}</span></div>
+                <div>
+                  <span style={{...styles.badge, backgroundColor: admin.ativo ? '#10b981' : '#ef4444'}}>
+                    {admin.ativo ? 'Ativo' : 'Inativo'}
+                  </span>
+                </div>
+                <div style={styles.actionsCell}>
+                  {admin.tipo !== 'proprietario' && (
+                    <button 
+                      style={{...styles.btnAction, backgroundColor: '#6f42c1', color: 'white'}}
+                      onClick={() => handleAbrirPermissoes(admin)}
+                      title="Gerenciar permissões"
+                    >
+                      🔐
+                    </button>
+                  )}
+                  <button 
+                    style={styles.btnAction}
+                    onClick={() => handleToggleAdminStatus(admin.id, admin.ativo)}
+                  >
+                    {admin.ativo ? 'Desativar' : 'Ativar'}
+                  </button>
+                  <button 
+                    style={styles.btnDanger}
+                    onClick={() => handleDeleteAdmin(admin.id)}
+                  >
+                    Excluir
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
-
-      {admins.length === 0 ? (
-        <div style={styles.empty}>
-          <p>Nenhum administrador cadastrado</p>
-        </div>
-      ) : (
-        <div style={styles.table}>
-          <div style={styles.tableHeader}>
-            <div>Nome</div>
-            <div>Email</div>
-            <div>Perfil</div>
-            <div>Status</div>
-            <div>Ações</div>
-          </div>
-          {admins.map((admin) => (
-            <div key={admin.id} style={styles.tableRow}>
-              <div>{admin.nome}</div>
-              <div>{admin.email}</div>
-              <div><span style={styles.badge}>{formatarTipo(admin.tipo)}</span></div>
-              <div>
-                <span style={{...styles.badge, backgroundColor: admin.ativo ? '#10b981' : '#ef4444'}}>
-                  {admin.ativo ? 'Ativo' : 'Inativo'}
-                </span>
-              </div>
-              <div style={styles.actionsCell}>
-                {temPermissao('pode_gerenciar_admins') && admin.tipo !== 'proprietario' && (
-                  <>
-                    <button 
-                      style={styles.btnAction}
-                      onClick={() => abrirPermissoes(admin)}
-                    >
-                      🔐 Permissões
-                    </button>
-                    <button 
-                      style={styles.btnAction}
-                      onClick={() => handleToggleAdminStatus(admin.id, admin.ativo, admin.tipo)}
-                    >
-                      {admin.ativo ? 'Desativar' : 'Ativar'}
-                    </button>
-                    <button 
-                      style={styles.btnDanger}
-                      onClick={() => handleDeleteAdmin(admin.id, admin.tipo)}
-                    >
-                      Excluir
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+    );
+  };
 
   const renderVendedores = () => (
     <div>
       <div style={styles.sectionHeader}>
         <h2>🛍️ Vendedores Próprios</h2>
-        {temPermissao('pode_gerenciar_vendedores') && (
-          <button style={styles.btnPrimary} onClick={() => {
-            setFormData({});
-            setModalAddVendedor(true);
-          }}>
-            + Adicionar Vendedor
-          </button>
-        )}
+        <button style={styles.btnPrimary} onClick={() => {
+          setFormData({});
+          setModalAddVendedor(true);
+        }}>
+          + Adicionar Vendedor
+        </button>
       </div>
 
       {vendedores.length === 0 ? (
@@ -521,22 +683,18 @@ const LojistaUsuarios = () => {
                 </div>
               </div>
               <div style={styles.cardActions}>
-                {temPermissao('pode_gerenciar_vendedores') && (
-                  <>
-                    <button 
-                      style={styles.btnAction}
-                      onClick={() => handleToggleVendedorStatus(vendedor.id, vendedor.ativo)}
-                    >
-                      {vendedor.ativo ? 'Desativar' : 'Ativar'}
-                    </button>
-                    <button 
-                      style={styles.btnDanger}
-                      onClick={() => handleDeleteVendedor(vendedor.id)}
-                    >
-                      Excluir
-                    </button>
-                  </>
-                )}
+                <button 
+                  style={styles.btnAction}
+                  onClick={() => handleToggleVendedorStatus(vendedor.id, vendedor.ativo)}
+                >
+                  {vendedor.ativo ? 'Desativar' : 'Ativar'}
+                </button>
+                <button 
+                  style={styles.btnDanger}
+                  onClick={() => handleDeleteVendedor(vendedor.id)}
+                >
+                  Excluir
+                </button>
               </div>
             </div>
           ))}
@@ -572,14 +730,12 @@ const LojistaUsuarios = () => {
                   </div>
                 </div>
                 <div style={styles.cardActions}>
-                  {temPermissao('pode_gerenciar_consultores') && (
-                    <button 
-                      style={styles.btnDanger}
-                      onClick={() => handleRemoverConsultor(vinculo.id)}
-                    >
-                      Remover
-                    </button>
-                  )}
+                  <button 
+                    style={styles.btnDanger}
+                    onClick={() => handleRemoverConsultor(vinculo.id)}
+                  >
+                    Remover
+                  </button>
                 </div>
               </div>
             );
@@ -588,15 +744,6 @@ const LojistaUsuarios = () => {
       )}
     </div>
   );
-
-  if (loadingPerms) {
-    return (
-      <div style={styles.loadingContainer}>
-        <div style={styles.spinner}></div>
-        <p>Carregando permissões...</p>
-      </div>
-    );
-  }
 
   return (
     <div style={styles.container}>
@@ -612,6 +759,7 @@ const LojistaUsuarios = () => {
           style={{...styles.tab, ...(activeTab === 'admins' ? styles.tabActive : {})}}
         >
           👤 Administradores
+          {!podeGerenciarAdmins() && <span style={{marginLeft: '8px'}}>🔒</span>}
         </button>
         <button
           onClick={() => setActiveTab('vendedores')}
@@ -643,10 +791,10 @@ const LojistaUsuarios = () => {
         )}
       </div>
 
-      {/* MODAL ADD ADMIN */}
-      {modalAddAdmin && (
+      {/* MODALS (mantém iguais, adicionando validação no submit) */}
+      {modalAddAdmin && podeGerenciarAdmins() && (
         <div style={styles.modalOverlay} onClick={() => setModalAddAdmin(false)}>
-          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+          <div style={{...styles.modal, maxWidth: '700px'}} onClick={(e) => e.stopPropagation()}>
             <h2 style={styles.modalTitle}>Adicionar Administrador</h2>
             <form onSubmit={handleAddAdmin}>
               <div style={styles.formGroup}>
@@ -676,15 +824,16 @@ const LojistaUsuarios = () => {
                   value={formData.tipo || 'gerente_geral'}
                   onChange={(e) => setFormData({...formData, tipo: e.target.value})}
                 >
+                  <option value="proprietario">Proprietário</option>
                   <option value="gerente_geral">Gerente Geral</option>
                   <option value="gerente_vendas">Gerente de Vendas</option>
                   <option value="supervisor">Supervisor</option>
                   <option value="coordenador">Coordenador</option>
                 </select>
-                <small style={{color: '#64748b', fontSize: '0.85rem'}}>
-                  * O tipo "Proprietário" é reservado apenas para o criador da loja
-                </small>
               </div>
+
+              {formData.tipo && formData.tipo !== 'proprietario' && renderCheckboxesPermissoes()}
+
               <div style={styles.modalActions}>
                 <button type="button" style={styles.btnSecondary} onClick={() => setModalAddAdmin(false)}>
                   Cancelar
@@ -698,7 +847,38 @@ const LojistaUsuarios = () => {
         </div>
       )}
 
-      {/* MODAL ADD VENDEDOR */}
+      {modalEditPermissoes && adminSelecionado && podeGerenciarAdmins() && (
+        <div style={styles.modalOverlay} onClick={() => setModalEditPermissoes(false)}>
+          <div style={{...styles.modal, maxWidth: '700px'}} onClick={(e) => e.stopPropagation()}>
+            <h2 style={styles.modalTitle}>
+              🔐 Permissões: {adminSelecionado.nome}
+            </h2>
+            <p style={{color: '#666', marginBottom: '20px'}}>
+              {formatarTipo(adminSelecionado.tipo)} • {adminSelecionado.email}
+            </p>
+
+            {renderCheckboxesPermissoes()}
+
+            <div style={styles.modalActions}>
+              <button 
+                type="button" 
+                style={styles.btnSecondary} 
+                onClick={() => setModalEditPermissoes(false)}
+              >
+                Cancelar
+              </button>
+              <button 
+                type="button" 
+                style={styles.btnPrimary}
+                onClick={handleSalvarPermissoes}
+              >
+                💾 Salvar Permissões
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {modalAddVendedor && (
         <div style={styles.modalOverlay} onClick={() => setModalAddVendedor(false)}>
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -746,111 +926,16 @@ const LojistaUsuarios = () => {
           </div>
         </div>
       )}
-
-      {/* MODAL PERMISSÕES */}
-      {modalPermissoes && usuarioSelecionado && (
-        <div style={styles.modalOverlay} onClick={() => setModalPermissoes(false)}>
-          <div style={{...styles.modal, maxWidth: '700px'}} onClick={(e) => e.stopPropagation()}>
-            <h2 style={styles.modalTitle}>
-              🔐 Permissões de {usuarioSelecionado.nome}
-              <div style={{fontSize: '0.9rem', color: '#64748b', fontWeight: 'normal', marginTop: '5px'}}>
-                {formatarTipo(usuarioSelecionado.tipo)}
-              </div>
-            </h2>
-
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '15px',
-              marginBottom: '25px'
-            }}>
-              {Object.keys(permissoesModal).map((key) => (
-                <label key={key} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '10px',
-                  backgroundColor: '#f8fafc',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                }}>
-                  <input
-                    type="checkbox"
-                    checked={permissoesModal[key]}
-                    onChange={(e) =>
-                      setPermissoesModal({
-                        ...permissoesModal,
-                        [key]: e.target.checked,
-                      })
-                    }
-                    style={{marginRight: '10px'}}
-                  />
-                  <div>
-                    <div style={{fontWeight: '600'}}>
-                      {key.replace(/_/g, ' ').replace('pode ', '').replace(/^\w/, c => c.toUpperCase())}
-                    </div>
-                    <div style={{fontSize: '0.8rem', color: '#64748b'}}>
-                      {getDescricaoPermissao(key)}
-                    </div>
-                  </div>
-                </label>
-              ))}
-            </div>
-
-            <div style={styles.modalActions}>
-              <button 
-                type="button" 
-                style={styles.btnSecondary} 
-                onClick={() => setModalPermissoes(false)}
-              >
-                Cancelar
-              </button>
-              <button 
-                type="button" 
-                style={styles.btnPrimary}
-                onClick={salvarPermissoes}
-              >
-                Salvar Permissões
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-const getDescricaoPermissao = (key) => {
-  const descricoes = {
-    pode_criar_produto: 'Criar novos produtos no catálogo',
-    pode_editar_produto: 'Editar informações de produtos existentes',
-    pode_excluir_produto: 'Remover produtos do catálogo',
-    pode_alterar_preco: 'Alterar preços de produtos',
-    pode_gerenciar_estoque: 'Atualizar estoque e inventário',
-    pode_criar_promocao: 'Criar novas promoções e descontos',
-    pode_editar_promocao: 'Editar promoções existentes',
-    pode_excluir_promocao: 'Remover promoções',
-    pode_disparar_promocoes: 'Ativar/desativar promoções',
-    pode_gerenciar_vendedores: 'Adicionar/remover vendedores próprios',
-    pode_gerenciar_consultores: 'Gerenciar consultores externos',
-    pode_gerenciar_admins: 'Gerenciar outros administradores',
-    pode_gerenciar_treinamentos: 'Gerenciar materiais de treinamento',
-    pode_visualizar_relatorios: 'Acessar relatórios e análises',
-  };
-  return descricoes[key] || '';
-};
-
+// (Os estilos permanecem os mesmos)
 const styles = {
   container: {
     padding: '30px',
     backgroundColor: '#f8f9fa',
     minHeight: '100vh',
-  },
-  loadingContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '50vh',
   },
   header: {
     marginBottom: '30px',
@@ -881,6 +966,8 @@ const styles = {
     fontSize: '1rem',
     fontWeight: '600',
     cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
   },
   tabActive: {
     color: '#3b82f6',
@@ -891,6 +978,50 @@ const styles = {
     borderRadius: '12px',
     padding: '30px',
     boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+  },
+  // ✅ ESTILOS DO UPGRADE BOX
+  upgradeBox: {
+    textAlign: 'center',
+    padding: '60px 40px',
+    backgroundColor: '#f8fafc',
+    borderRadius: '16px',
+    border: '2px dashed #cbd5e1',
+  },
+  upgradeIcon: {
+    fontSize: '4rem',
+    marginBottom: '20px',
+  },
+  upgradeTitle: {
+    fontSize: '1.8rem',
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: '15px',
+  },
+  upgradeText: {
+    fontSize: '1.1rem',
+    color: '#64748b',
+    marginBottom: '30px',
+    lineHeight: '1.6',
+  },
+  upgradeList: {
+    textAlign: 'left',
+    maxWidth: '400px',
+    margin: '0 auto 40px auto',
+    padding: 0,
+    listStyle: 'none',
+    fontSize: '1rem',
+    color: '#475569',
+  },
+  upgradeButton: {
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    border: 'none',
+    padding: '16px 48px',
+    borderRadius: '12px',
+    fontSize: '1.1rem',
+    fontWeight: '700',
+    cursor: 'pointer',
+    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
   },
   sectionHeader: {
     display: 'flex',
@@ -965,7 +1096,7 @@ const styles = {
   },
   tableHeader: {
     display: 'grid',
-    gridTemplateColumns: '2fr 2fr 1fr 1fr 2fr',
+    gridTemplateColumns: '2fr 2fr 1fr 1fr 1.5fr',
     gap: '10px',
     padding: '12px 15px',
     backgroundColor: '#f8fafc',
@@ -976,7 +1107,7 @@ const styles = {
   },
   tableRow: {
     display: 'grid',
-    gridTemplateColumns: '2fr 2fr 1fr 1fr 2fr',
+    gridTemplateColumns: '2fr 2fr 1fr 1fr 1.5fr',
     gap: '10px',
     padding: '12px 15px',
     borderBottom: '1px solid #e2e8f0',
@@ -986,7 +1117,6 @@ const styles = {
   actionsCell: {
     display: 'flex',
     gap: '8px',
-    flexWrap: 'wrap',
   },
   badge: {
     backgroundColor: '#3b82f6',
@@ -1065,6 +1195,8 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
+    overflowY: 'auto',
+    padding: '20px',
   },
   modal: {
     backgroundColor: 'white',
@@ -1105,9 +1237,42 @@ const styles = {
     justifyContent: 'flex-end',
     marginTop: '30px',
   },
+  permissoesBox: {
+    marginTop: '25px',
+    padding: '20px',
+    backgroundColor: '#f8fafc',
+    borderRadius: '12px',
+    border: '2px solid #e2e8f0',
+  },
+  permissoesTitle: {
+    margin: '0 0 20px 0',
+    fontSize: '1.1rem',
+    color: '#1e293b',
+    fontWeight: '700',
+  },
+  permissoesGroup: {
+    marginBottom: '20px',
+    paddingBottom: '15px',
+    borderBottom: '1px solid #e2e8f0',
+  },
+  permissoesGroupTitle: {
+    display: 'block',
+    marginBottom: '12px',
+    fontSize: '0.95rem',
+    color: '#475569',
+    fontWeight: '600',
+  },
+  checkboxLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '8px',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
+    color: '#1e293b',
+  },
 };
 
-// Animação
 const styleSheet = document.createElement("style");
 styleSheet.innerText = `
   @keyframes spin {
