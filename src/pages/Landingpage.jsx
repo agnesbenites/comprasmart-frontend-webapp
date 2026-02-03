@@ -60,7 +60,7 @@ const Landingpage = () => {
   const STRIPE_URLS = {
     BASICO: 'https://buy.stripe.com/00w7sL2z6ceE11cd8ZgQE01',
     PRO: 'https://buy.stripe.com/dRm8wP7Tq1A011c1qhgQE02',
-    ENTERPRISE: 'https://buy.stripe.com/3cI3cv2z6fqQaBM8SJgQE03',
+    ENTERPRISE: 'https://buy.stripe.com/6oU28r5LiemMaBM8SJgQE0a',
   };
 
   const handleStripeCheckout = (stripeLink) => {
