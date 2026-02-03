@@ -97,6 +97,7 @@ function App() {
       <Routes>
         {/* PÁGINA INICIAL É A LANDING */}
         <Route path="/" element={<Landingpage />} />
+	<Route path="/cadastro" element={<LojistaRegisterPage />} />
         
         {/* Onboarding é uma rota separada */}
         <Route path="/onboarding" element={<MarketingOnboarding />} />
