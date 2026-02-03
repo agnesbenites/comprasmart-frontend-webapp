@@ -5,6 +5,12 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { Link } from 'react-router-dom';
 
+const VALORES_PLANOS = {
+  basic:      99.90,
+  pro:       199.90,
+  enterprise: 499.90,
+};
+
 const DashboardEnterprise = () => {
   const [loading, setLoading] = useState(true);
   const [lojaId, setLojaId] = useState(null);
@@ -60,7 +66,7 @@ const DashboardEnterprise = () => {
         ?.filter(v => v.venda_incremental && v.origem_venda === 'consultor_on_demand')
         .reduce((sum, v) => sum + parseFloat(v.valor_total || 0), 0) || 0;
 
-      const roi = estoqueRecuperado / 360.00;
+      const roi = estoqueRecuperado / VALORES_PLANOS.enterprise;
 
       // Contadores por método
       const vendasVideo = vendas?.filter(v => v.metodo_fechamento === 'video').length || 0;
@@ -184,7 +190,7 @@ const DashboardEnterprise = () => {
         <div style={styles.roiDetails}>
           <div style={styles.roiDetailItem}>
             <span style={styles.roiDetailLabel}>Investimento Mensal</span>
-            <span style={styles.roiDetailValue}>R$ 360,00</span>
+            <span style={styles.roiDetailValue}>R$ {VALORES_PLANOS.enterprise.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
           </div>
           <div style={styles.roiDetailItem}>
             <span style={styles.roiDetailLabel}>Estoque Recuperado</span>
