@@ -99,7 +99,7 @@ const Institucional = () => {
             onError={e => { 
               e.target.style.display = 'none';
               const fallback = document.createElement('div');
-              fallback.innerHTML = '<span style="color: #C9F7A6; font-size: 42px; font-weight: 800; font-family: Poppins, sans-serif;">Kaslee</span>';
+              fallback.innerHTML = '<span style="color: #0accbd; font-size: 42px; font-weight: 800; font-family: Poppins, sans-serif;">Kaslee</span>';
               e.target.parentElement.appendChild(fallback);
             }}
           />
@@ -149,10 +149,10 @@ const Institucional = () => {
             A Kaslee é uma plataforma digital que conecta lojas a consultores independentes.
           </p>
           <p style={S.text}>
-            <strong style={{ color: '#C9F7A6' }}>O que são os Consultores Independentes?</strong> São profissionais da área de vendas, que possuem perícia e experiência vendendo os segmentos que escolhem, como eletrodomésticos, moda, papelaria, eletrônicos, brinquedos, entre outros.
+            <strong style={{ color: '#0accbd' }}>O que são os Consultores Independentes?</strong> São profissionais da área de vendas, que possuem perícia e experiência vendendo os segmentos que escolhem, como eletrodomésticos, moda, papelaria, eletrônicos, brinquedos, entre outros.
           </p>
           <p style={S.text}>
-            <strong style={{ color: '#C9F7A6' }}>Como funciona?</strong> As lojas cadastram seus produtos, definem preços, comissões e regras de venda. Em contrapartida, os consultores escolhem os produtos que dominam, divulgam e atendem clientes online.
+            <strong style={{ color: '#0accbd' }}>Como funciona?</strong> As lojas cadastram seus produtos, definem preços, comissões e regras de venda. Em contrapartida, os consultores escolhem os produtos que dominam, divulgam e atendem clientes online.
           </p>
           <p style={S.text}>
             Toda a jornada — do contato ao pagamento — acontece dentro da plataforma, com controle total para o lojista e pagamento automático para todas as partes envolvidas.
@@ -211,7 +211,7 @@ const Institucional = () => {
             A Kaslee veio para revolucionar o mercado. Fazemos integração com outros softwares, queremos que o varejo venda mais, que os consumidores se sintam seguros na aquisição dos produtos, além de fomentar o mercado de trabalho com pessoas capacitadas e profissionais da área de vendas.
           </p>
           <p style={S.text}>
-            Nosso compromisso é com o desenvolvimento e a tecnologia tem muito a acrescentar. Contamos com uma área de treinamentos que podem ser realizados por todos os usuários, além da gamificação para deixar os vendedores ainda mais craques com a nossa <strong style={{ color: '#C9F7A6' }}>"Arena de Vendas"</strong>.
+            Nosso compromisso é com o desenvolvimento e a tecnologia tem muito a acrescentar. Contamos com uma área de treinamentos que podem ser realizados por todos os usuários, além da gamificação para deixar os vendedores ainda mais craques com a nossa <strong style={{ color: '#0accbd' }}>"Arena de Vendas"</strong>.
           </p>
         </div>
 
@@ -262,7 +262,7 @@ const S = {
   },
 
   logo: {
-    color: '#C9F7A6',
+    color: '#0accbd',
     fontWeight: '700',
     fontSize: '24px',
     letterSpacing: '-0.5px',
@@ -275,8 +275,8 @@ const S = {
 
   navHome: {
     padding: '10px 20px',
-    border: '2px solid #C9F7A6',
-    color: '#C9F7A6',
+    border: '2px solid #0accbd',
+    color: '#0accbd',
     borderRadius: '8px',
     textDecoration: 'none',
     fontWeight: '600',
@@ -286,7 +286,7 @@ const S = {
 
   navLogin: {
     padding: '10px 20px',
-    backgroundColor: '#B12FAF',
+    backgroundColor: '#bb25a6',
     color: '#fff',
     borderRadius: '8px',
     textDecoration: 'none',
@@ -327,7 +327,7 @@ const S = {
   title: {
     fontSize: '40px',
     fontWeight: '800',
-    color: '#C9F7A6',
+    color: '#0accbd',
     marginBottom: '24px',
     lineHeight: '1.2',
     letterSpacing: '-1px',
@@ -353,7 +353,7 @@ const S = {
   sectionTitle: {
     fontSize: '28px',
     fontWeight: 700,
-    color: '#C9F7A6',
+    color: '#0accbd',
     marginBottom: '20px',
   },
   text: {
@@ -380,7 +380,7 @@ const S = {
   mvvLabel: {
     fontSize: '20px',
     fontWeight: 700,
-    color: '#C9F7A6',
+    color: '#0accbd',
     marginBottom: '14px',
     letterSpacing: '-0.3px',
   },
@@ -403,7 +403,7 @@ const S = {
     marginBottom: '24px',
   },
   ctaButton: {
-    background: '#C9F7A6',
+    background: '#0accbd',
     color: '#000',
     border: 'none',
     padding: '12px 32px',
@@ -449,7 +449,7 @@ const S = {
 // Estilos CSS adicionais para hover e responsividade
 const styles = `
   .institucional-navHome:hover {
-    background-color: #C9F7A6;
+    background-color: #0accbd;
     color: #000;
   }
 
@@ -462,7 +462,7 @@ const styles = `
   }
 
   .institucional-footerLink:hover {
-    color: #C9F7A6;
+    color: #0accbd;
   }
 
   @media (min-width: 768px) {

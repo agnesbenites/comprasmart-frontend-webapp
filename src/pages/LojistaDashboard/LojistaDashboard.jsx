@@ -18,13 +18,16 @@ import LojistaCupom from "./pages/LojistaCupom";
 import LojistaLive from "./pages/LojistaLive";
 import PlanosPage from "./pages/planos/Planos.page";
 import DashboardEnterprise from "./pages/DashboardEnterprise";
-import NotificacoesPage from "./pages/NotificacoesPage"; // ✅ NOVO
+import NotificacoesPage from "./pages/NotificacoesPage"; 
 
 /* ===================== COMPONENTES ===================== */
 import MenuLateral from "./components/MenuLateral";
 import TrainingManagementPanel from "./components/TrainingManagementPanel";
 import ReportPanelLojista from "./components/ReportPanelLojista";
 import GerenciadorPedidos from "../../shared/components/GerenciadorPedidos";
+
+// Importar ArenaVendasPainel do ConsultorDashboard
+import ArenaVendasPainel from "../ConsultorDashboard/components/ArenaVendasPainel";
 
 /* ===================== ESTILOS ===================== */
 const styles = {
@@ -109,6 +112,10 @@ const LojistaDashboardLayout = () => {
 
 /* ===================== ROTAS ===================== */
 export default function LojistaDashboard() {
+  // Simulando dados do usuário (em produção, viria do contexto de autenticação)
+  const user = { id: "lojista-123" };
+  const lojaAtual = { id: "loja-456" };
+
   return (
     <Routes>
       {/* Rota principal do dashboard com layout */}
@@ -133,6 +140,16 @@ export default function LojistaDashboard() {
         <Route path="cupom" element={<LojistaCupom />} />
         <Route path="live" element={<LojistaLive />} />
         <Route path="enterprise" element={<DashboardEnterprise />} />
+        {/* ✅ NOVA ROTA DA ARENA DE VENDAS */}
+        <Route
+          path="arena"
+          element={
+            <ArenaVendasPainel
+              consultorId={user?.id}
+              lojaId={lojaAtual?.id || null}
+            />
+          }
+        />
       </Route>
 
       {/* ✅ Redireciona /lojista para /lojista/dashboard com CAMINHO ABSOLUTO */}

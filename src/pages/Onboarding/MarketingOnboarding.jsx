@@ -23,7 +23,7 @@ const MarketingOnboarding = () => {
         '✅ 15 minutos de correção livre após cadastro',
         '✅ Zero compromisso de contratação CLT'
       ],
-      color: '#3b82f6',
+      color: '#bb25a6',
       badge: 'TODOS OS PLANOS',
     },
     {
@@ -37,7 +37,7 @@ const MarketingOnboarding = () => {
         '✅ Você paga apenas pelas vendas concretizadas',
         '✅ Sem custo fixo de folha de pagamento'
       ],
-      color: '#10b981',
+      color: '#f53342',
       badge: 'PLANO PRO',
     },
     {
@@ -51,7 +51,7 @@ const MarketingOnboarding = () => {
         '✅ ROI calculado em tempo real',
         '✅ Seu capital volta a circular'
       ],
-      color: '#f59e0b',
+      color: '#bb25a6',
       badge: 'PLANO ENTERPRISE',
     },
     {
@@ -65,7 +65,7 @@ const MarketingOnboarding = () => {
         '✅ R$ 801 a R$ 2.000: 15% (Venda Técnica)',
         '✅ Acima de R$ 2.000: 20% (Venda VIP)'
       ],
-      color: '#8b5cf6',
+      color: '#2f0d51',
       badge: 'COMISSÃO DINÂMICA',
     },
     {
@@ -74,7 +74,7 @@ const MarketingOnboarding = () => {
       subtitle: 'Quanto Você Perde Por Não Ter Overflow?',
       description: 'Estudos mostram que 30% das vendas são perdidas por demora no atendimento ou equipe sobrecarregada. Calcule quanto isso representa no seu faturamento.',
       benefits: [],
-      color: '#ef4444',
+      color: '#f53342',
       badge: 'SIMULE SEU GANHO',
       mostrarCalculadora: true,
     }
@@ -98,7 +98,7 @@ const MarketingOnboarding = () => {
         '📍 Marketing: 5km',
         '📁 Atualização CSV'
       ],
-      cor: '#1A2332',
+      cor: '#1a0a2e',
       stripeUrl: 'https://buy.stripe.com/00w7sL2z6ceE11cd8ZgQE01',
     },
     {
@@ -118,7 +118,7 @@ const MarketingOnboarding = () => {
         '📊 Analytics semanal e mensal',
         '📍 Marketing: 10km'
       ],
-      cor: '#2C3E50',
+      cor: '#2f0d51',
       stripeUrl: 'https://buy.stripe.com/dRm8wP7Tq1A011c1qhgQE02',
     },
     {
@@ -139,7 +139,7 @@ const MarketingOnboarding = () => {
         '📍 Marketing: 20km',
         '🤖 BI de Liquidez de Estoque'
       ],
-      cor: '#34495E',
+      cor: '#1a0a2e',
       stripeUrl: 'https://buy.stripe.com/6oU28r5LiemMaBM8SJgQE0a',
     }
   ];
@@ -438,7 +438,7 @@ const MarketingOnboarding = () => {
                 onClick={() => selecionarPlano(plano)}
                 style={{
                   ...styles.planoButton,
-                  backgroundColor: '#5DADE2',
+                  backgroundColor: '#bb25a6',
                   color: 'white',
                 }}
               >
@@ -470,7 +470,7 @@ const MarketingOnboarding = () => {
         </button>
         
         <h1 style={styles.addonsTitle}>
-          Você escolheu: <span style={{color: '#F4D03F'}}>{planoSelecionado.nome}</span>
+          Você escolheu: <span style={{color: '#bb25a6'}}>{planoSelecionado.nome}</span>
         </h1>
         <p style={styles.addonsSubtitle}>
           Personalize seu plano com recursos adicionais
@@ -601,7 +601,7 @@ const styles = {
   title: {
     fontSize: '2.5rem',
     fontWeight: '800',
-    color: '#1e293b',
+    color: '#2f0d51',
     marginBottom: '10px',
     lineHeight: '1.2',
   },
@@ -647,7 +647,7 @@ const styles = {
     display: 'block',
     fontSize: '1.1rem',
     fontWeight: '600',
-    color: '#1e293b',
+    color: '#2f0d51',
     marginBottom: '10px',
   },
   
@@ -657,7 +657,7 @@ const styles = {
     fontSize: '1.3rem',
     fontWeight: '700',
     textAlign: 'center',
-    border: '3px solid #3b82f6',
+    border: '3px solid #bb25a6',
     borderRadius: '12px',
     outline: 'none',
   },
@@ -755,7 +755,7 @@ const styles = {
   planosTitle: {
     fontSize: '3rem',
     fontWeight: '800',
-    color: '#1e293b',
+    color: '#2f0d51',
     marginBottom: '15px',
   },
   
@@ -766,8 +766,8 @@ const styles = {
   },
   
   roiInfo: {
-    backgroundColor: '#eff6ff',
-    border: '2px solid #3b82f6',
+    backgroundColor: '#f3eef8',
+    border: '2px solid #2f0d51',
     borderRadius: '12px',
     padding: '20px',
     maxWidth: '700px',
@@ -776,7 +776,7 @@ const styles = {
   
   roiInfoTexto: {
     fontSize: '1.1rem',
-    color: '#1e40af',
+    color: '#2f0d51',
     margin: 0,
   },
   
@@ -804,8 +804,8 @@ const styles = {
     position: 'absolute',
     top: '-15px',
     right: '20px',
-    backgroundColor: '#F4D03F',
-    color: '#1A2332',
+    backgroundColor: '#bb25a6',
+    color: '#2f0d51',
     padding: '6px 16px',
     borderRadius: '20px',
     fontSize: '0.75rem',
@@ -911,7 +911,7 @@ const styles = {
   addonsTitle: {
     fontSize: '2.5rem',
     fontWeight: '800',
-    color: '#1e293b',
+    color: '#2f0d51',
     marginBottom: '15px',
   },
   
@@ -947,14 +947,14 @@ const styles = {
   addonNome: {
     fontSize: '1.3rem',
     fontWeight: '700',
-    color: '#1e293b',
+    color: '#2f0d51',
     marginBottom: '10px',
   },
   
   addonPreco: {
     fontSize: '1.8rem',
     fontWeight: '800',
-    color: '#3b82f6',
+    color: '#bb25a6',
     marginBottom: '15px',
   },
   
@@ -969,7 +969,7 @@ const styles = {
     display: 'inline-block',
     width: '100%',
     padding: '12px',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '8px',
@@ -987,15 +987,15 @@ const styles = {
   },
   
   finalizarButton: {
-    backgroundColor: '#F4D03F',
-    color: '#1A2332',
+    backgroundColor: '#bb25a6',
+    color: '#2f0d51',
     border: 'none',
     padding: '18px 50px',
     borderRadius: '12px',
     fontSize: '1.2rem',
     fontWeight: '800',
     cursor: 'pointer',
-    boxShadow: '0 6px 20px rgba(244, 208, 63, 0.4)',
+    boxShadow: '0 6px 20px rgba(233,30,99,0.3)',
     marginBottom: '20px',
   },
   

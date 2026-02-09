@@ -1,9 +1,10 @@
-// src/App.jsx - CORRIGIDO COM STRIPE SUCCESS
+// src/App.jsx - CORRIGIDO - SEM BrowserRouter AQUI
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
 import { PlanoProvider } from './contexts/PlanoContext';
 
+// Importação das páginas
 import Landingpage from "./pages/Landingpage";
 import LoginPage from "./pages/LoginPage";
 import LoginsPanel from "./pages/LoginsPanel";
@@ -13,23 +14,28 @@ import ApprovalsPage from "./pages/ApprovalsPage";
 import AplicativoConfirmacao from "./pages/AplicativoConfirmacao";
 import MarketingOnboarding from "./pages/Onboarding/MarketingOnboarding";
 import PlanQuiz from "./pages/Quiz/PlanQuiz";
-import StripeSuccess from "./pages/StripeSuccess"; // ✅ NOVO
+import StripeSuccess from "./pages/StripeSuccess";
+import Institucional from "./pages/Institucional"; // ✅ PÁGINA INSTITUCIONAL
 
+// Importações de registro
 import RegisterPage from "./pages/RegisterPage";
 import LojistaRegisterPage from "./pages/LojistaDashboard/pages/LojistaRegisterPage";
 import VendedorRegisterPage from "./pages/VendedorDashboard/pages/VendedorRegisterPage";
 
+// Importações de login
 import ConsultorLogin from "./pages/ConsultorDashboard/pages/Consultant/ConsultorLogin";
 import LojistaLogin from "./pages/LojistaDashboard/pages/LojistaLogin";
 import VendedorLogin from "./pages/VendedorDashboard/pages/VendedorLogin";
 import AdminLogin from "./pages/AdminDashboard/pages/AdminLogin";
 import LojistaEscolha from "./pages/LojistaDashboard/pages/LojistaEscolha";
 
+// Importações de dashboard
 import ConsultorDashboard from "./pages/ConsultorDashboard/pages/ConsultorDashboard";
 import LojistaDashboard from "./pages/LojistaDashboard/LojistaDashboard";
 import VendedorDashboard from "./pages/VendedorDashboard/pages/VendedorDashboard";
 import AdminDashboard from "./pages/AdminDashboard/pages/AdminDashboard";
 
+// Componente de callback do Supabase
 const SupabaseCallback = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
@@ -68,6 +74,7 @@ const SupabaseCallback = () => {
   return null;
 };
 
+// Componente para rotas protegidas
 const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
@@ -91,27 +98,36 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
+// Componente principal da aplicação
 function App() {
   return (
     <PlanoProvider>
       <Routes>
-        {/* PÁGINA INICIAL É A LANDING */}
+        {/* PÁGINA INICIAL */}
         <Route path="/" element={<Landingpage />} />
-	<Route path="/cadastro" element={<LojistaRegisterPage />} />
         
-        {/* Onboarding é uma rota separada */}
+        {/* PÁGINA INSTITUCIONAL */}
+        <Route path="/institucional" element={<Institucional />} />
+        
+        {/* PÁGINA DE CADASTRO PRINCIPAL */}
+        <Route path="/cadastro" element={<LojistaRegisterPage />} />
+        
+        {/* ONBOARDING */}
         <Route path="/onboarding" element={<MarketingOnboarding />} />
         
-        {/* Quiz - Descubra Seu Plano Ideal */}
+        {/* QUIZ */}
         <Route path="/quiz" element={<PlanQuiz />} />
         
-        {/* ✅ STRIPE SUCCESS - NOVO */}
+        {/* STRIPE SUCCESS */}
         <Route path="/stripe-success" element={<StripeSuccess />} />
         
-        {/* Cadastro */}
+        {/* CADASTROS ESPECÍFICOS */}
         <Route path="/cadastro/lojista" element={<LojistaRegisterPage />} />
+        <Route path="/consultor/cadastro" element={<RegisterPage />} />
+        <Route path="/lojista/cadastro" element={<LojistaRegisterPage />} />
+        <Route path="/vendedor/cadastro" element={<VendedorRegisterPage />} />
 
-        {/* Páginas públicas */}
+        {/* PÁGINAS PÚBLICAS */}
         <Route path="/entrar" element={<LoginsPanel />} />
         <Route path="/login" element={<LoginsPanel />} />
         <Route path="/login-page" element={<LoginPage />} />
@@ -122,12 +138,7 @@ function App() {
         <Route path="/aplicativo-confirmacao" element={<AplicativoConfirmacao />} />
         <Route path="/callback" element={<SupabaseCallback />} />
 
-        {/* Cadastros */}
-        <Route path="/consultor/cadastro" element={<RegisterPage />} />
-        <Route path="/lojista/cadastro" element={<LojistaRegisterPage />} />
-        <Route path="/vendedor/cadastro" element={<VendedorRegisterPage />} />
-
-        {/* Logins */}
+        {/* LOGINS ESPECÍFICOS */}
         <Route path="/consultor/login" element={<ConsultorLogin />} />
         <Route path="/lojista/login" element={<LojistaLogin />} />
         <Route path="/vendedor/login" element={<VendedorLogin />} />
@@ -135,14 +146,71 @@ function App() {
         <Route path="/lojista/escolha" element={<LojistaEscolha />} />
         <Route path="/agnes-admin-2025" element={<Navigate to="/admin/login" replace />} />
 
-        {/* Dashboards protegidos */}
-        <Route path="/consultor/dashboard/*" element={<ProtectedRoute><ConsultorDashboard /></ProtectedRoute>} />
-        <Route path="/lojista/*" element={<ProtectedRoute><LojistaDashboard /></ProtectedRoute>} />
-        <Route path="/vendedor/*" element={<ProtectedRoute><VendedorDashboard /></ProtectedRoute>} />
-        <Route path="/admin/*" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+        {/* DASHBOARDS PROTEGIDOS */}
+        <Route 
+          path="/consultor/dashboard/*" 
+          element={
+            <ProtectedRoute>
+              <ConsultorDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/lojista/*" 
+          element={
+            <ProtectedRoute>
+              <LojistaDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/vendedor/*" 
+          element={
+            <ProtectedRoute>
+              <VendedorDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/*" 
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
 
-        {/* 404 */}
-        <Route path="*" element={<h1 style={{ textAlign: "center" }}>404 - Pagina nao encontrada</h1>} />
+        {/* PÁGINA 404 */}
+        <Route 
+          path="*" 
+          element={
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              height: '100vh',
+              flexDirection: 'column',
+              backgroundColor: '#f5f5f5'
+            }}>
+              <h1 style={{ fontSize: '48px', color: '#333', marginBottom: '20px' }}>404</h1>
+              <p style={{ fontSize: '18px', color: '#666' }}>Página não encontrada</p>
+              <a 
+                href="/" 
+                style={{
+                  marginTop: '20px',
+                  padding: '10px 20px',
+                  backgroundColor: '#E91E63',
+                  color: 'white',
+                  textDecoration: 'none',
+                  borderRadius: '5px',
+                  fontWeight: 'bold'
+                }}
+              >
+                Voltar para a página inicial
+              </a>
+            </div>
+          } 
+        />
       </Routes>
     </PlanoProvider>
   );

@@ -1,8 +1,8 @@
 // app-frontend/src/pages/LojistaDashboard/components/TrainingManagementPanel.jsx
-// Painel de Gerenciamento de Treinamentos para Lojistas
+// Painel de Gerenciamento de Treinamentos para Lojistas - COM ARENA DE VENDAS
 
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaEye, FaBook, FaUsers, FaClock } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaEye, FaBook, FaUsers, FaClock, FaTrophy, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 
 const LOJISTA_PRIMARY = "#28a745";
 
@@ -11,6 +11,9 @@ const TrainingManagementPanel = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingTreinamento, setEditingTreinamento] = useState(null);
+  const [arenaConfig, setArenaConfig] = useState(null);
+  const [loadingArena, setLoadingArena] = useState(true);
+  
   const [stats, setStats] = useState({
     total: 0,
     ativos: 0,
@@ -39,7 +42,8 @@ const TrainingManagementPanel = () => {
   useEffect(() => {
     carregarTreinamentos();
     carregarEstatisticas();
-    carregarSegmentos(); // NOVO
+    carregarSegmentos();
+    carregarArenaConfig(); // NOVO: Carregar configuração da Arena
   }, []);
 
   // ======= CARREGAR DADOS =======
@@ -62,6 +66,37 @@ const TrainingManagementPanel = () => {
       setTreinamentos(mockTreinamentos);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // NOVO: Carregar configuração da Arena
+  const carregarArenaConfig = async () => {
+    try {
+      const response = await fetch(`/api/arena/config/${lojistaId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Erro ao carregar configuração da Arena');
+
+      const data = await response.json();
+      setArenaConfig(data.config || null);
+      
+    } catch (error) {
+      console.error('Erro:', error);
+      // Mock data para desenvolvimento
+      setArenaConfig({
+        id: 'arena-123',
+        loja_id: lojistaId,
+        ativo: false,
+        tier: null,
+        acesso_consultores: false,
+        stripe_subscription_id: null,
+        semana_referencia: new Date().toISOString().split('T')[0]
+      });
+    } finally {
+      setLoadingArena(false);
     }
   };
 
@@ -88,7 +123,6 @@ const TrainingManagementPanel = () => {
     }
   };
 
-  // NOVO: Carregar segmentos do lojista
   const carregarSegmentos = async () => {
     try {
       const response = await fetch(`/api/lojistas/${lojistaId}/segmentos`, {
@@ -107,6 +141,65 @@ const TrainingManagementPanel = () => {
       // Mock data de segmentos
       setSegmentos(mockSegmentos);
     }
+  };
+
+  // ======= MANIPULAR ARENA =======
+  const habilitarArena = async (tier) => {
+    try {
+      const response = await fetch('/api/arena/habilitar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          loja_id: lojistaId,
+          tier: tier
+        })
+      });
+
+      if (!response.ok) throw new Error('Erro ao habilitar Arena');
+
+      const data = await response.json();
+      
+      if (data.checkoutUrl) {
+        // Redirecionar para checkout do Stripe
+        window.location.href = data.checkoutUrl;
+      } else {
+        alert('✅ Arena habilitada com sucesso!');
+        carregarArenaConfig();
+      }
+      
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('❌ Erro ao habilitar Arena');
+    }
+  };
+
+  const desativarArena = async () => {
+    if (!confirm('Tem certeza que deseja desativar a Arena de Vendas?')) return;
+
+    try {
+      const response = await fetch(`/api/arena/desativar/${lojistaId}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (!response.ok) throw new Error('Erro ao desativar Arena');
+
+      alert('✅ Arena desativada com sucesso!');
+      carregarArenaConfig();
+      
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('❌ Erro ao desativar Arena');
+    }
+  };
+
+  const irParaArena = () => {
+    window.location.href = `/lojista/dashboard/arena`;
   };
 
   // ======= HANDLERS =======
@@ -134,7 +227,7 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao salvar treinamento');
 
-      alert(editingTreinamento ? ' Treinamento atualizado!' : ' Treinamento criado!');
+      alert(editingTreinamento ? '✅ Treinamento atualizado!' : '✅ Treinamento criado!');
       
       setShowModal(false);
       resetForm();
@@ -143,7 +236,7 @@ const TrainingManagementPanel = () => {
       
     } catch (error) {
       console.error('Erro:', error);
-      alert(' Erro ao salvar treinamento');
+      alert('❌ Erro ao salvar treinamento');
     }
   };
 
@@ -176,13 +269,13 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao excluir');
 
-      alert(' Treinamento excluido!');
+      alert('✅ Treinamento excluído!');
       carregarTreinamentos();
       carregarEstatisticas();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert(' Erro ao excluir treinamento');
+      alert('❌ Erro ao excluir treinamento');
     }
   };
 
@@ -199,12 +292,12 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao alterar status');
 
-      alert(` Treinamento ${!currentStatus ? 'ativado' : 'desativado'}!`);
+      alert(`✅ Treinamento ${!currentStatus ? 'ativado' : 'desativado'}!`);
       carregarTreinamentos();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert(' Erro ao alterar status');
+      alert('❌ Erro ao alterar status');
     }
   };
 
@@ -257,16 +350,20 @@ const TrainingManagementPanel = () => {
     }));
   };
 
-  if (loading) {
-    return <div style={styles.loading}>Carregando treinamentos...</div>;
+  if (loading || loadingArena) {
+    return <div style={styles.loading}>Carregando...</div>;
   }
+
+  const arenaAtiva = arenaConfig?.ativo;
+  const tierAtual = arenaConfig?.tier;
+  const podeAcessarArena = arenaAtiva;
 
   return (
     <div style={styles.container}>
       {/* HEADER */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}> Gerenciar Treinamentos</h2>
+          <h2 style={styles.title}>🎓 Gerenciar Treinamentos</h2>
           <p style={styles.subtitle}>Crie e gerencie treinamentos para seus consultores</p>
         </div>
         <button onClick={() => setShowModal(true)} style={styles.addButton}>
@@ -274,10 +371,107 @@ const TrainingManagementPanel = () => {
         </button>
       </div>
 
-      {/* ESTATSTICAS */}
+      {/* SEÇÃO DA ARENA DE VENDAS */}
+      <div style={styles.arenaSection}>
+        <div style={styles.arenaHeader}>
+          <FaTrophy style={styles.arenaIcon} />
+          <div>
+            <h3 style={styles.arenaTitle}>🎯 Arena de Vendas</h3>
+            <p style={styles.arenaDescription}>
+              Sistema gamificado para competição saudável entre seus consultores
+            </p>
+          </div>
+        </div>
+
+        <div style={styles.arenaContent}>
+          {arenaAtiva ? (
+            <div style={styles.arenaActive}>
+              <div style={styles.arenaStatus}>
+                <span style={styles.arenaBadgeActive}>✅ ATIVA</span>
+                <span style={styles.arenaTier}>Plano: {tierAtual?.toUpperCase() || 'BÁSICO'}</span>
+              </div>
+              <div style={styles.arenaBenefits}>
+                <h4 style={styles.arenaBenefitsTitle}>Benefícios ativos:</h4>
+                <ul style={styles.arenaBenefitsList}>
+                  <li>🏆 Ranking em tempo real de consultores</li>
+                  <li>📊 Dashboard de desempenho detalhado</li>
+                  <li>🎯 Metas e desafios semanais</li>
+                  <li>🏅 Sistema de recompensas e premiações</li>
+                  {arenaConfig?.acesso_consultores && <li>👥 Acesso dos consultores ao ranking</li>}
+                </ul>
+              </div>
+              <div style={styles.arenaActions}>
+                <button onClick={irParaArena} style={styles.arenaActionPrimary}>
+                  Acessar Arena
+                </button>
+                <button onClick={desativarArena} style={styles.arenaActionSecondary}>
+                  Desativar Arena
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={styles.arenaInactive}>
+              <div style={styles.arenaStatus}>
+                <span style={styles.arenaBadgeInactive}>❌ DESATIVADA</span>
+              </div>
+              <div style={styles.arenaPlans}>
+                <h4 style={styles.arenaPlansTitle}>Escolha um plano:</h4>
+                <div style={styles.plansGrid}>
+                  <div style={styles.planCard}>
+                    <h5 style={styles.planTitle}>BÁSICO</h5>
+                    <p style={styles.planPrice}>R$ 97/mês</p>
+                    <ul style={styles.planFeatures}>
+                      <li>🏆 Ranking básico</li>
+                      <li>📊 5 métricas principais</li>
+                      <li>🎯 3 desafios semanais</li>
+                      <li>🔒 Acesso apenas para administradores</li>
+                    </ul>
+                    <button onClick={() => habilitarArena('basico')} style={styles.planButton}>
+                      Ativar Plano
+                    </button>
+                  </div>
+                  
+                  <div style={styles.planCard}>
+                    <div style={styles.planRecommended}>RECOMENDADO</div>
+                    <h5 style={styles.planTitle}>PRO</h5>
+                    <p style={styles.planPrice}>R$ 197/mês</p>
+                    <ul style={styles.planFeatures}>
+                      <li>✅ Tudo do Básico</li>
+                      <li>👥 Acesso para consultores</li>
+                      <li>📈 Dashboard avançado</li>
+                      <li>🏅 10 desafios semanais</li>
+                      <li>📊 Relatórios detalhados</li>
+                    </ul>
+                    <button onClick={() => habilitarArena('pro')} style={styles.planButtonPro}>
+                      Ativar Plano
+                    </button>
+                  </div>
+                  
+                  <div style={styles.planCard}>
+                    <h5 style={styles.planTitle}>ENTERPRISE</h5>
+                    <p style={styles.planPrice}>R$ 497/mês</p>
+                    <ul style={styles.planFeatures}>
+                      <li>✅ Tudo do Pro</li>
+                      <li>🏢 Múltiplas filiais</li>
+                      <li>📊 API de integração</li>
+                      <li>👨‍💼 Suporte prioritário</li>
+                      <li>🔧 Personalização completa</li>
+                    </ul>
+                    <button onClick={() => habilitarArena('enterprise')} style={styles.planButton}>
+                      Ativar Plano
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ESTATÍSTICAS */}
       <div style={styles.statsGrid}>
         <div style={styles.statCard}>
-          <div style={styles.statIcon}></div>
+          <div style={styles.statIcon}>📚</div>
           <div>
             <p style={styles.statLabel}>Total de Treinamentos</p>
             <p style={styles.statValue}>{stats.total}</p>
@@ -285,7 +479,7 @@ const TrainingManagementPanel = () => {
         </div>
 
         <div style={styles.statCard}>
-          <div style={styles.statIcon}></div>
+          <div style={styles.statIcon}>✅</div>
           <div>
             <p style={styles.statLabel}>Treinamentos Ativos</p>
             <p style={styles.statValue}>{stats.ativos}</p>
@@ -293,7 +487,7 @@ const TrainingManagementPanel = () => {
         </div>
 
         <div style={styles.statCard}>
-          <div style={styles.statIcon}></div>
+          <div style={styles.statIcon}>👥</div>
           <div>
             <p style={styles.statLabel}>Consultores Inscritos</p>
             <p style={styles.statValue}>{stats.consultoresInscritos}</p>
@@ -303,23 +497,27 @@ const TrainingManagementPanel = () => {
 
       {/* TABELA DE TREINAMENTOS */}
       <div style={styles.tableContainer}>
+        <div style={styles.tableHeaderSection}>
+          <h3 style={styles.tableTitle}>Treinamentos Cadastrados</h3>
+          <p style={styles.tableSubtitle}>Gerencie seus treinamentos de produtos</p>
+        </div>
         <table style={styles.table}>
           <thead>
             <tr style={styles.tableHeader}>
-              <th style={styles.th}>Titulo</th>
+              <th style={styles.th}>Título</th>
               <th style={styles.th}>Segmento</th>
-              <th style={styles.th}>Nivel</th>
-              <th style={styles.th}>Duracao</th>
+              <th style={styles.th}>Nível</th>
+              <th style={styles.th}>Duração</th>
               <th style={styles.th}>Status</th>
-              <th style={styles.th}>Obrigatorio</th>
-              <th style={styles.th}>Acoes</th>
+              <th style={styles.th}>Obrigatório</th>
+              <th style={styles.th}>Ações</th>
             </tr>
           </thead>
           <tbody>
             {treinamentos.length === 0 ? (
               <tr>
                 <td colSpan="7" style={styles.emptyState}>
-                  Nenhum treinamento cadastrado. Clique em "Novo Treinamento" para comecar.
+                  Nenhum treinamento cadastrado. Clique em "Novo Treinamento" para começar.
                 </td>
               </tr>
             ) : (
@@ -343,11 +541,11 @@ const TrainingManagementPanel = () => {
                       onClick={() => handleToggleStatus(treinamento.id, treinamento.ativo)}
                       style={treinamento.ativo ? styles.badgeActive : styles.badgeInactive}
                     >
-                      {treinamento.ativo ? ' Ativo' : ' Inativo'}
+                      {treinamento.ativo ? '✅ Ativo' : '❌ Inativo'}
                     </button>
                   </td>
                   <td style={styles.td}>
-                    {treinamento.obrigatorio ? '  Sim' : 'Nao'}
+                    {treinamento.obrigatorio ? '✅ Sim' : 'Não'}
                   </td>
                   <td style={styles.td}>
                     <div style={styles.actions}>
@@ -366,43 +564,43 @@ const TrainingManagementPanel = () => {
         </table>
       </div>
 
-      {/* MODAL DE CRIACAO/EDICAO */}
+      {/* MODAL DE CRIAÇÃO/EDIÇÃO (código original mantido) */}
       {showModal && (
         <div style={styles.modalOverlay} onClick={() => setShowModal(false)}>
           <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div style={styles.modalHeader}>
               <h3 style={styles.modalTitle}>
-                {editingTreinamento ? ' Editar Treinamento' : 'O Novo Treinamento'}
+                {editingTreinamento ? '✏️ Editar Treinamento' : '📝 Novo Treinamento'}
               </h3>
-              <button onClick={() => { setShowModal(false); resetForm(); }} style={styles.closeButton}>O</button>
+              <button onClick={() => { setShowModal(false); resetForm(); }} style={styles.closeButton}>✕</button>
             </div>
 
             <form onSubmit={handleSubmit} style={styles.form}>
-              {/* INFORMACOES BSICAS */}
+              {/* INFORMAÇÕES BÁSICAS */}
               <div style={styles.formSection}>
-                <h4 style={styles.formSectionTitle}> Informacoes Basicas</h4>
+                <h4 style={styles.formSectionTitle}>📋 Informações Básicas</h4>
                 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Titulo *</label>
+                  <label style={styles.label}>Título *</label>
                   <input
                     type="text"
                     value={formData.titulo}
                     onChange={(e) => setFormData({...formData, titulo: e.target.value})}
                     style={styles.input}
                     required
-                    placeholder="Ex: Treinamento de Eletr´nicos - Smartphones"
+                    placeholder="Ex: Treinamento de Eletrônicos - Smartphones"
                   />
                 </div>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Descricao *</label>
+                  <label style={styles.label}>Descrição *</label>
                   <textarea
                     value={formData.descricao}
                     onChange={(e) => setFormData({...formData, descricao: e.target.value})}
                     style={styles.textarea}
                     required
                     rows={3}
-                    placeholder="Descreva o conteudo e objetivos do treinamento..."
+                    placeholder="Descreva o conteúdo e objetivos do treinamento..."
                   />
                 </div>
 
@@ -421,26 +619,26 @@ const TrainingManagementPanel = () => {
                       ))}
                     </select>
                     <small style={{ fontSize: '12px', color: '#666', display: 'block', marginTop: '5px' }}>
-                      Apenas consultores deste segmento verao este treinamento
+                      Apenas consultores deste segmento verão este treinamento
                     </small>
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Nivel *</label>
+                    <label style={styles.label}>Nível *</label>
                     <select
                       value={formData.nivel}
                       onChange={(e) => setFormData({...formData, nivel: e.target.value})}
                       style={styles.select}
                       required
                     >
-                      <option value="basico">Basico</option>
-                      <option value="intermediario">Intermediario</option>
-                      <option value="avancado">Avancado</option>
+                      <option value="basico">Básico</option>
+                      <option value="intermediario">Intermediário</option>
+                      <option value="avancado">Avançado</option>
                     </select>
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Duracao (min) *</label>
+                    <label style={styles.label}>Duração (min) *</label>
                     <input
                       type="number"
                       value={formData.duracao_estimada}
@@ -461,7 +659,7 @@ const TrainingManagementPanel = () => {
                       onChange={(e) => setFormData({...formData, obrigatorio: e.target.checked})}
                       style={styles.checkbox}
                     />
-                      Treinamento Obrigatorio
+                    📌 Treinamento Obrigatório
                   </label>
 
                   <label style={styles.checkboxLabel}>
@@ -471,54 +669,54 @@ const TrainingManagementPanel = () => {
                       onChange={(e) => setFormData({...formData, ativo: e.target.checked})}
                       style={styles.checkbox}
                     />
-                     Ativar Imediatamente
+                    ✅ Ativar Imediatamente
                   </label>
                 </div>
               </div>
 
-              {/* M“DULOS */}
+              {/* MÓDULOS */}
               <div style={styles.formSection}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
-                  <h4 style={styles.formSectionTitle}> Modulos do Treinamento</h4>
+                  <h4 style={styles.formSectionTitle}>📚 Módulos do Treinamento</h4>
                   <button type="button" onClick={handleAddModulo} style={styles.addModuloButton}>
-                    <FaPlus /> Adicionar Modulo
+                    <FaPlus /> Adicionar Módulo
                   </button>
                 </div>
 
                 {formData.conteudo.modulos.map((modulo, index) => (
                   <div key={index} style={styles.moduloCard}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                      <strong>Modulo {index + 1}</strong>
+                      <strong>Módulo {index + 1}</strong>
                       <button type="button" onClick={() => handleRemoveModulo(index)} style={styles.removeModuloButton}>
                         <FaTrash /> Remover
                       </button>
                     </div>
 
                     <div style={styles.formGroup}>
-                      <label style={styles.labelSmall}>Titulo do Modulo</label>
+                      <label style={styles.labelSmall}>Título do Módulo</label>
                       <input
                         type="text"
                         value={modulo.titulo}
                         onChange={(e) => handleModuloChange(index, 'titulo', e.target.value)}
                         style={styles.inputSmall}
-                        placeholder="Ex: Introducao aos Smartphones"
+                        placeholder="Ex: Introdução aos Smartphones"
                       />
                     </div>
 
                     <div style={styles.formGroup}>
-                      <label style={styles.labelSmall}>Descricao</label>
+                      <label style={styles.labelSmall}>Descrição</label>
                       <textarea
                         value={modulo.descricao}
                         onChange={(e) => handleModuloChange(index, 'descricao', e.target.value)}
                         style={styles.textareaSmall}
                         rows={2}
-                        placeholder="Breve descricao do conteudo..."
+                        placeholder="Breve descrição do conteúdo..."
                       />
                     </div>
 
                     <div style={styles.formRow}>
                       <div style={styles.formGroup}>
-                        <label style={styles.labelSmall}>URL do Video (opcional)</label>
+                        <label style={styles.labelSmall}>URL do Vídeo (opcional)</label>
                         <input
                           type="url"
                           value={modulo.video_url}
@@ -529,7 +727,7 @@ const TrainingManagementPanel = () => {
                       </div>
 
                       <div style={styles.formGroup}>
-                        <label style={styles.labelSmall}>Duracao (min)</label>
+                        <label style={styles.labelSmall}>Duração (min)</label>
                         <input
                           type="number"
                           value={modulo.duracao}
@@ -544,18 +742,18 @@ const TrainingManagementPanel = () => {
 
                 {formData.conteudo.modulos.length === 0 && (
                   <p style={{ textAlign: 'center', color: '#666', fontSize: 14 }}>
-                    Nenhum modulo adicionado. Clique em "Adicionar Modulo" para comecar.
+                    Nenhum módulo adicionado. Clique em "Adicionar Módulo" para começar.
                   </p>
                 )}
               </div>
 
-              {/* BOTOES */}
+              {/* BOTÕES */}
               <div style={styles.modalFooter}>
                 <button type="button" onClick={() => { setShowModal(false); resetForm(); }} style={styles.cancelButton}>
                   Cancelar
                 </button>
                 <button type="submit" style={styles.submitButton}>
-                  {editingTreinamento ? ' Salvar Alteracoes' : ' Criar Treinamento'}
+                  {editingTreinamento ? '💾 Salvar Alterações' : '✅ Criar Treinamento'}
                 </button>
               </div>
             </form>
@@ -569,14 +767,14 @@ const TrainingManagementPanel = () => {
 // ======= HELPERS =======
 const getSegmentoLabel = (segmentoId) => {
   const segmento = mockSegmentos.find(s => s.id === segmentoId);
-  return segmento ? segmento.nome : 'Nao definido';
+  return segmento ? segmento.nome : 'Não definido';
 };
 
 const getNivelLabel = (nivel) => {
   const labels = {
-    basico: 'Basico',
-    intermediario: 'Intermediario',
-    avancado: 'Avancado'
+    basico: 'Básico',
+    intermediario: 'Intermediário',
+    avancado: 'Avançado'
   };
   return labels[nivel] || nivel;
 };
@@ -592,13 +790,13 @@ const getNivelStyle = (nivel) => {
 
 // ======= MOCK DATA =======
 const mockSegmentos = [
-  { id: 'eletronicos', nome: 'Eletr´nicos' },
+  { id: 'eletronicos', nome: 'Eletrônicos' },
   { id: 'smartphones', nome: 'Smartphones' },
-  { id: 'informatica', nome: 'Informatica' },
-  { id: 'eletrodomesticos', nome: 'Eletrodomesticos' },
-  { id: 'moveis', nome: 'Moveis' },
-  { id: 'moda', nome: 'Moda e Vestuario' },
-  { id: 'cosmeticos', nome: 'Cosmeticos e Beleza' },
+  { id: 'informatica', nome: 'Informática' },
+  { id: 'eletrodomesticos', nome: 'Eletrodomésticos' },
+  { id: 'moveis', nome: 'Móveis' },
+  { id: 'moda', nome: 'Moda e Vestuário' },
+  { id: 'cosmeticos', nome: 'Cosméticos e Beleza' },
   { id: 'esportes', nome: 'Esportes e Lazer' },
   { id: 'livros', nome: 'Livros e Papelaria' },
   { id: 'alimentos', nome: 'Alimentos e Bebidas' },
@@ -608,7 +806,7 @@ const mockTreinamentos = [
   {
     id: 1,
     titulo: 'Conhecendo Smartphones Samsung',
-    descricao: 'Aprenda sobre os principais modelos e caracteristicas da linha Galaxy',
+    descricao: 'Aprenda sobre os principais modelos e características da linha Galaxy',
     segmento: 'smartphones',
     categoria: 'produto',
     nivel: 'basico',
@@ -617,9 +815,9 @@ const mockTreinamentos = [
     ativo: true,
     conteudo: {
       modulos: [
-        { titulo: 'Introducao   Samsung', descricao: 'Historia e posicionamento', video_url: '', duracao: 10 },
+        { titulo: 'Introdução à Samsung', descricao: 'História e posicionamento', video_url: '', duracao: 10 },
         { titulo: 'Linha Galaxy S', descricao: 'Modelos premium', video_url: '', duracao: 20 },
-        { titulo: 'Linha Galaxy A', descricao: 'Modelos intermediarios', video_url: '', duracao: 15 },
+        { titulo: 'Linha Galaxy A', descricao: 'Modelos intermediários', video_url: '', duracao: 15 },
       ]
     }
   },
@@ -637,7 +835,7 @@ const mockTreinamentos = [
   },
   {
     id: 3,
-    titulo: 'Tecnicas Avancadas - TVs 4K e 8K',
+    titulo: 'Técnicas Avançadas - TVs 4K e 8K',
     descricao: 'Entenda as tecnologias e diferenciais das Smart TVs',
     segmento: 'eletronicos',
     categoria: 'produto',
@@ -692,6 +890,200 @@ const styles = {
     alignItems: 'center',
     gap: '8px',
   },
+  
+  // Arena Section
+  arenaSection: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+    marginBottom: '30px',
+    overflow: 'hidden',
+  },
+  arenaHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: '20px 25px',
+    backgroundColor: '#f8f9ff',
+    borderBottom: '1px solid #e2e8f0',
+  },
+  arenaIcon: {
+    fontSize: '2.5rem',
+    color: '#ffd700',
+    marginRight: '15px',
+  },
+  arenaTitle: {
+    fontSize: '1.5rem',
+    fontWeight: 'bold',
+    margin: '0 0 5px 0',
+    color: '#333',
+  },
+  arenaDescription: {
+    fontSize: '0.95rem',
+    color: '#666',
+    margin: 0,
+  },
+  arenaContent: {
+    padding: '25px',
+  },
+  arenaActive: {
+    backgroundColor: '#f0fff4',
+    padding: '20px',
+    borderRadius: '8px',
+    border: '1px solid #c6f6d5',
+  },
+  arenaInactive: {
+    backgroundColor: '#fff5f5',
+    padding: '20px',
+    borderRadius: '8px',
+    border: '1px solid #fed7d7',
+  },
+  arenaStatus: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px',
+  },
+  arenaBadgeActive: {
+    padding: '8px 16px',
+    backgroundColor: '#48bb78',
+    color: 'white',
+    borderRadius: '20px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+  },
+  arenaBadgeInactive: {
+    padding: '8px 16px',
+    backgroundColor: '#f56565',
+    color: 'white',
+    borderRadius: '20px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+  },
+  arenaTier: {
+    padding: '8px 16px',
+    backgroundColor: '#4299e1',
+    color: 'white',
+    borderRadius: '20px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+  },
+  arenaBenefits: {
+    marginBottom: '25px',
+  },
+  arenaBenefitsTitle: {
+    fontSize: '1.1rem',
+    fontWeight: '600',
+    margin: '0 0 10px 0',
+    color: '#2d3748',
+  },
+  arenaBenefitsList: {
+    margin: 0,
+    paddingLeft: '20px',
+    color: '#4a5568',
+  },
+  arenaActions: {
+    display: 'flex',
+    gap: '15px',
+  },
+  arenaActionPrimary: {
+    padding: '12px 24px',
+    backgroundColor: '#4299e1',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  arenaActionSecondary: {
+    padding: '12px 24px',
+    backgroundColor: 'transparent',
+    color: '#f56565',
+    border: '2px solid #f56565',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  arenaPlans: {},
+  arenaPlansTitle: {
+    fontSize: '1.2rem',
+    fontWeight: '600',
+    margin: '0 0 20px 0',
+    color: '#2d3748',
+  },
+  plansGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '20px',
+  },
+  planCard: {
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '12px',
+    border: '2px solid #e2e8f0',
+    position: 'relative',
+  },
+  planRecommended: {
+    position: 'absolute',
+    top: '-12px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: '#4299e1',
+    color: 'white',
+    padding: '4px 12px',
+    borderRadius: '20px',
+    fontSize: '12px',
+    fontWeight: 'bold',
+  },
+  planTitle: {
+    fontSize: '1.3rem',
+    fontWeight: 'bold',
+    margin: '0 0 10px 0',
+    color: '#2d3748',
+    textAlign: 'center',
+  },
+  planPrice: {
+    fontSize: '1.8rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    margin: '0 0 20px 0',
+    color: '#2d3748',
+  },
+  planFeatures: {
+    listStyle: 'none',
+    padding: 0,
+    margin: '0 0 20px 0',
+    color: '#4a5568',
+  },
+  planFeaturesLi: {
+    padding: '5px 0',
+    fontSize: '14px',
+  },
+  planButton: {
+    width: '100%',
+    padding: '12px',
+    backgroundColor: LOJISTA_PRIMARY,
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  planButtonPro: {
+    width: '100%',
+    padding: '12px',
+    backgroundColor: '#4299e1',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    fontSize: '14px',
+  },
+  
+  // Stats
   statsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
@@ -721,11 +1113,28 @@ const styles = {
     color: '#333',
     margin: 0,
   },
+  
+  // Table
   tableContainer: {
     backgroundColor: 'white',
     borderRadius: '12px',
     boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
     overflow: 'hidden',
+  },
+  tableHeaderSection: {
+    padding: '20px 25px',
+    borderBottom: '1px solid #e2e8f0',
+  },
+  tableTitle: {
+    fontSize: '1.3rem',
+    fontWeight: 'bold',
+    margin: '0 0 5px 0',
+    color: '#333',
+  },
+  tableSubtitle: {
+    fontSize: '0.95rem',
+    color: '#666',
+    margin: 0,
   },
   table: {
     width: '100%',
@@ -797,7 +1206,7 @@ const styles = {
     padding: '5px',
   },
   
-  // Modal
+  // Modal (mantido do original)
   modalOverlay: {
     position: 'fixed',
     top: 0,

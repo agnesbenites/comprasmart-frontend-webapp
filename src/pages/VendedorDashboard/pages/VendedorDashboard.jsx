@@ -29,6 +29,9 @@ import GerenciadorPedidos from "../../../shared/components/GerenciadorPedidos";
 import StatusVendasVendedor from "../components/StatusVendasVendedor";
 import SchedulePanel from "../../ConsultorDashboard/components/SchedulePanel";
 
+// Importar ArenaVendasPainel do ConsultorDashboard
+import ArenaVendasPainel from "../../ConsultorDashboard/components/ArenaVendasPainel";
+
 // =============================================================
 // === CORES E CONSTANTES ===
 // =============================================================
@@ -50,6 +53,7 @@ const VENDEDOR_MENU_ITEMS = [
     { title: "Relatorios", rota: "/vendedor/dashboard/relatorio", icon: "&#128202;", destaque: false },
     { title: "Treinamentos", rota: "/vendedor/dashboard/treinamentos", icon: "&#127891;", destaque: false },
     { title: "Report", rota: "/vendedor/dashboard/report", icon: "&#128221;", destaque: false },
+    { title: "🎯 Arena de Vendas", rota: "/vendedor/dashboard/arena", icon: "🎯", destaque: false },
 ];
 
 // === DADOS MOCKADOS DE CAMPANHAS ===
@@ -610,6 +614,10 @@ const vendedorStyles = {
 // === COMPONENTE PRINCIPAL COM ROTAS ===
 // =============================================================
 export default function VendedorDashboard() {
+    // Simulando dados do usuário (em produção, viria do contexto de autenticação)
+    const user = { id: "vendedor-123" };
+    const lojaVinculada = { id: "loja-456" };
+
     return (
         <Routes>
             <Route path="/" element={<VendedorDashboardLayout />}>
@@ -631,6 +639,15 @@ export default function VendedorDashboard() {
                 <Route path="dashboard/treinamentos" element={<TrainingPanel />} />
                 <Route path="dashboard/report" element={<ReportPanel />} />
                 <Route path="dashboard/profile" element={<VendedorProfile />} />
+                <Route
+                    path="dashboard/arena"
+                    element={
+                        <ArenaVendasPainel
+                            consultorId={user?.id}
+                            lojaId={lojaVinculada?.id || null}
+                        />
+                    }
+                />
             </Route>
         </Routes>
     );
