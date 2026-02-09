@@ -430,7 +430,7 @@ const DashboardPro = ({ nomeLoja, metrics, onRefresh }) => {
           <div>
             <div style={styles.cardLabel}>Ticket Médio</div>
             <div style={styles.cardValue}>
-              R$ {(metrics.receitaTotal / metrics.totalVendas || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 0 })}
+              R$ {(metrics.receitaTotal / metrics.totalVendas || 0).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </div>
           </div>
         </div>
