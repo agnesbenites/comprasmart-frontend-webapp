@@ -170,7 +170,7 @@ const ScoreStatisticsPanel = () => {
             titulo="Vendas" 
             nota={estatisticas.mediaVendas} 
             peso={35}
-            color="#28a745"
+            color="#bb25a6"
           />
           <ComponenteCard 
             titulo="Treinamentos" 

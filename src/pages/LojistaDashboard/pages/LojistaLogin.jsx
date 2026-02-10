@@ -131,7 +131,7 @@ const LojistaLogin = () => {
             onClick={() => setLoginType("email")}
             style={{
               ...styles.toggleButton,
-              backgroundColor: loginType === "email" ? "#28a745" : "#f8f9fa",
+              backgroundColor: loginType === "email" ? "#bb25a6" : "#f8f9fa",
               color: loginType === "email" ? "white" : "#666",
             }}
           >
@@ -142,7 +142,7 @@ const LojistaLogin = () => {
             onClick={() => setLoginType("cnpj")}
             style={{
               ...styles.toggleButton,
-              backgroundColor: loginType === "cnpj" ? "#28a745" : "#f8f9fa",
+              backgroundColor: loginType === "cnpj" ? "#bb25a6" : "#f8f9fa",
               color: loginType === "cnpj" ? "white" : "#666",
             }}
           >
@@ -246,7 +246,7 @@ const styles = {
   title: {
     fontSize: "1.8rem",
     fontWeight: "700",
-    color: "#28a745",
+    color: "#bb25a6",
     marginBottom: "8px",
   },
   subtitle: {
@@ -301,7 +301,7 @@ const styles = {
   },
   button: {
     padding: "14px",
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -320,7 +320,7 @@ const styles = {
   linkButton: {
     background: "none",
     border: "none",
-    color: "#28a745",
+    color: "#bb25a6",
     fontSize: "0.9rem",
     fontWeight: "600",
     cursor: "pointer",

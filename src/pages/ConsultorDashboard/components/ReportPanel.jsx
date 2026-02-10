@@ -208,7 +208,7 @@ const ReportPanel = ({ consultorId }) => {
       {/* Mensagem de Sucesso */}
       {sucesso && (
         <div style={styles.successCard}>
-          <FaCheckCircle size={50} color="#28a745" />
+          <FaCheckCircle size={50} color="#bb25a6" />
           <div style={styles.successContent}>
             <h3 style={styles.successTitle}> Notificacao enviada com sucesso!</h3>
             <p style={styles.successText}>
@@ -502,7 +502,7 @@ const styles = {
   },
   successCard: {
     backgroundColor: '#e8f5e9',
-    border: '2px solid #28a745',
+    border: '2px solid #bb25a6',
     borderRadius: '12px',
     padding: '30px',
     marginBottom: '25px',
@@ -516,7 +516,7 @@ const styles = {
   successTitle: {
     fontSize: '1.3rem',
     fontWeight: 'bold',
-    color: '#28a745',
+    color: '#bb25a6',
     margin: '0 0 12px 0',
   },
   successText: {

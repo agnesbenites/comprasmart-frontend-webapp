@@ -178,7 +178,7 @@ const LojistaCadastro = () => {
           <span>👤 <strong>{lojistaInfo.nome}</strong></span>
           <span>📧 {lojistaInfo.email}</span>
           <span style={{
-            backgroundColor: '#3b82f6',
+            backgroundColor: '#bb25a6',
             color: 'white',
             padding: '4px 12px',
             borderRadius: '12px',

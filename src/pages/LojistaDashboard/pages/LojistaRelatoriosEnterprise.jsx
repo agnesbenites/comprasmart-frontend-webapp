@@ -310,7 +310,7 @@ const LojistaRelatoriosEnterprise = () => {
                                     <div style={{
                                         ...styles.barFill,
                                         width: `${totalVendas > 0 ? (metricasAvancadas.vendasPorOrigem.organicas / totalVendas) * 100 : 0}%`,
-                                        backgroundColor: '#3b82f6'
+                                        backgroundColor: '#bb25a6'
                                     }}></div>
                                 </div>
                                 <span style={styles.barValue}>{metricasAvancadas.vendasPorOrigem.organicas}</span>

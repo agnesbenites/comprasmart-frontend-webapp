@@ -190,7 +190,7 @@ const AdminConsultores = () => {
       {/* Estatísticas */}
       <div style={styles.statsGrid}>
         <StatCard label="Total" value={estatisticas.total} color="#2c5aa0" />
-        <StatCard label="Ativos" value={estatisticas.ativos} color="#28a745" />
+        <StatCard label="Ativos" value={estatisticas.ativos} color="#bb25a6" />
         <StatCard label="Pendentes" value={estatisticas.pendentes} color="#ffc107" />
         <StatCard label="Bloqueados" value={estatisticas.bloqueados} color="#dc3545" />
       </div>
@@ -223,7 +223,7 @@ const AdminConsultores = () => {
             onClick={() => setFiltro('ativo')}
             style={{
               ...styles.filterButton,
-              backgroundColor: filtro === 'ativo' ? '#28a745' : '#f8f9fa',
+              backgroundColor: filtro === 'ativo' ? '#bb25a6' : '#f8f9fa',
               color: filtro === 'ativo' ? 'white' : '#333',
             }}
           >
@@ -317,7 +317,7 @@ const AdminConsultores = () => {
                           style={styles.iconButton}
                           title="Aprovar"
                         >
-                          <FaCheckCircle color="#28a745" size={18} />
+                          <FaCheckCircle color="#bb25a6" size={18} />
                         </button>
                       )}
                       <button
@@ -325,14 +325,14 @@ const AdminConsultores = () => {
                         style={styles.iconButton}
                         title={consultor.status === 'bloqueado' ? 'Desbloquear' : 'Bloquear'}
                       >
-                        <FaBan color={consultor.status === 'bloqueado' ? '#28a745' : '#dc3545'} size={18} />
+                        <FaBan color={consultor.status === 'bloqueado' ? '#bb25a6' : '#dc3545'} size={18} />
                       </button>
                       <button
                         onClick={() => handleVerDetalhes(consultor)}
                         style={styles.iconButton}
                         title="Ver Detalhes"
                       >
-                        <FaEdit color="#2563eb" size={18} />
+                        <FaEdit color="#bb25a6" size={18} />
                       </button>
                       <button
                         onClick={() => handleEnviarNotificacao(consultor)}
@@ -399,14 +399,14 @@ const AdminConsultores = () => {
                 </div>
               </div>
               <div style={styles.detalhesStatCard}>
-                <FaDollarSign color="#28a745" size={24} />
+                <FaDollarSign color="#bb25a6" size={24} />
                 <div>
                   <p style={styles.detalhesStatLabel}>Total Comissões</p>
                   <p style={styles.detalhesStatValue}>R$ {consultorDetalhes.totalComissoes.toFixed(2)}</p>
                 </div>
               </div>
               <div style={styles.detalhesStatCard}>
-                <FaUsers color="#2563eb" size={24} />
+                <FaUsers color="#bb25a6" size={24} />
                 <div>
                   <p style={styles.detalhesStatLabel}>Total Vendas</p>
                   <p style={styles.detalhesStatValue}>{consultorDetalhes.totalVendas}</p>
@@ -599,7 +599,7 @@ const styles = {
   },
   comissaoValor: {
     fontWeight: '600',
-    color: '#28a745',
+    color: '#bb25a6',
   },
   statusBadge: {
     padding: '5px 12px',

@@ -281,7 +281,7 @@ const MinhaAgenda = () => {
                                                 onClick={() => toggleHorario(horario.id, horario.ativo)}
                                                 style={{
                                                     ...styles.toggleBtn,
-                                                    backgroundColor: horario.ativo ? '#ffc107' : '#28a745'
+                                                    backgroundColor: horario.ativo ? '#ffc107' : '#bb25a6'
                                                 }}
                                             >
                                                 {horario.ativo ? '⏸ Pausar' : '▶ Ativar'}
@@ -309,27 +309,27 @@ const styles = {
     loading: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '20px' },
     spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #2c5aa0', borderRadius: '50%', animation: 'spin 1s linear infinite' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' },
-    title: { fontSize: '2rem', color: '#2c3e50', margin: 0 },
-    copiarBtn: { backgroundColor: '#007bff', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
+    title: { fontSize: '2rem', color: '#2f0d51', margin: 0 },
+    copiarBtn: { backgroundColor: '#bb25a6', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
     infoBox: { backgroundColor: '#e3f2fd', border: '1px solid #90caf9', borderRadius: '8px', padding: '15px', marginBottom: '30px', display: 'flex', gap: '15px', alignItems: 'flex-start' },
     infoIcon: { fontSize: '2rem' },
     infoText: { fontSize: '14px', color: '#555', margin: '5px 0 0 0', lineHeight: '1.5' },
     addCard: { backgroundColor: '#fff', padding: '25px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', marginBottom: '30px' },
-    cardTitle: { fontSize: '1.2rem', color: '#2c3e50', marginBottom: '20px', fontWeight: '600' },
+    cardTitle: { fontSize: '1.2rem', color: '#2f0d51', marginBottom: '20px', fontWeight: '600' },
     formGrid: { display: 'grid', gridTemplateColumns: '2fr 1fr 1fr auto', gap: '15px', alignItems: 'end' },
     formGroup: { display: 'flex', flexDirection: 'column' },
     label: { fontSize: '14px', fontWeight: '600', color: '#555', marginBottom: '8px' },
     input: { padding: '10px 15px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px' },
-    addBtn: { backgroundColor: '#28a745', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px', height: '45px' },
+    addBtn: { backgroundColor: '#bb25a6', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px', height: '45px' },
     diasGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' },
     diaCard: { backgroundColor: '#fff', padding: '20px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' },
     diaHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px', paddingBottom: '10px', borderBottom: '2px solid #e0e0e0' },
-    diaNome: { fontSize: '1.1rem', fontWeight: 'bold', color: '#2c3e50', margin: 0 },
+    diaNome: { fontSize: '1.1rem', fontWeight: 'bold', color: '#2f0d51', margin: 0 },
     contador: { fontSize: '13px', color: '#6c757d', fontWeight: '600' },
     semHorarios: { fontSize: '14px', color: '#999', fontStyle: 'italic', textAlign: 'center', padding: '20px 0' },
     horariosList: { display: 'flex', flexDirection: 'column', gap: '10px' },
     horarioItem: { backgroundColor: '#f8f9fa', padding: '12px 15px', borderRadius: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #e0e0e0' },
-    horarioTime: { fontSize: '14px', fontWeight: '600', color: '#2c3e50' },
+    horarioTime: { fontSize: '14px', fontWeight: '600', color: '#2f0d51' },
     horarioActions: { display: 'flex', gap: '8px' },
     toggleBtn: { color: 'white', border: 'none', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' },
     removeBtn: { backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', cursor: 'pointer' }

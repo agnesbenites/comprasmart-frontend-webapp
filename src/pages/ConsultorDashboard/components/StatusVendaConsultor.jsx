@@ -161,7 +161,7 @@ const StatusVendaConsultor = ({ consultorId }) => {
             borderRadius: '9999px', 
             fontSize: '10px', 
             fontWeight: '900',
-            backgroundColor: isPago ? '#10b981' : '#1e40af',
+            backgroundColor: isPago ? '#10b981' : '#2f0d51',
             color: 'white'
           }}
         >

@@ -970,8 +970,8 @@ const styles = {
     alignItems: 'center',
   },
   tabActive: {
-    color: '#3b82f6',
-    borderBottomColor: '#3b82f6',
+    color: '#bb25a6',
+    borderBottomColor: '#bb25a6',
   },
   content: {
     backgroundColor: 'white',
@@ -1013,7 +1013,7 @@ const styles = {
     color: '#475569',
   },
   upgradeButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '16px 48px',
@@ -1035,7 +1035,7 @@ const styles = {
     marginTop: '5px',
   },
   btnPrimary: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -1083,7 +1083,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #e2e8f0',
-    borderTop: '4px solid #3b82f6',
+    borderTop: '4px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -1119,7 +1119,7 @@ const styles = {
     gap: '8px',
   },
   badge: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '4px 12px',
     borderRadius: '12px',
@@ -1147,7 +1147,7 @@ const styles = {
     width: '50px',
     height: '50px',
     borderRadius: '50%',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     display: 'flex',
     alignItems: 'center',

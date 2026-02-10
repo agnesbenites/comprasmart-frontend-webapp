@@ -361,10 +361,10 @@ const TrainingPanel = ({ consultorId }) => {
         <div style={styles.statusCard}>
           {isHabilitado() ? (
             <>
-              <FaCheckCircle size={40} color="#28a745" />
+              <FaCheckCircle size={40} color="#bb25a6" />
               <div>
                 <p style={styles.statusLabel}>Status</p>
-                <p style={{ ...styles.statusValue, color: '#28a745' }}> Habilitado</p>
+                <p style={{ ...styles.statusValue, color: '#bb25a6' }}> Habilitado</p>
               </div>
             </>
           ) : (
@@ -460,12 +460,12 @@ const TrainingPanel = ({ consultorId }) => {
 const TrainCard = ({ treinamento, isConcluido, onIniciar, isLojista = false }) => (
   <div style={{
     ...styles.trainCard,
-    borderLeft: `4px solid ${isConcluido ? '#28a745' : treinamento.obrigatorio ? '#dc3545' : '#ffc107'}`,
+    borderLeft: `4px solid ${isConcluido ? '#bb25a6' : treinamento.obrigatorio ? '#dc3545' : '#ffc107'}`,
     opacity: isConcluido ? 0.8 : 1,
   }}>
     <div style={styles.trainCardHeader}>
       <div style={styles.trainCardTitle}>
-        {isConcluido && <FaCheckCircle color="#28a745" size={20} />}
+        {isConcluido && <FaCheckCircle color="#bb25a6" size={20} />}
         {treinamento.obrigatorio && !isConcluido && (
           <span style={styles.obrigatorioTag}>OBRIGAT“RIO</span>
         )}
@@ -832,7 +832,7 @@ const styles = {
     lineHeight: '1.6',
   },
   concluirButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '16px 30px',

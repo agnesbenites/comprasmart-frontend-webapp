@@ -628,7 +628,7 @@ const styles = {
   buttonPrimary: {
     width: "100%",
     padding: "14px",
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -649,7 +649,7 @@ const styles = {
   },
   buttonCapture: {
     padding: "12px 32px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -660,7 +660,7 @@ const styles = {
   buttonSuccess: {
     width: "100%",
     padding: "14px",
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -672,7 +672,7 @@ const styles = {
   buttonRetry: {
     width: "100%",
     padding: "14px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -690,7 +690,7 @@ const styles = {
   uploadButton: {
     width: "100%",
     padding: "16px",
-    backgroundColor: "#007bff",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -744,7 +744,7 @@ const styles = {
     position: "absolute",
     width: "40px",
     height: "40px",
-    border: "4px solid #28a745",
+    border: "4px solid #bb25a6",
   },
   cornerTL: { top: 0, left: 0, borderRight: "none", borderBottom: "none" },
   cornerTR: { top: 0, right: 0, borderLeft: "none", borderBottom: "none" },
@@ -758,7 +758,7 @@ const styles = {
   faceOval: {
     width: "100%",
     height: "100%",
-    border: "4px solid #28a745",
+    border: "4px solid #bb25a6",
     borderRadius: "50%",
   },
   cameraInstructions: {
@@ -784,7 +784,7 @@ const styles = {
     width: "60px",
     height: "60px",
     border: "6px solid #f3f3f3",
-    borderTop: "6px solid #28a745",
+    borderTop: "6px solid #bb25a6",
     borderRadius: "50%",
     animation: "spin 1s linear infinite",
     margin: "0 auto 24px",
@@ -809,7 +809,7 @@ const styles = {
   successTitle: {
     fontSize: "1.8rem",
     fontWeight: "700",
-    color: "#28a745",
+    color: "#bb25a6",
     marginBottom: "12px",
   },
   successText: {
@@ -838,7 +838,7 @@ const styles = {
   scoreCircle: {
     width: "120px",
     height: "120px",
-    border: "8px solid #28a745",
+    border: "8px solid #bb25a6",
     borderRadius: "50%",
     display: "flex",
     alignItems: "center",
@@ -848,7 +848,7 @@ const styles = {
   scoreValue: {
     fontSize: "2rem",
     fontWeight: "700",
-    color: "#28a745",
+    color: "#bb25a6",
   },
   scoreLabel: {
     fontSize: "0.9rem",

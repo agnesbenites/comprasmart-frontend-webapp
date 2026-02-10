@@ -162,7 +162,7 @@ const LojistaVendedores = () => {
       {/* CARDS DE MÉTRICAS GERAIS */}
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#3b82f6'}}>👥</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>👥</div>
           <div>
             <div style={styles.cardLabel}>Vendedores Ativos</div>
             <div style={styles.cardValue}>{metrics.vendedoresAtivos}</div>
@@ -332,7 +332,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #e2e8f0',
-    borderTop: '4px solid #3b82f6',
+    borderTop: '4px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -368,7 +368,7 @@ const styles = {
     backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -446,7 +446,7 @@ const styles = {
     position: 'absolute',
     top: '10px',
     right: '10px',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     width: '35px',
     height: '35px',
@@ -461,7 +461,7 @@ const styles = {
     width: '60px',
     height: '60px',
     borderRadius: '50%',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     display: 'flex',
     alignItems: 'center',
@@ -541,7 +541,7 @@ const styles = {
     alignItems: 'center',
   },
   rankBadge: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '4px 10px',
     borderRadius: '8px',
@@ -557,7 +557,7 @@ const styles = {
     width: '40px',
     height: '40px',
     borderRadius: '50%',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     display: 'flex',
     alignItems: 'center',
@@ -625,7 +625,7 @@ const styles = {
     marginBottom: '30px',
   },
   emptyButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '14px 28px',

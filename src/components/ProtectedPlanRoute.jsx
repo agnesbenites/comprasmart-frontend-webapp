@@ -85,7 +85,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '5px solid #f3f3f3',
-    borderTop: '5px solid #007bff',
+    borderTop: '5px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -142,7 +142,7 @@ const styles = {
     margin: 0,
   },
   upgradeButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '18px 50px',
     borderRadius: '8px',

@@ -255,7 +255,7 @@ const MOCK_NOTIFICACOES = [
   },
   {
     id: 3,
-    titulo: 'Bem-vindo ao Compra Smart!',
+    titulo: 'Bem-vindo ao Kaslee!',
     mensagem: 'Obrigado por se cadastrar. Explore todas as funcionalidades.',
     tipo: 'success',
     lida: true,
@@ -280,7 +280,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #f3f3f3',
-    borderTop: '4px solid #3b82f6',
+    borderTop: '4px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -328,8 +328,8 @@ const styles = {
     transition: 'all 0.2s',
   },
   filtroButtonActive: {
-    borderColor: '#3b82f6',
-    backgroundColor: '#3b82f6',
+    borderColor: '#bb25a6',
+    backgroundColor: '#bb25a6',
     color: 'white',
   },
   marcarTodasButton: {
@@ -360,7 +360,7 @@ const styles = {
   },
   notifNaoLida: {
     backgroundColor: '#eff6ff',
-    borderColor: '#3b82f6',
+    borderColor: '#bb25a6',
   },
   notifLida: {
     backgroundColor: 'white',
@@ -401,7 +401,7 @@ const styles = {
     width: '10px',
     height: '10px',
     borderRadius: '50%',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
   },
   deleteButton: {
     padding: '8px',

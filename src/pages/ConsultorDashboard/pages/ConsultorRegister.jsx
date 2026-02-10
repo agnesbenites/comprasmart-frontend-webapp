@@ -289,9 +289,9 @@ const RegisterPage = () => {
 
             {/* Progress */}
             <div style={styles.progressBar}>
-              <div style={{...styles.progressStep, backgroundColor: "#28a745"}}>✓</div>
-              <div style={{...styles.progressStep, backgroundColor: etapa >= 2 ? "#28a745" : "#e0e0e0"}}>2</div>
-              <div style={{...styles.progressStep, backgroundColor: etapa >= 3 ? "#28a745" : "#e0e0e0"}}>3</div>
+              <div style={{...styles.progressStep, backgroundColor: "#bb25a6"}}>✓</div>
+              <div style={{...styles.progressStep, backgroundColor: etapa >= 2 ? "#bb25a6" : "#e0e0e0"}}>2</div>
+              <div style={{...styles.progressStep, backgroundColor: etapa >= 3 ? "#bb25a6" : "#e0e0e0"}}>3</div>
             </div>
             <div style={styles.progressLabels}>
               <span style={styles.labelActive}>Biometria</span>
@@ -700,7 +700,7 @@ const styles = {
     display: "block",
     marginTop: "4px",
     fontSize: "0.8rem",
-    color: "#28a745",
+    color: "#bb25a6",
     fontWeight: "600",
   },
   hint: {

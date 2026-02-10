@@ -26,7 +26,7 @@ const RegisterPage = () => {
 
   const colors = {
     consultor: { primary: "#17a2b8", bg: "#e0f7fa" },
-    lojista: { primary: "#28a745", bg: "#e8f5e9" },
+    lojista: { primary: "#bb25a6", bg: "#e8f5e9" },
   };
 
   const currentColor = colors[userType];

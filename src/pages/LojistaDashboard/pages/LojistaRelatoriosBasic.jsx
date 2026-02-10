@@ -3,17 +3,30 @@
 
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../../supabaseClient";
+import {
+    obterResumoMensalIA,
+    regenerarResumoIA,
+    getMesAtual,
+    getMesAnterior,
+} from "../../../api/relatorioIA.service";
 
 const STRIPE_PURCHASE_URL = "https://buy.stripe.com/14AeVdgpWemMaBMb0RgQE07";
 const STRIPE_COLOR = "#635bff";
 
 const LojistaRelatoriosBasic = () => {
     const [periodo, setPeriodo] = useState("mensal");
-    const [tipoExportacao, setTipoExportacao] = useState("TUDO"); // ✅ NOVO ESTADO
-    const [formatoExportacao, setFormatoExportacao] = useState("CSV"); // ✅ NOVO ESTADO
+    const [tipoExportacao, setTipoExportacao] = useState("TUDO");
+    const [formatoExportacao, setFormatoExportacao] = useState("CSV");
     const [loading, setLoading] = useState(false);
-    const [exportando, setExportando] = useState(false); // ✅ NOVO ESTADO
+    const [exportando, setExportando] = useState(false);
     const [lojaId, setLojaId] = useState(null);
+
+    // IA Report states
+    const [resumoIA, setResumoIA] = useState('');
+    const [loadingIA, setLoadingIA] = useState(false);
+    const [erroIA, setErroIA] = useState('');
+    const [fonteIA, setFonteIA] = useState('');
+    const [geradoEmIA, setGeradoEmIA] = useState('');
    
     const [boughtCampaign, setBoughtCampaign] = useState({
         isPaid: false,
@@ -210,6 +223,24 @@ const LojistaRelatoriosBasic = () => {
             console.log("Exportação de " + tipoExportacao + " concluída!");
             setExportando(false);
         }, 500);
+    };
+
+    // 🤖 ANÁLISE COM IA
+    const handleGerarResumoIA = async (forcar = false) => {
+        if (!lojaId) return;
+        setLoadingIA(true);
+        setErroIA('');
+        try {
+            const params = { lojistaId: lojaId, mesAtual: getMesAtual(), mesAnterior: getMesAnterior() };
+            const data = forcar ? await regenerarResumoIA(params) : await obterResumoMensalIA(params);
+            setResumoIA(data.resumo);
+            setFonteIA(data.fonte);
+            setGeradoEmIA(data.geradoEm);
+        } catch (err) {
+            setErroIA(err.message || 'Erro ao gerar análise');
+        } finally {
+            setLoadingIA(false);
+        }
     };
 
     const handleConfigurarCampanha = async (e) => {
@@ -487,6 +518,108 @@ const LojistaRelatoriosBasic = () => {
                 </div>
             </div>
 
+            {/* 🤖 ANÁLISE INTELIGENTE COM IA */}
+            <div style={styles.exportSection}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: resumoIA ? 16 : 0, flexWrap: 'wrap', gap: 12 }}>
+                    <div>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1e293b', margin: 0 }}>
+                            🤖 Análise Inteligente
+                        </h3>
+                        <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0' }}>
+                            IA analisa seus dados e gera recomendações práticas
+                        </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                        {!resumoIA && !loadingIA && (
+                            <button
+                                onClick={() => handleGerarResumoIA(false)}
+                                disabled={loadingIA || loading}
+                                style={{
+                                    padding: '10px 22px', borderRadius: 8, border: 'none',
+                                    background: 'linear-gradient(135deg, #2f0d51, #bb25a6)',
+                                    color: '#fff', fontSize: '0.9rem', fontWeight: 600,
+                                    cursor: 'pointer', transition: 'all 0.2s',
+                                    boxShadow: '0 2px 8px rgba(187,37,166,0.25)',
+                                    opacity: (loadingIA || loading) ? 0.6 : 1,
+                                }}
+                            >
+                                ✨ Gerar Análise do Mês
+                            </button>
+                        )}
+                        {resumoIA && (
+                            <button
+                                onClick={() => handleGerarResumoIA(true)}
+                                disabled={loadingIA}
+                                style={{
+                                    padding: '8px 16px', borderRadius: 8,
+                                    border: '1px solid #bb25a6', background: 'transparent',
+                                    color: '#bb25a6', fontSize: '0.85rem', fontWeight: 600,
+                                    cursor: 'pointer', opacity: loadingIA ? 0.6 : 1,
+                                }}
+                            >
+                                🔄 Regenerar
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Loading IA */}
+                {loadingIA && (
+                    <div style={{ textAlign: 'center', padding: '24px 0' }}>
+                        <div style={styles.spinner}></div>
+                        <p style={{ fontSize: '0.9rem', color: '#666' }}>Analisando seus resultados com IA...</p>
+                    </div>
+                )}
+
+                {/* Erro IA */}
+                {erroIA && !loadingIA && (
+                    <div style={{ background: '#fff5f5', borderRadius: 8, padding: 16, textAlign: 'center' }}>
+                        <p style={{ color: '#c53030', fontSize: '0.9rem', margin: '0 0 8px' }}>⚠️ {erroIA}</p>
+                        <button
+                            onClick={() => handleGerarResumoIA(false)}
+                            style={{ padding: '6px 16px', borderRadius: 6, border: 'none', background: '#f53342', color: '#fff', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+                        >
+                            Tentar novamente
+                        </button>
+                    </div>
+                )}
+
+                {/* Resumo IA */}
+                {resumoIA && !loadingIA && (
+                    <div>
+                        <div style={{
+                            background: '#f8f4fb', borderRadius: 10, padding: '20px 18px',
+                            borderLeft: '4px solid #bb25a6',
+                        }}>
+                            {resumoIA.split('\n').map((line, i) => (
+                                <p key={i} style={{
+                                    fontSize: '0.9rem', color: '#333', lineHeight: 1.7,
+                                    margin: line.trim() === '' ? '8px 0' : '4px 0',
+                                }}>{line}</p>
+                            ))}
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap', gap: 8 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <span style={{
+                                    background: '#f3eef8', color: '#2f0d51', padding: '2px 8px',
+                                    borderRadius: 10, fontSize: '0.75rem', fontWeight: 600,
+                                }}>
+                                    {fonteIA === 'cache' ? '📦 Cache' : fonteIA === 'ia-regenerado' ? '🔄 Regenerado' : '✨ Novo'}
+                                </span>
+                                {geradoEmIA && (
+                                    <span style={{ fontSize: '0.75rem', color: '#999' }}>
+                                        {new Date(geradoEmIA).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' })}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                        <p style={{ fontSize: '0.7rem', color: '#bbb', marginTop: 8, fontStyle: 'italic', textAlign: 'center' }}>
+                            Análise gerada por IA com base nos dados disponíveis. Verifique antes de tomar decisões.
+                        </p>
+                    </div>
+                )}
+            </div>
+
             {loading && (
                 <div style={styles.loading}>
                     <div style={styles.spinner}></div>
@@ -530,7 +663,7 @@ const styles = {
         margin: 0
     },
     planBadge: {
-        backgroundColor: '#3b82f6',
+        backgroundColor: '#bb25a6',
         color: 'white',
         padding: '8px 16px',
         borderRadius: '20px',
@@ -673,7 +806,7 @@ const styles = {
         height: '40px',
         margin: '0 auto 15px',
         border: '4px solid #f3f3f3',
-        borderTop: '4px solid #3b82f6',
+        borderTop: '4px solid #bb25a6',
         borderRadius: '50%',
         animation: 'spin 1s linear infinite'
     },

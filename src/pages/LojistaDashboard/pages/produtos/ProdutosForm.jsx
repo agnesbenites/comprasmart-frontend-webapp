@@ -878,7 +878,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
           data-cy="produto-submit"
           style={{
             marginTop: '25px',
-            backgroundColor: loading ? '#6c757d' : '#28a745',
+            backgroundColor: loading ? '#6c757d' : '#bb25a6',
             color: 'white',
             border: 'none',
             padding: '14px 30px',

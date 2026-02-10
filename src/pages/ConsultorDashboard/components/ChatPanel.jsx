@@ -764,7 +764,7 @@ const ChatPanel = () => {
                 {consultorData && cart.length > 0 && (
                   <div style={styles.comissaoInfo}>
                     <div style={styles.comissaoItem}>
-                      <FaMoneyBillWave size={12} style={{ color: '#28a745' }} />
+                      <FaMoneyBillWave size={12} style={{ color: '#bb25a6' }} />
                       <span>Comissão ({consultorData.percentual_comissao || 5}%):</span>
                       <span style={styles.comissaoValor}>
                         R$ {calcularComissao(calculateTotal()).toFixed(2)}
@@ -790,7 +790,7 @@ const ChatPanel = () => {
                       <small>Cor: {produto.cor}</small>
                       <small style={{ 
                         color: produto.estoque < 1 ? '#dc3545' : 
-                               produto.estoque < 5 ? '#ffc107' : '#28a745'
+                               produto.estoque < 5 ? '#ffc107' : '#bb25a6'
                       }}>
                         Estoque: {produto.estoque}
                       </small>
@@ -1270,7 +1270,7 @@ const styles = {
   itemPrice: {
     fontSize: '12px',
     fontWeight: 'bold',
-    color: '#28a745',
+    color: '#bb25a6',
     marginLeft: '8px',
   },
   removeItemBtn: {
@@ -1305,7 +1305,7 @@ const styles = {
     fontSize: '13px',
   },
   comissaoValor: {
-    color: '#28a745',
+    color: '#bb25a6',
     fontWeight: 'bold',
   },
   productsSection: {
@@ -1377,7 +1377,7 @@ const styles = {
     gap: '15px',
   },
   finalizeButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: '#ffffff',
     border: 'none',
     padding: '14px',
@@ -1398,7 +1398,7 @@ const styles = {
     textAlign: 'center',
   },
   successText: {
-    color: '#28a745',
+    color: '#bb25a6',
     fontWeight: '600',
     marginBottom: '10px',
   },

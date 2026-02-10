@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-const PRIMARY_COLOR = "#007bff";
+const PRIMARY_COLOR = "#bb25a6";
 const SECONDARY_COLOR = "#495057";
 
 const Cart = ({ 
@@ -153,7 +153,7 @@ const Cart = ({
     totalValue: {
       fontSize: '1.3rem',
       fontWeight: 'bold',
-      color: '#28a745',
+      color: '#bb25a6',
     },
     finalizeButton: {
       width: '100%',

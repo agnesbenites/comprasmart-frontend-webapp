@@ -279,7 +279,7 @@ const styles = {
     width: '100%',
     height: '300px',
     backgroundColor: '#f8f9fa',
-    border: '3px dashed #007bff',
+    border: '3px dashed #bb25a6',
     borderRadius: '12px',
     display: 'flex',
     flexDirection: 'column',
@@ -295,7 +295,7 @@ const styles = {
     color: '#999'
   },
   scanButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '15px 30px',
@@ -319,7 +319,7 @@ const styles = {
     marginBottom: '10px'
   },
   processButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '10px 20px',
@@ -334,7 +334,7 @@ const styles = {
     width: '60px',
     height: '60px',
     border: '5px solid #f3f3f3',
-    borderTop: '5px solid #007bff',
+    borderTop: '5px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
     margin: '0 auto 20px'
@@ -360,7 +360,7 @@ const styles = {
   },
   successTitle: {
     fontSize: '1.8rem',
-    color: '#28a745',
+    color: '#bb25a6',
     marginBottom: '20px'
   },
   successDetails: {
@@ -378,7 +378,7 @@ const styles = {
     borderBottom: '1px solid #dee2e6'
   },
   statusSuccess: {
-    color: '#28a745',
+    color: '#bb25a6',
     fontWeight: '600'
   },
   nextActions: {
@@ -388,7 +388,7 @@ const styles = {
     flexWrap: 'wrap'
   },
   newSaleButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 25px',

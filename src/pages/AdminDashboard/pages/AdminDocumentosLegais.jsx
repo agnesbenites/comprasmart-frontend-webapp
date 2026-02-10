@@ -165,9 +165,9 @@ const AdminDocumentosLegais = () => {
 
   const getTipoColor = (tipo) => {
     const colors = {
-      contrato: '#2563eb',
+      contrato: '#bb25a6',
       termos: '#ffc107',
-      privacidade: '#28a745',
+      privacidade: '#bb25a6',
     };
     return colors[tipo] || '#6c757d';
   };
@@ -431,7 +431,7 @@ const styles = {
   },
   notionButton: {
     padding: '8px 16px',
-    backgroundColor: '#2563eb',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '6px',
@@ -457,7 +457,7 @@ const styles = {
   },
   saveButton: {
     padding: '8px 16px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '6px',
@@ -511,7 +511,7 @@ const styles = {
   },
   urlLink: {
     fontSize: '0.85rem',
-    color: '#2563eb',
+    color: '#bb25a6',
     textDecoration: 'none',
     wordBreak: 'break-all',
   },

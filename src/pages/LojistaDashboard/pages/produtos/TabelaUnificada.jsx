@@ -34,7 +34,7 @@ const TabelaUnificada = ({
     };
 
     const getTipoCor = (tipo) => {
-        return tipo === 'produto' ? '#28a745' : '#6f42c1';
+        return tipo === 'produto' ? '#bb25a6' : '#6f42c1';
     };
 
     const getNomeItem = (item) => {
@@ -75,7 +75,7 @@ const TabelaUnificada = ({
 
     const getStatusItem = (item) => {
         if (item._tipo === 'produto') {
-            const status = getStatusEstoque ? getStatusEstoque(item.estoque, 5) : { texto: "OK", cor: "#28a745" };
+            const status = getStatusEstoque ? getStatusEstoque(item.estoque, 5) : { texto: "OK", cor: "#bb25a6" };
             return (
                 <span
                     style={{
@@ -98,7 +98,7 @@ const TabelaUnificada = ({
                     style={{
                         ...styles.status,
                         backgroundColor: item.ativo ? '#d4edda' : '#f8d7da',
-                        color: item.ativo ? '#28a745' : '#dc3545',
+                        color: item.ativo ? '#bb25a6' : '#dc3545',
                     }}
                 >
                     {item.ativo ? '✅ Ativa' : '⏸️ Inativa'}
@@ -295,7 +295,7 @@ const TabelaUnificada = ({
                                                         marginBottom: '10px'
                                                     }}>
                                                         <span style={{
-                                                            backgroundColor: item._tipo === 'produto' ? '#6f42c1' : '#28a745',
+                                                            backgroundColor: item._tipo === 'produto' ? '#6f42c1' : '#bb25a6',
                                                             color: 'white',
                                                             padding: '4px 8px',
                                                             borderRadius: '12px',

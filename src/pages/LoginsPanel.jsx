@@ -10,7 +10,7 @@ const LoginsPanel = () => {
   return (
     <div style={styles.container}>
       <div style={styles.content}>
-        <h1 style={styles.mainTitle}>Compra Smart</h1>
+        <h1 style={styles.mainTitle}>Kaslee</h1>
         <p style={styles.subtitle}>Sistema Inteligente de Consultoria</p>
 
         <div style={styles.grid}>
@@ -32,11 +32,11 @@ const LoginsPanel = () => {
           </div>
 
           {/* LOJISTA/VENDEDOR */}
-          <div style={{ ...styles.card, borderColor: "#28a745" }}>
+          <div style={{ ...styles.card, borderColor: "#bb25a6" }}>
             <div style={styles.iconWrapper}>
               <span style={styles.icon}>&#127978;</span>
             </div>
-            <h2 style={{ ...styles.cardTitle, color: "#28a745" }}>
+            <h2 style={{ ...styles.cardTitle, color: "#bb25a6" }}>
               Lojista / Vendedor
             </h2>
             <p style={styles.cardDescription}>
@@ -44,7 +44,7 @@ const LoginsPanel = () => {
             </p>
             <button
               onClick={() => navigate("/lojista/escolha")}
-              style={{ ...styles.button, backgroundColor: "#28a745" }}
+              style={{ ...styles.button, backgroundColor: "#bb25a6" }}
             >
               Acessar como Lojista/Vendedor
             </button>

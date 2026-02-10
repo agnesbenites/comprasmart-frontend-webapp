@@ -268,7 +268,7 @@ Complete este treinamento para avançar no processo de habilitação.`;
               
               {isConcluido(treinamentoSelecionado.id) && (
                 <div style={styles.jaConcluidoMessage}>
-                  <FaCheckCircle color="#28a745" size={24} />
+                  <FaCheckCircle color="#bb25a6" size={24} />
                   <span>Você já concluiu este treinamento!</span>
                 </div>
               )}
@@ -292,10 +292,10 @@ Complete este treinamento para avançar no processo de habilitação.`;
         <div style={styles.statusCard}>
           {isHabilitado() ? (
             <>
-              <FaCheckCircle size={40} color="#28a745" />
+              <FaCheckCircle size={40} color="#bb25a6" />
               <div>
                 <p style={styles.statusLabel}>Status</p>
-                <p style={{ ...styles.statusValue, color: '#28a745' }}>✅ Habilitado</p>
+                <p style={{ ...styles.statusValue, color: '#bb25a6' }}>✅ Habilitado</p>
               </div>
             </>
           ) : (
@@ -391,7 +391,7 @@ Complete este treinamento para avançar no processo de habilitação.`;
 const TrainCard = ({ treinamento, isConcluido, isNovo, onIniciar }) => (
   <div style={{
     ...styles.trainCard,
-    borderLeft: `4px solid ${isConcluido ? '#28a745' : treinamento.obrigatorio ? '#dc3545' : '#ffc107'}`,
+    borderLeft: `4px solid ${isConcluido ? '#bb25a6' : treinamento.obrigatorio ? '#dc3545' : '#ffc107'}`,
     opacity: isConcluido ? 0.8 : 1,
   }}>
     <div style={styles.trainCardHeader}>
@@ -597,7 +597,7 @@ const styles = {
     flexWrap: 'wrap',
   },
   concluidoBadge: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '4px 10px',
     borderRadius: '6px',
@@ -608,7 +608,7 @@ const styles = {
     gap: '4px',
   },
   novoBadge: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '4px 10px',
     borderRadius: '6px',
@@ -729,7 +729,7 @@ const styles = {
     boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
   },
   concluirButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '16px 30px',

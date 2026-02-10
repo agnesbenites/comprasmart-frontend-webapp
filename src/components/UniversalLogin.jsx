@@ -165,7 +165,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
             onClick={() => window.location.href = getRedirectPath()}
             style={{
               padding: '10px 20px',
-              backgroundColor: '#28a745',
+              backgroundColor: '#bb25a6',
               color: 'white',
               border: 'none',
               borderRadius: '5px',

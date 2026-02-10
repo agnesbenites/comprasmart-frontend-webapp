@@ -340,7 +340,7 @@ const IntegracaoVenda = () => {
               {venda.desconto > 0 && (
                 <div style={styles.totalRow}>
                   <span>Desconto:</span>
-                  <span style={{color: '#28a745'}}>- R$ {venda.desconto.toFixed(2)}</span>
+                  <span style={{color: '#bb25a6'}}>- R$ {venda.desconto.toFixed(2)}</span>
                 </div>
               )}
               <div style={styles.totalFinal}>
@@ -388,7 +388,7 @@ const IntegracaoVenda = () => {
               </div>
               <div style={styles.resumoItem}>
                 <span>Total:</span>
-                <strong style={{color: '#28a745', fontSize: '1.3rem'}}>
+                <strong style={{color: '#bb25a6', fontSize: '1.3rem'}}>
                   R$ {venda.valorTotal.toFixed(2)}
                 </strong>
               </div>
@@ -699,7 +699,7 @@ const styles = {
   produtoTotal: {
     fontSize: '1.05rem',
     fontWeight: '700',
-    color: '#28a745',
+    color: '#bb25a6',
     width: '120px',
     textAlign: 'right',
   },
@@ -748,7 +748,7 @@ const styles = {
     padding: '15px 35px',
     fontSize: '1.1rem',
     fontWeight: '700',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '10px',
@@ -774,7 +774,7 @@ const styles = {
     width: '80px',
     height: '80px',
     backgroundColor: '#d4edda',
-    color: '#28a745',
+    color: '#bb25a6',
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
@@ -784,7 +784,7 @@ const styles = {
   },
   sucessoTitulo: {
     fontSize: '1.6rem',
-    color: '#28a745',
+    color: '#bb25a6',
     marginBottom: '10px',
   },
   sucessoTexto: {

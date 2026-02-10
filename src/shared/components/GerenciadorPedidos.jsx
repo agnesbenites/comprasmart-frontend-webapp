@@ -9,7 +9,7 @@ const STATUS_PEDIDO = [
     { value: 'QR Code Gerado!', label: 'QR Code Gerado!', cor: '#6c757d', icon: '📱' },
     { value: 'Aguardando Separação', label: 'Aguardando Separacao', cor: '#ffc107', icon: '📦' },
     { value: 'Pronto para pagamento', label: 'Pronto para Pagamento', cor: '#17a2b8', icon: '💳' },
-    { value: 'Pago/Cancelado', label: 'Pago/Cancelado', cor: '#28a745', icon: '✅' },
+    { value: 'Pago/Cancelado', label: 'Pago/Cancelado', cor: '#bb25a6', icon: '✅' },
     { value: 'Retirado pelo Cliente', label: 'Retirado pelo Cliente', cor: '#6f42c1', icon: '🛍️' }
 ];
 

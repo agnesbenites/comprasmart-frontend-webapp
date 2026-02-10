@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
-const LOJISTA_PRIMARY = '#2563eb';
+const LOJISTA_PRIMARY = '#bb25a6';
 const MAX_INDICACOES_MES = 5;
 const CREDITOS_POR_INDICACAO = 30;
 const INDICACOES_PARA_UPGRADE = 2;
@@ -159,7 +159,7 @@ const LojistaIndicacoes = () => {
   const getStatusBadge = (status) => {
     const badges = {
       pendente: { color: '#ffc107', bg: '#fff3cd', text: '⏳ Pendente' },
-      aprovado: { color: '#28a745', bg: '#d4edda', text: '✅ Aprovado' },
+      aprovado: { color: '#bb25a6', bg: '#d4edda', text: '✅ Aprovado' },
       recusado: { color: '#dc3545', bg: '#f8d7da', text: '❌ Recusado' },
     };
     return badges[status] || badges.pendente;
@@ -188,7 +188,7 @@ const LojistaIndicacoes = () => {
           </div>
         </div>
 
-        <div style={{...styles.statCard, borderLeft: '4px solid #28a745'}}>
+        <div style={{...styles.statCard, borderLeft: '4px solid #bb25a6'}}>
           <div style={styles.statIcon}>⬆️</div>
           <div style={styles.statContent}>
             <p style={styles.statLabel}>Upgrades Disponíveis</p>
@@ -508,7 +508,7 @@ const styles = {
   },
   upgradeAlert: {
     backgroundColor: '#d4edda',
-    border: '2px solid #28a745',
+    border: '2px solid #bb25a6',
     borderRadius: '12px',
     padding: '20px',
     marginBottom: '30px',
@@ -538,7 +538,7 @@ const styles = {
     margin: 0,
   },
   upgradeButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -674,7 +674,7 @@ const styles = {
   creditosGanhos: {
     fontSize: '0.9rem',
     fontWeight: '600',
-    color: '#28a745',
+    color: '#bb25a6',
   },
   emptyState: {
     textAlign: 'center',

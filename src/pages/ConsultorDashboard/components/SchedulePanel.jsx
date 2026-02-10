@@ -249,7 +249,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
   const getStatusInfo = (status) => {
     const statusMap = {
       'pendente': { emoji: '🟡', texto: 'Pendente Aprovação', cor: '#ffc107' },
-      'confirmado': { emoji: '✅', texto: 'Confirmado', cor: '#28a745' },
+      'confirmado': { emoji: '✅', texto: 'Confirmado', cor: '#bb25a6' },
       'cancelado': { emoji: '❌', texto: 'Cancelado', cor: '#dc3545' },
       'concluido': { emoji: '🎉', texto: 'Concluído', cor: '#6c757d' },
     };
@@ -790,7 +790,7 @@ const styles = {
   },
   btnConfirmar: {
     flex: 1,
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px',

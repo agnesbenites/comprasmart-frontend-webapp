@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 
-const PRIMARY_COLOR = "#007bff";
+const PRIMARY_COLOR = "#bb25a6";
 const SECONDARY_COLOR = "#495057";
 const API_URL = 'https://plataforma-consultoria-mvp.onrender.com';
 
@@ -365,7 +365,7 @@ const styles = {
   },
   successTitle: {
     margin: '0 0 10px 0',
-    color: '#28a745',
+    color: '#bb25a6',
     fontSize: '1.5rem',
   },
   successText: {
@@ -399,7 +399,7 @@ const styles = {
   },
   summaryValueBold: {
     fontSize: '1.2rem',
-    color: '#28a745',
+    color: '#bb25a6',
     fontWeight: '700',
   },
   qrCodeContainer: {

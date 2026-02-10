@@ -198,7 +198,7 @@ const RegisterText = styled.p`
 
 const RegisterButton = styled.button`
   padding: 15px 40px;
-  background-color: #28a745;
+  background-color: #bb25a6;
   color: white;
   border: none;
   border-radius: 8px;
@@ -228,9 +228,9 @@ const LojistaEscolha = () => {
           <LogoWrapper>
             <LogoImage
               src="/img/logo_compra_smart.png"
-              alt="Logo Compra Smart"
+              alt="Logo Kaslee"
             />
-            <LogoText>Compra Smart</LogoText>
+            <LogoText>Kaslee</LogoText>
             <LogoSubtitle>Área do Lojista</LogoSubtitle>
           </LogoWrapper>
         </Header>
@@ -292,7 +292,7 @@ const LojistaEscolha = () => {
           {/* Seção de Cadastro */}
           <RegisterSection>
             <RegisterText>
-              🚀 <strong>Ainda não usa o Compra Smart?</strong> Cadastre sua loja e comece a vender hoje mesmo!
+              🚀 <strong>Ainda não usa o Kaslee?</strong> Cadastre sua loja e comece a vender hoje mesmo!
             </RegisterText>
             <RegisterButton onClick={() => navigate("/lojista/cadastro")}>
               📝 Cadastre-se Grátis

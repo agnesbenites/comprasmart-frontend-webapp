@@ -288,7 +288,7 @@ const ExcluirContaConsultor = ({ consultorId }) => {
             </p>
           </div>
           <p style={styles.farewellText}>
-            Obrigado por ter feito parte da Compra Smart! 💙
+            Obrigado por ter feito parte da Kaslee! 💙
           </p>
         </div>
       </div>
@@ -529,7 +529,7 @@ const styles = {
   },
   successBox: {
     backgroundColor: '#d4edda',
-    border: '3px solid #28a745',
+    border: '3px solid #bb25a6',
     borderRadius: '12px',
     padding: '50px',
     textAlign: 'center',

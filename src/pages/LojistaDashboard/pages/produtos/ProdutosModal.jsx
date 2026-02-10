@@ -245,7 +245,7 @@ const ProdutosModal = ({
                             </div>
                             <div style={{ ...styles.previewRow, ...styles.previewTotal }}>
                                 <strong>Você recebe:</strong>
-                                <strong style={{ color: '#28a745' }}>R$ {valorFinal.toFixed(2)}</strong>
+                                <strong style={{ color: '#bb25a6' }}>R$ {valorFinal.toFixed(2)}</strong>
                             </div>
                         </div>
                     )}
@@ -536,7 +536,7 @@ const styles = {
     saveButton: {
         flex: 1,
         padding: "12px 20px",
-        backgroundColor: "#28a745",
+        backgroundColor: "#bb25a6",
         color: "white",
         border: "none",
         borderRadius: "6px",

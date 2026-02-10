@@ -151,7 +151,7 @@ const styles = {
     height: '60px',
     margin: '0 auto 30px',
     border: '6px solid #f3f3f3',
-    borderTop: '6px solid #28a745',
+    borderTop: '6px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -183,7 +183,7 @@ const styles = {
   button: {
     marginTop: '30px',
     padding: '14px 32px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '8px',

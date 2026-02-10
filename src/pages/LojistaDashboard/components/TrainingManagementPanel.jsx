@@ -2,14 +2,15 @@
 // Painel de Gerenciamento de Treinamentos para Lojistas - COM ARENA DE VENDAS
 
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaEye, FaBook, FaUsers, FaClock, FaTrophy, FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaEye, FaBook, FaUsers, FaClock, FaTrophy, FaToggleOn, FaToggleOff, FaTimes } from 'react-icons/fa';
 
-const LOJISTA_PRIMARY = "#28a745";
+const LOJISTA_PRIMARY = "#bb25a6";
 
 const TrainingManagementPanel = () => {
   const [treinamentos, setTreinamentos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [showArenaInfo, setShowArenaInfo] = useState(false);
   const [editingTreinamento, setEditingTreinamento] = useState(null);
   const [arenaConfig, setArenaConfig] = useState(null);
   const [loadingArena, setLoadingArena] = useState(true);
@@ -380,8 +381,80 @@ const TrainingManagementPanel = () => {
             <p style={styles.arenaDescription}>
               Sistema gamificado para competição saudável entre seus consultores
             </p>
+            <button onClick={() => setShowArenaInfo(true)} style={{
+              marginTop: 8, background: 'transparent', color: '#bb25a6',
+              border: '2px solid #bb25a6', padding: '6px 20px', borderRadius: 50,
+              fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all .2s',
+            }}>
+              Saiba Mais sobre a Arena →
+            </button>
           </div>
         </div>
+
+        {/* MODAL SAIBA MAIS - ARENA DE VENDAS */}
+        {showArenaInfo && (
+          <div style={{
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            zIndex: 1000, padding: 20,
+          }} onClick={() => setShowArenaInfo(false)}>
+            <div style={{
+              background: '#fff', borderRadius: 24, padding: '40px 36px',
+              maxWidth: 720, width: '100%', maxHeight: '90vh', overflowY: 'auto',
+              position: 'relative', boxShadow: '0 24px 64px rgba(0,0,0,0.2)',
+            }} onClick={e => e.stopPropagation()}>
+              <button onClick={() => setShowArenaInfo(false)} style={{
+                position: 'absolute', top: 16, right: 16, background: 'none',
+                border: 'none', color: '#999', cursor: 'pointer', padding: 8,
+              }}>
+                <FaTimes size={20} />
+              </button>
+
+              <div style={{ textAlign: 'center', marginBottom: 32 }}>
+                <span style={{ fontSize: 48 }}>🏆</span>
+                <h2 style={{ fontSize: 28, fontWeight: 800, color: '#2f0d51', marginTop: 12 }}>
+                  Kaslee Arena de Vendas
+                </h2>
+                <p style={{ fontSize: 15, color: '#777', marginTop: 8 }}>
+                  O sistema de gamificação que transforma treinamento em resultados
+                </p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
+                {[
+                  { emoji: '🎯', title: 'Simulação com Personas', desc: 'Pratique com personas de clientes reais em diferentes níveis de dificuldade. Cada interação simula cenários do dia a dia de vendas.' },
+                  { emoji: '⭐', title: 'Sistema de Pontos', desc: 'Ganhe pontos por cada venda simulada, atendimento correto e desafio completado. Quanto mais difícil a persona, mais pontos.' },
+                  { emoji: '📊', title: 'Ranking Semanal', desc: 'Os melhores consultores ganham destaque e são priorizados nas oportunidades de venda.' },
+                  { emoji: '🏅', title: 'Níveis e Badges', desc: 'Evolua de Iniciante até Mestre de Vendas. Cada nível desbloqueia badges exclusivas no perfil.' },
+                  { emoji: '📈', title: 'Desafios Semanais', desc: 'Missões especiais com recompensas. Complete objetivos como "Venda 5 produtos técnicos".' },
+                  { emoji: '🤖', title: 'Feedback com IA', desc: 'A IA analisa sua abordagem, identifica pontos fortes e sugere melhorias personalizadas.' },
+                ].map((item, i) => (
+                  <div key={i} style={{
+                    background: '#f9f7fb', borderRadius: 16, padding: '20px 16px', textAlign: 'center',
+                  }}>
+                    <span style={{ fontSize: 28 }}>{item.emoji}</span>
+                    <h4 style={{ fontSize: 15, fontWeight: 700, color: '#2f0d51', margin: '8px 0 6px' }}>{item.title}</h4>
+                    <p style={{ fontSize: 13, color: '#666', lineHeight: 1.55 }}>{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ textAlign: 'center', marginTop: 32, paddingTop: 24, borderTop: '1px solid #eee' }}>
+                <p style={{ fontSize: 14, color: '#555', marginBottom: 16 }}>
+                  A Arena de Vendas está disponível em todos os planos. Consultores treinam e melhoram suas habilidades continuamente.
+                </p>
+                <button onClick={() => setShowArenaInfo(false)} style={{
+                  background: '#bb25a6', color: '#fff', border: 'none',
+                  padding: '14px 36px', borderRadius: 50, fontSize: 15, fontWeight: 700,
+                  cursor: 'pointer', boxShadow: '0 4px 16px rgba(187,37,166,0.3)',
+                }}>
+                  Entendi, Fechar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div style={styles.arenaContent}>
           {arenaAtiva ? (
@@ -419,7 +492,7 @@ const TrainingManagementPanel = () => {
                 <div style={styles.plansGrid}>
                   <div style={styles.planCard}>
                     <h5 style={styles.planTitle}>BÁSICO</h5>
-                    <p style={styles.planPrice}>R$ 97/mês</p>
+                    <p style={styles.planPrice}>R$ 15/mês</p>
                     <ul style={styles.planFeatures}>
                       <li>🏆 Ranking básico</li>
                       <li>📊 5 métricas principais</li>
@@ -434,7 +507,7 @@ const TrainingManagementPanel = () => {
                   <div style={styles.planCard}>
                     <div style={styles.planRecommended}>RECOMENDADO</div>
                     <h5 style={styles.planTitle}>PRO</h5>
-                    <p style={styles.planPrice}>R$ 197/mês</p>
+                    <p style={styles.planPrice}>R$ 40/mês</p>
                     <ul style={styles.planFeatures}>
                       <li>✅ Tudo do Básico</li>
                       <li>👥 Acesso para consultores</li>
@@ -449,7 +522,7 @@ const TrainingManagementPanel = () => {
                   
                   <div style={styles.planCard}>
                     <h5 style={styles.planTitle}>ENTERPRISE</h5>
-                    <p style={styles.planPrice}>R$ 497/mês</p>
+                    <p style={styles.planPrice}>R$ 60/mês</p>
                     <ul style={styles.planFeatures}>
                       <li>✅ Tudo do Pro</li>
                       <li>🏢 Múltiplas filiais</li>
@@ -781,7 +854,7 @@ const getNivelLabel = (nivel) => {
 
 const getNivelStyle = (nivel) => {
   const styles = {
-    basico: { backgroundColor: '#28a745', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' },
+    basico: { backgroundColor: '#bb25a6', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' },
     intermediario: { backgroundColor: '#ffc107', color: '#333', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' },
     avancado: { backgroundColor: '#dc3545', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px' }
   };
@@ -961,7 +1034,7 @@ const styles = {
   },
   arenaTier: {
     padding: '8px 16px',
-    backgroundColor: '#4299e1',
+    backgroundColor: '#bb25a6',
     color: 'white',
     borderRadius: '20px',
     fontWeight: 'bold',
@@ -987,7 +1060,7 @@ const styles = {
   },
   arenaActionPrimary: {
     padding: '12px 24px',
-    backgroundColor: '#4299e1',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '8px',
@@ -1029,7 +1102,7 @@ const styles = {
     top: '-12px',
     left: '50%',
     transform: 'translateX(-50%)',
-    backgroundColor: '#4299e1',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '4px 12px',
     borderRadius: '20px',
@@ -1074,7 +1147,7 @@ const styles = {
   planButtonPro: {
     width: '100%',
     padding: '12px',
-    backgroundColor: '#4299e1',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '8px',
@@ -1347,7 +1420,7 @@ const styles = {
   },
   addModuloButton: {
     padding: '8px 16px',
-    backgroundColor: '#007bff',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '6px',

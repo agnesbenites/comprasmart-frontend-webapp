@@ -42,7 +42,7 @@ const ProdutosTable = ({ produtos, onEdit, onDelete, getStatusEstoque }) => {
 
             {produtos.map((produto) => {
               const isExpandido = expandido === produto.id;
-              const status = getStatusEstoque ? getStatusEstoque(produto.estoque, 5) : { texto: "OK", cor: "#28a745" };
+              const status = getStatusEstoque ? getStatusEstoque(produto.estoque, 5) : { texto: "OK", cor: "#bb25a6" };
 
               return (
                 <React.Fragment key={produto.id}>

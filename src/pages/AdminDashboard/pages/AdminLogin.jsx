@@ -66,7 +66,7 @@ const AdminLogin = () => {
         <div style={styles.logoContainer}>
           <div style={styles.logoIcon}>🔧</div>
           <h2 style={styles.title}>Painel Administrativo</h2>
-          <p style={styles.subtitle}>CompraSmart</p>
+          <p style={styles.subtitle}>Kaslee</p>
         </div>
 
         <div style={styles.warningBox}>

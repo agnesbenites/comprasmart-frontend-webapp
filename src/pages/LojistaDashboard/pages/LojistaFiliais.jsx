@@ -485,7 +485,7 @@ const styles = {
     display: "block",
     fontSize: "2rem",
     fontWeight: "bold",
-    color: "#007bff",
+    color: "#bb25a6",
     marginBottom: "5px",
   },
   statLabel: {
@@ -506,7 +506,7 @@ const styles = {
     gap: "15px",
   },
   upgradeButton: {
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     padding: "8px 16px",
@@ -516,7 +516,7 @@ const styles = {
     fontSize: "0.9rem",
   },
   addButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     padding: "15px 25px",
@@ -636,7 +636,7 @@ const styles = {
     cursor: "pointer",
   },
   submitButton: {
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     padding: "12px 25px",

@@ -25,7 +25,7 @@ const styles = {
   planoNome: {
     fontSize: "20px",
     fontWeight: "700",
-    color: "#2563eb",
+    color: "#bb25a6",
   },
   planoValor: {
     fontSize: "24px",
@@ -68,7 +68,7 @@ const styles = {
     padding: "12px 24px",
     borderRadius: "8px",
     border: "none",
-    backgroundColor: "#2563eb",
+    backgroundColor: "#bb25a6",
     color: "#ffffff",
     fontWeight: "600",
     cursor: "pointer",

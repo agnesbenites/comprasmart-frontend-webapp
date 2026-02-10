@@ -103,7 +103,7 @@ const LojistaQRCode = () => {
             minWidth: '200px'
         },
         generateButton: {
-            backgroundColor: '#28a745',
+            backgroundColor: '#bb25a6',
             color: 'white',
             border: 'none',
             padding: '10px 20px',
@@ -116,14 +116,14 @@ const LojistaQRCode = () => {
             backgroundColor: 'white',
             padding: '20px',
             borderRadius: '8px',
-            border: '2px dashed #007bff',
+            border: '2px dashed #bb25a6',
             textAlign: 'center',
         },
         linkText: {
             fontSize: '0.9rem',
             wordBreak: 'break-all',
             marginTop: '10px',
-            color: '#007bff'
+            color: '#bb25a6'
         },
         // Tabela de Rastreamento
         table: {
@@ -184,7 +184,7 @@ const LojistaQRCode = () => {
             textAlign: 'left',
         },
         copyButton: {
-            backgroundColor: '#28a745',
+            backgroundColor: '#bb25a6',
             color: 'white',
             border: 'none',
             padding: '10px 20px',
@@ -240,7 +240,7 @@ const LojistaQRCode = () => {
                         <p style={{ margin: '5px 0', fontSize: '1.1rem', fontWeight: 'bold', color: styles.title.color }}>
                             Criador: {modalData.creator} ({modalData.source})
                         </p>
-                        <p style={{ margin: '5px 0', fontSize: '1.1rem', fontWeight: 'bold', color: modalData.saleValue > 0 ? '#28a745' : '#dc3545' }}>
+                        <p style={{ margin: '5px 0', fontSize: '1.1rem', fontWeight: 'bold', color: modalData.saleValue > 0 ? '#bb25a6' : '#dc3545' }}>
                             Valor da Venda (Simulado): R$ {saleValue}
                         </p>
                         <p style={{ margin: '5px 0', fontSize: '0.9rem', color: '#666' }}>
@@ -361,7 +361,7 @@ const LojistaQRCode = () => {
                                         {qr.status}
                                     </td>
                                     {/* Exibicao do valor na tabela */}
-                                    <td style={{...styles.td, fontWeight: 'bold', color: qr.saleValue > 0 ? '#28a745' : '#dc3545'}}>
+                                    <td style={{...styles.td, fontWeight: 'bold', color: qr.saleValue > 0 ? '#bb25a6' : '#dc3545'}}>
                                         R$ {qr.saleValue.toFixed(2).replace('.', ',')}
                                     </td>
                                     <td style={styles.td}>
@@ -369,7 +369,7 @@ const LojistaQRCode = () => {
                                         <button 
                                             onClick={() => handleViewTrackedQR(qr)}
                                             style={{
-                                                backgroundColor: '#007bff',
+                                                backgroundColor: '#bb25a6',
                                                 color: 'white',
                                                 border: 'none',
                                                 padding: '6px 10px',

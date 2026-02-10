@@ -18,14 +18,14 @@ const TermsPage = () => {
         <header style={styles.header}>
           <img 
             src="/img/logo_compra_smart.png" 
-            alt="Compra Smart" 
+            alt="Kaslee" 
             style={styles.logo}
             onError={(e) => e.target.style.display = 'none'}
           />
           <h1 style={styles.title}>
             📜 Termos e Condições de Uso
           </h1>
-          <p style={styles.subtitle}>Compra Smart</p>
+          <p style={styles.subtitle}>Kaslee</p>
           <div style={styles.versionBox}>
             <span>Versão 1.0.0</span>
             <span>•</span>
@@ -36,7 +36,7 @@ const TermsPage = () => {
         {/* INTRODUÇÃO */}
         <section style={styles.introSection}>
           <p style={styles.introParagraph}>
-            <strong>Leia atentamente antes de prosseguir.</strong> Estes Termos e Condições de Uso regem o acesso e uso da plataforma Compra Smart. Ao criar uma conta, acessar ou utilizar nossa Plataforma, você concorda em cumprir e estar vinculado a estes Termos.
+            <strong>Leia atentamente antes de prosseguir.</strong> Estes Termos e Condições de Uso regem o acesso e uso da plataforma Kaslee. Ao criar uma conta, acessar ou utilizar nossa Plataforma, você concorda em cumprir e estar vinculado a estes Termos.
           </p>
         </section>
 
@@ -58,10 +58,10 @@ const TermsPage = () => {
         {/* 2. DESCRIÇÃO DO SERVIÇO */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            🔍 2. O que é a Compra Smart
+            🔍 2. O que é a Kaslee
           </h2>
           <p style={styles.paragraph}>
-            A Compra Smart é uma plataforma digital que conecta <strong>Lojistas</strong>, <strong>Consultores</strong> e <strong>Clientes</strong> para facilitar vendas com atendimento personalizado.
+            A Kaslee é uma plataforma digital que conecta <strong>Lojistas</strong>, <strong>Consultores</strong> e <strong>Clientes</strong> para facilitar vendas com atendimento personalizado.
           </p>
           <div style={styles.highlightBox}>
             <h3 style={styles.highlightTitle}>✨ Principais funcionalidades:</h3>
@@ -75,7 +75,7 @@ const TermsPage = () => {
             </ul>
           </div>
           <div style={styles.warningBox}>
-            <h3 style={styles.warningTitle}>⚠️ A Compra Smart NÃO é:</h3>
+            <h3 style={styles.warningTitle}>⚠️ A Kaslee NÃO é:</h3>
             <ul style={styles.list}>
               <li>Loja virtual ou e-commerce próprio</li>
               <li>Empregadora de Consultores (são profissionais autônomos)</li>
@@ -135,13 +135,13 @@ const TermsPage = () => {
             © 5. Propriedade Intelectual
           </h2>
           <p style={styles.paragraph}>
-            Todos os direitos sobre a Plataforma pertencem à Compra Smart, incluindo código-fonte, marca, logotipos, design, textos e algoritmos.
+            Todos os direitos sobre a Plataforma pertencem à Kaslee, incluindo código-fonte, marca, logotipos, design, textos e algoritmos.
           </p>
           <div style={styles.highlightBox}>
             <h3 style={styles.highlightTitle}>📤 Conteúdo Enviado por Você:</h3>
             <p>Ao enviar conteúdo (fotos, textos, avaliações), você:</p>
             <ul style={styles.list}>
-              <li>Concede licença mundial e gratuita para a Compra Smart usar e exibir</li>
+              <li>Concede licença mundial e gratuita para a Kaslee usar e exibir</li>
               <li>Garante que é titular dos direitos ou possui autorização</li>
               <li>Responsabiliza-se por violações de direitos de terceiros</li>
             </ul>
@@ -149,7 +149,7 @@ const TermsPage = () => {
           <div style={styles.warningBox}>
             <h3 style={styles.warningTitle}>⚖️ Produtos de Marcas de Terceiros (Lojistas)</h3>
             <p>Ao cadastrar produtos de marcas de terceiros, o LOJISTA declara que é revendedor autorizado e possui autorização expressa ou implícita do titular da marca.</p>
-            <p>A Compra Smart <strong>NÃO verifica</strong> autorizações de revenda e poderá remover produtos mediante notificação de titulares.</p>
+            <p>A Kaslee <strong>NÃO verifica</strong> autorizações de revenda e poderá remover produtos mediante notificação de titulares.</p>
           </div>
         </section>
 
@@ -162,7 +162,7 @@ const TermsPage = () => {
             Pagamentos são processados através do <strong>Stripe</strong>, sob responsabilidade do gateway de pagamento.
           </p>
           <div style={styles.highlightBox}>
-            <h3 style={styles.highlightTitle}>A Compra Smart NÃO:</h3>
+            <h3 style={styles.highlightTitle}>A Kaslee NÃO:</h3>
             <ul style={styles.list}>
               <li>Armazena dados de cartão de crédito</li>
               <li>Processa pagamentos diretamente</li>
@@ -170,7 +170,7 @@ const TermsPage = () => {
             </ul>
           </div>
           <p style={styles.paragraph}>
-            <strong>Reembolsos:</strong> A Compra Smart atua como facilitadora e não intermediará disputas. Reembolsos seguem políticas do Lojista e legislação consumerista (CDC).
+            <strong>Reembolsos:</strong> A Kaslee atua como facilitadora e não intermediará disputas. Reembolsos seguem políticas do Lojista e legislação consumerista (CDC).
           </p>
         </section>
 
@@ -199,7 +199,7 @@ const TermsPage = () => {
             ⚠️ 8. Limitação de Responsabilidade
           </h2>
           <div style={styles.warningBox}>
-            <h3 style={styles.warningTitle}>A Compra Smart NÃO se responsabiliza por:</h3>
+            <h3 style={styles.warningTitle}>A Kaslee NÃO se responsabiliza por:</h3>
             <ul style={styles.list}>
               <li>Funcionamento ininterrupto da Plataforma</li>
               <li>Qualidade, segurança ou legalidade dos produtos dos Lojistas</li>
@@ -249,7 +249,7 @@ const TermsPage = () => {
             🔄 10. Modificações dos Termos
           </h2>
           <p style={styles.paragraph}>
-            A Compra Smart pode modificar estes Termos a qualquer momento. Alterações significativas serão comunicadas por e-mail e/ou notificação na Plataforma.
+            A Kaslee pode modificar estes Termos a qualquer momento. Alterações significativas serão comunicadas por e-mail e/ou notificação na Plataforma.
           </p>
           <p style={styles.paragraph}>
             <strong>Novas versões entram em vigor 5 dias após a publicação.</strong> O uso continuado da Plataforma após as alterações constitui aceitação.
@@ -331,7 +331,7 @@ const TermsPage = () => {
 
           <p style={styles.footerText}>
             Versão 1.0.0 - Vigente desde 21/12/2024<br />
-            Compra Smart © 2024 - Todos os direitos reservados
+            Kaslee © 2024 - Todos os direitos reservados
           </p>
         </footer>
       </div>
@@ -359,7 +359,7 @@ const styles = {
   },
   header: {
     textAlign: "center",
-    borderBottom: "3px solid #2563eb",
+    borderBottom: "3px solid #bb25a6",
     paddingBottom: "25px",
     marginBottom: "30px",
   },
@@ -368,7 +368,7 @@ const styles = {
     marginBottom: "15px",
   },
   title: {
-    color: "#2563eb",
+    color: "#bb25a6",
     fontSize: "32px",
     marginBottom: "10px",
     fontWeight: "700",
@@ -385,7 +385,7 @@ const styles = {
     padding: "8px 16px",
     borderRadius: "20px",
     fontSize: "13px",
-    color: "#2563eb",
+    color: "#bb25a6",
     fontWeight: "600",
   },
   introSection: {
@@ -433,7 +433,7 @@ const styles = {
     padding: "18px",
     borderRadius: "10px",
     margin: "15px 0",
-    borderLeft: "4px solid #2563eb",
+    borderLeft: "4px solid #bb25a6",
   },
   highlightTitle: {
     color: "#1e3a8a",
@@ -482,7 +482,7 @@ const styles = {
   documentLink: {
     display: "block",
     padding: "12px 18px",
-    backgroundColor: "#2563eb",
+    backgroundColor: "#bb25a6",
     color: "white",
     textDecoration: "none",
     borderRadius: "8px",
@@ -491,7 +491,7 @@ const styles = {
     transition: "background-color 0.3s",
   },
   footer: {
-    borderTop: "3px solid #2563eb",
+    borderTop: "3px solid #bb25a6",
     paddingTop: "30px",
     marginTop: "40px",
   },
@@ -500,7 +500,7 @@ const styles = {
     padding: "25px",
     borderRadius: "10px",
     marginBottom: "25px",
-    border: "2px solid #28a745",
+    border: "2px solid #bb25a6",
   },
   acceptanceTitle: {
     color: "#155724",
@@ -544,7 +544,7 @@ const styles = {
   },
   acceptButton: {
     padding: "15px 30px",
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",

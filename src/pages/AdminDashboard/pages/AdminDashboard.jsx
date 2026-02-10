@@ -243,7 +243,7 @@ const AdminDashboard = () => {
       <div style={styles.header}>
         <div>
           <h1 style={styles.title}>🔧 Painel Administrativo</h1>
-          <p style={styles.subtitle}>Visão geral da plataforma CompraSmart</p>
+          <p style={styles.subtitle}>Visão geral da plataforma Kaslee</p>
         </div>
         <div style={styles.headerActions}>
           <button onClick={() => navigate('/admin/manutencao')} style={styles.manutencaoButton}>
@@ -262,7 +262,7 @@ const AdminDashboard = () => {
           label="Lojas Ativas"
           value={metricas.lojasAtivas}
           subtitle={`${metricas.lojasPendentes} pendentes`}
-          color="#2563eb"
+          color="#bb25a6"
           onClick={() => navigate('/admin/lojistas')}
         />
         <MetricCard
@@ -278,7 +278,7 @@ const AdminDashboard = () => {
           label="Pedidos Hoje"
           value={metricas.pedidosHoje}
           subtitle="↑ 12% vs ontem"
-          color="#28a745"
+          color="#bb25a6"
         />
         <MetricCard
           icon={<FaDollarSign />}
@@ -418,7 +418,7 @@ const AlertCard = ({ alerta }) => {
   const gravidadeColors = {
     alta: '#dc3545',
     media: '#ffc107',
-    baixa: '#28a745',
+    baixa: '#bb25a6',
   };
 
   return (
@@ -620,7 +620,7 @@ const styles = {
   onlineDot: {
     width: '10px',
     height: '10px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     borderRadius: '50%',
   },
   onlineInfo: {
@@ -670,7 +670,7 @@ const styles = {
   },
   aprovarButton: {
     padding: '8px 12px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '6px',

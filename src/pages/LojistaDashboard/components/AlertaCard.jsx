@@ -3,7 +3,7 @@ import React from "react";
 const AlertaCard = ({ icone, mensagem, tipo = "info", acao }) => {
   const cores = {
     info: { cor: "#17a2b8", bg: "#d1ecf1", border: "#bee5eb" },
-    success: { cor: "#28a745", bg: "#d4edda", border: "#c3e6cb" },
+    success: { cor: "#bb25a6", bg: "#d4edda", border: "#c3e6cb" },
     warning: { cor: "#ffc107", bg: "#fff3cd", border: "#ffeaa7" },
     danger: { cor: "#dc3545", bg: "#f8d7da", border: "#f5c6cb" },
     estoque: { cor: "#fd7e14", bg: "#ffe5d0", border: "#ffd1a8" },

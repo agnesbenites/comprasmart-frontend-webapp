@@ -199,7 +199,7 @@ function App() {
                 style={{
                   marginTop: '20px',
                   padding: '10px 20px',
-                  backgroundColor: '#E91E63',
+                  backgroundColor: '#f53342',
                   color: 'white',
                   textDecoration: 'none',
                   borderRadius: '5px',

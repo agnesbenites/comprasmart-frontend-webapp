@@ -1,8 +1,8 @@
 import React from "react";
 
-const ProgressBar = ({ percentual, cor = "#007bff", altura = 10, label }) => {
+const ProgressBar = ({ percentual, cor = "#bb25a6", altura = 10, label }) => {
   const getCor = (percent) => {
-    if (percent >= 100) return "#28a745";
+    if (percent >= 100) return "#bb25a6";
     if (percent >= 70) return "#ffc107";
     if (percent >= 50) return "#fd7e14";
     return "#dc3545";

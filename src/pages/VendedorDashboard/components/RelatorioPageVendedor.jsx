@@ -142,7 +142,7 @@ const RelatorioPageVendedor = () => {
   }, [periodo]);
 
   // Componente de gráfico de barras
-  const BarChart = ({ data, title, color = "#28a745" }) => {
+  const BarChart = ({ data, title, color = "#bb25a6" }) => {
     if (!data || data.length === 0) {
       return (
         <div style={{ 
@@ -152,7 +152,7 @@ const RelatorioPageVendedor = () => {
           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
           marginBottom: "20px"
         }}>
-          <h3 style={{ color: "#28a745", marginBottom: "20px" }}>{title}</h3>
+          <h3 style={{ color: "#bb25a6", marginBottom: "20px" }}>{title}</h3>
           <p style={{ color: "#666", textAlign: "center" }}>Sem dados disponíveis</p>
         </div>
       );
@@ -168,7 +168,7 @@ const RelatorioPageVendedor = () => {
         boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
         marginBottom: "20px"
       }}>
-        <h3 style={{ color: "#28a745", marginBottom: "20px" }}>{title}</h3>
+        <h3 style={{ color: "#bb25a6", marginBottom: "20px" }}>{title}</h3>
         <div style={{ display: "flex", alignItems: "flex-end", gap: "10px", height: "200px", overflowX: "auto" }}>
           {data.map((item, index) => (
             <div key={index} style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", alignItems: "center", minWidth: "50px" }}>
@@ -184,7 +184,7 @@ const RelatorioPageVendedor = () => {
               <span style={{ marginTop: "8px", fontSize: "11px", color: "#666", textAlign: "center" }}>
                 {item.dia}
               </span>
-              <span style={{ fontSize: "12px", fontWeight: "bold", color: "#28a745" }}>
+              <span style={{ fontSize: "12px", fontWeight: "bold", color: "#bb25a6" }}>
                 {item.vendas}
               </span>
             </div>
@@ -203,7 +203,7 @@ const RelatorioPageVendedor = () => {
       boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
       marginBottom: "20px"
     }}>
-      <h4 style={{ color: "#28a745", marginBottom: "10px" }}>📅 Selecione o Período</h4>
+      <h4 style={{ color: "#bb25a6", marginBottom: "10px" }}>📅 Selecione o Período</h4>
       <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
         <input
           type="date"
@@ -225,7 +225,7 @@ const RelatorioPageVendedor = () => {
           }}
           style={{
             padding: "8px 15px",
-            backgroundColor: "#28a745",
+            backgroundColor: "#bb25a6",
             color: "white",
             border: "none",
             borderRadius: "5px",
@@ -261,7 +261,7 @@ const RelatorioPageVendedor = () => {
             onClick={() => window.location.reload()}
             style={{
               padding: "10px 20px",
-              backgroundColor: "#28a745",
+              backgroundColor: "#bb25a6",
               color: "white",
               border: "none",
               borderRadius: "5px",
@@ -305,7 +305,7 @@ const RelatorioPageVendedor = () => {
           gap: "20px"
         }}>
           <div>
-            <h1 style={{ color: "#28a745", margin: "0 0 10px 0" }}>
+            <h1 style={{ color: "#bb25a6", margin: "0 0 10px 0" }}>
               📊 Relatório do Vendedor
             </h1>
             <p style={{ color: "#666", margin: "0 0 5px 0", fontSize: "18px", fontWeight: "500" }}>
@@ -324,7 +324,7 @@ const RelatorioPageVendedor = () => {
               onClick={() => window.print()}
               style={{
                 padding: "10px 20px",
-                backgroundColor: "#28a745",
+                backgroundColor: "#bb25a6",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
@@ -359,7 +359,7 @@ const RelatorioPageVendedor = () => {
               }}
               style={{
                 padding: "10px 20px",
-                backgroundColor: "#007bff",
+                backgroundColor: "#bb25a6",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
@@ -386,15 +386,15 @@ const RelatorioPageVendedor = () => {
             borderRadius: "10px",
             boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
             textAlign: "center",
-            borderLeft: "4px solid #28a745"
+            borderLeft: "4px solid #bb25a6"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#28a745", fontSize: "16px" }}>🛒 Vendas do Período</h3>
-            <p style={{ fontSize: "28px", fontWeight: "bold", color: "#28a745", margin: "0 0 5px 0" }}>
+            <h3 style={{ margin: "0 0 10px 0", color: "#bb25a6", fontSize: "16px" }}>🛒 Vendas do Período</h3>
+            <p style={{ fontSize: "28px", fontWeight: "bold", color: "#bb25a6", margin: "0 0 5px 0" }}>
               {dadosVendas.totalVendas}
             </p>
             {dadosVendas.crescimento !== 0 && (
               <p style={{ 
-                color: dadosVendas.crescimento > 0 ? "#28a745" : "#dc3545", 
+                color: dadosVendas.crescimento > 0 ? "#bb25a6" : "#dc3545", 
                 margin: "5px 0 0 0", 
                 fontSize: "14px" 
               }}>
@@ -409,10 +409,10 @@ const RelatorioPageVendedor = () => {
             borderRadius: "10px",
             boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
             textAlign: "center",
-            borderLeft: "4px solid #007bff"
+            borderLeft: "4px solid #bb25a6"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#007bff", fontSize: "16px" }}>💰 Valor Total</h3>
-            <p style={{ fontSize: "28px", fontWeight: "bold", color: "#007bff", margin: "0" }}>
+            <h3 style={{ margin: "0 0 10px 0", color: "#bb25a6", fontSize: "16px" }}>💰 Valor Total</h3>
+            <p style={{ fontSize: "28px", fontWeight: "bold", color: "#bb25a6", margin: "0" }}>
               {formatarMoeda(dadosVendas.valorTotal)}
             </p>
             <p style={{ color: "#666", margin: "5px 0 0 0", fontSize: "12px" }}>
@@ -442,7 +442,7 @@ const RelatorioPageVendedor = () => {
         <BarChart 
           data={dadosVendas.vendasPorDia} 
           title="📅 Vendas por Dia" 
-          color="#28a745"
+          color="#bb25a6"
         />
 
         {/* Resumo Executivo */}
@@ -453,7 +453,7 @@ const RelatorioPageVendedor = () => {
           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
           marginBottom: "30px"
         }}>
-          <h3 style={{ color: "#28a745", marginBottom: "15px" }}>📋 Resumo</h3>
+          <h3 style={{ color: "#bb25a6", marginBottom: "15px" }}>📋 Resumo</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "15px" }}>
             <div>
               <strong>✅ Status:</strong>

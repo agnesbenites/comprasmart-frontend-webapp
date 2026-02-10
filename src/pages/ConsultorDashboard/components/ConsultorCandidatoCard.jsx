@@ -3,7 +3,7 @@
 import React from 'react';
 import { FaStar, FaGraduationCap, FaShoppingCart, FaTrophy, FaCheckCircle, FaClock } from 'react-icons/fa';
 
-const LOJISTA_PRIMARY = "#28a745";
+const LOJISTA_PRIMARY = "#bb25a6";
 const LOJISTA_LIGHT_BG = "#e8f5e9";
 
 /**
@@ -95,7 +95,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
         {/* Vendas */}
         <div style={styles.metricaItem}>
           <div style={styles.metricaHeader}>
-            <FaShoppingCart color="#28a745" size={18} />
+            <FaShoppingCart color="#bb25a6" size={18} />
             <span style={styles.metricaLabel}>Vendas</span>
           </div>
           <div style={styles.metricaValor}>
@@ -109,7 +109,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
               style={{
                 ...styles.progressFill,
                 width: `${consultor.score.componentes.vendas.percentual}%`,
-                backgroundColor: '#28a745',
+                backgroundColor: '#bb25a6',
               }}
             />
           </div>
@@ -156,7 +156,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
           <span>Cadastrado ha {consultor.tempoPlataforma}</span>
         </div>
         <div style={styles.infoItem}>
-          <FaCheckCircle color="#28a745" />
+          <FaCheckCircle color="#bb25a6" />
           <span>{consultor.lojasAtivas} lojas ativas</span>
         </div>
       </div>

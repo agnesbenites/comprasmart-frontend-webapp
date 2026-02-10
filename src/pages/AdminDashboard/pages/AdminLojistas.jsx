@@ -197,8 +197,8 @@ const AdminLojistas = () => {
 
       {/* Estatísticas */}
       <div style={styles.statsGrid}>
-        <StatCard label="Total" value={estatisticas.total} color="#2563eb" />
-        <StatCard label="Ativas" value={estatisticas.ativos} color="#28a745" />
+        <StatCard label="Total" value={estatisticas.total} color="#bb25a6" />
+        <StatCard label="Ativas" value={estatisticas.ativos} color="#bb25a6" />
         <StatCard label="Pendentes" value={estatisticas.pendentes} color="#ffc107" />
         <StatCard label="Bloqueadas" value={estatisticas.bloqueados} color="#dc3545" />
       </div>
@@ -231,7 +231,7 @@ const AdminLojistas = () => {
             onClick={() => setFiltro('ativo')}
             style={{
               ...styles.filterButton,
-              backgroundColor: filtro === 'ativo' ? '#28a745' : '#f8f9fa',
+              backgroundColor: filtro === 'ativo' ? '#bb25a6' : '#f8f9fa',
               color: filtro === 'ativo' ? 'white' : '#333',
             }}
           >
@@ -310,7 +310,7 @@ const AdminLojistas = () => {
                           style={styles.iconButton}
                           title="Aprovar"
                         >
-                          <FaCheckCircle color="#28a745" size={18} />
+                          <FaCheckCircle color="#bb25a6" size={18} />
                         </button>
                       )}
                       <button
@@ -318,14 +318,14 @@ const AdminLojistas = () => {
                         style={styles.iconButton}
                         title={loja.status === 'bloqueado' ? 'Desbloquear' : 'Bloquear'}
                       >
-                        <FaBan color={loja.status === 'bloqueado' ? '#28a745' : '#dc3545'} size={18} />
+                        <FaBan color={loja.status === 'bloqueado' ? '#bb25a6' : '#dc3545'} size={18} />
                       </button>
                       <button
                         onClick={() => handleEditar(loja)}
                         style={styles.iconButton}
                         title="Editar"
                       >
-                        <FaEdit color="#2563eb" size={18} />
+                        <FaEdit color="#bb25a6" size={18} />
                       </button>
                       <button
                         onClick={() => handleEnviarNotificacao(loja)}
@@ -700,7 +700,7 @@ const styles = {
   },
   saveButton: {
     padding: '10px 20px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '8px',

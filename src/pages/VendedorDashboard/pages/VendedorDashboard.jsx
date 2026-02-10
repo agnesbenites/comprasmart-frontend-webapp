@@ -36,7 +36,7 @@ import ArenaVendasPainel from "../../ConsultorDashboard/components/ArenaVendasPa
 // === CORES E CONSTANTES ===
 // =============================================================
 const VENDOR_PRIMARY = "#4a6fa5";
-const VENDOR_PRIMARY_DARK = "#2c3e50";
+const VENDOR_PRIMARY_DARK = "#2f0d51";
 const VENDOR_SECONDARY = "#f8f9fa";
 const VENDOR_LIGHT_BG = "#eaf2ff";
 
@@ -113,7 +113,7 @@ export const VendedorHomePanel = () => {
         {
             titulo: "Integrar Venda",
             descricao: "Finalizar venda no caixa",
-            cor: "#28a745",
+            cor: "#bb25a6",
             rota: "/vendedor/dashboard/integracao",
             icon: "&#128179;"
         },
@@ -204,7 +204,7 @@ export const VendedorHomePanel = () => {
 
             {/* Metricas Rapidas */}
             <div style={vendedorStyles.metricsGrid}>
-                <div style={vendedorStyles.metricCard("#e8f5e8", "#28a745")}>
+                <div style={vendedorStyles.metricCard("#e8f5e8", "#bb25a6")}>
                     <h3 style={vendedorStyles.metricTitle("#155724")}>Vendas do Mes</h3>
                     <p style={vendedorStyles.metricValue("#155724")}>
                         {vendedorInfo.vendasRealizadas}/{vendedorInfo.metaMensal}
@@ -316,7 +316,7 @@ const VendedorDashboardLayout = () => {
     return (
         <div style={sidebarStyles.dashboardContainer}>
             <div style={sidebarStyles.sidebar}>
-                <h2 style={sidebarStyles.logoTitle}>CompraSmart Vendedor</h2>
+                <h2 style={sidebarStyles.logoTitle}>Kaslee Vendedor</h2>
                 <nav>
                     {VENDEDOR_MENU_ITEMS.map((item) => (
                         <Link key={item.rota} to={item.rota} style={getMenuItemStyle(item)}>
@@ -514,7 +514,7 @@ const vendedorStyles = {
         padding: "15px",
         borderRadius: "10px",
         minWidth: "150px",
-        border: performance >= 80 ? "2px solid #28a745" : "2px solid #ffc107"
+        border: performance >= 80 ? "2px solid #bb25a6" : "2px solid #ffc107"
     }),
     performanceLabel: {
         fontSize: "12px",
@@ -524,7 +524,7 @@ const vendedorStyles = {
     performanceValue: (performance) => ({
         fontSize: "24px",
         fontWeight: "bold",
-        color: performance >= 80 ? "#28a745" : "#ffc107",
+        color: performance >= 80 ? "#bb25a6" : "#ffc107",
         margin: "0 0 10px 0"
     }),
     comissaoPequena: {

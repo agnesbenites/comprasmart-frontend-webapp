@@ -250,7 +250,7 @@ const StoresPanel = ({ consultorId }) => {
 
   const getStatusCandidatura = (lojaId, aceitaCandidaturas) => {
     if (lojasAprovadas.includes(lojaId)) {
-      return { status: 'aprovado', label: '✅ Aprovado', cor: '#28a745' };
+      return { status: 'aprovado', label: '✅ Aprovado', cor: '#bb25a6' };
     }
     const candidatura = minhasCandidaturas.find(c => c.lojaId === lojaId);
     if (candidatura) {
@@ -303,7 +303,7 @@ const StoresPanel = ({ consultorId }) => {
           </div>
           <div style={{ ...styles.statCard, backgroundColor: '#e8f5e9' }}>
             <p style={styles.statLabel}>Aprovadas</p>
-            <p style={{ ...styles.statValue, color: '#28a745' }}>{lojasAprovadas.length}</p>
+            <p style={{ ...styles.statValue, color: '#bb25a6' }}>{lojasAprovadas.length}</p>
           </div>
         </div>
       </div>
@@ -363,7 +363,7 @@ const StoresPanel = ({ consultorId }) => {
             onClick={() => setFiltro('aprovadas')}
             style={{
               ...styles.filterButton,
-              backgroundColor: filtro === 'aprovadas' ? '#28a745' : '#e9ecef',
+              backgroundColor: filtro === 'aprovadas' ? '#bb25a6' : '#e9ecef',
               color: filtro === 'aprovadas' ? 'white' : '#333',
             }}
           >
@@ -473,7 +473,7 @@ const StoresPanel = ({ consultorId }) => {
                     statusCandidatura.status === 'sem_vagas' ? '#f8f9fa' :
                     CONSULTOR_PRIMARY,
                   color: 
-                    statusCandidatura.status === 'aprovado' ? '#28a745' :
+                    statusCandidatura.status === 'aprovado' ? '#bb25a6' :
                     statusCandidatura.status === 'pendente' ? '#856404' :
                     statusCandidatura.status === 'sem_vagas' ? '#6c757d' :
                     'white',
@@ -764,7 +764,7 @@ const styles = {
   comissaoMedia: {
     fontSize: '1.1rem',
     fontWeight: 'bold',
-    color: '#28a745',
+    color: '#bb25a6',
   },
   comissaoFaixa: {
     fontSize: '12px',

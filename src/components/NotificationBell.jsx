@@ -179,7 +179,7 @@ const styles = {
   markAllButton: {
     background: 'none',
     border: 'none',
-    color: '#007bff',
+    color: '#bb25a6',
     fontSize: '12px',
     cursor: 'pointer',
     textDecoration: 'underline',
@@ -234,7 +234,7 @@ const styles = {
     width: '8px',
     height: '8px',
     borderRadius: '50%',
-    backgroundColor: '#007bff',
+    backgroundColor: '#bb25a6',
   },
   emptyState: {
     padding: '40px 20px',
@@ -254,7 +254,7 @@ const styles = {
   viewAllButton: {
     background: 'none',
     border: 'none',
-    color: '#007bff',
+    color: '#bb25a6',
     fontSize: '13px',
     cursor: 'pointer',
     fontWeight: 'bold',

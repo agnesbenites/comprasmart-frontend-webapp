@@ -220,7 +220,7 @@ const modalStyles = {
   },
   sendButton: {
     padding: '10px 20px',
-    backgroundColor: '#007bff',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '4px',

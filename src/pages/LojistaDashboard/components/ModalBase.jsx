@@ -37,7 +37,7 @@ const ModalBase = ({
                 onClick={acao.onClick}
                 style={{
                   ...styles.botao,
-                  backgroundColor: acao.primaria ? "#007bff" : "#6c757d",
+                  backgroundColor: acao.primaria ? "#bb25a6" : "#6c757d",
                 }}
                 disabled={acao.desabilitado}
               >

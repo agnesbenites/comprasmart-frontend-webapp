@@ -129,7 +129,7 @@ const DashboardEnterprise = () => {
   const getRoiStatus = (roi) => {
     if (roi >= 5) return { label: 'Excelente', color: '#10b981' };
     if (roi >= 3) return { label: 'Ótimo', color: '#059669' };
-    if (roi >= 2) return { label: 'Bom', color: '#3b82f6' };
+    if (roi >= 2) return { label: 'Bom', color: '#bb25a6' };
     if (roi >= 1) return { label: 'Recuperado', color: '#f59e0b' };
     return { label: 'Em Crescimento', color: '#64748b' };
   };
@@ -158,7 +158,7 @@ const DashboardEnterprise = () => {
             ...styles.planBadge,
             backgroundColor: planoLoja === 'enterprise' ? '#fbbf24' : 
                            planoLoja === 'business' ? '#8b5cf6' : 
-                           planoLoja === 'starter' ? '#3b82f6' : '#64748b'
+                           planoLoja === 'starter' ? '#bb25a6' : '#64748b'
           }}>
             {planoLoja?.toUpperCase() || 'PLANO'}
           </span>
@@ -436,7 +436,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #e2e8f0',
-    borderTop: '4px solid #3b82f6',
+    borderTop: '4px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -473,7 +473,7 @@ const styles = {
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -620,7 +620,7 @@ const styles = {
     gap: '15px',
   },
   acaoButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '18px 15px',
@@ -682,7 +682,7 @@ const styles = {
   },
   metodoPercentual: {
     fontSize: '1rem',
-    color: '#3b82f6',
+    color: '#bb25a6',
     fontWeight: '600',
   },
   // TABELAS
@@ -718,7 +718,7 @@ const styles = {
     gap: '10px',
   },
   rankBadge: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '4px 10px',
     borderRadius: '8px',

@@ -7,7 +7,7 @@ const ModuleCard = ({
   features = [], 
   estatistica, 
   rota, 
-  cor = "#007bff",
+  cor = "#bb25a6",
   icone = ""
 }) => {
   const navigate = useNavigate();

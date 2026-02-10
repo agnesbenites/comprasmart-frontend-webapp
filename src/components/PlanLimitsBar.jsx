@@ -29,7 +29,7 @@ const PlanLimitsBar = ({ lojistaId }) => {
                         style={{
                             ...styles.progressFill,
                             width: `${Math.min(limit.percentual, 100)}%`,
-                            backgroundColor: isAtLimit ? '#dc3545' : isNearLimit ? '#ffc107' : '#28a745'
+                            backgroundColor: isAtLimit ? '#dc3545' : isNearLimit ? '#ffc107' : '#bb25a6'
                         }}
                     />
                 </div>

@@ -213,7 +213,7 @@ const LojistaConsultorConfig = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#3b82f6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
           <div>
             <div style={styles.cardLabel}>Faturamento Total</div>
             <div style={styles.cardValue}>
@@ -699,7 +699,7 @@ const styles = {
   },
   especialidadeBadge: {
     backgroundColor: '#dbeafe',
-    color: '#1e40af',
+    color: '#2f0d51',
     padding: '4px 12px',
     borderRadius: '8px',
     fontSize: '0.85rem',

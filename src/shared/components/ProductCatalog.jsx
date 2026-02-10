@@ -230,7 +230,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart, supabase }) => {
     addButton: {
       width: '100%',
       padding: '10px',
-      backgroundColor: '#28a745',
+      backgroundColor: '#bb25a6',
       color: 'white',
       border: 'none',
       borderRadius: '6px',
@@ -347,7 +347,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart, supabase }) => {
               </div>
               <div style={styles.productStock}>
                 {produto.estoque > 0 ? (
-                  <span style={{ color: '#28a745' }}>
+                  <span style={{ color: '#bb25a6' }}>
                     ✅ {produto.estoque} em estoque
                   </span>
                 ) : (

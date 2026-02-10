@@ -19,8 +19,8 @@ const LoginPage = () => {
 
   // Cores da landing page
   const colors = {
-    consultor: { primary: "#007bff", bg: "#e3f2fd" },
-    lojista: { primary: "#28a745", bg: "#e8f5e9" },
+    consultor: { primary: "#bb25a6", bg: "#e3f2fd" },
+    lojista: { primary: "#bb25a6", bg: "#e8f5e9" },
     vendedor: { primary: "#4a6fa5", bg: "#eaf2ff" },
     admin: { primary: "#dc3545", bg: "#ffebee" },
   };
@@ -321,7 +321,7 @@ if (typeof document !== 'undefined') {
       opacity: 0.9 !important;
     }
     input:focus {
-      border-color: #007bff !important;
+      border-color: #bb25a6 !important;
     }
   `;
   document.head.appendChild(style);

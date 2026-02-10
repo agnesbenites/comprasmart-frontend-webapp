@@ -10,7 +10,7 @@ import ArenaProgresso from './ArenaProgresso';
 
 // ─── CORES (baseadas na paleta do consultor) ──────
 const CONSULTOR_PRIMARY = '#2c5aa0';
-const CONSULTOR_ACCENT  = '#5dade2';
+const CONSULTOR_ACCENT  = '#bb25a6';
 const VERDE_DESTAQUE    = '#6BCB77';
 
 // ─── STYLES ────────────────────────────────────────

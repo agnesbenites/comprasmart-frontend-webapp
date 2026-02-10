@@ -231,7 +231,7 @@ const QueuePanel = () => {
     };
 
     const getStatusStyle = () => {
-        if (status === 'disponivel') return { backgroundColor: '#28a745', color: 'white' };
+        if (status === 'disponivel') return { backgroundColor: '#bb25a6', color: 'white' };
         if (status === 'ocupado') return { backgroundColor: '#ffc107', color: '#333' };
         return { backgroundColor: '#6c757d', color: 'white' };
     };
@@ -408,7 +408,7 @@ const QueuePanel = () => {
 const styles = {
     container: { backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.08)', padding: '25px' },
     loading: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '20px' },
-    spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #007bff', borderRadius: '50%', animation: 'spin 1s linear infinite' },
+    spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #bb25a6', borderRadius: '50%', animation: 'spin 1s linear infinite' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px', flexWrap: 'wrap', gap: '15px' },
     title: { fontSize: '1.5rem', fontWeight: '600', color: CONSULTOR_PRIMARY, margin: 0 },
     headerActions: { display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap' },
@@ -421,15 +421,15 @@ const styles = {
     atendimentoDetalhe: { fontSize: '14px', color: '#666', margin: 0 },
     atendimentoActions: { display: 'flex', gap: '10px' },
     chatButton: { backgroundColor: CONSULTOR_PRIMARY, color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' },
-    finalizarButton: { backgroundColor: '#28a745', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' },
+    finalizarButton: { backgroundColor: '#bb25a6', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' },
     secao: { backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '12px', marginBottom: '25px' },
     secaoTitulo: { fontSize: '1.1rem', fontWeight: '600', color: '#333', marginBottom: '15px' },
-    agendamentoCard: { backgroundColor: '#fff', padding: '15px', borderRadius: '8px', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '15px', borderLeft: '4px solid #007bff' },
-    agendamentoHora: { fontSize: '1.2rem', fontWeight: 'bold', color: '#007bff', minWidth: '70px' },
+    agendamentoCard: { backgroundColor: '#fff', padding: '15px', borderRadius: '8px', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '15px', borderLeft: '4px solid #bb25a6' },
+    agendamentoHora: { fontSize: '1.2rem', fontWeight: 'bold', color: '#bb25a6', minWidth: '70px' },
     agendamentoInfo: { flex: 1 },
     agendamentoNome: { fontSize: '1rem', fontWeight: '600', color: '#333', margin: '0 0 5px 0' },
     agendamentoDetalhe: { fontSize: '14px', color: '#666', margin: 0 },
-    confirmarBtn: { backgroundColor: '#28a745', color: 'white', border: 'none', padding: '8px 15px', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
+    confirmarBtn: { backgroundColor: '#bb25a6', color: 'white', border: 'none', padding: '8px 15px', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
     confirmadoBadge: { backgroundColor: '#d4edda', color: '#155724', padding: '8px 15px', borderRadius: '20px', fontSize: '14px', fontWeight: '600' },
     emptyState: { textAlign: 'center', padding: '60px 20px' },
     emptyIcon: { fontSize: '4rem', marginBottom: '20px' },
@@ -445,7 +445,7 @@ const styles = {
     chamadaDetalhes: { display: 'flex', flexDirection: 'column', gap: '5px' },
     detalheItem: { fontSize: '14px', color: '#666', margin: 0 },
     chamadaActions: { display: 'flex', flexDirection: 'column', gap: '8px' },
-    aceitarButton: { backgroundColor: '#28a745', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
+    aceitarButton: { backgroundColor: '#bb25a6', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
     recusarButton: { backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
 };
 

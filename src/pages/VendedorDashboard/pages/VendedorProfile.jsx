@@ -5,7 +5,7 @@ import { supabase } from "@/supabaseClient";
 
 // Cores do Vendedor
 const VENDOR_PRIMARY = "#4a6fa5";
-const VENDOR_PRIMARY_DARK = "#2c3e50";
+const VENDOR_PRIMARY_DARK = "#2f0d51";
 const VENDOR_LIGHT_BG = "#eaf2ff";
 
 const VendedorProfile = () => {

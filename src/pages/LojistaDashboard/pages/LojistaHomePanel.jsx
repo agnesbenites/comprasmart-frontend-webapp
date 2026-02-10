@@ -211,7 +211,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
       {/* MÉTRICAS */}
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#3b82f6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
           <div>
             <div style={styles.cardLabel}>Receita Total</div>
             <div style={styles.cardValue}>
@@ -407,7 +407,7 @@ const DashboardPro = ({ nomeLoja, metrics, onRefresh }) => {
 
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#3b82f6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
           <div>
             <div style={styles.cardLabel}>Faturamento</div>
             <div style={styles.cardValue}>
@@ -471,7 +471,7 @@ const DashboardBasic = ({ nomeLoja, metrics, onRefresh }) => {
 
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#3b82f6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
           <div>
             <div style={styles.cardLabel}>Faturamento</div>
             <div style={styles.cardValue}>
@@ -521,7 +521,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #e2e8f0',
-    borderTop: '4px solid #3b82f6',
+    borderTop: '4px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -549,7 +549,7 @@ const styles = {
     margin: 0,
   },
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -717,7 +717,7 @@ const styles = {
   },
   metodoPercentual: {
     fontSize: '1rem',
-    color: '#3b82f6',
+    color: '#bb25a6',
     fontWeight: '600',
   },
   table: {
@@ -756,7 +756,7 @@ const styles = {
     color: '#94a3b8',
   },
   rankBadge: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     padding: '2px 8px',
     borderRadius: '8px',
@@ -776,13 +776,13 @@ const styles = {
   },
   infoBox: {
     backgroundColor: '#eff6ff',
-    border: '2px solid #3b82f6',
+    border: '2px solid #bb25a6',
     borderRadius: '12px',
     padding: '20px',
     textAlign: 'center',
   },
   infoText: {
-    color: '#1e40af',
+    color: '#2f0d51',
     fontSize: '1rem',
     margin: 0,
   },

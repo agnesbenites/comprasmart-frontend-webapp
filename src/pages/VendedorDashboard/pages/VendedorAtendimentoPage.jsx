@@ -685,7 +685,7 @@ const styles = {
     color: '#666',
   },
   btnEncerrar: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -825,7 +825,7 @@ const styles = {
   },
   btnFinalizar: {
     width: '100%',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '15px',

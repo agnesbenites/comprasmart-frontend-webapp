@@ -33,7 +33,7 @@ const VendedorRegisterPage = () => {
             textAlign: 'center'
         },
         title: {
-            color: '#007bff',
+            color: '#bb25a6',
             marginBottom: '30px'
         },
         formGroup: {
@@ -55,7 +55,7 @@ const VendedorRegisterPage = () => {
         submitButton: {
             width: '100%',
             padding: '15px',
-            backgroundColor: '#28a745',
+            backgroundColor: '#bb25a6',
             color: 'white',
             border: 'none',
             borderRadius: '8px',
@@ -87,7 +87,7 @@ const VendedorRegisterPage = () => {
                 </div>
                 <button type="submit" style={styles.submitButton}>Cadastrar</button>
                 <p style={{ marginTop: '15px', fontSize: '0.9rem' }}>
-                    Se ja possui cadastro, <a href="/vendedor/login" style={{ color: '#007bff', textDecoration: 'none' }}>faca login aqui</a>.
+                    Se ja possui cadastro, <a href="/vendedor/login" style={{ color: '#bb25a6', textDecoration: 'none' }}>faca login aqui</a>.
                 </p>
             </form>
         </div>

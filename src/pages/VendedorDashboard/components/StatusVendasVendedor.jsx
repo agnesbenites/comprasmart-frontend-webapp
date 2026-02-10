@@ -86,7 +86,7 @@ const StatusVendasVendedor = () => {
   const getStatusPagamentoInfo = (status) => {
     const statusMap = {
       'aguardando': { emoji: '⏳', texto: 'Aguardando Pagamento', cor: '#ffc107' },
-      'pago': { emoji: '✅', texto: 'Pago', cor: '#28a745' },
+      'pago': { emoji: '✅', texto: 'Pago', cor: '#bb25a6' },
       'cancelado': { emoji: '❌', texto: 'Cancelado', cor: '#dc3545' },
       'estornado': { emoji: '↩️', texto: 'Estornado', cor: '#6c757d' },
     };
@@ -97,7 +97,7 @@ const StatusVendasVendedor = () => {
     const statusMap = {
       'aguardando': { emoji: '📦', texto: 'Aguardando Separação', cor: '#ffc107' },
       'em_separacao': { emoji: '🔄', texto: 'Em Separação', cor: '#17a2b8' },
-      'pronto_retirada': { emoji: '✅', texto: 'Pronto para Retirada', cor: '#28a745' },
+      'pronto_retirada': { emoji: '✅', texto: 'Pronto para Retirada', cor: '#bb25a6' },
       'entregue': { emoji: '🎉', texto: 'Entregue', cor: '#6c757d' },
     };
     return statusMap[status] || { emoji: '❓', texto: status, cor: '#999' };
@@ -483,8 +483,8 @@ const styles = {
     animation: 'pulse 2s infinite',
   },
   timelineStepCompleto: {
-    backgroundColor: '#28a745',
-    border: '2px solid #28a745',
+    backgroundColor: '#bb25a6',
+    border: '2px solid #bb25a6',
   },
   timelineLine: {
     flex: 1,

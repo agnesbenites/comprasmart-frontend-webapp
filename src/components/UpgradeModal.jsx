@@ -137,7 +137,7 @@ const styles = {
     },
     addonBtn: {
         padding: '12px 24px',
-        backgroundColor: '#28a745',
+        backgroundColor: '#bb25a6',
         color: 'white',
         border: 'none',
         borderRadius: '6px',

@@ -28,7 +28,7 @@ const styles = {
     transition: "all 0.2s",
   },
   planCardHover: {
-    borderColor: "#2563eb",
+    borderColor: "#bb25a6",
     boxShadow: "0 4px 12px rgba(37, 99, 235, 0.1)",
   },
   planName: {
@@ -40,7 +40,7 @@ const styles = {
   planPrice: {
     fontSize: "28px",
     fontWeight: "700",
-    color: "#2563eb",
+    color: "#bb25a6",
     marginBottom: "16px",
   },
   planFeatures: {
@@ -65,7 +65,7 @@ const styles = {
     padding: "12px 24px",
     borderRadius: "8px",
     border: "none",
-    backgroundColor: "#2563eb",
+    backgroundColor: "#bb25a6",
     color: "#ffffff",
     fontWeight: "600",
     cursor: "pointer",
@@ -89,7 +89,7 @@ const UpgradePlans = ({ planos = [], onSelectPlan }) => {
             style={styles.planCard} 
             data-cy="plano-card"
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#2563eb";
+              e.currentTarget.style.borderColor = "#bb25a6";
               e.currentTarget.style.boxShadow = "0 4px 12px rgba(37, 99, 235, 0.1)";
             }}
             onMouseLeave={(e) => {

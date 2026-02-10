@@ -1,7 +1,7 @@
 // app-frontend/src/pages/Landingpage.jsx
 // Landing Page KASLEE — Logos separadas, Logo Bag.png + Logo Clara.png
 
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   FaStore, FaUserTie, FaShoppingCart, FaChartLine,
@@ -10,7 +10,7 @@ import {
   FaMobileAlt, FaRegCheckCircle,
   FaBullseye, FaWarehouse, FaSlidersH, FaTachometerAlt,
   FaGraduationCap, FaLayerGroup,
-  FaHandHoldingUsd, FaLaptopCode
+  FaHandHoldingUsd, FaLaptopCode, FaTrophy, FaTimes
 } from 'react-icons/fa';
 
 /* ─── SCROLL REVEAL ─── */
@@ -116,6 +116,47 @@ const HeroBtnPurple = ({ children, onClick }) => {
     </button>
   );
 };
+/* ─── HOVER IMAGE CARD ─── */
+const HoverImageCard = ({ src, label, sublabel }) => {
+  const [hovered, setHovered] = React.useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        borderRadius: 20, overflow: 'hidden', position: 'relative',
+        height: 320, cursor: 'default',
+      }}
+    >
+      <img
+        src={src} alt={label}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        onError={e => { e.target.parentElement.style.background = '#f3eef8'; e.target.style.display = 'none'; }}
+      />
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: hovered ? 'rgba(47,13,81,0.75)' : 'rgba(47,13,81,0.15)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        transition: 'all 0.4s ease', padding: 20,
+      }}>
+        <p style={{
+          fontFamily: "'Poppins',sans-serif", fontSize: 15, fontWeight: 700,
+          color: '#fff', textAlign: 'center', margin: 0,
+          opacity: hovered ? 1 : 0, transform: hovered ? 'translateY(0)' : 'translateY(12px)',
+          transition: 'all 0.4s ease 0.05s',
+        }}>{label}</p>
+        {sublabel && (
+          <p style={{
+            fontSize: 12, color: 'rgba(255,255,255,0.85)', textAlign: 'center', marginTop: 4,
+            opacity: hovered ? 1 : 0, transform: hovered ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'all 0.4s ease 0.12s',
+          }}>{sublabel}</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const PlanCard = ({ name, price, period, description, features, color, highlighted, onBuy }) => (
   <div style={{
     background: color, borderRadius: 24, padding: '44px 34px 38px', width: 340,
@@ -158,6 +199,8 @@ const PlanCard = ({ name, price, period, description, features, color, highlight
    ═════════════════════════════════════════════ */
 const Landingpage = () => {
   const navigate = useNavigate();
+  const [showArenaModal, setShowArenaModal] = useState(false);
+  const [showSaibaMais, setShowSaibaMais] = useState(false);
   const scrollToPlanos = () => { document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' }); };
 
   const STRIPE_URLS = {
@@ -261,37 +304,101 @@ const Landingpage = () => {
         ))}
       </section>
 
-      {/* ══════ COMO FUNCIONA — Logo Bag antes do título ══════ */}
+      {/* ══════ COMO FUNCIONA — Grid Bento com imagens ══════ */}
       <section id="como-funciona" style={S.section}>
         <Reveal>
-          <div style={{ textAlign: 'center', marginBottom: 12 }}>
-            <img
-              src="/img/Logo Bag.png"
-              alt=""
-              style={{ height: 52, width: 'auto', marginBottom: 12 }}
-              onError={e => { e.target.style.display = 'none'; }}
-            />
-          </div>
-          <h2 style={S.secTitle}>Como Funciona</h2>
+          <h2 style={S.secTitle}>Como Funciona?</h2>
           <p style={S.secSub}>Simples, rápido e sem complicação</p>
         </Reveal>
-        <div style={S.stepsGrid}>
-          {[
-            { icon: <FaStore size={36} color="#bb25a6" />, n: '1', t: 'Você Cadastra Produtos', d: 'Adicione os produtos da sua loja na plataforma com fotos, preços e descrições' },
-            { icon: <FaUserTie size={36} color="#bb25a6" />, n: '2', t: 'Consultores se candidatam', d: 'Profissionais autônomos promovem seus produtos para clientes qualificados' },
-            { icon: <FaShoppingCart size={36} color="#bb25a6" />, n: '3', t: 'Cliente Compra', d: 'Venda finalizada com segurança. Cliente pode retirar na loja ou receber em casa' },
-            { icon: <FaMoneyBillWave size={36} color="#bb25a6" />, n: '4', t: 'Você Recebe', d: 'Pagamento processado automaticamente. Consultor recebe comissão, você recebe o lucro' },
-          ].map((s, i) => (
-            <Reveal key={i} delay={i * 0.12}>
-              <div style={S.stepCard}>
-                <div style={S.stepNum}>{s.n}</div>
-                {s.icon}
-                <h3 style={S.stepT}>{s.t}</h3>
-                <p style={S.stepD}>{s.d}</p>
-              </div>
-            </Reveal>
-          ))}
+
+        <div style={S.bentoGrid}>
+          {/* Linha 1: Step 1 + Imagem */}
+          <Reveal delay={0.05}>
+            <div style={S.bentoCard}>
+              <div style={S.bentoStep}>1</div>
+              <FaStore size={28} color="#bb25a6" />
+              <h3 style={S.bentoTitle}>Você Cadastra Produtos</h3>
+              <p style={S.bentoDesc}>Adicione os produtos da sua loja na plataforma com fotos, preços e descrições</p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <HoverImageCard src="/img/carrinhoprodutos.png" label="Tudo pelo celular" sublabel="Gerencie sua loja de qualquer lugar" />
+          </Reveal>
+
+          {/* Linha 2: Imagem + Step 2 */}
+          <Reveal delay={0.15}>
+            <HoverImageCard src="/img/atendimentoimagem.png" label="Atendimento exclusivo" sublabel="Consultores especializados nos seus segmentos" />
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div style={S.bentoCard}>
+              <div style={S.bentoStep}>2</div>
+              <FaUserTie size={28} color="#bb25a6" />
+              <h3 style={S.bentoTitle}>Consultores se candidatam</h3>
+              <p style={S.bentoDesc}>Profissionais autônomos promovem seus produtos para clientes qualificados</p>
+            </div>
+          </Reveal>
+
+          {/* Linha 3: Step 3 + Imagem */}
+          <Reveal delay={0.25}>
+            <div style={S.bentoCard}>
+              <div style={S.bentoStep}>3</div>
+              <FaShoppingCart size={28} color="#bb25a6" />
+              <h3 style={S.bentoTitle}>Cliente Compra</h3>
+              <p style={S.bentoDesc}>Venda finalizada com segurança. Cliente pode retirar na loja ou receber em casa</p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <HoverImageCard src="/img/qrcodecliente.png" label="Compra rápida e segura" sublabel="QR Code, Pix, cartão — tudo integrado" />
+          </Reveal>
+
+          {/* Linha 4: Imagem + Step 4 */}
+          <Reveal delay={0.35}>
+            <HoverImageCard src="/img/carrinhosacola.png" label="Venda mais sem marketplace" sublabel="Sem taxas abusivas, com controle total" />
+          </Reveal>
+          <Reveal delay={0.4}>
+            <div style={S.bentoCard}>
+              <div style={S.bentoStep}>4</div>
+              <FaMoneyBillWave size={28} color="#bb25a6" />
+              <h3 style={S.bentoTitle}>Você Recebe</h3>
+              <p style={S.bentoDesc}>Pagamento processado automaticamente. Consultor recebe comissão, você recebe o lucro</p>
+            </div>
+          </Reveal>
         </div>
+
+        {/* ARENA DE VENDAS + SAIBA MAIS */}
+        <Reveal delay={0.3}>
+          <div style={{
+            marginTop: 40, padding: '36px 40px', borderRadius: 20,
+            background: '#fff', border: '2px solid #2f0d51',
+            boxShadow: '0 4px 20px rgba(47,13,81,0.08)',
+          }}>
+            <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 20, fontWeight: 700, color: '#2f0d51', marginBottom: 8 }}>
+              🏆 Arena de Vendas
+            </h3>
+            <p style={{ fontSize: 15, color: '#555', lineHeight: 1.65, marginBottom: 16 }}>
+              Sistema de gamificação para treinamento de equipes de vendas. Consultores praticam com personas reais, ganham pontos, desbloqueiam novas habilidades e sobem no ranking.
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
+              <button onClick={() => setShowArenaModal(true)} style={{
+                background: '#2f0d51', color: '#fff', border: 'none',
+                padding: '10px 24px', borderRadius: 50, fontSize: 14, fontWeight: 600,
+                cursor: 'pointer', fontFamily: "'Poppins',sans-serif",
+              }}>
+                Conhecer a Arena de Vendas →
+              </button>
+              <button onClick={() => setShowSaibaMais(true)} style={{
+                background: 'transparent', color: '#bb25a6', border: '2px solid #bb25a6',
+                padding: '8px 24px', borderRadius: 50, fontSize: 14, fontWeight: 600,
+                cursor: 'pointer', fontFamily: "'Poppins',sans-serif",
+              }}>
+                Saiba Mais sobre a Kaslee →
+              </button>
+            </div>
+            <p style={{ fontSize: 13, color: '#999', margin: 0 }}>
+              Saiba mais sobre todas as funcionalidades da Kaslee, como usamos os dados, algoritmos e a IA para te ajudar.
+            </p>
+          </div>
+        </Reveal>
       </section>
 
       {/* ══════ PARA LOJISTAS — Logo Bag no header ══════ */}
@@ -299,7 +406,7 @@ const Landingpage = () => {
         <div style={S.inner}>
           <Reveal>
             <div style={S.secHeader}>
-              <img src="/img/Logo Bag.png" alt="" style={{ height: 48, width: 'auto' }} onError={e => { e.target.style.display = 'none'; }} />
+              <img src="/img/Logo Bag.png" alt="" style={{ height: 72, width: 'auto' }} onError={e => { e.target.style.display = 'none'; }} />
               <div>
                 <h2 style={S.secTitleLeft}>Para Lojistas</h2>
                 <p style={S.secTagline}>Multiplique Seu Alcance e Suas Vendas</p>
@@ -312,17 +419,19 @@ const Landingpage = () => {
 
           <div style={S.grid2col}>
             {[
-              { icon: <FaBullseye size={30} color="#bb25a6" />, t: 'Público Alvo na Mão', d: 'Alcance clientes que não sabiam que sua loja tinha o produto. Os consultores levam seu estoque exatamente para o público que está buscando.' },
-              { icon: <FaWarehouse size={30} color="#bb25a6" />, t: 'Zero Estoque Parado', d: 'Faça a gestão inteligente e venda rapidamente itens que estão ocupando espaço, transformando produto parado em capital de giro.' },
-              { icon: <FaSlidersH size={30} color="#bb25a6" />, t: 'Comissão Flexível', d: 'Defina e ajuste a comissão que você paga aos consultores por venda, garantindo que o custo de aquisição do cliente esteja sempre sob seu controle.' },
-              { icon: <FaTachometerAlt size={30} color="#bb25a6" />, t: 'Gestão Centralizada', d: 'Acompanhe todas as suas vendas e o desempenho dos consultores em um único dashboard de gestão, com recebimento automatizado via Stripe.' },
-              { icon: <FaGraduationCap size={30} color="#bb25a6" />, t: 'Vendas Especializada', d: 'Autorize consultores que entendem profundamente de seus produtos a vendê-los, garantindo que o cliente receba a orientação técnica correta.' },
-              { icon: <FaBullhorn size={30} color="#bb25a6" />, t: 'Campanhas de Sucesso', d: 'Crie promoções e campanhas exclusivas dentro da plataforma, potencializando a saída de produtos específicos.' },
+              { icon: <FaBullseye size={24} color="#bb25a6" />, t: 'Público Alvo na Mão', d: 'Alcance clientes que não sabiam que sua loja tinha o produto. Os consultores levam seu estoque exatamente para o público que está buscando.' },
+              { icon: <FaWarehouse size={24} color="#bb25a6" />, t: 'Zero Estoque Parado', d: 'Faça a gestão inteligente e venda rapidamente itens que estão ocupando espaço, transformando produto parado em capital de giro.' },
+              { icon: <FaSlidersH size={24} color="#bb25a6" />, t: 'Comissão Flexível', d: 'Defina e ajuste a comissão que você paga aos consultores por venda, garantindo que o custo de aquisição do cliente esteja sempre sob seu controle.' },
+              { icon: <FaTachometerAlt size={24} color="#bb25a6" />, t: 'Gestão Centralizada', d: 'Acompanhe todas as suas vendas e o desempenho dos consultores em um único dashboard de gestão, com recebimento automatizado via Stripe.' },
+              { icon: <FaGraduationCap size={24} color="#bb25a6" />, t: 'Vendas Especializada', d: 'Autorize consultores que entendem profundamente de seus produtos a vendê-los, garantindo que o cliente receba a orientação técnica correta.' },
+              { icon: <FaBullhorn size={24} color="#bb25a6" />, t: 'Campanhas de Sucesso', d: 'Crie promoções e campanhas exclusivas dentro da plataforma, potencializando a saída de produtos específicos.' },
             ].map((c, i) => (
               <Reveal key={i} delay={i * 0.08}>
                 <div style={{ ...S.bCard, background: '#fff', boxShadow: '0 2px 12px rgba(47,13,81,0.06)', border: '1px solid rgba(47,13,81,0.06)' }}>
-                  <div style={S.bIconWrap}>{c.icon}</div>
-                  <h3 style={S.bTitle}>{c.t}</h3>
+                  <div style={S.bInlineHeader}>
+                    {c.icon}
+                    <h3 style={S.bTitleInline}>{c.t}</h3>
+                  </div>
                   <p style={S.bDesc}>{c.d}</p>
                 </div>
               </Reveal>
@@ -331,12 +440,12 @@ const Landingpage = () => {
         </div>
       </section>
 
-      {/* ══════ PARA CONSULTORES — Logo Clara no header ══════ */}
+      {/* ══════ PARA CONSULTORES — Logo Bag no header ══════ */}
       <section style={{ ...S.fullSection, background: '#f5f3f7' }}>
         <div style={S.inner}>
           <Reveal>
             <div style={S.secHeader}>
-              <img src="/img/Logo Clara.png" alt="" style={{ height: 60, width: 'auto' }} onError={e => { e.target.style.display = 'none'; }} />
+              <img src="/img/Logo Bag.png" alt="" style={{ height: 72, width: 'auto' }} onError={e => { e.target.style.display = 'none'; }} />
               <div>
                 <h2 style={S.secTitleLeft}>Para Consultor</h2>
                 <p style={S.secTagline}>Liberdade e Renda Extra</p>
@@ -379,10 +488,10 @@ const Landingpage = () => {
           </Reveal>
           <div style={S.grid3col}>
             {[
-              { icon: <FaDollarSign size={38} color="#bb25a6" />, t: 'Sem Custos Fixos', d: 'Pague apenas comissões sobre vendas realizadas. Zero folha de pagamento.' },
+              { icon: <FaDollarSign size={38} color="#bb25a6" />, t: 'Mensalidade + Comissão', d: 'Modelo de custos transparente: mensalidade fixa pelo plano e comissão por venda realizada. Sem surpresas.' },
               { icon: <FaClock size={38} color="#bb25a6" />, t: 'Venda 24/7', d: 'Consultores trabalham em horários diversos, sua loja vende o tempo todo.' },
-              { icon: <FaChartLine size={38} color="#bb25a6" />, t: 'Alcance Expandido', d: 'Chegue a novos clientes que seus consultores já conhecem e confiam.' },
-              { icon: <FaMobileAlt size={38} color="#bb25a6" />, t: '100% Digital', d: 'Plataforma web e mobile. Gerencie tudo pelo celular ou computador.' },
+              { icon: <FaChartLine size={38} color="#bb25a6" />, t: 'Alcance Local', d: 'Venda para clientes próximos a você. Consultores conectam seus produtos a quem está por perto.' },
+              { icon: <FaMobileAlt size={38} color="#bb25a6" />, t: '100% Web', d: 'Plataforma web para lojistas e consultores. App exclusivo para o cliente final.' },
               { icon: <FaBox size={38} color="#bb25a6" />, t: 'Controle Total', d: 'Defina preços, comissões, e gerencie seu estoque em tempo real.' },
               { icon: <FaUsers size={38} color="#bb25a6" />, t: 'Rede de Consultores', d: 'Acesso a profissionais qualificados prontos para vender seus produtos.' },
             ].map((c, i) => (
@@ -406,17 +515,17 @@ const Landingpage = () => {
         </Reveal>
         <div style={S.plansRow}>
           <Reveal delay={0.05}>
-            <PlanCard name="Básico" price="R$ 99,90" period="por mês" description="Ideal para começar" color="#1a0a2e"
+            <PlanCard name="Básico" price="R$ 97" period="por mês" description="Ideal para começar" color="#1a0a2e"
               features={['Até 100 produtos','Até 5 consultores','Dashboard básico','Chat com clientes','Suporte por email','Comissões configuráveis']}
               onBuy={() => handleStripe(STRIPE_URLS.BASICO)} />
           </Reveal>
           <Reveal delay={0.15}>
-            <PlanCard name="Pro" price="R$ 199,90" period="por mês" description="Para lojas em crescimento" color="#2f0d51" highlighted
+            <PlanCard name="Pro" price="R$ 197" period="por mês" description="Para lojas em crescimento" color="#2f0d51" highlighted
               features={['Produtos ilimitados','Consultores ilimitados','Dashboard avançado','Chat + videochamada','Campanhas de marketing','Múltiplas filiais','Relatórios detalhados','Suporte prioritário','API de integração']}
               onBuy={() => handleStripe(STRIPE_URLS.PRO)} />
           </Reveal>
           <Reveal delay={0.25}>
-            <PlanCard name="Enterprise" price="R$ 499,00" period="por mês" description="Para grandes operações" color="#1a0a2e"
+            <PlanCard name="Enterprise" price="R$ 497" period="por mês" description="Para grandes operações" color="#1a0a2e"
               features={['Tudo do Pro, mais:','Dashboard BI Avançado','Análise de ROI por consultor','Previsão de vendas (IA)','Análise de tendências','Relatórios customizados','Suporte premium 24/7','Gerente de conta dedicado','Treinamento personalizado','SLA garantido']}
               onBuy={() => handleStripe(STRIPE_URLS.ENTERPRISE)} />
           </Reveal>
@@ -440,6 +549,121 @@ const Landingpage = () => {
           </div>
         </Reveal>
       </section>
+
+      {/* ══════ MODAL SAIBA MAIS ══════ */}
+      {showSaibaMais && (
+        <div style={S.modalOverlay} onClick={() => setShowSaibaMais(false)}>
+          <div style={S.modalContent} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowSaibaMais(false)} style={S.modalClose}>
+              <FaTimes size={20} />
+            </button>
+
+            <div style={{ textAlign: 'center', marginBottom: 32 }}>
+              <span style={{ fontSize: 48 }}>🧠</span>
+              <h2 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 28, fontWeight: 800, color: '#2f0d51', marginTop: 12 }}>
+                Como a Kaslee Funciona Por Dentro
+              </h2>
+              <p style={{ fontSize: 15, color: '#777', marginTop: 8 }}>
+                Tecnologia, dados e inteligência artificial a serviço das suas vendas
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              {[
+                { emoji: '🤖', title: 'IA Integrada', desc: 'Otimizamos vendas, sugerimos produtos, analisamos desempenho e fornecemos feedback personalizado com inteligência artificial em toda a plataforma.' },
+                { emoji: '🎯', title: 'Algoritmo de Matching', desc: 'Conectamos consultores aos produtos certos com base em histórico de vendas, especialização e localização geográfica.' },
+                { emoji: '📊', title: 'Uso Inteligente de Dados', desc: 'Relatórios detalhados sobre quais produtos vendem mais, em quais horários e por quais consultores. Tudo em conformidade com a LGPD.' },
+                { emoji: '🔒', title: 'Segurança e LGPD', desc: 'Dados criptografados, pagamentos pela Stripe e total conformidade com a Lei Geral de Proteção de Dados.' },
+                { emoji: '🔗', title: 'Integrações e API', desc: 'Conecte seu ERP, gestão de estoque e ferramentas de marketing. Nossa API automatiza processos e integra sua operação.' },
+                { emoji: '📈', title: 'BI e Previsão de Vendas', desc: 'Business Intelligence avançado com previsão baseada em dados históricos, tendências e identificação de produtos com baixo giro.' },
+                { emoji: '🎮', title: 'Arena de Vendas', desc: 'Gamificação com simulações de personas reais, ranking, badges e feedback da IA para treinar equipes de forma prática.' },
+                { emoji: '🎛️', title: 'Controle Total', desc: 'O lojista define preços, comissões, regras e acompanha em tempo real cada etapa: carrinho, pagamento, separação e entrega.' },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', padding: '16px 12px', background: i % 2 === 0 ? '#f9f7fb' : '#fff', borderRadius: 12 }}>
+                  <span style={{ fontSize: 26, flexShrink: 0 }}>{item.emoji}</span>
+                  <div>
+                    <h4 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 15, fontWeight: 700, color: '#2f0d51', margin: '0 0 4px' }}>{item.title}</h4>
+                    <p style={{ fontSize: 13, color: '#666', lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: 28, paddingTop: 20, borderTop: '1px solid #eee' }}>
+              <button onClick={() => { setShowSaibaMais(false); scrollToPlanos(); }} style={S.arenaModalBtn}>
+                Ver Planos e Começar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══════ MODAL ARENA DE VENDAS ══════ */}
+      {showArenaModal && (
+        <div style={S.modalOverlay} onClick={() => setShowArenaModal(false)}>
+          <div style={{ ...S.modalContent, maxWidth: 780 }} onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowArenaModal(false)} style={S.modalClose}>
+              <FaTimes size={20} />
+            </button>
+
+            <div style={{ textAlign: 'center', marginBottom: 28 }}>
+              <span style={{ fontSize: 48 }}>🏆</span>
+              <h2 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 26, fontWeight: 800, color: '#2f0d51', marginTop: 12 }}>
+                Kaslee Arena de Vendas
+              </h2>
+              <p style={{ fontSize: 14, color: '#777', marginTop: 6 }}>
+                Treine, evolua e desbloqueie novas oportunidades de venda como em um jogo
+              </p>
+            </div>
+
+            {/* COMO FUNCIONA */}
+            <div style={{ marginBottom: 24 }}>
+              <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 16, fontWeight: 700, color: '#2f0d51', marginBottom: 10, borderBottom: '2px solid #f3eef8', paddingBottom: 6 }}>
+                Como Funciona?
+              </h3>
+              {[
+                { step: '1', text: 'Escolha: aprimorar conhecimento atual ou explorar novo segmento (ex: Moda Plus Size, Eletrônicos)' },
+                { step: '2', text: 'IA cria trilha personalizada: Conhecimento → Simulação com Personas → Avaliação' },
+                { step: '3', text: 'Sessões curtas de até 15 min. Timer pausa quando você precisa atender um cliente real' },
+                { step: '4', text: 'IA ajusta dificuldade: acertou muito? Fica mais difícil. Errou? Reforça o básico' },
+                { step: '5', text: 'Trilha completa = Nova habilidade desbloqueada! Badge no perfil + acesso a lojas do segmento' },
+              ].map((s, i) => (
+                <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', padding: '8px 12px', background: i % 2 === 0 ? '#f9f7fb' : '#fff', borderRadius: 10, marginBottom: 4 }}>
+                  <span style={{ background: '#bb25a6', color: '#fff', width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{s.step}</span>
+                  <p style={{ fontSize: 13, color: '#444', lineHeight: 1.5, margin: 0 }}>{s.text}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* FUNCIONALIDADES */}
+            <div style={S.arenaGrid}>
+              {[
+                { emoji: '🎯', title: 'Simulação com Personas', desc: 'Personas com objeções realistas. Dificuldade crescente conforme seu desempenho.' },
+                { emoji: '⭐', title: 'Pontos e Ranking', desc: 'De 10 a 200 pts por ação. Ranking geral, por segmento e semanal.' },
+                { emoji: '🏅', title: '5 Níveis', desc: 'Iniciante → Aprendiz → Vendedor → Especialista → Mestre de Vendas.' },
+                { emoji: '🔓', title: 'Desbloqueio de Habilidades', desc: 'Complete trilhas e desbloqueie novos segmentos. Candidatura automática a lojas.' },
+                { emoji: '⏱️', title: 'Timer Inteligente', desc: 'Pausa quando atende cliente real. Restaura de onde parou.' },
+                { emoji: '🤖', title: 'IA Adaptativa', desc: 'Feedback detalhado, dicas de estudo e relatórios de evolução pessoal.' },
+              ].map((item, i) => (
+                <div key={i} style={S.arenaGridItem}>
+                  <span style={{ fontSize: 24 }}>{item.emoji}</span>
+                  <h4 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 13, fontWeight: 700, color: '#2f0d51', margin: '6px 0 4px' }}>{item.title}</h4>
+                  <p style={{ fontSize: 12, color: '#666', lineHeight: 1.45 }}>{item.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: 28, paddingTop: 20, borderTop: '1px solid #eee' }}>
+              <p style={{ fontSize: 13, color: '#555', marginBottom: 14 }}>
+                A Arena está disponível como addon em todos os planos Kaslee, a partir de R$ 15/mês.
+              </p>
+              <button onClick={() => { setShowArenaModal(false); scrollToPlanos(); }} style={S.arenaModalBtn}>
+                Ver Planos e Começar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ══════ FOOTER — só Logo Bag ══════ */}
       <footer style={S.footer}>
@@ -516,7 +740,7 @@ const S = {
   },
 
   hero: {
-    background: 'linear-gradient(160deg,#FAFAFA 0%,#f3eef8 40%,#ede4f3 100%)',
+    background: 'linear-gradient(160deg,#f3eef8 0%,#e8d9f0 30%,#d9c4e8 60%,#e0cde9 100%)',
     padding: '80px 48px 100px',
   },
   heroInner: { maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 10 },
@@ -551,7 +775,7 @@ const S = {
 
   numbersBar: {
     display: 'flex', justifyContent: 'center', gap: 24, flexWrap: 'wrap',
-    maxWidth: 1200, margin: '-50px auto 60px', padding: '0 40px',
+    maxWidth: 1200, margin: '-50px auto 20px', padding: '0 40px',
     position: 'relative', zIndex: 10,
   },
   numCard: {
@@ -562,8 +786,8 @@ const S = {
   numVal: { fontFamily: "'Poppins',sans-serif", fontSize: 32, fontWeight: 600, color: '#2f0d51', marginBottom: 6 },
   numLabel: { fontSize: 14, color: '#888' },
 
-  section: { padding: '80px 40px', maxWidth: 1200, margin: '0 auto' },
-  fullSection: { padding: '80px 40px', maxWidth: '100%' },
+  section: { padding: '50px 40px', maxWidth: 1200, margin: '0 auto' },
+  fullSection: { padding: '60px 40px', maxWidth: '100%' },
   inner: { maxWidth: 1200, margin: '0 auto' },
   secTitle: { fontFamily: "'Poppins',sans-serif", fontSize: 40, fontWeight: 800, textAlign: 'center', color: '#2f0d51', marginBottom: 16 },
   secSub: { fontSize: 18, textAlign: 'center', color: '#777', marginBottom: 52 },
@@ -573,6 +797,30 @@ const S = {
   secDescLeft: { fontSize: 16, color: '#555', lineHeight: 1.7, maxWidth: 700, marginBottom: 40 },
 
   stepsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 28 },
+
+  bentoGrid: {
+    display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16,
+    maxWidth: 680, margin: '0 auto',
+  },
+  bentoCard: {
+    background: '#fff', borderRadius: 20, padding: '28px 22px',
+    boxShadow: '0 2px 12px rgba(47,13,81,0.06)',
+    display: 'flex', flexDirection: 'column', alignItems: 'center',
+    textAlign: 'center', position: 'relative', height: 320,
+    justifyContent: 'center',
+  },
+  bentoStep: {
+    position: 'absolute', top: 12, left: 12,
+    background: '#bb25a6', color: '#fff', width: 28, height: 28,
+    borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontSize: 12, fontWeight: 700,
+  },
+  bentoTitle: {
+    fontFamily: "'Poppins',sans-serif", fontSize: 15, fontWeight: 700,
+    color: '#2f0d51', margin: '10px 0 6px',
+  },
+  bentoDesc: { fontSize: 13, color: '#777', lineHeight: 1.55 },
+
   stepCard: {
     textAlign: 'center', padding: 32, borderRadius: 20,
     background: '#fff', boxShadow: '0 4px 18px rgba(0,0,0,0.05)', position: 'relative',
@@ -584,14 +832,68 @@ const S = {
     fontSize: 16, fontWeight: 700,
   },
   stepT: { fontFamily: "'Poppins',sans-serif", fontSize: 18, fontWeight: 700, margin: '18px 0 10px', color: '#2f0d51' },
-  stepD: { fontSize: 14, color: '#777', lineHeight: 1.65 },
+  stepInlineHeader: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 18 },
+  stepTInline: { fontFamily: "'Poppins',sans-serif", fontSize: 16, fontWeight: 700, color: '#2f0d51', margin: 0 },
+  stepD: { fontSize: 14, color: '#777', lineHeight: 1.65, marginTop: 10 },
 
   grid2col: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 22 },
   grid3col: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 },
   bCard: { borderRadius: 20, padding: '30px 28px' },
   bIconWrap: { marginBottom: 14 },
+  bInlineHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 },
   bTitle: { fontFamily: "'Poppins',sans-serif", fontSize: 18, fontWeight: 700, color: '#2f0d51', marginBottom: 8, lineHeight: 1.3 },
+  bTitleInline: { fontFamily: "'Poppins',sans-serif", fontSize: 16, fontWeight: 700, color: '#2f0d51', margin: 0, lineHeight: 1.3 },
   bDesc: { fontSize: 14, color: '#555', lineHeight: 1.65 },
+
+  arenaCard: {
+    marginTop: 40, padding: '32px 36px', borderRadius: 20,
+    background: 'linear-gradient(135deg,#2f0d51,#3d1a6e)', border: 'none',
+    boxShadow: '0 8px 32px rgba(47,13,81,0.15)',
+    color: '#fff',
+  },
+  arenaBtn: {
+    marginTop: 16, background: '#bb25a6', color: '#fff', border: 'none',
+    padding: '12px 28px', borderRadius: 50, fontSize: 14, fontWeight: 700,
+    cursor: 'pointer', fontFamily: "'Poppins',sans-serif",
+    boxShadow: '0 4px 16px rgba(187,37,166,0.3)', transition: 'all .3s',
+  },
+  saibaMaisBox: { marginTop: 32, textAlign: 'center' },
+  saibaMaisBtn: {
+    background: 'transparent', color: '#bb25a6', border: '2px solid #bb25a6',
+    padding: '10px 28px', borderRadius: 50, fontSize: 14, fontWeight: 700,
+    cursor: 'pointer', fontFamily: "'Poppins',sans-serif", transition: 'all .3s',
+  },
+
+  modalOverlay: {
+    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+    background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    zIndex: 1000, padding: 20,
+  },
+  modalContent: {
+    background: '#fff', borderRadius: 24, padding: '40px 36px',
+    maxWidth: 720, width: '100%', maxHeight: '90vh', overflowY: 'auto',
+    position: 'relative', boxShadow: '0 24px 64px rgba(0,0,0,0.2)',
+  },
+  modalClose: {
+    position: 'absolute', top: 16, right: 16, background: 'none',
+    border: 'none', color: '#999', cursor: 'pointer', padding: 8,
+  },
+  arenaGrid: {
+    display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: 20,
+  },
+  arenaGridItem: {
+    background: '#f9f7fb', borderRadius: 16, padding: '20px 16px',
+    textAlign: 'center',
+  },
+  arenaModalBtn: {
+    background: '#bb25a6', color: '#fff', border: 'none',
+    padding: '14px 36px', borderRadius: 50, fontSize: 15, fontWeight: 700,
+    cursor: 'pointer', fontFamily: "'Poppins',sans-serif",
+    boxShadow: '0 4px 16px rgba(187,37,166,0.3)',
+  },
+
   consultCard: { borderRadius: 20, padding: '28px 30px', display: 'flex', alignItems: 'flex-start', gap: 20 },
   whyCard: { borderRadius: 20, padding: 36, textAlign: 'center' },
   whyCardClean: {

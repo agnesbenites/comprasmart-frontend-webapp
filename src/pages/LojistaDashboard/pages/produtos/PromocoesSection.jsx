@@ -448,7 +448,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                   onClick={() => handleToggleAtivo(promocao)}
                   style={{
                     ...styles.actionButton,
-                    backgroundColor: promocao.ativo ? '#ffc107' : '#28a745',
+                    backgroundColor: promocao.ativo ? '#ffc107' : '#bb25a6',
                   }}
                 >
                   {promocao.ativo ? '⏸️ Pausar' : '▶️ Ativar'}
@@ -1041,7 +1041,7 @@ const styles = {
   submitButton: {
     flex: 1,
     padding: '12px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '8px',

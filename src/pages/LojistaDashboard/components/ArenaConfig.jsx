@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
 const CONSULTOR_PRIMARY = '#2c5aa0';
-const CONSULTOR_ACCENT  = '#5dade2';
+const CONSULTOR_ACCENT  = '#bb25a6';
 const VERDE_DESTAQUE    = '#6BCB77';
 
 const styles = {

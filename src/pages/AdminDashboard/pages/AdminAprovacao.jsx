@@ -240,7 +240,7 @@ const MetricLabel = styled.h4`
 const MetricValue = styled.span`
   font-size: 32px;
   font-weight: bold;
-  color: #007bff;
+  color: #bb25a6;
   display: block;
   margin-bottom: 5px;
 `;
@@ -345,7 +345,7 @@ const StatNumbers = styled.div`
 const StatValue = styled.span`
   font-size: 42px;
   font-weight: bold;
-  color: #007bff;
+  color: #bb25a6;
   display: block;
 `;
 
@@ -377,7 +377,7 @@ const TabButton = styled.button`
   ${(props) =>
     props.$active &&
     css`
-      background-color: #007bff;
+      background-color: #bb25a6;
       color: white;
       border: none;
       font-weight: bold;
@@ -419,7 +419,7 @@ const Avatar = styled.div`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #007bff;
+  background-color: #bb25a6;
   color: white;
   display: flex;
   align-items: center;
@@ -547,7 +547,7 @@ const ApprovalButtons = styled.div`
 `;
 
 const ApproveButton = styled(ActionButton)`
-  background-color: #28a745;
+  background-color: #bb25a6;
   &:hover:not(:disabled) {
     background-color: #1e7e34;
   }
@@ -645,7 +645,7 @@ const PieChart = ({ premium, basic }) => {
   const total = premium + basic;
   const pPremium = Math.round((premium / total) * 100);
   const pBasic = 100 - pPremium;
-  const gradient = `conic-gradient(#28a745 0% ${pPremium}%, #007bff ${pPremium}% 100%)`;
+  const gradient = `conic-gradient(#bb25a6 0% ${pPremium}%, #bb25a6 ${pPremium}% 100%)`;
 
   return (
     <ChartContainer>
@@ -654,10 +654,10 @@ const PieChart = ({ premium, basic }) => {
         <PieChartElement $background={gradient} />
         <Legend>
           <div>
-            <LegendColor $bgColor="#28a745" /> Premium ({pPremium}%)
+            <LegendColor $bgColor="#bb25a6" /> Premium ({pPremium}%)
           </div>
           <div>
-            <LegendColor $bgColor="#007bff" /> Basic ({pBasic}%)
+            <LegendColor $bgColor="#bb25a6" /> Basic ({pBasic}%)
           </div>
         </Legend>
       </PieChartWrapper>
@@ -680,7 +680,7 @@ const ChecklistItem = ({
 
   const statusColor =
     status === "approved"
-      ? "#28a745"
+      ? "#bb25a6"
       : status === "pending"
       ? "#ffc107"
       : "#dc3545";
@@ -698,9 +698,9 @@ const ChecklistItem = ({
             onClick={() => handleToggle("approved")}
             disabled={status === "approved"}
             style={{
-              backgroundColor: status === "approved" ? "#28a745" : "white",
-              border: "1px solid #28a745",
-              color: status === "approved" ? "white" : "#28a745",
+              backgroundColor: status === "approved" ? "#bb25a6" : "white",
+              border: "1px solid #bb25a6",
+              color: status === "approved" ? "white" : "#bb25a6",
               padding: "4px 8px",
               fontSize: "10px",
               fontWeight: "bold",
@@ -785,7 +785,7 @@ const ApprovalCard = ({
   const approvalPercentage = calculateApprovalPercentage();
   const progressBarColor =
     approvalPercentage >= 80
-      ? "#28a745"
+      ? "#bb25a6"
       : approvalPercentage >= 50
       ? "#ffc107"
       : "#dc3545";

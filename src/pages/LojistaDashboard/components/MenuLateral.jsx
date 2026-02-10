@@ -159,7 +159,7 @@ const MenuLateral = () => {
             {item.badge && (
               <span style={{
                 ...styles.badge,
-                backgroundColor: item.badgeColor || '#3b82f6'
+                backgroundColor: item.badgeColor || '#bb25a6'
               }}>
                 {item.badge}
               </span>
@@ -193,7 +193,7 @@ const styles = {
     fontSize: '0.9rem',
   },
   linkActive: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     fontWeight: '600',
   },

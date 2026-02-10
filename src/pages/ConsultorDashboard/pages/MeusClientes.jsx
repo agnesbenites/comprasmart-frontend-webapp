@@ -250,7 +250,7 @@ const MeusClientes = () => {
         );
     }
 
-    const COLORS = ['#364fab', '#28a745', '#ffc107', '#dc3545', '#17a2b8'];
+    const COLORS = ['#364fab', '#bb25a6', '#ffc107', '#dc3545', '#17a2b8'];
 
     return (
         <div style={styles.container}>
@@ -273,9 +273,9 @@ const MeusClientes = () => {
 
             <div style={styles.cardsGrid}>
                 <MetricCard title="Total de Clientes" value={metricas.totalClientes} icon="👥" color="#364fab" />
-                <MetricCard title="Clientes Recorrentes" value={metricas.clientesRecorrentes} icon="🔄" color="#28a745" />
+                <MetricCard title="Clientes Recorrentes" value={metricas.clientesRecorrentes} icon="🔄" color="#bb25a6" />
                 <MetricCard title="Taxa de Retorno" value={`${metricas.taxaRetorno}%`} icon="📈" color="#ffc107" />
-                <MetricCard title="Comissão Média/Cliente" value={`R$ ${metricas.valorMedioPorCliente.toFixed(2)}`} icon="💰" color="#28a745" />
+                <MetricCard title="Comissão Média/Cliente" value={`R$ ${metricas.valorMedioPorCliente.toFixed(2)}`} icon="💰" color="#bb25a6" />
             </div>
 
             <div style={styles.chartsGrid}>
@@ -358,7 +358,7 @@ const MeusClientes = () => {
                                     <td style={styles.td}>{cliente.primeiroAtendimento}</td>
                                     <td style={styles.td}>{cliente.ultimoAtendimento}</td>
                                     <td style={styles.tdCenter}>
-                                        <span style={{...styles.dias, color: cliente.diasDesdeUltimo > 30 ? '#dc3545' : '#28a745'}}>
+                                        <span style={{...styles.dias, color: cliente.diasDesdeUltimo > 30 ? '#dc3545' : '#bb25a6'}}>
                                             {cliente.diasDesdeUltimo}d
                                         </span>
                                     </td>
@@ -414,10 +414,10 @@ const styles = {
     loading: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', gap: '20px' },
     spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #364fab', borderRadius: '50%', animation: 'spin 1s linear infinite' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '20px' },
-    title: { fontSize: '1.8rem', color: '#2c3e50', margin: 0 },
+    title: { fontSize: '1.8rem', color: '#2f0d51', margin: 0 },
     filters: { display: 'flex', gap: '15px' },
     select: { padding: '10px 15px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px', cursor: 'pointer', backgroundColor: 'white' },
-    exportButton: { padding: '10px 20px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' },
+    exportButton: { padding: '10px 20px', backgroundColor: '#bb25a6', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '600' },
     cardsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minimin(220px, 1fr))', gap: '20px', marginBottom: '30px' },
     metricCard: { backgroundColor: 'white', padding: '20px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', display: 'flex', gap: '15px', alignItems: 'center' },
     metricIcon: { fontSize: '2rem' },
@@ -426,7 +426,7 @@ const styles = {
     metricValue: { fontSize: '22px', fontWeight: 'bold' },
     chartsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', gap: '30px', marginBottom: '30px' },
     card: { backgroundColor: 'white', padding: '25px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', marginBottom: '30px' },
-    cardTitle: { fontSize: '1.2rem', color: '#2c3e50', marginBottom: '20px', fontWeight: '600' },
+    cardTitle: { fontSize: '1.2rem', color: '#2f0d51', marginBottom: '20px', fontWeight: '600' },
     tableContainer: { overflowX: 'auto' },
     table: { width: '100%', borderCollapse: 'collapse' },
     th: { padding: '12px', textAlign: 'left', borderBottom: '2px solid #ddd', backgroundColor: '#f8f9fa', fontWeight: '600', color: '#495057', fontSize: '14px' },

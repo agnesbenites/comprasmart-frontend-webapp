@@ -110,7 +110,7 @@ const PlanQuiz = () => {
         '📊 Analytics semanal',
         '📍 Marketing: 10km'
       ],
-      cor: '#2C3E50'
+      cor: '#2f0d51'
     },
     enterprise: {
       nome: 'ENTERPRISE',
@@ -127,7 +127,7 @@ const PlanQuiz = () => {
         '📊 BI diário',
         '📍 Marketing: 20km'
       ],
-      cor: '#34495E'
+      cor: '#2f0d51'
     }
   };
 
@@ -377,7 +377,7 @@ const styles = {
   
   progressoPreenchido: {
     height: '100%',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     transition: 'width 0.3s',
   },
   
@@ -522,7 +522,7 @@ const styles = {
   },
   
   btnPrimary: {
-    backgroundColor: '#F4D03F',
+    backgroundColor: '#bb25a6',
     color: '#1A2332',
     border: 'none',
     padding: '18px 40px',
@@ -534,7 +534,7 @@ const styles = {
   },
   
   btnSecondary: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '15px 30px',

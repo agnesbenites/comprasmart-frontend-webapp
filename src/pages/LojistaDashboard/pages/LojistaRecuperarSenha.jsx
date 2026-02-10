@@ -189,7 +189,7 @@ const styles = {
   button: {
     width: "100%",
     padding: "15px",
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -217,7 +217,7 @@ const styles = {
   },
   successTitle: {
     textAlign: "center",
-    color: "#28a745",
+    color: "#bb25a6",
     marginBottom: "15px",
     fontSize: "1.8rem",
     fontWeight: "700",

@@ -60,7 +60,7 @@ const styles = {
   linkButton: {
     background: "none",
     border: "none",
-    color: "#2563eb",
+    color: "#bb25a6",
     cursor: "pointer",
     fontSize: "14px",
     textDecoration: "underline",

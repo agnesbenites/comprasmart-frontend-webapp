@@ -48,9 +48,9 @@ const styles = {
     padding: "25px 20px",
     textAlign: "center",
     fontWeight: "700",
-    color: "#3b82f6",
+    color: "#bb25a6",
     borderBottom: "2px solid #e2e8f0",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "linear-gradient(135deg, #2f0d51 0%, #bb25a6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
@@ -91,7 +91,7 @@ const LojistaDashboardLayout = () => {
     <div style={styles.dashboardContainer}>
       {/* SIDEBAR COM MENU LATERAL */}
       <aside style={styles.sidebar}>
-        <h2 style={styles.logoTitle}>CompraSmart</h2>
+        <h2 style={styles.logoTitle}>Kaslee</h2>
         <MenuLateral />
       </aside>
 

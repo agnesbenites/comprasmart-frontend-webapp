@@ -30,7 +30,7 @@ const NominatePanel = () => {
         <div style={styles.container}>
             {/* LOGO E TTULO */}
             <div style={styles.header}>
-                <img src="/img/logo_compra_smart.png" alt="Compra Smart Logo" style={styles.logo} />
+                <img src="/img/logo_compra_smart.png" alt="Kaslee Logo" style={styles.logo} />
                 <h2 style={styles.title}>Indique e Cresca Conosco!</h2>
             </div>
 
@@ -71,7 +71,7 @@ const NominatePanel = () => {
             <ul style={styles.list}>
                 {mockNominations.map((nom) => (
                     <li key={nom.email} style={styles.listItem}>
-                        {nom.email} - <strong style={{ color: nom.status === 'Cadastrado e Ativo' ? '#28a745' : '#ffc107' }}>{nom.status}</strong>
+                        {nom.email} - <strong style={{ color: nom.status === 'Cadastrado e Ativo' ? '#bb25a6' : '#ffc107' }}>{nom.status}</strong>
                     </li>
                 ))}
             </ul>
@@ -125,7 +125,7 @@ const styles = {
         marginTop: '15px',
         fontWeight: 'bold',
         fontSize: '16px',
-        color: '#28a745', // Cor verde para destaque positivo
+        color: '#bb25a6', // Cor verde para destaque positivo
     },
     subtitle: { 
         marginTop: '30px', 

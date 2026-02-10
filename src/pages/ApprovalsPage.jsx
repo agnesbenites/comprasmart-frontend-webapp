@@ -11,7 +11,6 @@ export default function ApprovalsPage() {
   const [activeTab, setActiveTab] = useState("consultores");
   const [error, setError] = useState(null);
 
-  // --- BUSCA INICIAL ---
   useEffect(() => {
     fetchData();
   }, []);
@@ -33,11 +32,10 @@ export default function ApprovalsPage() {
     }
   };
 
-  // --- ACAO DE APROVAR / REPROVAR ---
   const handleApproval = async (type, id, aprovado) => {
     const motivo_rejeicao =
       aprovado === false
-        ? prompt("Motivo da reprovacao:") || "Sem justificativa"
+        ? prompt("Motivo da reprovação:") || "Sem justificativa"
         : null;
 
     try {
@@ -63,7 +61,7 @@ export default function ApprovalsPage() {
             <th className="py-3 px-4 text-left">Email</th>
             <th className="py-3 px-4 text-left">Cidade</th>
             <th className="py-3 px-4 text-center">Status</th>
-            <th className="py-3 px-4 text-center">Acoes</th>
+            <th className="py-3 px-4 text-center">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -93,10 +91,10 @@ export default function ApprovalsPage() {
                 <td className="py-3 px-4">{item.cidade}</td>
                 <td className="py-3 px-4 text-center">
                   {item.aprovado
-                    ? " Aprovado"
+                    ? "✅ Aprovado"
                     : item.motivo_rejeicao
-                    ? " Reprovado"
-                    : "o Pendente"}
+                    ? "❌ Reprovado"
+                    : "⏳ Pendente"}
                 </td>
                 <td className="py-3 px-4 text-center space-x-2">
                   <button
@@ -120,53 +118,29 @@ export default function ApprovalsPage() {
     </div>
   );
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-64 text-gray-600">
-        Carregando dados...
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="text-center text-red-500 mt-10 font-medium">{error}</div>
-    );
+  if (loading) return <div className="flex justify-center items-center h-64 text-gray-600">Carregando dados...</div>;
+  if (error) return <div className="text-center text-red-500 mt-10 font-medium">{error}</div>;
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold text-gray-700 mb-6">
-        Painel de Aprovacoes
+        Painel de Aprovações - Kaslee
       </h1>
-
-      {/* Tabs */}
       <div className="flex space-x-4 mb-6">
         <button
           onClick={() => setActiveTab("consultores")}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            activeTab === "consultores"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
+          className={`px-4 py-2 rounded-lg font-medium ${activeTab === "consultores" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
         >
           Consultores
         </button>
         <button
           onClick={() => setActiveTab("lojistas")}
-          className={`px-4 py-2 rounded-lg font-medium ${
-            activeTab === "lojistas"
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
+          className={`px-4 py-2 rounded-lg font-medium ${activeTab === "lojistas" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
         >
           Lojistas
         </button>
       </div>
-
-      {/* Tabela */}
-      {activeTab === "consultores"
-        ? renderTable("consultores", consultores)
-        : renderTable("lojistas", lojistas)}
+      {activeTab === "consultores" ? renderTable("consultores", consultores) : renderTable("lojistas", lojistas)}
     </div>
   );
 }
-

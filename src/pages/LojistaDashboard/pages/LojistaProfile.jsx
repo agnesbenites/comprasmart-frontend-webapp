@@ -8,7 +8,7 @@ const LojistaProfile = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false); // ← NOVO ESTADO
   
   const [empresa, setEmpresa] = useState({
-    nome: "Empresa Teste Compra Smart",
+    nome: "Empresa Teste Kaslee",
     cnpj: "12.345.678/0001-95",
     email: "carlos@empresa.com",
     telefone: "(11) 99999-9999",
@@ -259,7 +259,7 @@ const LojistaProfile = () => {
             borderRadius: '8px',
             border: '1px solid #bfdbfe'
           }}>
-            <p style={{ margin: 0, color: '#1e40af', fontSize: '0.95rem' }}>
+            <p style={{ margin: 0, color: '#2f0d51', fontSize: '0.95rem' }}>
               💡 <strong>Dica:</strong> Clique em "Gerenciar Plano" para fazer upgrade, adicionar recursos extras ou visualizar suas faturas.
             </p>
           </div>
@@ -691,7 +691,7 @@ const styles = {
     justifyContent: "center",
   },
   smallButton: {
-    backgroundColor: "#28a745",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     padding: "6px 12px",

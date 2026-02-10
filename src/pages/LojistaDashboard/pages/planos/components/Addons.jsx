@@ -41,7 +41,7 @@ const styles = {
   addonPreco: {
     fontSize: "18px",
     fontWeight: "700",
-    color: "#2563eb",
+    color: "#bb25a6",
   },
   addonDescricao: {
     fontSize: "14px",

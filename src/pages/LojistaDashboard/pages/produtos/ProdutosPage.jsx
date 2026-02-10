@@ -137,7 +137,7 @@ const ProdutosPage = () => {
     if (estoque <= estoqueMinimo) {
       return { texto: "Estoque baixo", cor: "#ffc107" };
     }
-    return { texto: "OK", cor: "#28a745" };
+    return { texto: "OK", cor: "#bb25a6" };
   };
 
   // Filtrar produtos da loja selecionada

@@ -115,7 +115,7 @@ const LojistaRegisterPage = () => {
       nome: "Pro",
       preco: "R$ 299",
       periodo: "/mês",
-      cor: "#007bff",
+      cor: "#bb25a6",
       popular: true,
       recursos: [
         "✓ 1 Loja",
@@ -131,7 +131,7 @@ const LojistaRegisterPage = () => {
       nome: "Enterprise",
       preco: "R$ 499",
       periodo: "/mês",
-      cor: "#28a745",
+      cor: "#bb25a6",
       recursos: [
         "✓ Lojas Ilimitadas",
         "✓ Vendedores Ilimitados",
@@ -553,7 +553,7 @@ const LojistaRegisterPage = () => {
               {[1,2,3,4,5,6,7].map(num => (
                 <div key={num} style={{
                   ...styles.progressStep,
-                  backgroundColor: etapa >= num ? "#28a745" : "#e0e0e0"
+                  backgroundColor: etapa >= num ? "#bb25a6" : "#e0e0e0"
                 }}>
                   {num === 1 ? "✓" : num}
                 </div>
@@ -580,14 +580,14 @@ const LojistaRegisterPage = () => {
                 <div style={styles.toggleGroup}>
                   <button type="button" onClick={() => setTipoPessoa("PJ")} style={{
                     ...styles.toggleButton,
-                    backgroundColor: tipoPessoa === "PJ" ? "#28a745" : "#f8f9fa",
+                    backgroundColor: tipoPessoa === "PJ" ? "#bb25a6" : "#f8f9fa",
                     color: tipoPessoa === "PJ" ? "white" : "#666"
                   }}>
                     🏢 Pessoa Jurídica (CNPJ)
                   </button>
                   <button type="button" onClick={() => setTipoPessoa("PF")} style={{
                     ...styles.toggleButton,
-                    backgroundColor: tipoPessoa === "PF" ? "#28a745" : "#f8f9fa",
+                    backgroundColor: tipoPessoa === "PF" ? "#bb25a6" : "#f8f9fa",
                     color: tipoPessoa === "PF" ? "white" : "#666"
                   }}>
                     👤 Pessoa Física (MEI)
@@ -974,14 +974,14 @@ const styles = {
   container: { minHeight: "100vh", backgroundColor: "#f8f9fa", padding: "20px" },
   card: { maxWidth: "900px", margin: "0 auto", backgroundColor: "white", borderRadius: "12px", boxShadow: "0 4px 20px rgba(0,0,0,0.1)" },
   header: { padding: "32px", textAlign: "center", borderBottom: "2px solid #f0f0f0" },
-  title: { fontSize: "2rem", fontWeight: "700", color: "#28a745", marginBottom: "8px" },
+  title: { fontSize: "2rem", fontWeight: "700", color: "#bb25a6", marginBottom: "8px" },
   subtitle: { fontSize: "1rem", color: "#666", marginBottom: "16px" },
   validatedBadge: { display: "inline-block", padding: "8px 16px", backgroundColor: "#d4edda", color: "#155724", borderRadius: "20px", fontSize: "0.9rem", fontWeight: "600", marginBottom: "20px", border: "2px solid #c3e6cb" },
   progressBar: { display: "flex", justifyContent: "center", gap: "8px", marginBottom: "12px" },
   progressStep: { width: "35px", height: "35px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: "700", fontSize: "0.85rem", transition: "background-color 0.3s" },
   progressLabels: { display: "flex", justifyContent: "center", gap: "24px", fontSize: "0.75rem", marginTop: "8px" },
   label: { color: "#999", display: "block", marginBottom: "6px", fontWeight: "600" },
-  labelActive: { color: "#28a745", fontWeight: "600" },
+  labelActive: { color: "#bb25a6", fontWeight: "600" },
   form: { padding: "32px" },
   etapa: { marginBottom: "24px" },
   etapaTitle: { fontSize: "1.3rem", fontWeight: "600", color: "#333", marginBottom: "20px" },
@@ -992,8 +992,8 @@ const styles = {
   row: { display: "flex", gap: "16px" },
   fileUpload: { marginBottom: "20px" },
   fileInput: { width: "100%", padding: "12px", border: "2px dashed #e0e0e0", borderRadius: "8px", cursor: "pointer", backgroundColor: "#fafafa" },
-  fileName: { display: "block", marginTop: "8px", fontSize: "0.9rem", color: "#28a745", fontWeight: "600" },
-  autoFilled: { display: "block", marginTop: "4px", fontSize: "0.8rem", color: "#28a745", fontWeight: "600" },
+  fileName: { display: "block", marginTop: "8px", fontSize: "0.9rem", color: "#bb25a6", fontWeight: "600" },
+  autoFilled: { display: "block", marginTop: "4px", fontSize: "0.8rem", color: "#bb25a6", fontWeight: "600" },
   cepGroup: { display: "flex", gap: "8px" },
   cepButton: { padding: "12px 20px", backgroundColor: "#17a2b8", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap", fontWeight: "600" },
   planosGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px" },
@@ -1010,7 +1010,7 @@ const styles = {
   secaoTitle: { fontSize: "1.1rem", fontWeight: "600", marginBottom: "16px", color: "#333" },
   formInline: { display: "flex", gap: "8px", marginBottom: "12px", flexWrap: "wrap" },
   inputInline: { flex: 1, minWidth: "140px", padding: "10px", border: "2px solid #e0e0e0", borderRadius: "6px", fontSize: "0.9rem" },
-  addButton: { padding: "10px 20px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "6px", fontWeight: "600", cursor: "pointer", whiteSpace: "nowrap" },
+  addButton: { padding: "10px 20px", backgroundColor: "#bb25a6", color: "white", border: "none", borderRadius: "6px", fontWeight: "600", cursor: "pointer", whiteSpace: "nowrap" },
   helperText: { fontSize: "0.8rem", color: "#666", marginTop: "8px" },
   lista: { marginTop: "16px" },
   listaItem: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px", backgroundColor: "white", borderRadius: "6px", marginBottom: "8px", border: "1px solid #e0e0e0" },
@@ -1019,14 +1019,14 @@ const styles = {
   resumoTitle: { fontSize: "1.1rem", fontWeight: "600", marginBottom: "12px" },
   termos: { marginTop: "20px", padding: "16px", backgroundColor: "#f0f0f0", borderRadius: "8px" },
   checkboxLabel: { display: "flex", alignItems: "flex-start", fontSize: "0.9rem", cursor: "pointer" },
-  link: { color: "#28a745", fontWeight: "600" },
+  link: { color: "#bb25a6", fontWeight: "600" },
   erro: { padding: "12px 16px", backgroundColor: "#ffebee", color: "#c62828", borderRadius: "8px", marginBottom: "16px", border: "1px solid #ef9a9a", fontWeight: "500" },
   buttonGroup: { display: "flex", gap: "12px", marginTop: "24px" },
-  buttonPrimary: { flex: 1, padding: "16px", backgroundColor: "#28a745", color: "white", border: "none", borderRadius: "8px", fontSize: "1.1rem", fontWeight: "600", cursor: "pointer", transition: "background-color 0.2s" },
+  buttonPrimary: { flex: 1, padding: "16px", backgroundColor: "#bb25a6", color: "white", border: "none", borderRadius: "8px", fontSize: "1.1rem", fontWeight: "600", cursor: "pointer", transition: "background-color 0.2s" },
   buttonSecondary: { padding: "16px 24px", backgroundColor: "#6c757d", color: "white", border: "none", borderRadius: "8px", fontSize: "1rem", fontWeight: "600", cursor: "pointer" },
   footer: { marginTop: "24px", padding: "20px", borderTop: "1px solid #e0e0e0", textAlign: "center" },
   footerText: { fontSize: "0.9rem", color: "#666" },
-  linkButton: { background: "none", border: "none", color: "#28a745", fontSize: "0.9rem", fontWeight: "600", cursor: "pointer", textDecoration: "underline" },
+  linkButton: { background: "none", border: "none", color: "#bb25a6", fontSize: "0.9rem", fontWeight: "600", cursor: "pointer", textDecoration: "underline" },
 };
 
 export default LojistaRegisterPage;

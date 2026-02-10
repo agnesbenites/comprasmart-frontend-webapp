@@ -1,6 +1,6 @@
 import React from "react";
 
-const CardMetrica = ({ icone, valor, label, cor = "#007bff", onClick }) => {
+const CardMetrica = ({ icone, valor, label, cor = "#bb25a6", onClick }) => {
   return (
     <div 
       style={styles.card} 

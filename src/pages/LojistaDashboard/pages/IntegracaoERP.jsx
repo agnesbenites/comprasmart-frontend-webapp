@@ -239,7 +239,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #f3f3f3',
-    borderTop: '4px solid #28a745',
+    borderTop: '4px solid #bb25a6',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -314,12 +314,12 @@ const styles = {
   precoValor: {
     fontSize: '3rem',
     fontWeight: 'bold',
-    color: '#28a745',
+    color: '#bb25a6',
   },
   contratarButton: {
     width: '100%',
     padding: '18px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '12px',
@@ -412,7 +412,7 @@ const styles = {
   },
   conectarButton: {
     padding: '12px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '8px',

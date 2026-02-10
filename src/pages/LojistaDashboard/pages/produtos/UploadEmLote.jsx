@@ -390,7 +390,7 @@ const styles = {
     cursor: 'pointer',
   },
   uploadButton: {
-    backgroundColor: '#28a745',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -424,7 +424,7 @@ const styles = {
     padding: '20px',
     backgroundColor: 'white',
     borderRadius: '8px',
-    border: '2px solid #28a745',
+    border: '2px solid #bb25a6',
   },
   errorList: {
     padding: '15px',
