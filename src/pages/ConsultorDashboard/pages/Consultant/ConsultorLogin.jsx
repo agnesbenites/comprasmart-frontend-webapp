@@ -6,7 +6,6 @@ import { useAuth } from "@contexts/AuthContext";
 
 const ConsultorLogin = () => {
   const navigate = useNavigate();
-  // CORREÇÃO AQUI: mudar 'login' para 'signIn'
   const { signIn, isAuthenticated, loading: authLoading } = useAuth();
   
   const [email, setEmail] = useState("");
@@ -28,18 +27,33 @@ const ConsultorLogin = () => {
     setError("");
 
     try {
-      // CORREÇÃO: mudar 'login' para 'signIn'
-      const result = await signIn(email, password);
+      // CORREÇÃO: Seguir o mesmo padrão do LojistaLogin.jsx
+      // A função signIn retorna { data, error } do Supabase
+      const { data, error } = await signIn(email, password);
       
-      // O signIn do AuthContext retorna { data, error } do Supabase
-      if (result?.user) {
+      if (error) {
+        // Se houver erro do Supabase
+        throw error;
+      }
+      
+      // Se chegou aqui, login foi bem-sucedido
+      if (data?.user) {
         navigate('/consultor/dashboard', { replace: true });
       } else {
-        setError("Erro ao fazer login");
+        setError("Erro ao fazer login - usuário não encontrado");
       }
     } catch (error) {
       // Captura o erro real do Supabase
-      setError(error.message || "Erro inesperado. Tente novamente.");
+      console.error("Erro no login:", error);
+      
+      // Tratamento de erros específicos
+      if (error.message?.includes("Invalid")) {
+        setError("E-mail ou senha incorretos");
+      } else if (error.message?.includes("Email not confirmed")) {
+        setError("E-mail não confirmado. Verifique sua caixa de entrada");
+      } else {
+        setError(error.message || "Erro inesperado. Tente novamente.");
+      }
     } finally {
       setLoading(false);
     }
