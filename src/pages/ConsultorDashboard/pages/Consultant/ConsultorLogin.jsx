@@ -20,37 +20,38 @@ const ConsultorLogin = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // Funcao de login - CORREÇÃO AQUI
+  // Funcao de login - VERSÃO CORRIGIDA
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      // CORREÇÃO: Seguir o mesmo padrão do LojistaLogin.jsx
-      // A função signIn retorna { data, error } do Supabase
-      const { data, error } = await signIn(email, password);
+      const result = await signIn(email, password);
       
-      if (error) {
-        // Se houver erro do Supabase
-        throw error;
-      }
+      // VERIFICAÇÃO FLEXÍVEL - aceita ambas as formas
+      const user = result?.user || result?.data?.user;
       
-      // Se chegou aqui, login foi bem-sucedido
-      if (data?.user) {
+      if (user) {
+        // Login bem-sucedido
+        console.log("✅ Login bem-sucedido:", user.email);
         navigate('/consultor/dashboard', { replace: true });
       } else {
-        setError("Erro ao fazer login - usuário não encontrado");
+        // Se não encontrou user em nenhum lugar
+        console.log("❌ Resposta do signIn:", result);
+        setError("Usuário não encontrado na resposta");
       }
     } catch (error) {
       // Captura o erro real do Supabase
-      console.error("Erro no login:", error);
+      console.error("❌ Erro no login:", error);
       
       // Tratamento de erros específicos
-      if (error.message?.includes("Invalid")) {
+      if (error.message?.includes("Invalid login credentials")) {
         setError("E-mail ou senha incorretos");
       } else if (error.message?.includes("Email not confirmed")) {
         setError("E-mail não confirmado. Verifique sua caixa de entrada");
+      } else if (error.message?.includes("Invalid")) {
+        setError("Credenciais inválidas");
       } else {
         setError(error.message || "Erro inesperado. Tente novamente.");
       }
@@ -162,6 +163,7 @@ const ConsultorLogin = () => {
 };
 
 const styles = {
+  // ... (mantenha os mesmos estilos)
   container: {
     minHeight: "100vh",
     backgroundColor: "#f8f9fa",
