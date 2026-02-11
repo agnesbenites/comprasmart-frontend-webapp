@@ -6,7 +6,8 @@ import { useAuth } from "@contexts/AuthContext";
 
 const ConsultorLogin = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated, loading: authLoading } = useAuth();
+  // CORREÇÃO AQUI: mudar 'login' para 'signIn'
+  const { signIn, isAuthenticated, loading: authLoading } = useAuth();
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,22 +21,25 @@ const ConsultorLogin = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // Funcao de login
+  // Funcao de login - CORREÇÃO AQUI
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const result = await login(email, password);
+      // CORREÇÃO: mudar 'login' para 'signIn'
+      const result = await signIn(email, password);
       
-      if (result.success) {
+      // O signIn do AuthContext retorna { data, error } do Supabase
+      if (result?.user) {
         navigate('/consultor/dashboard', { replace: true });
       } else {
-        setError(result.error || "Erro ao fazer login");
+        setError("Erro ao fazer login");
       }
     } catch (error) {
-      setError("Erro inesperado. Tente novamente.");
+      // Captura o erro real do Supabase
+      setError(error.message || "Erro inesperado. Tente novamente.");
     } finally {
       setLoading(false);
     }
