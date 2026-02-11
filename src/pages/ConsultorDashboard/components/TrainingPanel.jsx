@@ -59,6 +59,7 @@ const TrainingPanel = ({ consultorId }) => {
   const [loading, setLoading] = useState(true);
   const [loadingContent, setLoadingContent] = useState(false);
   const [progressoGeral, setProgressoGeral] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
     carregarTreinamentos();
@@ -290,9 +291,11 @@ Complete este treinamento para avançar no processo de habilitação.`;
   return (
     <div style={styles.container}>
       
-      {/* --- HERO BANNER ARENA DE VENDAS (NO TOPO) --- */}
+      {/* --- HERO BANNER ARENA DE VENDAS (COM EFEITO HOVER) --- */}
       <div 
         onClick={acessarArena}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
         style={{
           width: '100%',
           height: '300px',
@@ -304,40 +307,65 @@ Complete este treinamento para avançar no processo de habilitação.`;
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'flex-end',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+          boxShadow: isHovering ? '0 12px 30px rgba(0,0,0,0.3)' : '0 8px 24px rgba(0,0,0,0.2)',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          transform: isHovering ? 'scale(1.02)' : 'scale(1)',
+          transition: 'all 0.3s ease',
+          filter: isHovering ? 'brightness(0.85)' : 'brightness(1)',
         }}
       >
-        {/* Overlay escuro para o texto não sumir na imagem */}
+        {/* Overlay escuro que aparece mais no hover */}
         <div style={{
-          width: '100%',
-          padding: '40px',
-          background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)',
-          color: 'white'
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: isHovering ? 'rgba(0, 0, 0, 0.25)' : 'rgba(0, 0, 0, 0.1)',
+          transition: 'background-color 0.3s ease',
+          pointerEvents: 'none',
+        }} />
+        
+        {/* Ícone de play no centro (aparece no hover) */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          width: '70px',
+          height: '70px',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: isHovering ? 1 : 0,
+          transition: 'opacity 0.3s ease, transform 0.3s ease',
+          pointerEvents: 'none',
+          transform: isHovering ? 'translate(-50%, -50%) scale(1.1)' : 'translate(-50%, -50%) scale(1)',
         }}>
-          <h1 style={{ margin: '0 0 10px 0', fontSize: '2.5rem', fontWeight: '800' }}>
-            Arena de Vendas Kaslee
-          </h1>
-          <p style={{ margin: '0 0 20px 0', fontSize: '1.2rem', opacity: '0.9', maxWidth: '600px' }}>
-            Pratique seu pitch de vendas com nossa inteligência artificial antes de atender clientes reais.
-          </p>
-          <button style={{
-            backgroundColor: '#17a2b8',
-            color: 'white',
-            border: 'none',
-            padding: '15px 30px',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            cursor: 'pointer',
-            boxShadow: '0 4px 15px rgba(23, 162, 184, 0.4)'
-          }}>
-            <FaPlayCircle size={22} /> INICIAR TREINAMENTO NA ARENA
-          </button>
+          <FaPlayCircle size={32} color="white" />
+        </div>
+        
+        {/* Tooltip no canto inferior direito */}
+        <div style={{
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          color: 'white',
+          padding: '8px 16px',
+          borderRadius: '20px',
+          fontSize: '13px',
+          fontWeight: '600',
+          backdropFilter: 'blur(4px)',
+          opacity: isHovering ? 1 : 0.8,
+          transition: 'opacity 0.3s ease, transform 0.3s ease',
+          transform: isHovering ? 'translateY(0)' : 'translateY(5px)',
+          pointerEvents: 'none',
+        }}>
+          Clique para acessar a Arena de Vendas →
         </div>
       </div>
 

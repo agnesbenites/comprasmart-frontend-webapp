@@ -35,6 +35,9 @@ import LojistaDashboard from "./pages/LojistaDashboard/LojistaDashboard";
 import VendedorDashboard from "./pages/VendedorDashboard/pages/VendedorDashboard";
 import AdminDashboard from "./pages/AdminDashboard/pages/AdminDashboard";
 
+// Importação da Arena de Vendas
+import ArenaVendasPainel from "./pages/ConsultorDashboard/components/ArenaVendasPainel";
+
 // Componente de callback do Supabase
 const SupabaseCallback = () => {
   const [loading, setLoading] = React.useState(true);
@@ -155,6 +158,23 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        
+        {/* ARENA DE VENDAS */}
+        <Route 
+          path="/consultor/arena" 
+          element={
+            <ProtectedRoute>
+              <div style={{ 
+                backgroundColor: '#f8f9fa', 
+                minHeight: '100vh',
+                padding: '20px'
+              }}>
+                <ArenaVendasPainel consultorId={"ID_DO_CONSULTOR_AQUI"} />
+              </div>
+            </ProtectedRoute>
+          } 
+        />
+        
         <Route 
           path="/lojista/*" 
           element={
