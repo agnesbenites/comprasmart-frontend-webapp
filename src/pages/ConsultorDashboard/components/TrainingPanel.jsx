@@ -1,7 +1,8 @@
 // app-frontend/src/pages/ConsultorDashboard/components/TrainingPanel.jsx
 
 import React, { useState, useEffect } from 'react';
-import { FaCheckCircle, FaLock, FaFileAlt, FaClock, FaStore, FaShieldAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaPlayCircle, FaCheckCircle, FaLock, FaFileAlt, FaClock, FaStore, FaShieldAlt } from 'react-icons/fa';
 
 const CONSULTOR_PRIMARY = "#2c5aa0";
 const CONSULTOR_LIGHT_BG = "#eaf2ff";
@@ -34,7 +35,7 @@ const SimpleMarkdown = ({ content }) => {
           const parts = line.split('**');
           return (
             <p key={idx} style={{ marginBottom: '12px' }}>
-              {parts.map((part, i) => i % 2 === 0 ? part : <strong>{part}</strong>)}
+              {parts.map((part, i) => i % 2 === 0 ? part : <strong key={i}>{part}</strong>)}
             </p>
           );
         }
@@ -49,6 +50,7 @@ const SimpleMarkdown = ({ content }) => {
 };
 
 const TrainingPanel = ({ consultorId }) => {
+  const navigate = useNavigate();
   const [treinamentosPlataforma, setTreinamentosPlataforma] = useState([]);
   const [treinamentosLojistas, setTreinamentosLojistas] = useState([]);
   const [treinamentosConcluidos, setTreinamentosConcluidos] = useState([]);
@@ -61,6 +63,11 @@ const TrainingPanel = ({ consultorId }) => {
   useEffect(() => {
     carregarTreinamentos();
   }, []);
+
+  // Função para navegar até a Arena de Vendas
+  const acessarArena = () => {
+    navigate('/consultor/arena');
+  };
 
   const carregarTreinamentos = async () => {
     setLoading(true);
@@ -282,6 +289,58 @@ Complete este treinamento para avançar no processo de habilitação.`;
   // Visualização em Lista
   return (
     <div style={styles.container}>
+      
+      {/* --- HERO BANNER ARENA DE VENDAS (NO TOPO) --- */}
+      <div 
+        onClick={acessarArena}
+        style={{
+          width: '100%',
+          height: '300px',
+          backgroundImage: 'url("/img/herobannerarenavendas.png")', 
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          borderRadius: '16px',
+          marginBottom: '40px',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'flex-end',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Overlay escuro para o texto não sumir na imagem */}
+        <div style={{
+          width: '100%',
+          padding: '40px',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)',
+          color: 'white'
+        }}>
+          <h1 style={{ margin: '0 0 10px 0', fontSize: '2.5rem', fontWeight: '800' }}>
+            Arena de Vendas Kaslee
+          </h1>
+          <p style={{ margin: '0 0 20px 0', fontSize: '1.2rem', opacity: '0.9', maxWidth: '600px' }}>
+            Pratique seu pitch de vendas com nossa inteligência artificial antes de atender clientes reais.
+          </p>
+          <button style={{
+            backgroundColor: '#17a2b8',
+            color: 'white',
+            border: 'none',
+            padding: '15px 30px',
+            borderRadius: '8px',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            cursor: 'pointer',
+            boxShadow: '0 4px 15px rgba(23, 162, 184, 0.4)'
+          }}>
+            <FaPlayCircle size={22} /> INICIAR TREINAMENTO NA ARENA
+          </button>
+        </div>
+      </div>
+
       {/* Header com Status de Habilitação */}
       <div style={styles.header}>
         <div>
@@ -326,7 +385,47 @@ Complete este treinamento para avançar no processo de habilitação.`;
         </div>
       </div>
 
-      {/* Duas Colunas */}
+      {/* Grid de Certificações */}
+      <h2 style={{ 
+        color: '#333', 
+        fontSize: '1.6rem', 
+        fontWeight: '700', 
+        marginBottom: '25px',
+        marginTop: '40px'
+      }}>
+        Certificações Disponíveis
+      </h2>
+
+      <div style={{ 
+        display: 'grid', 
+        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+        gap: '25px',
+        marginBottom: '40px'
+      }}>
+        {/* Card 1 - Compliance */}
+        <div style={cardStyle}>
+          <div style={iconBoxStyle}><FaShieldAlt size={26} color="#2c5aa0" /></div>
+          <h3 style={cardTitleStyle}>Compliance e Ética</h3>
+          <p style={cardTextStyle}>Aprenda as diretrizes da Kaslee para um atendimento seguro.</p>
+          <div style={cardFooterStyle}>
+            <span style={metaItemStyle}><FaClock /> 25 min</span>
+            <span style={metaItemStyle}>📄 Certificação</span>
+          </div>
+        </div>
+
+        {/* Card 2 - Gestão de Lojas */}
+        <div style={cardStyle}>
+          <div style={iconBoxStyle}><FaStore size={26} color="#2c5aa0" /></div>
+          <h3 style={cardTitleStyle}>Gestão de Lojas</h3>
+          <p style={cardTextStyle}>Como organizar o catálogo e pedidos dos lojistas parceiros.</p>
+          <div style={cardFooterStyle}>
+            <span style={metaItemStyle}><FaClock /> 40 min</span>
+            <span style={metaItemStyle}>📄 Certificação</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Duas Colunas - Treinamentos Detalhados */}
       <div style={styles.columnsContainer}>
         
         {/* Coluna 1: Treinamentos da Plataforma */}
@@ -438,11 +537,70 @@ const TrainCard = ({ treinamento, isConcluido, isNovo, onIniciar }) => (
   </div>
 );
 
+// Estilos para os cards de certificação
+const cardStyle = {
+  backgroundColor: 'white',
+  padding: '30px',
+  borderRadius: '15px',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+  border: '1px solid #eee',
+  transition: 'transform 0.2s, box-shadow 0.2s',
+  cursor: 'pointer',
+  '&:hover': {
+    transform: 'translateY(-4px)',
+    boxShadow: '0 8px 20px rgba(0,0,0,0.1)',
+  }
+};
+
+const iconBoxStyle = {
+  width: '60px',
+  height: '60px',
+  borderRadius: '12px',
+  backgroundColor: '#eaf2ff',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: '20px'
+};
+
+const cardTitleStyle = { 
+  margin: '0 0 10px 0', 
+  fontSize: '1.2rem', 
+  color: '#1e293b', 
+  fontWeight: '600' 
+};
+
+const cardTextStyle = { 
+  margin: '0 0 20px 0', 
+  fontSize: '0.95rem', 
+  color: '#64748b', 
+  lineHeight: '1.6' 
+};
+
+const cardFooterStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingTop: '15px',
+  borderTop: '1px solid #f1f5f9'
+};
+
+const metaItemStyle = {
+  fontSize: '0.85rem',
+  color: '#94a3b8',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '5px'
+};
+
 const styles = {
   container: {
     backgroundColor: '#f8f9fa',
     minHeight: '100vh',
     padding: '25px',
+    maxWidth: '1200px',
+    margin: '0 auto',
+    fontFamily: 'Inter, sans-serif'
   },
   loadingContainer: {
     display: 'flex',
@@ -539,6 +697,7 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: '25px',
+    marginTop: '30px',
   },
   column: {
     backgroundColor: 'white',
@@ -575,6 +734,10 @@ const styles = {
     padding: '20px',
     borderLeft: '4px solid',
     transition: 'transform 0.2s',
+    '&:hover': {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    }
   },
   trainCardHeader: {
     display: 'flex',
@@ -674,6 +837,7 @@ const styles = {
     fontWeight: '600',
     fontSize: '14px',
     cursor: 'pointer',
+    transition: 'background-color 0.2s',
   },
   emptyState: {
     textAlign: 'center',
