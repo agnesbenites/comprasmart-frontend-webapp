@@ -1,135 +1,55 @@
 // src/hooks/useArena.js
 // Gerencia estado da Arena de Vendas pra o consultor
-// Fase 1 (sem loja) e Fase 2 (com produtos da loja)
+// 🎯 ARENA INDEPENDENTE - SEM VÍNCULO COM LOJISTAS
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../supabaseClient';
 
-// Limites espelhados do banco (evita chamada extra)
-export const ARENA_LIMITES = {
-  basico:     { limite: 5,    consultores: false, dificil: false, ranking: false },
-  pro:        { limite: 20,   consultores: true,  dificil: true,  ranking: false },
-  enterprise: { limite: null, consultores: true,  dificil: true,  ranking: true  }
-};
-
-export function useArena({ consultorId, lojaId }) {
-  const [fase, setFase]             = useState(1);       // 1 ou 2
-  const [produtos, setProdutos]     = useState([]);      // genéricos ou da loja
+export function useArena({ consultorId }) {
+  const [fase, setFase]             = useState(1);       // Sempre fase 1 (produtos genéricos)
+  const [produtos, setProdutos]     = useState([]);      // Apenas produtos genéricos
   const [cenarios, setCenarios]     = useState([]);
   const [sessaoAtual, setSessaoAtual] = useState(null);
   const [historico, setHistorico]   = useState([]);      // sessões anteriores
-  const [acesso, setAcesso]         = useState(null);    // retorno de pode_iniciar_sim
   const [loading, setLoading]       = useState(true);
-  const [plano, setPlano]           = useState('basico'); // plano padrão para consultores sem loja
 
-  // ─── Busca o plano do consultor (se tiver loja) ────────────
-  const carregarPlano = useCallback(async () => {
-    if (!consultorId) return 'basico';
-    
-    // Se não tem lojaId, nem gasta bateria chamando a tabela de lojistas!
-    if (!lojaId) {
-      console.log("Consultor independente: Ativando cota grátis de 5 sessões.");
-      setPlano('basico');
-      return 'basico';
-    }
-
-    try {
-      const { data: loja } = await supabase
-        .from('lojas_corrigida')
-        .select('plano')
-        .eq('id', lojaId) // Busca pelo ID da loja, não do consultor
-        .maybeSingle();
-
-      const planoFinal = loja?.plano || 'basico';
-      setPlano(planoFinal);
-      return planoFinal;
-    } catch (err) {
-      console.error('[useArena] erro ao carregar plano:', err);
-      setPlano('basico');
-      return 'basico';
-    }
-  }, [consultorId, lojaId]);
-
-  // ─── Determina fase e busca produtos ────────────
+  // ─── Busca produtos genéricos (sempre fase 1) ────────────
   const carregarProdutos = useCallback(async () => {
-    if (!consultorId) return; // <--- ADICIONADO: cláusula de barreira
+    if (!consultorId) return;
     
     try {
-      if (lojaId) {
-        // Fase 2: busca produtos reais da loja pelo segmento do consultor
-        const { data: consultor } = await supabase
-          .from('consultores')
-          .select('segmentos')
-          .eq('id', consultorId)
-          .maybeSingle();
-
-        if (consultor?.segmentos?.length) {
-          const { data: prodLoja } = await supabase
-            .from('produtos')
-            .select('id, nome, descricao, preco, categoria')
-            .eq('loja_id', lojaId)
-            .eq('ativo', true)
-            .in('segmento', consultor.segmentos);
-
-          if (prodLoja?.length) {
-            setProdutos(prodLoja.map(p => ({ ...p, generico: false })));
-            setFase(2);
-            return;
-          }
-        }
-      }
-
-      // Fase 1: produtos genéricos
       const { data: genericos } = await supabase
         .from('produtos_genericos')
         .select('id, nome, descricao, preco, categoria, segmento')
         .eq('ativo', true);
 
       setProdutos((genericos || []).map(p => ({ ...p, generico: true })));
-      setFase(1);
+      setFase(1); // Sempre fase 1
 
     } catch (err) {
       console.error('[useArena] erro ao carregar produtos:', err);
     }
-  }, [consultorId, lojaId]);
+  }, [consultorId]);
 
-  // ─── Busca cenários disponíveis pra a fase atual ─
+  // ─── Busca cenários disponíveis ────────────
   const carregarCenarios = useCallback(async () => {
     try {
       const { data } = await supabase
         .from('cenarios_simulacao')
         .select('*')
         .eq('ativo', true)
-        .lte('fase_minima', fase)
+        .lte('fase_minima', 1) // Sempre fase 1
         .order('dificuldade');
 
       setCenarios(data || []);
     } catch (err) {
       console.error('[useArena] erro ao carregar cenários:', err);
     }
-  }, [fase]);
-
-  // ─── Verifica acesso (pode iniciar sim?) ──────────
-  const verificarAcesso = useCallback(async (dificuldadeEscolhida = 'facil') => {
-    if (!consultorId) return;
-
-    try {
-      const { data, error } = await supabase.rpc('pode_iniciar_sim', {
-        p_consultor_id: consultorId,
-        p_loja_id: lojaId || null,
-        p_dificuldade: dificuldadeEscolhida // Enviamos a dificuldade aqui
-      });
-
-      if (error) throw error;
-      setAcesso(data[0]);
-    } catch (err) {
-      console.error('[useArena] erro ao verificar acesso:', err);
-    }
-  }, [consultorId, lojaId]);
+  }, []);
 
   // ─── Busca histórico de sessões ────────────────────
   const carregarHistorico = useCallback(async () => {
-    if (!consultorId) return; // <--- ADICIONADO: cláusula de barreira
+    if (!consultorId) return;
     
     try {
       const { data } = await supabase
@@ -146,22 +66,19 @@ export function useArena({ consultorId, lojaId }) {
 
   // ─── Inicia nova simulação ─────────────────────────
   const iniciarSimulacao = useCallback(async (produto, cenario) => {
+    if (!consultorId || !produto || !cenario) return;
+    
     try {
-      // Incrementa contador na loja (se fase 2)
-      if (lojaId) {
-        await supabase.rpc('incrementar_sim', { p_loja_id: lojaId });
-      }
-
-      // Cria sessão
+      // Cria sessão (SEM loja_id)
       const { data: sessao } = await supabase
         .from('sessoes_simulacao')
         .insert({
           consultor_id:    consultorId,
-          loja_id:         lojaId || null,
+          loja_id:         null, // Arena independente = sem loja
           produto_id:      produto.id,
-          produto_generico: produto.generico,
+          produto_generico: true, // Sempre genérico
           cenario_id:      cenario.id,
-          fase:            fase,
+          fase:            1, // Sempre fase 1
           historico_conversa: [],
           status:          'em_andamento'
         })
@@ -175,7 +92,7 @@ export function useArena({ consultorId, lojaId }) {
       console.error('[useArena] erro ao iniciar simulação:', err);
       throw err;
     }
-  }, [consultorId, lojaId, fase]);
+  }, [consultorId]);
 
   // ─── Adiciona mensagem ao histórico da sessão ─────
   const adicionarMensagem = useCallback(async (sessaoId, role, content) => {
@@ -249,39 +166,30 @@ export function useArena({ consultorId, lojaId }) {
   useEffect(() => {
     const init = async () => {
       setLoading(true);
-      
-      // Primeiro carrega o plano do consultor
-      await carregarPlano();
-      
-      // Depois carrega os demais dados
       await Promise.all([
         carregarProdutos(),
-        verificarAcesso(),
         carregarHistorico()
       ]);
-      
       setLoading(false);
     };
     if (consultorId) init();
-  }, [consultorId, lojaId, carregarPlano, carregarProdutos, verificarAcesso, carregarHistorico]);
+  }, [consultorId, carregarProdutos, carregarHistorico]);
 
   useEffect(() => {
     carregarCenarios();
-  }, [fase, carregarCenarios]);
+  }, [carregarCenarios]);
 
   return {
-    fase,
-    produtos,
-    cenarios,
+    fase,          // Sempre 1
+    produtos,      // Apenas genéricos
+    cenarios,      // Todos disponíveis (fase_minima <= 1)
     sessaoAtual,
     historico,
-    acesso,
-    plano,
     loading,
     iniciarSimulacao,
     adicionarMensagem,
     finalizarSessao,
     abandonarSessao,
-    refetch: () => Promise.all([carregarProdutos(), verificarAcesso(), carregarHistorico()])
+    refetch: () => Promise.all([carregarProdutos(), carregarHistorico()])
   };
 }
