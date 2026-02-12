@@ -26,30 +26,29 @@ export function useArena({ consultorId, lojaId }) {
   const carregarPlano = useCallback(async () => {
     if (!consultorId) return 'basico';
     
+    // Se não tem lojaId, nem gasta bateria chamando a tabela de lojistas!
+    if (!lojaId) {
+      console.log("Consultor independente: Ativando cota grátis de 5 sessões.");
+      setPlano('basico');
+      return 'basico';
+    }
+
     try {
-      const { data: loja, error } = await supabase
+      const { data: loja } = await supabase
         .from('lojas_corrigida')
-        .select('plano, id')
-        .eq('user_id', consultorId) // O seu ID de consultor
-        .maybeSingle(); // <--- MUDANÇA CRUCIAL: Se não achar, retorna null em vez de erro 406
+        .select('plano')
+        .eq('id', lojaId) // Busca pelo ID da loja, não do consultor
+        .maybeSingle();
 
-      if (error) throw error;
-
-      if (!loja) {
-        console.log("Consultor independente: Ativando cota grátis de 5 sessões.");
-        setPlano('basico');
-        return 'basico';
-      }
-
-      setPlano(loja.plano || 'basico');
-      return loja.plano || 'basico';
-      
+      const planoFinal = loja?.plano || 'basico';
+      setPlano(planoFinal);
+      return planoFinal;
     } catch (err) {
       console.error('[useArena] erro ao carregar plano:', err);
       setPlano('basico');
       return 'basico';
     }
-  }, [consultorId]);
+  }, [consultorId, lojaId]);
 
   // ─── Determina fase e busca produtos ────────────
   const carregarProdutos = useCallback(async () => {
