@@ -1,4 +1,4 @@
-// LojistaRelatorios_BASIC.jsx - COM BOTÃO DE EXPORTAR
+// LojistaRelatorios_BASIC.jsx - COM BOTÃO DE EXPORTAR PDF
 // PLANO BASIC - Funcionalidades base (R$ 50/mês)
 
 import React, { useState, useEffect } from "react";
@@ -8,6 +8,10 @@ import {
     regenerarResumoIA,
     getMesAtual,
     getMesAnterior,
+    exportarRelatorioPDFIA, // ✅ Importado!
+    downloadRelatorioPDFIA, // ✅ Função utilitária
+    visualizarRelatorioPDFIA, // ✅ Para visualização
+    formatarMesParaExibicao // ✅ Utilitário
 } from "../../../api/relatorioIA.service";
 
 const STRIPE_PURCHASE_URL = "https://buy.stripe.com/14AeVdgpWemMaBMb0RgQE07";
@@ -174,55 +178,90 @@ const LojistaRelatoriosBasic = () => {
         return headers + '\n' + rows;
     };
 
-    // ✅ NOVA FUNÇÃO - Botão de Exportar
-    const handleExportarClick = () => {
+    // ✅ HANDLE EXPORTAR - VERSÃO TURBINADA COM PDF
+    const handleExportarClick = async () => {
         setExportando(true);
-        
-        let exportData = [];
-        let filename = `relatorio_${tipoExportacao}_${periodo}_${new Date().getTime()}.csv`;
 
-        if (tipoExportacao === "TUDO") {
-            exportData = [
-                ...dataRelatorios.consultores.map(c => ({...c, tipo_relatorio: "Consultor"})),       
-                ...dataRelatorios.vendedores.map(v => ({...v, tipo_relatorio: "Vendedor"})),
-                ...dataRelatorios.campanhas.map(c => ({...c, tipo_relatorio: "Campanha"})),
-                ...dataRelatorios.vendas.map(v => ({...v, tipo_relatorio: "Venda"})),
-            ];
-        } else if (tipoExportacao === "VENDEDORES") {
-            exportData = dataRelatorios.vendedores;
-        } else if (tipoExportacao === "CONSULTORES") {
-            exportData = dataRelatorios.consultores;
-        } else if (tipoExportacao === "CAMPANHAS") {
-            exportData = dataRelatorios.campanhas;
-        } else if (tipoExportacao === "VENDAS") {
-            exportData = dataRelatorios.vendas;
-        }
-       
-        if (exportData.length === 0) {
-            alert("Nenhum dado disponível para exportar!");
-            setExportando(false);
-            return;
-        }
-
-        // Simular delay de processamento
-        setTimeout(() => {
-            const csvString = convertToCSV(exportData);
-            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-           
-            if (link.download !== undefined) {
-                const url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", filename);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+        try {
+            // ✅ SE FOR PDF, USA O BACKEND NOVO COM IA
+            if (formatoExportacao === "PDF") {
+                // Usar a função utilitária para download automático
+                await downloadRelatorioPDFIA({
+                    lojistaId: lojaId,
+                    mesAtual: getMesAtual(),
+                    mesAnterior: getMesAnterior(),
+                    nomeArquivo: `Relatorio_IA_${formatarMesParaExibicao(getMesAtual()).replace('/', '_')}.pdf`
+                });
+                
+                setExportando(false);
+                return;
             }
-            
-            console.log("Exportação de " + tipoExportacao + " concluída!");
+
+            // 📊 EXPORTAÇÃO CSV/EXCEL (lógica existente)
+            let exportData = [];
+            let filename = `relatorio_${tipoExportacao}_${periodo}_${new Date().getTime()}.csv`;
+
+            if (tipoExportacao === "TUDO") {
+                exportData = [
+                    ...dataRelatorios.consultores.map(c => ({...c, tipo_relatorio: "Consultor"})),       
+                    ...dataRelatorios.vendedores.map(v => ({...v, tipo_relatorio: "Vendedor"})),
+                    ...dataRelatorios.campanhas.map(c => ({...c, tipo_relatorio: "Campanha"})),
+                    ...dataRelatorios.vendas.map(v => ({...v, tipo_relatorio: "Venda"})),
+                ];
+            } else if (tipoExportacao === "VENDEDORES") {
+                exportData = dataRelatorios.vendedores;
+            } else if (tipoExportacao === "CONSULTORES") {
+                exportData = dataRelatorios.consultores;
+            } else if (tipoExportacao === "CAMPANHAS") {
+                exportData = dataRelatorios.campanhas;
+            } else if (tipoExportacao === "VENDAS") {
+                exportData = dataRelatorios.vendas;
+            }
+           
+            if (exportData.length === 0) {
+                alert("Nenhum dado disponível para exportar!");
+                setExportando(false);
+                return;
+            }
+
+            // Simular delay de processamento
+            setTimeout(() => {
+                const csvString = convertToCSV(exportData);
+                const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvString], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+               
+                if (link.download !== undefined) {
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+                
+                console.log("Exportação de " + tipoExportacao + " concluída!");
+                setExportando(false);
+            }, 500);
+
+        } catch (error) {
+            console.error("Erro na exportação:", error);
+            alert("Ocorreu um erro ao exportar o arquivo: " + error.message);
             setExportando(false);
-        }, 500);
+        }
+    };
+
+    // ✅ HANDLE VISUALIZAR PDF - Botão específico para visualização
+    const handleVisualizarPDF = async () => {
+        try {
+            await visualizarRelatorioPDFIA({
+                lojistaId: lojaId,
+                mesAtual: getMesAtual(),
+                mesAnterior: getMesAnterior()
+            });
+        } catch (error) {
+            alert("Erro ao visualizar PDF: " + error.message);
+        }
     };
 
     // 🤖 ANÁLISE COM IA
@@ -456,7 +495,7 @@ const LojistaRelatoriosBasic = () => {
                 <span style={styles.planBadge}>PLANO BASIC</span>
             </div>
            
-            {/* ✅ NOVA SEÇÃO DE EXPORTAÇÃO */}
+            {/* ✅ SEÇÃO DE EXPORTAÇÃO */}
             <div style={styles.exportSection}>
                 <div style={styles.exportFilters}>
                     <div style={styles.filterGroup}>
@@ -500,7 +539,7 @@ const LojistaRelatoriosBasic = () => {
                         >
                             <option value="CSV">📄 CSV</option>
                             <option value="EXCEL">📊 Excel (Em breve)</option>
-                            <option value="PDF">📕 PDF (Em breve)</option>
+                            <option value="PDF">📕 PDF com IA</option> {/* ✅ Atualizado! */}
                         </select>
                     </div>
 
@@ -509,11 +548,17 @@ const LojistaRelatoriosBasic = () => {
                         disabled={loading || exportando}
                         style={{
                             ...styles.exportButton,
+                            backgroundColor: formatoExportacao === "PDF" ? "#f53342" : "#10b981", // Vermelho para PDF
                             opacity: (loading || exportando) ? 0.6 : 1,
                             cursor: (loading || exportando) ? 'not-allowed' : 'pointer'
                         }}
                     >
-                        {exportando ? '⏳ Exportando...' : '📥 Exportar Relatório'}
+                        {exportando 
+                            ? '⏳ Exportando...' 
+                            : formatoExportacao === "PDF" 
+                                ? '📕 Exportar PDF com IA' 
+                                : '📥 Exportar Relatório'
+                        }
                     </button>
                 </div>
             </div>
@@ -584,7 +629,7 @@ const LojistaRelatoriosBasic = () => {
                     </div>
                 )}
 
-                {/* Resumo IA */}
+                {/* ✅ Resumo IA COM BOTÃO DE PDF DIRETO */}
                 {resumoIA && !loadingIA && (
                     <div>
                         <div style={{
@@ -598,6 +643,7 @@ const LojistaRelatoriosBasic = () => {
                                 }}>{line}</p>
                             ))}
                         </div>
+                        
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10, flexWrap: 'wrap', gap: 8 }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <span style={{
@@ -612,7 +658,51 @@ const LojistaRelatoriosBasic = () => {
                                     </span>
                                 )}
                             </div>
+                            
+                            {/* ✅ BOTÃO DE DOWNLOAD DIRETO DO RESUMO EM PDF */}
+                            <div style={{ display: 'flex', gap: 8 }}>
+                                <button
+                                    onClick={handleVisualizarPDF}
+                                    style={{
+                                        padding: '8px 16px',
+                                        borderRadius: 8,
+                                        backgroundColor: '#6366f1',
+                                        color: 'white',
+                                        border: 'none',
+                                        fontWeight: 600,
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '6px'
+                                    }}
+                                >
+                                    👁️ Visualizar PDF
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setFormatoExportacao("PDF");
+                                        handleExportarClick();
+                                    }}
+                                    style={{
+                                        padding: '8px 16px',
+                                        borderRadius: 8,
+                                        backgroundColor: '#f53342',
+                                        color: 'white',
+                                        border: 'none',
+                                        fontWeight: 600,
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '6px'
+                                    }}
+                                >
+                                    📕 Baixar PDF com IA
+                                </button>
+                            </div>
                         </div>
+                        
                         <p style={{ fontSize: '0.7rem', color: '#bbb', marginTop: 8, fontStyle: 'italic', textAlign: 'center' }}>
                             Análise gerada por IA com base nos dados disponíveis. Verifique antes de tomar decisões.
                         </p>
@@ -639,6 +729,14 @@ const LojistaRelatoriosBasic = () => {
                     </div>
                 </div>
             )}
+
+            {/* ✅ Animação do spinner */}
+            <style dangerouslySetInnerHTML={{__html: `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `}} />
         </div>
     );
 };
@@ -670,7 +768,6 @@ const styles = {
         fontSize: '0.85rem',
         fontWeight: '600'
     },
-    // ✅ NOVOS ESTILOS PARA EXPORTAÇÃO
     exportSection: {
         backgroundColor: 'white',
         padding: '25px',
