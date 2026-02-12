@@ -23,6 +23,8 @@ export function useArena({ consultorId, lojaId }) {
 
   // ─── Determina fase e busca produtos ────────────
   const carregarProdutos = useCallback(async () => {
+    if (!consultorId) return; // <--- ADICIONADO: cláusula de barreira
+    
     try {
       if (lojaId) {
         // Fase 2: busca produtos reais da loja pelo segmento do consultor
@@ -99,6 +101,8 @@ export function useArena({ consultorId, lojaId }) {
 
   // ─── Busca histórico de sessões ────────────────────
   const carregarHistorico = useCallback(async () => {
+    if (!consultorId) return; // <--- ADICIONADO: cláusula de barreira
+    
     try {
       const { data } = await supabase
         .from('sessoes_simulacao')
@@ -225,11 +229,11 @@ export function useArena({ consultorId, lojaId }) {
       setLoading(false);
     };
     if (consultorId) init();
-  }, [consultorId, lojaId]);
+  }, [consultorId, lojaId, carregarProdutos, verificarAcesso, carregarHistorico]);
 
   useEffect(() => {
     carregarCenarios();
-  }, [fase]);
+  }, [fase, carregarCenarios]);
 
   return {
     fase,
