@@ -3,8 +3,8 @@
 // Fase 1: produtos genéricos (antes de ter loja)
 // Fase 2: produtos da loja (quando já está vinculado)
 
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../supabaseClient';
+import React, { useState } from 'react';
+import { useArena } from '../../../hooks/useArena'; // Importamos o hook que já limpamos
 import ArenaSimulador from './ArenaSimulador';
 import ArenaProgresso from './ArenaProgresso';
 
@@ -346,105 +346,27 @@ const LABEL_DIFICULDADE = {
   dificil: 'Difícil',
 };
 
-
 // ─── COMPONENTE PRINCIPAL ──────────────────────────
 export default function ArenaVendasPainel({ consultorId, lojaId }) {
-  const [tab, setTab]                   = useState('simulador');
-  const [loading, setLoading]           = useState(true);
-  const [fase, setFase]                 = useState(1);
-  const [produtos, setProdutos]         = useState([]);
-  const [cenarios, setCenarios]         = useState([]);
+  const [tab, setTab] = useState('simulador');
   const [categoriaFiltro, setCategoriaFiltro] = useState('todos');
   const [produtoSelecionado, setProdutoSelecionado] = useState(null);
   const [cenarioSelecionado, setCenarioSelecionado] = useState(null);
-  const [acesso, setAcesso]             = useState(null);
   const [simuladorAberto, setSimuladorAberto] = useState(false);
-  const [sessaoAtual, setSessaoAtual]   = useState(null);
 
-  useEffect(() => {
-    carregarTudo();
-  }, [consultorId, lojaId]);
+  // USAMOS O HOOK AQUI - Ele já faz todo o trabalho sujo de buscar dados
+  const { 
+    fase, 
+    produtos, 
+    cenarios, 
+    acesso, 
+    loading, 
+    iniciarSimulacao: iniciarSim, 
+    sessaoAtual: sessaoDoHook,
+    refetch
+  } = useArena({ consultorId, lojaId });
 
-  const carregarTudo = async () => {
-    setLoading(true);
-    await Promise.all([
-      carregarProdutosEFase(),
-      carregarCenarios(),
-      verificarAcesso()
-    ]);
-    setLoading(false);
-  };
-
-  const carregarProdutosEFase = async () => {
-    try {
-      if (lojaId) {
-        const { data: consultor } = await supabase
-          .from('consultores')
-          .select('segmentos')
-          .eq('id', consultorId)
-          .single();
-
-        if (consultor?.segmentos?.length) {
-          const { data: prodLoja } = await supabase
-            .from('produtos')
-            .select('id, nome, descricao, preco, categoria')
-            .eq('loja_id', lojaId)
-            .eq('ativo', true)
-            .in('segmento', consultor.segmentos);
-
-          if (prodLoja?.length) {
-            setProdutos(prodLoja.map(p => ({ ...p, generico: false })));
-            setFase(2);
-            return;
-          }
-        }
-      }
-
-      const { data: gen } = await supabase
-        .from('produtos_genericos')
-        .select('id, nome, descricao, preco, categoria, segmento')
-        .eq('ativo', true);
-
-      setProdutos((gen || []).map(p => ({ ...p, generico: true })));
-      setFase(1);
-
-    } catch (err) {
-      console.error('[ArenaVendas] produtos:', err);
-    }
-  };
-
-  const carregarCenarios = async () => {
-    try {
-      const { data } = await supabase
-        .from('cenarios_simulacao')
-        .select('*')
-        .eq('ativo', true)
-        .order('fase_minima')
-        .order('dificuldade');
-
-      setCenarios(data || []);
-    } catch (err) {
-      console.error('[ArenaVendas] cenários:', err);
-    }
-  };
-
-  const verificarAcesso = async () => {
-    if (!lojaId) {
-      setAcesso({ pode: true, limite: null, usadas: 0 });
-      return;
-    }
-    try {
-      const { data, error } = await supabase.rpc('pode_iniciar_sim', {
-        p_loja_id: lojaId,
-        p_tipo: 'consultor'
-      });
-      if (error) throw error;
-      setAcesso(data);
-    } catch (err) {
-      console.error('[ArenaVendas] acesso:', err);
-    }
-  };
-
+  // Filtros de interface
   const produtosFiltrados = categoriaFiltro === 'todos'
     ? produtos
     : produtos.filter(p => p.categoria === categoriaFiltro);
@@ -457,54 +379,34 @@ export default function ArenaVendasPainel({ consultorId, lojaId }) {
   const semLimite    = limiteSims === null || limiteSims === undefined;
   const podeIniciar  = acesso?.pode && produtoSelecionado && cenarioSelecionado;
 
-  const iniciarSimulacao = async () => {
-    if (!podeIniciar) return;
+  const handleIniciar = async () => {
     try {
-      if (lojaId && fase === 2) {
-        await supabase.rpc('incrementar_sim', { p_loja_id: lojaId });
+      const sessao = await iniciarSim(produtoSelecionado, cenarioSelecionado);
+      if (sessao) {
+        setSimuladorAberto(true);
+        await refetch(); // Atualiza o contador de acesso
       }
-
-      const { data: sessao } = await supabase
-        .from('sessoes_simulacao')
-        .insert({
-          consultor_id:     consultorId,
-          loja_id:          lojaId || null,
-          produto_id:       produtoSelecionado.id,
-          produto_generico: produtoSelecionado.generico,
-          cenario_id:       cenarioSelecionado.id,
-          fase:             fase,
-          historico_conversa: [],
-          status:           'em_andamento'
-        })
-        .select()
-        .single();
-
-      setSessaoAtual(sessao);
-      setSimuladorAberto(true);
-      await verificarAcesso();
-
     } catch (err) {
-      console.error('[ArenaVendas] iniciar sim:', err);
+      console.error('[ArenaVendas] erro ao iniciar:', err);
       alert('Erro ao iniciar simulação. Tente novamente.');
     }
   };
 
   const fecharSimulador = () => {
     setSimuladorAberto(false);
-    setSessaoAtual(null);
     setProdutoSelecionado(null);
     setCenarioSelecionado(null);
-    carregarTudo();
+    refetch(); // Recarrega os dados ao fechar
   };
 
   if (loading) {
     return <div style={styles.loadingBox}>Carregando Arena de Vendas...</div>;
   }
 
-  if (simuladorAberto && sessaoAtual) {
+  if (simuladorAberto && sessaoDoHook) {
     return (
       <ArenaSimulador
-        sessao={sessaoAtual}
+        sessao={sessaoDoHook}
         produto={produtoSelecionado}
         cenario={cenarioSelecionado}
         consultorId={consultorId}
@@ -660,7 +562,7 @@ export default function ArenaVendasPainel({ consultorId, lojaId }) {
                 ...styles.btnIniciar,
                 ...(!podeIniciar ? styles.btnIniciarDisabled : {})
               }}
-              onClick={iniciarSimulacao}
+              onClick={handleIniciar}
               disabled={!podeIniciar}
             >
               {acesso?.pode ? '▶ Iniciar Simulação' : '⏳ Limite Atingido'}
