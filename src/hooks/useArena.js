@@ -20,6 +20,36 @@ export function useArena({ consultorId, lojaId }) {
   const [historico, setHistorico]   = useState([]);      // sessões anteriores
   const [acesso, setAcesso]         = useState(null);    // retorno de pode_iniciar_sim
   const [loading, setLoading]       = useState(true);
+  const [plano, setPlano]           = useState('basico'); // plano padrão para consultores sem loja
+
+  // ─── Busca o plano do consultor (se tiver loja) ────────────
+  const carregarPlano = useCallback(async () => {
+    if (!consultorId) return 'basico';
+    
+    try {
+      const { data: loja, error } = await supabase
+        .from('lojas_corrigida')
+        .select('plano, id')
+        .eq('user_id', consultorId) // O seu ID de consultor
+        .maybeSingle(); // <--- MUDANÇA CRUCIAL: Se não achar, retorna null em vez de erro 406
+
+      if (error) throw error;
+
+      if (!loja) {
+        console.log("Consultor independente: Ativando cota grátis de 5 sessões.");
+        setPlano('basico');
+        return 'basico';
+      }
+
+      setPlano(loja.plano || 'basico');
+      return loja.plano || 'basico';
+      
+    } catch (err) {
+      console.error('[useArena] erro ao carregar plano:', err);
+      setPlano('basico');
+      return 'basico';
+    }
+  }, [consultorId]);
 
   // ─── Determina fase e busca produtos ────────────
   const carregarProdutos = useCallback(async () => {
@@ -32,7 +62,7 @@ export function useArena({ consultorId, lojaId }) {
           .from('consultores')
           .select('segmentos')
           .eq('id', consultorId)
-          .single();
+          .maybeSingle();
 
         if (consultor?.segmentos?.length) {
           const { data: prodLoja } = await supabase
@@ -220,15 +250,21 @@ export function useArena({ consultorId, lojaId }) {
   useEffect(() => {
     const init = async () => {
       setLoading(true);
+      
+      // Primeiro carrega o plano do consultor
+      await carregarPlano();
+      
+      // Depois carrega os demais dados
       await Promise.all([
         carregarProdutos(),
         verificarAcesso(),
         carregarHistorico()
       ]);
+      
       setLoading(false);
     };
     if (consultorId) init();
-  }, [consultorId, lojaId, carregarProdutos, verificarAcesso, carregarHistorico]);
+  }, [consultorId, lojaId, carregarPlano, carregarProdutos, verificarAcesso, carregarHistorico]);
 
   useEffect(() => {
     carregarCenarios();
@@ -241,6 +277,7 @@ export function useArena({ consultorId, lojaId }) {
     sessaoAtual,
     historico,
     acesso,
+    plano,
     loading,
     iniciarSimulacao,
     adicionarMensagem,
