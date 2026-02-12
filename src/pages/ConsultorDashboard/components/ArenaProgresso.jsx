@@ -249,8 +249,12 @@ export default function ArenaProgresso({ consultorId }) {
   }, [consultorId]);
 
   const carregarSessoes = async () => {
+    // CLÁUSULA DE BARREIRA: Se não tiver o ID, não protocola a petição no banco
+    if (!consultorId) return; 
+
     try {
-      const { data } = await supabase
+      setLoading(true); // Garante que o estado de loading apareça enquanto busca
+      const { data, error } = await supabase
         .from('sessoes_simulacao')
         .select(`
           id,
@@ -268,14 +272,18 @@ export default function ArenaProgresso({ consultorId }) {
         .order('iniciada_em', { ascending: false })
         .limit(30);
 
+      if (error) throw error;
+
       const sessoesFiltradas = data || [];
       setSessoes(sessoesFiltradas);
 
+      // Cálculo da média de notas
       if (sessoesFiltradas.length > 0) {
         const soma = sessoesFiltradas.reduce((acc, s) => acc + (Number(s.pontuacao) || 0), 0);
         setMediaNota(Math.round((soma / sessoesFiltradas.length) * 10) / 10);
       }
 
+      // Cálculo do streak (dias consecutivos)
       const hoje = new Date();
       let streakCount = 0;
       for (let d = 0; d < 30; d++) {
@@ -292,13 +300,14 @@ export default function ArenaProgresso({ consultorId }) {
       setStreak(streakCount);
 
     } catch (err) {
-      console.error('[ArenaProgresso]', err);
+      console.error('[ArenaProgresso] erro ao carregar sessões:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
+  // Se não tiver consultorId, mostra loading também
+  if (!consultorId || loading) {
     return <div style={styles.vazio}>Carregando progresso...</div>;
   }
 
