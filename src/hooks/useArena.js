@@ -81,23 +81,22 @@ export function useArena({ consultorId, lojaId }) {
   }, [fase]);
 
   // ─── Verifica acesso (pode iniciar sim?) ──────────
-  const verificarAcesso = useCallback(async () => {
-    if (!lojaId) {
-      // Fase 1 sem loja: sempre pode usar produtos genéricos
-      setAcesso({ pode: true, limite: null, usadas: 0 });
-      return;
-    }
+  const verificarAcesso = useCallback(async (dificuldadeEscolhida = 'facil') => {
+    if (!consultorId) return;
+
     try {
       const { data, error } = await supabase.rpc('pode_iniciar_sim', {
-        p_loja_id: lojaId,
-        p_tipo: 'consultor'
+        p_consultor_id: consultorId,
+        p_loja_id: lojaId || null,
+        p_dificuldade: dificuldadeEscolhida // Enviamos a dificuldade aqui
       });
+
       if (error) throw error;
-      setAcesso(data);
+      setAcesso(data[0]);
     } catch (err) {
       console.error('[useArena] erro ao verificar acesso:', err);
     }
-  }, [lojaId]);
+  }, [consultorId, lojaId]);
 
   // ─── Busca histórico de sessões ────────────────────
   const carregarHistorico = useCallback(async () => {
