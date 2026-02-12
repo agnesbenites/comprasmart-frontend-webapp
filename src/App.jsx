@@ -101,6 +101,25 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   return children;
 };
 
+// Componente auxiliar para passar os IDs reais para a Arena
+const ArenaRouteWrapper = () => {
+  const { user } = useAuth(); // Pega o usuário logado do contexto
+  
+  return (
+    <div style={{ 
+      backgroundColor: '#f8f9fa', 
+      minHeight: '100vh',
+      padding: '20px'
+    }}>
+      {/* Aqui passamos o ID real do usuário e a loja vinculada nos metadados */}
+      <ArenaVendasPainel 
+        consultorId={user?.id} 
+        lojaId={user?.user_metadata?.loja_id || null} 
+      />
+    </div>
+  );
+};
+
 // Componente principal da aplicação
 function App() {
   return (
@@ -159,18 +178,12 @@ function App() {
           } 
         />
         
-        {/* ARENA DE VENDAS */}
+        {/* ARENA DE VENDAS - CORRIGIDO COM WRAPPER */}
         <Route 
           path="/consultor/arena" 
           element={
             <ProtectedRoute>
-              <div style={{ 
-                backgroundColor: '#f8f9fa', 
-                minHeight: '100vh',
-                padding: '20px'
-              }}>
-                <ArenaVendasPainel consultorId={"ID_DO_CONSULTOR_AQUI"} />
-              </div>
+              <ArenaRouteWrapper />
             </ProtectedRoute>
           } 
         />
