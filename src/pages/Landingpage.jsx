@@ -515,17 +515,17 @@ const Landingpage = () => {
         </Reveal>
         <div style={S.plansRow}>
           <Reveal delay={0.05}>
-            <PlanCard name="Básico" price="R$ 97" period="por mês" description="Ideal para começar" color="#1a0a2e"
+            <PlanCard name="Básico" price="R$ 99,90" period="por mês" description="Ideal para começar" color="#1a0a2e"
               features={['Até 100 produtos','Até 5 consultores','Dashboard básico','Chat com clientes','Suporte por email','Comissões configuráveis']}
               onBuy={() => handleStripe(STRIPE_URLS.BASICO)} />
           </Reveal>
           <Reveal delay={0.15}>
-            <PlanCard name="Pro" price="R$ 197" period="por mês" description="Para lojas em crescimento" color="#2f0d51" highlighted
+            <PlanCard name="Pro" price="R$ 199,90" period="por mês" description="Para lojas em crescimento" color="#2f0d51" highlighted
               features={['Produtos ilimitados','Consultores ilimitados','Dashboard avançado','Chat + videochamada','Campanhas de marketing','Múltiplas filiais','Relatórios detalhados','Suporte prioritário','API de integração']}
               onBuy={() => handleStripe(STRIPE_URLS.PRO)} />
           </Reveal>
           <Reveal delay={0.25}>
-            <PlanCard name="Enterprise" price="R$ 497" period="por mês" description="Para grandes operações" color="#1a0a2e"
+            <PlanCard name="Enterprise" price="R$ 499,00" period="por mês" description="Para grandes operações" color="#1a0a2e"
               features={['Tudo do Pro, mais:','Dashboard BI Avançado','Análise de ROI por consultor','Previsão de vendas (IA)','Análise de tendências','Relatórios customizados','Suporte premium 24/7','Gerente de conta dedicado','Treinamento personalizado','SLA garantido']}
               onBuy={() => handleStripe(STRIPE_URLS.ENTERPRISE)} />
           </Reveal>
