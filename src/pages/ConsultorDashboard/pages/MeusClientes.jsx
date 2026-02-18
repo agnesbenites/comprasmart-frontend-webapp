@@ -58,7 +58,7 @@ const MeusClientes = () => {
                         nome
                     )
                 `)
-                .eq('user_id', user.id)
+                .eq('consultor_id', user.id)
                 .eq('status_separacao', 'Retirado pelo Cliente');
 
             const { data: pedidosPeriodo } = await supabase
@@ -72,7 +72,7 @@ const MeusClientes = () => {
                         created_at
                     )
                 `)
-                .eq('user_id', user.id)
+                .eq('consultor_id', user.id)
                 .eq('status_separacao', 'Retirado pelo Cliente')
                 .gte('data_pedido', dataInicio)
                 .lte('data_pedido', dataFim);

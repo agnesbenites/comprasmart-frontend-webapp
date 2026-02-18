@@ -133,7 +133,7 @@ export const ConsultorHomePanel = () => {
                 const { data: pedidos } = await supabase
                     .from('pedidos')
                     .select('lojista_id')
-                    .eq('user_id', user.id)
+                    .eq('consultor_id', user.id)
                     .not('status_separacao', 'eq', 'Cancelado');
 
                 const lojasUnicas = new Set(pedidos?.map(p => p.lojista_id) || []);
@@ -146,7 +146,7 @@ export const ConsultorHomePanel = () => {
                 const { data: pedidosFinalizados } = await supabase
                     .from('pedidos')
                     .select('valor_total, valor_comissao, percentual_comissao')
-                    .eq('user_id', user.id)
+                    .eq('consultor_id', user.id)
                     .eq('status_separacao', 'Retirado pelo Cliente')
                     .gte('data_pedido', inicioMes.toISOString());
 
