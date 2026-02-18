@@ -59,8 +59,8 @@ const DashboardLayout = () => {
         const isActive = currentPath === rota || (rota !== "/consultor/dashboard" && currentPath.startsWith(rota));
         return `flex items-center p-3 my-1 rounded-l-full mr-4 transition-all duration-200 text-sm ${
             isActive
-            ? 'bg-blue-100 font-bold text-blue-800 border-l-4 border-blue-800'
-            : 'text-gray-600 hover:bg-blue-50 hover:text-blue-700'
+            ? 'bg-purple-100 font-bold text-[#2f0d51] border-l-4 border-[#2f0d51]'
+            : 'text-gray-600 hover:bg-purple-50 hover:text-[#9e1e8e]'
         }`;
     };
 
@@ -68,7 +68,7 @@ const DashboardLayout = () => {
         <div className="flex min-h-screen bg-gray-50">
             {/* Sidebar */}
             <div className="w-64 bg-white shadow-xl flex-shrink-0 flex flex-col">
-                <h2 className="text-2xl font-extrabold text-blue-800 p-6 text-center border-b border-gray-100">
+                <h2 className="text-2xl font-extrabold text-[#2f0d51] p-6 text-center border-b border-gray-100">
                     Autônomo
                 </h2>
                 <nav className="mt-4 flex-1">
@@ -95,12 +95,12 @@ const DashboardLayout = () => {
             <main className="flex-grow flex flex-col w-[calc(100%-16rem)] overflow-x-hidden">
                 <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-10">
                     <div>
-                        <h1 className="text-xl font-semibold text-blue-800">Painel do Consultor</h1>
+                        <h1 className="text-xl font-semibold text-[#2f0d51]">Painel do Consultor</h1>
                         <p className="text-sm text-gray-500">Bem-vindo(a), {user?.nome || 'Agnes Consultora'}</p>
                     </div>
                     <Link
                         to="/consultor/dashboard/profile"
-                        className="flex items-center gap-2 p-2 px-4 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
+                        className="flex items-center gap-2 p-2 px-4 rounded-full bg-purple-50 text-[#9e1e8e] hover:bg-purple-100 transition-colors"
                     >
                         <span className="text-lg">👤</span>
                         <span className="text-sm font-medium">Meu Perfil</span>
@@ -189,7 +189,7 @@ export const ConsultorHomePanel = () => {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="text-center">
-                    <div className="animate-spin text-blue-800 text-4xl mb-4">🔄</div>
+                    <div className="animate-spin text-[#2f0d51] text-4xl mb-4">🔄</div>
                     <p className="text-gray-600 font-medium">Carregando dados do consultor...</p>
                 </div>
             </div>
@@ -215,7 +215,7 @@ export const ConsultorHomePanel = () => {
 
                     <button 
                         onClick={() => window.location.href = '/entrar'}
-                        className="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700"
+                        className="bg-[#9e1e8e] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#7d1870]"
                     >
                         Fazer Login Novamente
                     </button>
@@ -225,7 +225,7 @@ export const ConsultorHomePanel = () => {
     }
 
     const atalhos = [
-        { titulo: "▶️ Próximo da Fila", descricao: "Iniciar um novo atendimento", cor: "bg-blue-500", rota: "/consultor/dashboard/fila" },
+        { titulo: "▶️ Próximo da Fila", descricao: "Iniciar um novo atendimento", cor: "bg-purple-500", rota: "/consultor/dashboard/fila" },
         { titulo: "🔄 Status Venda", descricao: "Acompanhar carrinho do cliente", cor: "bg-purple-500", rota: "/consultor/dashboard/status-venda" },
         { titulo: "💸 Sacar Comissão", descricao: "Ver saldo e solicitar saque", cor: "bg-yellow-500", rota: "/consultor/dashboard/analytics" },
         { titulo: "💬 Chat Ativo", descricao: "Falar com clientes", cor: "bg-teal-500", rota: "/consultor/dashboard/chat" }
@@ -235,7 +235,7 @@ export const ConsultorHomePanel = () => {
         <div className="max-w-7xl mx-auto">
             <div className="bg-white p-6 rounded-xl shadow-lg mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center">
                 <div className="mb-4 lg:mb-0">
-                    <h1 className="text-3xl font-bold text-blue-800 mb-1">
+                    <h1 className="text-3xl font-bold text-[#2f0d51] mb-1">
                         👋 Olá, {user?.nome || user?.email || 'Agnes Consultora'}!
                     </h1>
                     <p className="text-gray-600 mb-4">
@@ -247,7 +247,7 @@ export const ConsultorHomePanel = () => {
                         </h3>
                         <button 
                             onClick={() => navigate("/consultor/dashboard/lojas")}
-                            className="text-sm bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                            className="text-sm bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-[#9e1e8e]"
                         >
                             Ver Detalhes das Lojas
                         </button>
@@ -283,9 +283,9 @@ export const ConsultorHomePanel = () => {
                     <div className="bg-white p-6 rounded-xl shadow-md mb-6">
                         <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Performance</h3>
                         <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-blue-50 p-4 rounded-lg">
+                            <div className="bg-purple-50 p-4 rounded-lg">
                                 <p className="text-sm text-gray-600">ATENDIMENTOS (MÊS)</p>
-                                <p className="text-3xl font-bold text-blue-600">{consultorInfo.atendimentosMes}</p>
+                                <p className="text-3xl font-bold text-[#bb25a6]">{consultorInfo.atendimentosMes}</p>
                             </div>
                             <div className="bg-yellow-50 p-4 rounded-lg">
                                 <p className="text-sm text-gray-600">AVALIAÇÃO MÉDIA</p>
