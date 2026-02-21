@@ -64,7 +64,7 @@ const AdminManutencao = () => {
     e.preventDefault();
 
     if (!formManutencao.titulo || !formManutencao.dataInicio) {
-      alert('❌ Preencha todos os campos obrigatórios!');
+      alert(' Preencha todos os campos obrigatórios!');
       return;
     }
 
@@ -86,7 +86,7 @@ const AdminManutencao = () => {
 
       if (error) throw error;
 
-      alert('✅ Manutenção programada com sucesso!');
+      alert(' Manutenção programada com sucesso!');
       
       // Limpar formulário
       setFormManutencao({
@@ -102,7 +102,7 @@ const AdminManutencao = () => {
 
     } catch (error) {
       console.error('Erro ao programar manutenção:', error);
-      alert('❌ Erro ao programar manutenção');
+      alert(' Erro ao programar manutenção');
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ const AdminManutencao = () => {
     e.preventDefault();
 
     if (!formAviso.titulo || !formAviso.mensagem) {
-      alert('❌ Preencha todos os campos obrigatórios!');
+      alert(' Preencha todos os campos obrigatórios!');
       return;
     }
 
@@ -141,7 +141,7 @@ const AdminManutencao = () => {
         await enviarEmailsAvisos();
       }
 
-      alert('✅ Aviso enviado com sucesso!');
+      alert(' Aviso enviado com sucesso!');
       
       // Limpar formulário
       setFormAviso({
@@ -157,7 +157,7 @@ const AdminManutencao = () => {
 
     } catch (error) {
       console.error('Erro ao enviar aviso:', error);
-      alert('❌ Erro ao enviar aviso');
+      alert(' Erro ao enviar aviso');
     } finally {
       setLoading(false);
     }
@@ -193,12 +193,12 @@ const AdminManutencao = () => {
 
       if (error) throw error;
 
-      alert('✅ Aviso desativado!');
+      alert(' Aviso desativado!');
       carregarDados();
 
     } catch (error) {
       console.error('Erro ao desativar aviso:', error);
-      alert('❌ Erro ao desativar aviso');
+      alert(' Erro ao desativar aviso');
     }
   };
 
@@ -213,12 +213,12 @@ const AdminManutencao = () => {
 
       if (error) throw error;
 
-      alert('✅ Manutenção cancelada!');
+      alert(' Manutenção cancelada!');
       carregarDados();
 
     } catch (error) {
       console.error('Erro ao cancelar manutenção:', error);
-      alert('❌ Erro ao cancelar manutenção');
+      alert(' Erro ao cancelar manutenção');
     }
   };
 
@@ -359,8 +359,8 @@ const AdminManutencao = () => {
                 >
                   <option value="info">ℹ️ Informação</option>
                   <option value="warning">⚠️ Aviso</option>
-                  <option value="error">❌ Erro/Crítico</option>
-                  <option value="success">✅ Sucesso</option>
+                  <option value="error"> Erro/Crítico</option>
+                  <option value="success"> Sucesso</option>
                 </select>
               </div>
 
@@ -371,9 +371,9 @@ const AdminManutencao = () => {
                   onChange={(e) => setFormAviso({...formAviso, destino: e.target.value})}
                   style={styles.input}
                 >
-                  <option value="todos">👥 Todos os usuários</option>
-                  <option value="lojistas">🏪 Apenas Lojistas</option>
-                  <option value="consultores">👤 Apenas Consultores</option>
+                  <option value="todos"> Todos os usuários</option>
+                  <option value="lojistas"> Apenas Lojistas</option>
+                  <option value="consultores"> Apenas Consultores</option>
                 </select>
               </div>
             </div>
@@ -427,7 +427,7 @@ const AdminManutencao = () => {
                       ...styles.statusBadge,
                       backgroundColor: manutencao.status === 'programada' ? '#fff3cd' : '#f8d7da',
                     }}>
-                      {manutencao.status === 'programada' ? '⏳ Programada' : '❌ Cancelada'}
+                      {manutencao.status === 'programada' ? ' Programada' : ' Cancelada'}
                     </span>
                     {manutencao.status === 'programada' && (
                       <button
@@ -450,7 +450,7 @@ const AdminManutencao = () => {
 
       {/* Avisos Ativos */}
       <div style={styles.section}>
-        <h3 style={styles.sectionTitle}>🔔 Avisos Ativos</h3>
+        <h3 style={styles.sectionTitle}> Avisos Ativos</h3>
         <div style={styles.listContainer}>
           {avisos.length === 0 ? (
             <p style={styles.emptyText}>Nenhum aviso ativo</p>
@@ -487,8 +487,8 @@ const getTipoIcon = (tipo) => {
   const icons = {
     info: 'ℹ️',
     warning: '⚠️',
-    error: '❌',
-    success: '✅',
+    error: '',
+    success: '',
   };
   return icons[tipo] || 'ℹ️';
 };

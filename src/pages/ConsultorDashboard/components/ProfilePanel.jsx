@@ -2,14 +2,17 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaFileAlt, FaUpload, FaEdit, FaSave, FaTimes, FaPlus, FaTrash } from 'react-icons/fa';
 import { supabase } from '../../../supabaseClient';
 
-const CONSULTOR_PRIMARY = '#2c5aa0';
+const CONSULTOR_PRIMARY = '#2f0d51';
+const BASE_ICON = "/img/kaslee_icon";
+const Icon = ({ name, size = 20, style = {} }) => (
+  <img src={`${BASE_ICON}/${name}`} alt={name} style={{ width: size, height: size, ...style }} />
+);
 
 // Segmentos disponíveis com ícones
 const SEGMENTOS_DISPONIVEIS = [
-  { id: 'Smartphones', nome: 'Smartphones', icon: '📱', cor: '#3498db' },
+  { id: 'Smartphones', nome: 'Smartphones', icon: '', cor: '#bb25a6' },
   { id: 'Notebooks', nome: 'Notebooks', icon: '💻', cor: '#9b59b6' },
   { id: 'TVs', nome: 'TVs', icon: '📺', cor: '#e74c3c' },
   { id: 'Informática', nome: 'Informática', icon: '🖥️', cor: '#2f0d51' },
@@ -17,8 +20,8 @@ const SEGMENTOS_DISPONIVEIS = [
   { id: 'Áudio', nome: 'Áudio', icon: '🎧', cor: '#16a085' },
   { id: 'Móveis', nome: 'Móveis', icon: '🛋️', cor: '#8e44ad' },
   { id: 'Decoração', nome: 'Decoração', icon: '🪴', cor: '#bb25a6' },
-  { id: 'Iluminação', nome: 'Iluminação', icon: '💡', cor: '#f39c12' },
-  { id: 'Eletrodomésticos', nome: 'Eletrodomésticos', icon: '🏠', cor: '#2f0d51' },
+  { id: 'Iluminação', nome: 'Iluminação', icon: '', cor: '#f39c12' },
+  { id: 'Eletrodomésticos', nome: 'Eletrodomésticos', icon: '', cor: '#2f0d51' },
   { id: 'Moda', nome: 'Moda', icon: '👔', cor: '#c0392b' },
   { id: 'Beleza', nome: 'Beleza', icon: '💄', cor: '#f53342' },
   { id: 'Esportes', nome: 'Esportes', icon: '⚽', cor: '#ff5722' },
@@ -152,11 +155,11 @@ const ProfilePanel = () => {
 
       setPerfil({...editedPerfil});
       setIsEditing(false);
-      alert('✅ Perfil atualizado com sucesso!');
+      alert(' Perfil atualizado com sucesso!');
       
     } catch (error) {
       console.error('Erro ao salvar perfil:', error);
-      alert('❌ Erro ao salvar perfil. Tente novamente.');
+      alert(' Erro ao salvar perfil. Tente novamente.');
     }
   };
 
@@ -180,12 +183,12 @@ const ProfilePanel = () => {
     const allowedTypes = ['application/pdf', 'application/msword', 
                          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     if (!allowedTypes.includes(file.type)) {
-      alert('❌ Formato inválido. Use PDF, DOC ou DOCX.');
+      alert(' Formato inválido. Use PDF, DOC ou DOCX.');
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert('❌ Arquivo muito grande. Máximo 5MB.');
+      alert(' Arquivo muito grande. Máximo 5MB.');
       return;
     }
 
@@ -228,11 +231,11 @@ const ProfilePanel = () => {
         dataUploadCurriculo: new Date().toISOString(),
       });
 
-      alert('✅ Currículo enviado com sucesso!');
+      alert(' Currículo enviado com sucesso!');
       
     } catch (error) {
       console.error('Erro ao enviar currículo:', error);
-      alert('❌ Erro ao enviar currículo. Tente novamente.');
+      alert(' Erro ao enviar currículo. Tente novamente.');
     } finally {
       setUploadingCurriculo(false);
     }
@@ -260,13 +263,13 @@ const ProfilePanel = () => {
   // NOVO: Obter dados do segmento
   const getSegmentoData = (segmentoId) => {
     return SEGMENTOS_DISPONIVEIS.find(s => s.id === segmentoId) || 
-      { id: segmentoId, nome: segmentoId, icon: '📦', cor: '#95a5a6' };
+      { id: segmentoId, nome: segmentoId, icon: '', cor: '#95a5a6' };
   };
 
   if (loading) {
     return (
       <div style={styles.loadingContainer}>
-        <div style={styles.loadingSpinner}>🔄</div>
+        <div style={styles.loadingSpinner}><Icon name="carregando.png" size={48} /></div>
         <p>Carregando perfil...</p>
       </div>
     );
@@ -290,19 +293,19 @@ const ProfilePanel = () => {
           {!isEditing ? (
             <>
               <button onClick={handleEdit} style={styles.editButton}>
-                <FaEdit /> Editar Perfil
+                <Icon name="user.png" size={16} /> Editar Perfil
               </button>
               <button onClick={handleLogout} style={styles.logoutButton}>
-                🚪 Sair
+                <Icon name="logout.png" size={16} /> Sair
               </button>
             </>
           ) : (
             <>
               <button onClick={handleSave} style={styles.saveButton}>
-                <FaSave /> Salvar
+                <Icon name="atualizar.svg" size={16} /> Salvar
               </button>
               <button onClick={handleCancel} style={styles.cancelButton}>
-                <FaTimes /> Cancelar
+                <Icon name="excluir.svg" size={16} /> Cancelar
               </button>
             </>
           )}
@@ -312,13 +315,13 @@ const ProfilePanel = () => {
       {/* NOVO: Card de Segmentos Atendidos - DESTAQUE */}
       <div style={styles.segmentosDestaque}>
         <div style={styles.segmentosHeader}>
-          <h2 style={styles.segmentosTitle}>🎯 Segmentos Atendidos</h2>
+          <h2 style={styles.segmentosTitle}><Icon name="loja-consultor.png" size={22} style={{marginRight:8, verticalAlign:'middle'}} />Segmentos Atendidos</h2>
           {isEditing && (
             <button 
               onClick={() => setShowAddSegmento(!showAddSegmento)}
               style={styles.addSegmentoBtn}
             >
-              <FaPlus /> Adicionar
+              <Icon name="usuário-incluído.svg" size={16} /> Adicionar
             </button>
           )}
         </div>
@@ -374,7 +377,7 @@ const ProfilePanel = () => {
                       style={styles.removeSegmentoBtn}
                       title="Remover segmento"
                     >
-                      <FaTrash size={12} />
+                      <Icon name="excluir.svg" size={12} />
                     </button>
                   )}
                 </div>
@@ -389,7 +392,7 @@ const ProfilePanel = () => {
         {/* Coluna Esquerda - Dados Pessoais */}
         <div style={styles.leftColumn}>
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>📋 Dados Pessoais</h3>
+            <h3 style={styles.sectionTitle}><Icon name="dados-pessoais.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Dados Pessoais</h3>
             <div style={styles.infoGrid}>
               <InfoField
                 label="Nome Completo"
@@ -431,7 +434,7 @@ const ProfilePanel = () => {
           </div>
 
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>📍 Endereço</h3>
+            <h3 style={styles.sectionTitle}><Icon name="endereco.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Endereço</h3>
             <div style={styles.infoGrid}>
               <InfoField
                 label="Rua"
@@ -461,7 +464,7 @@ const ProfilePanel = () => {
           </div>
 
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>💬 Biografia</h3>
+            <h3 style={styles.sectionTitle}><Icon name="biografia.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Biografia</h3>
             {isEditing ? (
               <textarea
                 value={editedPerfil.bio}
@@ -479,12 +482,12 @@ const ProfilePanel = () => {
         {/* Coluna Direita - Currículo e Estatísticas */}
         <div style={styles.rightColumn}>
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>📄 Currículo</h3>
+            <h3 style={styles.sectionTitle}><Icon name="curriculo.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Currículo</h3>
             
             {perfil.curriculoUrl ? (
               <div style={styles.curriculoCard}>
                 <div style={styles.curriculoIcon}>
-                  <FaFileAlt size={40} color={CONSULTOR_PRIMARY} />
+                  <Icon name="curriculo.png" size={40} />
                 </div>
                 <div style={styles.curriculoInfo}>
                   <p style={styles.curriculoNome}>{perfil.curriculoNome}</p>
@@ -504,7 +507,7 @@ const ProfilePanel = () => {
               </div>
             ) : (
               <div style={styles.noCurriculoCard}>
-                <FaFileAlt size={40} color="#ccc" />
+              <Icon name="curriculo.png" size={40} style={{ opacity: 0.3 }} />
                 <p style={styles.noCurriculoText}>Nenhum currículo enviado</p>
               </div>
             )}
@@ -522,7 +525,7 @@ const ProfilePanel = () => {
               disabled={uploadingCurriculo}
               style={styles.uploadButton}
             >
-              <FaUpload />
+              <Icon name="adicionar-foto.svg" size={16} />
               {uploadingCurriculo ? 'Enviando...' : 'Substituir Currículo'}
             </button>
 
@@ -532,12 +535,12 @@ const ProfilePanel = () => {
           </div>
 
           <div style={styles.section}>
-            <h3 style={styles.sectionTitle}>📊 Estatísticas Rápidas</h3>
+            <h3 style={styles.sectionTitle}><Icon name="grafico-análise.svg" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Estatísticas Rápidas</h3>
             <div style={styles.statsGrid}>
-              <StatCard icon="🛒" label="Vendas no Mês" value="156" />
-              <StatCard icon="💰" label="Comissão Acumulada" value="R$ 6.240" />
-              <StatCard icon="⭐" label="Avaliação Média" value="4.8" />
-              <StatCard icon="🏪" label="Lojas Ativas" value={perfil.segmentosAtendidos.length} />
+              <StatCard icon="vendas.png" label="Vendas no Mês" value="156" />
+              <StatCard icon="comissoes.png" label="Comissão Acumulada" value="R$ 6.240" />
+              <StatCard icon="star.png" label="Avaliação Média" value="4.8" />
+              <StatCard icon="loja-consultor.png" label="Lojas Ativas" value={perfil.segmentosAtendidos.length} />
             </div>
           </div>
         </div>
@@ -566,7 +569,7 @@ const InfoField = ({ label, value, isEditing, onChange }) => (
 // Componente auxiliar para cards de estatística
 const StatCard = ({ icon, label, value }) => (
   <div style={styles.statCard}>
-    <span style={styles.statIcon}>{icon}</span>
+    <Icon name={icon} size={36} style={{ marginBottom: 10 }} />
     <p style={styles.statLabel}>{label}</p>
     <p style={styles.statValue}>{value}</p>
   </div>

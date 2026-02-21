@@ -141,7 +141,7 @@ const LojistaRelatoriosPro = () => {
                 <div style={styles.metricsGrid}>
                     {/* MÉTRICA 1: DINHEIRO SALVO */}
                     <div style={styles.metricCard}>
-                        <div style={styles.metricIcon}>💰</div>
+                        <div style={styles.metricIcon}></div>
                         <div style={styles.metricContent}>
                             <div style={styles.metricLabel}>Dinheiro Salvo</div>
                             <div style={styles.metricValue}>
@@ -183,7 +183,7 @@ const LojistaRelatoriosPro = () => {
 
                     {/* MÉTRICA 4: AUMENTO DE TICKET MÉDIO */}
                     <div style={styles.metricCard}>
-                        <div style={styles.metricIcon}>📈</div>
+                        <div style={styles.metricIcon}></div>
                         <div style={styles.metricContent}>
                             <div style={styles.metricLabel}>Aumento de Ticket Médio</div>
                             <div style={styles.metricValue}>
@@ -199,7 +199,7 @@ const LojistaRelatoriosPro = () => {
 
                 {/* INSIGHTS */}
                 <div style={styles.insightBox}>
-                    <h3 style={styles.insightTitle}>💡 Insights</h3>
+                    <h3 style={styles.insightTitle}> Insights</h3>
                     <ul style={styles.insightList}>
                         <li style={styles.insightItem}>
                             <strong>Sinergia Perfeita:</strong> Seus vendedores captam leads e os consultores 
@@ -222,7 +222,7 @@ const LojistaRelatoriosPro = () => {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>📊 Relatórios Avançados</h1>
+                <h1 style={styles.title}> Relatórios Avançados</h1>
                 <span style={styles.planBadge}>PLANO PRO</span>
             </div>
 

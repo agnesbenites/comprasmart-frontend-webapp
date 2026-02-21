@@ -8,10 +8,10 @@ import {
     regenerarResumoIA,
     getMesAtual,
     getMesAnterior,
-    exportarRelatorioPDFIA, // ✅ Importado!
-    downloadRelatorioPDFIA, // ✅ Função utilitária
-    visualizarRelatorioPDFIA, // ✅ Para visualização
-    formatarMesParaExibicao // ✅ Utilitário
+    exportarRelatorioPDFIA, //  Importado!
+    downloadRelatorioPDFIA, //  Função utilitária
+    visualizarRelatorioPDFIA, //  Para visualização
+    formatarMesParaExibicao //  Utilitário
 } from "../../../api/relatorioIA.service";
 
 const STRIPE_PURCHASE_URL = "https://buy.stripe.com/14AeVdgpWemMaBMb0RgQE07";
@@ -178,12 +178,12 @@ const LojistaRelatoriosBasic = () => {
         return headers + '\n' + rows;
     };
 
-    // ✅ HANDLE EXPORTAR - VERSÃO TURBINADA COM PDF
+    //  HANDLE EXPORTAR - VERSÃO TURBINADA COM PDF
     const handleExportarClick = async () => {
         setExportando(true);
 
         try {
-            // ✅ SE FOR PDF, USA O BACKEND NOVO COM IA
+            //  SE FOR PDF, USA O BACKEND NOVO COM IA
             if (formatoExportacao === "PDF") {
                 // Usar a função utilitária para download automático
                 await downloadRelatorioPDFIA({
@@ -197,7 +197,7 @@ const LojistaRelatoriosBasic = () => {
                 return;
             }
 
-            // 📊 EXPORTAÇÃO CSV/EXCEL (lógica existente)
+            //  EXPORTAÇÃO CSV/EXCEL (lógica existente)
             let exportData = [];
             let filename = `relatorio_${tipoExportacao}_${periodo}_${new Date().getTime()}.csv`;
 
@@ -251,7 +251,7 @@ const LojistaRelatoriosBasic = () => {
         }
     };
 
-    // ✅ HANDLE VISUALIZAR PDF - Botão específico para visualização
+    //  HANDLE VISUALIZAR PDF - Botão específico para visualização
     const handleVisualizarPDF = async () => {
         try {
             await visualizarRelatorioPDFIA({
@@ -264,7 +264,7 @@ const LojistaRelatoriosBasic = () => {
         }
     };
 
-    // 🤖 ANÁLISE COM IA
+    //  ANÁLISE COM IA
     const handleGerarResumoIA = async (forcar = false) => {
         if (!lojaId) return;
         setLoadingIA(true);
@@ -391,7 +391,7 @@ const LojistaRelatoriosBasic = () => {
                         rel="noopener noreferrer"
                         style={styles.stripeButton}
                     >
-                        💳 Comprar Dias de Campanha Agora
+                         Comprar Dias de Campanha Agora
                     </a>
                 </div>
             </div>
@@ -402,7 +402,7 @@ const LojistaRelatoriosBasic = () => {
         const remainingDays = boughtCampaign.remainingDays;
         const descontoTexto = configCampanha.descontoAtivo ? boughtCampaign.baseDiscount + "% Ativo" : "NÃO";
         const cupomTexto = configCampanha.cupomAtivo ? "SIM" : "NÃO";
-        const tituloCard = configCampanha.nome ? "✅ Campanha Ativa" : "⚙️ Configurar Campanha";
+        const tituloCard = configCampanha.nome ? " Campanha Ativa" : "⚙️ Configurar Campanha";
         
         return (
             <div style={styles.card}>
@@ -491,11 +491,11 @@ const LojistaRelatoriosBasic = () => {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>📊 Relatórios e Campanhas</h1>
+                <h1 style={styles.title}> Relatórios e Campanhas</h1>
                 <span style={styles.planBadge}>PLANO BASIC</span>
             </div>
            
-            {/* ✅ SEÇÃO DE EXPORTAÇÃO */}
+            {/*  SEÇÃO DE EXPORTAÇÃO */}
             <div style={styles.exportSection}>
                 <div style={styles.exportFilters}>
                     <div style={styles.filterGroup}>
@@ -521,11 +521,11 @@ const LojistaRelatoriosBasic = () => {
                             disabled={loading}
                             style={styles.select}
                         >
-                            <option value="TUDO">📦 Todos os Dados</option>
-                            <option value="VENDEDORES">👥 Vendedores</option>
+                            <option value="TUDO"> Todos os Dados</option>
+                            <option value="VENDEDORES"> Vendedores</option>
                             <option value="CONSULTORES">🤝 Consultores</option>
                             <option value="CAMPANHAS">📢 Campanhas</option>
-                            <option value="VENDAS">💰 Vendas</option>
+                            <option value="VENDAS"> Vendas</option>
                         </select>
                     </div>
 
@@ -537,9 +537,9 @@ const LojistaRelatoriosBasic = () => {
                             disabled={loading}
                             style={styles.select}
                         >
-                            <option value="CSV">📄 CSV</option>
-                            <option value="EXCEL">📊 Excel (Em breve)</option>
-                            <option value="PDF">📕 PDF com IA</option> {/* ✅ Atualizado! */}
+                            <option value="CSV"> CSV</option>
+                            <option value="EXCEL"> Excel (Em breve)</option>
+                            <option value="PDF">📕 PDF com IA</option> {/*  Atualizado! */}
                         </select>
                     </div>
 
@@ -554,7 +554,7 @@ const LojistaRelatoriosBasic = () => {
                         }}
                     >
                         {exportando 
-                            ? '⏳ Exportando...' 
+                            ? ' Exportando...' 
                             : formatoExportacao === "PDF" 
                                 ? '📕 Exportar PDF com IA' 
                                 : '📥 Exportar Relatório'
@@ -563,12 +563,12 @@ const LojistaRelatoriosBasic = () => {
                 </div>
             </div>
 
-            {/* 🤖 ANÁLISE INTELIGENTE COM IA */}
+            {/*  ANÁLISE INTELIGENTE COM IA */}
             <div style={styles.exportSection}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: resumoIA ? 16 : 0, flexWrap: 'wrap', gap: 12 }}>
                     <div>
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1e293b', margin: 0 }}>
-                            🤖 Análise Inteligente
+                             Análise Inteligente
                         </h3>
                         <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0' }}>
                             IA analisa seus dados e gera recomendações práticas
@@ -588,7 +588,7 @@ const LojistaRelatoriosBasic = () => {
                                     opacity: (loadingIA || loading) ? 0.6 : 1,
                                 }}
                             >
-                                ✨ Gerar Análise do Mês
+                                 Gerar Análise do Mês
                             </button>
                         )}
                         {resumoIA && (
@@ -602,7 +602,7 @@ const LojistaRelatoriosBasic = () => {
                                     cursor: 'pointer', opacity: loadingIA ? 0.6 : 1,
                                 }}
                             >
-                                🔄 Regenerar
+                                 Regenerar
                             </button>
                         )}
                     </div>
@@ -629,7 +629,7 @@ const LojistaRelatoriosBasic = () => {
                     </div>
                 )}
 
-                {/* ✅ Resumo IA COM BOTÃO DE PDF DIRETO */}
+                {/*  Resumo IA COM BOTÃO DE PDF DIRETO */}
                 {resumoIA && !loadingIA && (
                     <div>
                         <div style={{
@@ -650,7 +650,7 @@ const LojistaRelatoriosBasic = () => {
                                     background: '#f3eef8', color: '#2f0d51', padding: '2px 8px',
                                     borderRadius: 10, fontSize: '0.75rem', fontWeight: 600,
                                 }}>
-                                    {fonteIA === 'cache' ? '📦 Cache' : fonteIA === 'ia-regenerado' ? '🔄 Regenerado' : '✨ Novo'}
+                                    {fonteIA === 'cache' ? ' Cache' : fonteIA === 'ia-regenerado' ? ' Regenerado' : ' Novo'}
                                 </span>
                                 {geradoEmIA && (
                                     <span style={{ fontSize: '0.75rem', color: '#999' }}>
@@ -659,7 +659,7 @@ const LojistaRelatoriosBasic = () => {
                                 )}
                             </div>
                             
-                            {/* ✅ BOTÃO DE DOWNLOAD DIRETO DO RESUMO EM PDF */}
+                            {/*  BOTÃO DE DOWNLOAD DIRETO DO RESUMO EM PDF */}
                             <div style={{ display: 'flex', gap: 8 }}>
                                 <button
                                     onClick={handleVisualizarPDF}
@@ -720,7 +720,7 @@ const LojistaRelatoriosBasic = () => {
             {!loading && (
                 <div>
                     <div style={styles.grid}>
-                        {renderPerformanceTable("👥 Vendedores Próprios", dataRelatorios.vendedores, false)}
+                        {renderPerformanceTable(" Vendedores Próprios", dataRelatorios.vendedores, false)}
                         {renderPerformanceTable("🤝 Consultores da Plataforma", dataRelatorios.consultores, true)}
                     </div>
 
@@ -730,7 +730,7 @@ const LojistaRelatoriosBasic = () => {
                 </div>
             )}
 
-            {/* ✅ Animação do spinner */}
+            {/*  Animação do spinner */}
             <style dangerouslySetInnerHTML={{__html: `
                 @keyframes spin {
                     0% { transform: rotate(0deg); }

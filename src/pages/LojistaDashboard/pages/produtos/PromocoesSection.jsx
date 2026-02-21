@@ -33,7 +33,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
     precoTotal: '',
     quantidadeCompra: '',
     quantidadeLeva: '',
-    // ✅ NOVOS CAMPOS MARKETING
+    //  NOVOS CAMPOS MARKETING
     marketingDestaque: false,
     marketingLayout: 'card-grande',
     marketingLayoutPadrao: false,
@@ -83,9 +83,9 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ VALIDAÇÃO DE PLANO PARA MARKETING
+    //  VALIDAÇÃO DE PLANO PARA MARKETING
     if (formData.marketingDestaque && planoLoja === 'basic') {
-      alert('❌ O plano Basic não permite destaque no app mobile. Faça upgrade para Pro ou Enterprise!');
+      alert(' O plano Basic não permite destaque no app mobile. Faça upgrade para Pro ou Enterprise!');
       return;
     }
 
@@ -98,7 +98,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
         const prodDesconto = produtos.find(p => p.id === formData.produtoDescontoId);
 
         if (!prodPrincipal || !prodDesconto) {
-          alert('❌ Selecione os produtos');
+          alert(' Selecione os produtos');
           return;
         }
 
@@ -125,7 +125,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
         const produto = produtos.find(p => p.id === formData.produtoId);
 
         if (!produto) {
-          alert('❌ Selecione o produto');
+          alert(' Selecione o produto');
           return;
         }
 
@@ -145,7 +145,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
         const produto = produtos.find(p => p.id === formData.produtoId);
 
         if (!produto) {
-          alert('❌ Selecione o produto');
+          alert(' Selecione o produto');
           return;
         }
 
@@ -169,7 +169,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
         lojas_disponiveis: formData.lojasDisponiveis.length > 0 ? formData.lojasDisponiveis : null,
         config: config,
         criado_por: userId,
-        // ✅ NOVOS CAMPOS MARKETING
+        //  NOVOS CAMPOS MARKETING
         marketing_destaque: formData.marketingDestaque,
         marketing_layout: formData.marketingDestaque ? formData.marketingLayout : null,
         marketing_layout_padrao: formData.marketingLayoutPadrao,
@@ -182,14 +182,14 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
           .eq('id', editando.id);
 
         if (error) throw error;
-        alert('✅ Promoção atualizada!');
+        alert(' Promoção atualizada!');
       } else {
         const { error } = await supabase
           .from('combos')
           .insert([payload]);
 
         if (error) throw error;
-        alert('✅ Promoção criada!');
+        alert(' Promoção criada!');
       }
 
       setShowModal(false);
@@ -200,7 +200,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
 
     } catch (error) {
       console.error('[Promoções] Erro:', error);
-      alert('❌ Erro ao salvar promoção');
+      alert(' Erro ao salvar promoção');
     }
   };
 
@@ -214,7 +214,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
       if (error) throw error;
       carregarDados();
     } catch (error) {
-      alert('❌ Erro ao alterar status');
+      alert(' Erro ao alterar status');
     }
   };
 
@@ -228,10 +228,10 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
         .eq('id', promocaoId);
 
       if (error) throw error;
-      alert('✅ Promoção excluída!');
+      alert(' Promoção excluída!');
       carregarDados();
     } catch (error) {
-      alert('❌ Erro ao excluir');
+      alert(' Erro ao excluir');
     }
   };
 
@@ -257,7 +257,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
       precoTotal: promocao.config.preco_total || '',
       quantidadeCompra: promocao.config.quantidade_compra || '',
       quantidadeLeva: promocao.config.quantidade_leva || '',
-      // ✅ CARREGAR CAMPOS MARKETING
+      //  CARREGAR CAMPOS MARKETING
       marketingDestaque: promocao.marketing_destaque || false,
       marketingLayout: promocao.marketing_layout || 'card-grande',
       marketingLayoutPadrao: promocao.marketing_layout_padrao || false,
@@ -297,9 +297,9 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
   ==================================== */
   const getTipoTexto = (tipo) => {
     const tipos = {
-      'produto_desconto': '🎁 Compre X, Y sai mais barato',
-      'quantidade_preco': '📦 X unidades por R$ Y',
-      'compre_leve': '🎉 Compre X leve Y',
+      'produto_desconto': ' Compre X, Y sai mais barato',
+      'quantidade_preco': ' X unidades por R$ Y',
+      'compre_leve': ' Compre X leve Y',
     };
     return tipos[tipo] || tipo;
   };
@@ -324,7 +324,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
      RENDER
   ==================================== */
   if (loading) {
-    return <div style={styles.loading}>⏳ Carregando promoções...</div>;
+    return <div style={styles.loading}> Carregando promoções...</div>;
   }
 
   return (
@@ -332,7 +332,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
       <div style={styles.header}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h3 style={styles.title}>🎁 Promoções e Ofertas</h3>
+            <h3 style={styles.title}> Promoções e Ofertas</h3>
             <InfoButton title="Como funcionam as promoções?">
               <p style={{ margin: '8px 0', fontSize: '0.85rem' }}>
                 <strong>Cadastre produtos primeiro</strong><br />
@@ -378,7 +378,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
       {/* Lista de promoções */}
       {promocoes.length === 0 ? (
         <div style={styles.empty}>
-          <span style={{ fontSize: '4rem' }}>🎁</span>
+          <span style={{ fontSize: '4rem' }}></span>
           <h4 style={{ marginTop: '20px' }}>Nenhuma promoção cadastrada</h4>
           <p style={{ color: '#666' }}>Crie promoções para impulsionar suas vendas!</p>
         </div>
@@ -391,7 +391,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                   <strong style={styles.cardTitle}>{promocao.nome}</strong>
                   <span style={styles.badge}>{getTipoTexto(promocao.tipo_combo)}</span>
                   
-                  {/* ✅ BADGE EM DESTAQUE */}
+                  {/*  BADGE EM DESTAQUE */}
                   {promocao.marketing_destaque && (
                     <>
                       <br />
@@ -410,7 +410,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                         fontSize: '0.7rem',
                         color: '#6f42c1',
                       }}>
-                        Layout: {promocao.marketing_layout === 'card-grande' ? '🎨 Card Grande' : '📱 Banner'}
+                        Layout: {promocao.marketing_layout === 'card-grande' ? '🎨 Card Grande' : ' Banner'}
                       </small>
                     </>
                   )}
@@ -420,7 +420,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                   backgroundColor: promocao.ativo ? '#d4edda' : '#f8d7da',
                   color: promocao.ativo ? '#155724' : '#721c24',
                 }}>
-                  {promocao.ativo ? '✅ Ativa' : '⏸️ Pausada'}
+                  {promocao.ativo ? ' Ativa' : '⏸️ Pausada'}
                 </span>
               </div>
 
@@ -432,7 +432,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
 
               {promocao.quantidade_disponivel && (
                 <p style={styles.cardInfo}>
-                  📦 Quantidade disponível: {promocao.quantidade_disponivel}
+                   Quantidade disponível: {promocao.quantidade_disponivel}
                 </p>
               )}
 
@@ -477,7 +477,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
         </div>
       )}
 
-      {/* ✅ MODAL COM MARKETING */}
+      {/*  MODAL COM MARKETING */}
       {showModal && (
         <div style={styles.modalOverlay} onClick={() => setShowModal(false)}>
           <div style={styles.modal} onClick={e => e.stopPropagation()}>
@@ -526,9 +526,9 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                   Tipo de Promoção *
                   <InfoButton title="Tipos de promoção">
                     <div style={{ fontSize: '0.85rem' }}>
-                      <strong>🎁 Compre X, Y sai mais barato:</strong> Ao comprar produto X, produto Y fica com desconto<br /><br />
-                      <strong>📦 X unidades por R$ Y:</strong> Leve várias unidades por um preço fixo<br /><br />
-                      <strong>🎉 Compre X leve Y:</strong> Leve mais unidades pagando menos
+                      <strong> Compre X, Y sai mais barato:</strong> Ao comprar produto X, produto Y fica com desconto<br /><br />
+                      <strong> X unidades por R$ Y:</strong> Leve várias unidades por um preço fixo<br /><br />
+                      <strong> Compre X leve Y:</strong> Leve mais unidades pagando menos
                     </div>
                   </InfoButton>
                 </label>
@@ -538,16 +538,16 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                   style={styles.input}
                   required
                 >
-                  <option value="produto_desconto">🎁 Compre X, Y sai mais barato</option>
-                  <option value="quantidade_preco">📦 X unidades por R$ Y</option>
-                  <option value="compre_leve">🎉 Compre X leve Y</option>
+                  <option value="produto_desconto"> Compre X, Y sai mais barato</option>
+                  <option value="quantidade_preco"> X unidades por R$ Y</option>
+                  <option value="compre_leve"> Compre X leve Y</option>
                 </select>
               </div>
 
               {/* Campos dinâmicos baseados no tipo... (mantém todos como estão) */}
               {/* ... */}
 
-              {/* ✅ SEÇÃO DE MARKETING DIGITAL */}
+              {/*  SEÇÃO DE MARKETING DIGITAL */}
               <div style={{
                 marginTop: '30px',
                 padding: '20px',
@@ -564,7 +564,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                       <strong>Destaque sua promoção no app mobile!</strong><br /><br />
                       Sua promoção aparecerá em posição de destaque no aplicativo dos clientes,
                       aumentando a visibilidade e as chances de venda.<br /><br />
-                      <strong style={{ color: '#ffc107' }}>⭐ Disponível para planos Pro e Enterprise</strong>
+                      <strong style={{ color: '#ffc107' }}> Disponível para planos Pro e Enterprise</strong>
                     </div>
                   </InfoButton>
                 </div>
@@ -598,7 +598,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                       fontSize: '0.75rem',
                       fontWeight: '600',
                     }}>
-                      🔒 Upgrade necessário
+                       Upgrade necessário
                     </span>
                   )}
                 </label>
@@ -692,7 +692,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                           onChange={e => setFormData({...formData, marketingLayout: e.target.value})}
                           style={{ marginRight: '8px' }}
                         />
-                        <strong style={{ fontSize: '0.9rem' }}>📱 Banner Horizontal</strong>
+                        <strong style={{ fontSize: '0.9rem' }}> Banner Horizontal</strong>
                         <div style={{
                           marginTop: '10px',
                           padding: '15px',
@@ -710,7 +710,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                             fontSize: '1.5rem',
                             gap: '10px',
                           }}>
-                            🔥 50% OFF
+                             50% OFF
                           </div>
                           <small style={{ display: 'block', marginTop: '8px', fontSize: '0.75rem', color: '#666' }}>
                             Oferta em destaque<br />

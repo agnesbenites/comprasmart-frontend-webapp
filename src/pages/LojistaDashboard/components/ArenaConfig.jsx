@@ -353,7 +353,7 @@ export default function ArenaConfig({ lojaId }) {
     return (
       <div style={styles.container}>
         <div style={styles.header}>
-          <h2 style={styles.titulo}>🎯 Arena de Vendas</h2>
+          <h2 style={styles.titulo}> Arena de Vendas</h2>
           <p style={styles.subtitulo}>
             Treine sua equipe com simulações de vendas com IA. 
             Escolha o plano ideal pra sua operação.
@@ -398,7 +398,7 @@ export default function ArenaConfig({ lojaId }) {
         </div>
 
         <div style={{ marginTop: 24, padding: 16, background: '#FFF8E1', borderRadius: 10, fontSize: 13, color: '#F57F17' }}>
-          <strong>💡 Dica:</strong> Comece com o plano Básico pra testar. Você pode fazer upgrade a qualquer momento.
+          <strong> Dica:</strong> Comece com o plano Básico pra testar. Você pode fazer upgrade a qualquer momento.
         </div>
       </div>
     );
@@ -413,7 +413,7 @@ export default function ArenaConfig({ lojaId }) {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2 style={styles.titulo}>🎯 Arena de Vendas</h2>
+        <h2 style={styles.titulo}> Arena de Vendas</h2>
         <p style={styles.subtitulo}>
           Gerencie o acesso da sua equipe às simulações de vendas com IA.
         </p>

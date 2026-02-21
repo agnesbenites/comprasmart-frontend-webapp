@@ -143,7 +143,7 @@ const LojistaVendedores = () => {
       {/* HEADER */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>📊 Performance de Vendedores</h1>
+          <h1 style={styles.title}> Performance de Vendedores</h1>
           <p style={styles.subtitle}>Análise de vendas da equipe - {getPeriodoLabel()}</p>
         </div>
         <div style={styles.headerRight}>
@@ -154,7 +154,7 @@ const LojistaVendedores = () => {
             <option value="ano">Último ano</option>
           </select>
           <button onClick={carregarDados} style={styles.button}>
-            🔄 Atualizar
+             Atualizar
           </button>
         </div>
       </div>
@@ -162,7 +162,7 @@ const LojistaVendedores = () => {
       {/* CARDS DE MÉTRICAS GERAIS */}
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>👥</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}></div>
           <div>
             <div style={styles.cardLabel}>Vendedores Ativos</div>
             <div style={styles.cardValue}>{metrics.vendedoresAtivos}</div>
@@ -171,7 +171,7 @@ const LojistaVendedores = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#10b981'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#10b981'}}></div>
           <div>
             <div style={styles.cardLabel}>Faturamento Total</div>
             <div style={styles.cardValue}>
@@ -182,7 +182,7 @@ const LojistaVendedores = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#f59e0b'}}>📈</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#f59e0b'}}></div>
           <div>
             <div style={styles.cardLabel}>Ticket Médio</div>
             <div style={styles.cardValue}>
@@ -193,7 +193,7 @@ const LojistaVendedores = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#8b5cf6'}}>🎯</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#8b5cf6'}}></div>
           <div>
             <div style={styles.cardLabel}>Média de Vendas</div>
             <div style={styles.cardValue}>
@@ -207,7 +207,7 @@ const LojistaVendedores = () => {
       {/* TOP 5 VENDEDORES - DESTAQUE */}
       {vendedores.length > 0 && (
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🏆 Top 5 Vendedores do Período</h2>
+          <h2 style={styles.sectionTitle}> Top 5 Vendedores do Período</h2>
           <div style={styles.top5Grid}>
             {vendedores.slice(0, 5).map((vendedor, i) => (
               <div key={vendedor.id} style={styles.top5Card}>
@@ -239,7 +239,7 @@ const LojistaVendedores = () => {
       {/* TABELA COMPLETA DE VENDEDORES */}
       {vendedores.length > 0 && (
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📋 Todos os Vendedores</h2>
+          <h2 style={styles.sectionTitle}> Todos os Vendedores</h2>
           <div style={styles.table}>
             <div style={styles.tableHeader}>
               <div style={styles.tableCellRank}>#</div>
@@ -305,7 +305,7 @@ const LojistaVendedores = () => {
       {/* EMPTY STATE */}
       {vendedores.length === 0 && (
         <div style={styles.empty}>
-          <p style={styles.emptyIcon}>📊</p>
+          <p style={styles.emptyIcon}></p>
           <p style={styles.emptyText}>Nenhum vendedor cadastrado</p>
           <button style={styles.emptyButton}>+ Cadastrar Primeiro Vendedor</button>
         </div>

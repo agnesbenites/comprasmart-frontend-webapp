@@ -71,7 +71,7 @@ const styles = {
 const FaturasTable = ({ faturas = [], onEnviarEmail }) => {
   return (
     <section style={styles.section} data-cy="faturas-section">
-      <h2 style={styles.sectionTitle}>📄 Histórico de Faturas</h2>
+      <h2 style={styles.sectionTitle}> Histórico de Faturas</h2>
 
       {!faturas.length ? (
         <p style={styles.emptyText} data-cy="faturas-vazio">

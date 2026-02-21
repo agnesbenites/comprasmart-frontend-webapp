@@ -110,12 +110,12 @@ const NotificacoesPage = () => {
   const getIconeTipo = (tipo) => {
     const icones = {
       info: 'ℹ️',
-      success: '✅',
+      success: '',
       warning: '⚠️',
-      error: '❌',
-      payment: '💳',
-      order: '🛒',
-      user: '👤',
+      error: '',
+      payment: '',
+      order: '',
+      user: '',
       system: '⚙️',
     };
     return icones[tipo] || 'ℹ️';
@@ -135,7 +135,7 @@ const NotificacoesPage = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>🔔 Notificações</h1>
+        <h1 style={styles.title}> Notificações</h1>
         {notificacoesNaoLidas > 0 && (
           <span style={styles.badge}>
             {notificacoesNaoLidas} não {notificacoesNaoLidas === 1 ? 'lida' : 'lidas'}

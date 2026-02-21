@@ -167,13 +167,13 @@ const TrainingManagementPanel = () => {
         // Redirecionar para checkout do Stripe
         window.location.href = data.checkoutUrl;
       } else {
-        alert('✅ Arena habilitada com sucesso!');
+        alert(' Arena habilitada com sucesso!');
         carregarArenaConfig();
       }
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao habilitar Arena');
+      alert(' Erro ao habilitar Arena');
     }
   };
 
@@ -190,12 +190,12 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao desativar Arena');
 
-      alert('✅ Arena desativada com sucesso!');
+      alert(' Arena desativada com sucesso!');
       carregarArenaConfig();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao desativar Arena');
+      alert(' Erro ao desativar Arena');
     }
   };
 
@@ -228,7 +228,7 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao salvar treinamento');
 
-      alert(editingTreinamento ? '✅ Treinamento atualizado!' : '✅ Treinamento criado!');
+      alert(editingTreinamento ? ' Treinamento atualizado!' : ' Treinamento criado!');
       
       setShowModal(false);
       resetForm();
@@ -237,7 +237,7 @@ const TrainingManagementPanel = () => {
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao salvar treinamento');
+      alert(' Erro ao salvar treinamento');
     }
   };
 
@@ -270,13 +270,13 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao excluir');
 
-      alert('✅ Treinamento excluído!');
+      alert(' Treinamento excluído!');
       carregarTreinamentos();
       carregarEstatisticas();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao excluir treinamento');
+      alert(' Erro ao excluir treinamento');
     }
   };
 
@@ -293,12 +293,12 @@ const TrainingManagementPanel = () => {
 
       if (!response.ok) throw new Error('Erro ao alterar status');
 
-      alert(`✅ Treinamento ${!currentStatus ? 'ativado' : 'desativado'}!`);
+      alert(` Treinamento ${!currentStatus ? 'ativado' : 'desativado'}!`);
       carregarTreinamentos();
       
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao alterar status');
+      alert(' Erro ao alterar status');
     }
   };
 
@@ -364,7 +364,7 @@ const TrainingManagementPanel = () => {
       {/* HEADER */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>🎓 Gerenciar Treinamentos</h2>
+          <h2 style={styles.title}> Gerenciar Treinamentos</h2>
           <p style={styles.subtitle}>Crie e gerencie treinamentos para seus consultores</p>
         </div>
         <button onClick={() => setShowModal(true)} style={styles.addButton}>
@@ -377,7 +377,7 @@ const TrainingManagementPanel = () => {
         <div style={styles.arenaHeader}>
           <FaTrophy style={styles.arenaIcon} />
           <div>
-            <h3 style={styles.arenaTitle}>🎯 Arena de Vendas</h3>
+            <h3 style={styles.arenaTitle}> Arena de Vendas</h3>
             <p style={styles.arenaDescription}>
               Sistema gamificado para competição saudável entre seus consultores
             </p>
@@ -412,7 +412,7 @@ const TrainingManagementPanel = () => {
               </button>
 
               <div style={{ textAlign: 'center', marginBottom: 32 }}>
-                <span style={{ fontSize: 48 }}>🏆</span>
+                <span style={{ fontSize: 48 }}></span>
                 <h2 style={{ fontSize: 28, fontWeight: 800, color: '#2f0d51', marginTop: 12 }}>
                   Kaslee Arena de Vendas
                 </h2>
@@ -423,12 +423,12 @@ const TrainingManagementPanel = () => {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
                 {[
-                  { emoji: '🎯', title: 'Simulação com Personas', desc: 'Pratique com personas de clientes reais em diferentes níveis de dificuldade. Cada interação simula cenários do dia a dia de vendas.' },
-                  { emoji: '⭐', title: 'Sistema de Pontos', desc: 'Ganhe pontos por cada venda simulada, atendimento correto e desafio completado. Quanto mais difícil a persona, mais pontos.' },
-                  { emoji: '📊', title: 'Ranking Semanal', desc: 'Os melhores consultores ganham destaque e são priorizados nas oportunidades de venda.' },
-                  { emoji: '🏅', title: 'Níveis e Badges', desc: 'Evolua de Iniciante até Mestre de Vendas. Cada nível desbloqueia badges exclusivas no perfil.' },
-                  { emoji: '📈', title: 'Desafios Semanais', desc: 'Missões especiais com recompensas. Complete objetivos como "Venda 5 produtos técnicos".' },
-                  { emoji: '🤖', title: 'Feedback com IA', desc: 'A IA analisa sua abordagem, identifica pontos fortes e sugere melhorias personalizadas.' },
+                  { emoji: '', title: 'Simulação com Personas', desc: 'Pratique com personas de clientes reais em diferentes níveis de dificuldade. Cada interação simula cenários do dia a dia de vendas.' },
+                  { emoji: '', title: 'Sistema de Pontos', desc: 'Ganhe pontos por cada venda simulada, atendimento correto e desafio completado. Quanto mais difícil a persona, mais pontos.' },
+                  { emoji: '', title: 'Ranking Semanal', desc: 'Os melhores consultores ganham destaque e são priorizados nas oportunidades de venda.' },
+                  { emoji: '', title: 'Níveis e Badges', desc: 'Evolua de Iniciante até Mestre de Vendas. Cada nível desbloqueia badges exclusivas no perfil.' },
+                  { emoji: '', title: 'Desafios Semanais', desc: 'Missões especiais com recompensas. Complete objetivos como "Venda 5 produtos técnicos".' },
+                  { emoji: '', title: 'Feedback com IA', desc: 'A IA analisa sua abordagem, identifica pontos fortes e sugere melhorias personalizadas.' },
                 ].map((item, i) => (
                   <div key={i} style={{
                     background: '#f9f7fb', borderRadius: 16, padding: '20px 16px', textAlign: 'center',
@@ -460,17 +460,17 @@ const TrainingManagementPanel = () => {
           {arenaAtiva ? (
             <div style={styles.arenaActive}>
               <div style={styles.arenaStatus}>
-                <span style={styles.arenaBadgeActive}>✅ ATIVA</span>
+                <span style={styles.arenaBadgeActive}> ATIVA</span>
                 <span style={styles.arenaTier}>Plano: {tierAtual?.toUpperCase() || 'BÁSICO'}</span>
               </div>
               <div style={styles.arenaBenefits}>
                 <h4 style={styles.arenaBenefitsTitle}>Benefícios ativos:</h4>
                 <ul style={styles.arenaBenefitsList}>
-                  <li>🏆 Ranking em tempo real de consultores</li>
-                  <li>📊 Dashboard de desempenho detalhado</li>
-                  <li>🎯 Metas e desafios semanais</li>
-                  <li>🏅 Sistema de recompensas e premiações</li>
-                  {arenaConfig?.acesso_consultores && <li>👥 Acesso dos consultores ao ranking</li>}
+                  <li> Ranking em tempo real de consultores</li>
+                  <li> Dashboard de desempenho detalhado</li>
+                  <li> Metas e desafios semanais</li>
+                  <li> Sistema de recompensas e premiações</li>
+                  {arenaConfig?.acesso_consultores && <li> Acesso dos consultores ao ranking</li>}
                 </ul>
               </div>
               <div style={styles.arenaActions}>
@@ -485,7 +485,7 @@ const TrainingManagementPanel = () => {
           ) : (
             <div style={styles.arenaInactive}>
               <div style={styles.arenaStatus}>
-                <span style={styles.arenaBadgeInactive}>❌ DESATIVADA</span>
+                <span style={styles.arenaBadgeInactive}> DESATIVADA</span>
               </div>
               <div style={styles.arenaPlans}>
                 <h4 style={styles.arenaPlansTitle}>Escolha um plano:</h4>
@@ -494,10 +494,10 @@ const TrainingManagementPanel = () => {
                     <h5 style={styles.planTitle}>BÁSICO</h5>
                     <p style={styles.planPrice}>R$ 15/mês</p>
                     <ul style={styles.planFeatures}>
-                      <li>🏆 Ranking básico</li>
-                      <li>📊 5 métricas principais</li>
-                      <li>🎯 3 desafios semanais</li>
-                      <li>🔒 Acesso apenas para administradores</li>
+                      <li> Ranking básico</li>
+                      <li> 5 métricas principais</li>
+                      <li> 3 desafios semanais</li>
+                      <li> Acesso apenas para administradores</li>
                     </ul>
                     <button onClick={() => habilitarArena('basico')} style={styles.planButton}>
                       Ativar Plano
@@ -509,11 +509,11 @@ const TrainingManagementPanel = () => {
                     <h5 style={styles.planTitle}>PRO</h5>
                     <p style={styles.planPrice}>R$ 40/mês</p>
                     <ul style={styles.planFeatures}>
-                      <li>✅ Tudo do Básico</li>
-                      <li>👥 Acesso para consultores</li>
-                      <li>📈 Dashboard avançado</li>
-                      <li>🏅 10 desafios semanais</li>
-                      <li>📊 Relatórios detalhados</li>
+                      <li> Tudo do Básico</li>
+                      <li> Acesso para consultores</li>
+                      <li> Dashboard avançado</li>
+                      <li> 10 desafios semanais</li>
+                      <li> Relatórios detalhados</li>
                     </ul>
                     <button onClick={() => habilitarArena('pro')} style={styles.planButtonPro}>
                       Ativar Plano
@@ -524,9 +524,9 @@ const TrainingManagementPanel = () => {
                     <h5 style={styles.planTitle}>ENTERPRISE</h5>
                     <p style={styles.planPrice}>R$ 60/mês</p>
                     <ul style={styles.planFeatures}>
-                      <li>✅ Tudo do Pro</li>
+                      <li> Tudo do Pro</li>
                       <li>🏢 Múltiplas filiais</li>
-                      <li>📊 API de integração</li>
+                      <li> API de integração</li>
                       <li>👨‍💼 Suporte prioritário</li>
                       <li>🔧 Personalização completa</li>
                     </ul>
@@ -552,7 +552,7 @@ const TrainingManagementPanel = () => {
         </div>
 
         <div style={styles.statCard}>
-          <div style={styles.statIcon}>✅</div>
+          <div style={styles.statIcon}></div>
           <div>
             <p style={styles.statLabel}>Treinamentos Ativos</p>
             <p style={styles.statValue}>{stats.ativos}</p>
@@ -560,7 +560,7 @@ const TrainingManagementPanel = () => {
         </div>
 
         <div style={styles.statCard}>
-          <div style={styles.statIcon}>👥</div>
+          <div style={styles.statIcon}></div>
           <div>
             <p style={styles.statLabel}>Consultores Inscritos</p>
             <p style={styles.statValue}>{stats.consultoresInscritos}</p>
@@ -614,11 +614,11 @@ const TrainingManagementPanel = () => {
                       onClick={() => handleToggleStatus(treinamento.id, treinamento.ativo)}
                       style={treinamento.ativo ? styles.badgeActive : styles.badgeInactive}
                     >
-                      {treinamento.ativo ? '✅ Ativo' : '❌ Inativo'}
+                      {treinamento.ativo ? ' Ativo' : ' Inativo'}
                     </button>
                   </td>
                   <td style={styles.td}>
-                    {treinamento.obrigatorio ? '✅ Sim' : 'Não'}
+                    {treinamento.obrigatorio ? ' Sim' : 'Não'}
                   </td>
                   <td style={styles.td}>
                     <div style={styles.actions}>
@@ -651,7 +651,7 @@ const TrainingManagementPanel = () => {
             <form onSubmit={handleSubmit} style={styles.form}>
               {/* INFORMAÇÕES BÁSICAS */}
               <div style={styles.formSection}>
-                <h4 style={styles.formSectionTitle}>📋 Informações Básicas</h4>
+                <h4 style={styles.formSectionTitle}> Informações Básicas</h4>
                 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>Título *</label>
@@ -742,7 +742,7 @@ const TrainingManagementPanel = () => {
                       onChange={(e) => setFormData({...formData, ativo: e.target.checked})}
                       style={styles.checkbox}
                     />
-                    ✅ Ativar Imediatamente
+                     Ativar Imediatamente
                   </label>
                 </div>
               </div>
@@ -826,7 +826,7 @@ const TrainingManagementPanel = () => {
                   Cancelar
                 </button>
                 <button type="submit" style={styles.submitButton}>
-                  {editingTreinamento ? '💾 Salvar Alterações' : '✅ Criar Treinamento'}
+                  {editingTreinamento ? '💾 Salvar Alterações' : ' Criar Treinamento'}
                 </button>
               </div>
             </form>

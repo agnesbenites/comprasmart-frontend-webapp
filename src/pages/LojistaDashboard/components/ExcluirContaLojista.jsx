@@ -65,13 +65,13 @@ const ExcluirContaLojista = ({ lojistaId }) => {
           agendamento_id: result.agendamento_id
         });
         setEtapa('agendado');
-        alert('✅ Exclusão agendada com sucesso! Você receberá um email de confirmação.');
+        alert(' Exclusão agendada com sucesso! Você receberá um email de confirmação.');
       } else {
-        alert('❌ Erro ao agendar exclusão: ' + result.error);
+        alert(' Erro ao agendar exclusão: ' + result.error);
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao processar solicitação');
+      alert(' Erro ao processar solicitação');
     } finally {
       setLoading(false);
     }
@@ -100,14 +100,14 @@ const ExcluirContaLojista = ({ lojistaId }) => {
       if (result.success) {
         setExclusaoAgendada(null);
         setEtapa('inicial');
-        alert('✅ Exclusão cancelada! Sua conta foi reativada.');
+        alert(' Exclusão cancelada! Sua conta foi reativada.');
         window.location.reload();
       } else {
-        alert('❌ Erro ao cancelar exclusão: ' + result.error);
+        alert(' Erro ao cancelar exclusão: ' + result.error);
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao processar cancelamento');
+      alert(' Erro ao processar cancelamento');
     } finally {
       setLoading(false);
     }
@@ -142,9 +142,9 @@ const ExcluirContaLojista = ({ lojistaId }) => {
             Você terá <strong>30 dias</strong> para:
           </p>
           <ul style={styles.infoList}>
-            <li>✅ Fazer backup dos seus dados</li>
-            <li>✅ Cancelar a exclusão se mudar de ideia</li>
-            <li>✅ Exportar relatórios importantes</li>
+            <li> Fazer backup dos seus dados</li>
+            <li> Cancelar a exclusão se mudar de ideia</li>
+            <li> Exportar relatórios importantes</li>
           </ul>
           <p style={styles.infoText}>
             Após 30 dias, <strong>todos os dados serão permanentemente excluídos</strong>.
@@ -250,9 +250,9 @@ const ExcluirContaLojista = ({ lojistaId }) => {
         <div style={styles.infoBox}>
           <h3 style={styles.infoTitle}>📌 O que você pode fazer agora:</h3>
           <ul style={styles.infoList}>
-            <li>✅ Fazer backup dos seus dados</li>
-            <li>✅ Exportar relatórios importantes</li>
-            <li>✅ Salvar informações de clientes (se necessário)</li>
+            <li> Fazer backup dos seus dados</li>
+            <li> Exportar relatórios importantes</li>
+            <li> Salvar informações de clientes (se necessário)</li>
           </ul>
         </div>
 
@@ -267,7 +267,7 @@ const ExcluirContaLojista = ({ lojistaId }) => {
           onClick={cancelarExclusao}
           disabled={loading}
         >
-          {loading ? 'Processando...' : '🔄 Cancelar Exclusão e Reativar Conta'}
+          {loading ? 'Processando...' : ' Cancelar Exclusão e Reativar Conta'}
         </button>
       </div>
     );

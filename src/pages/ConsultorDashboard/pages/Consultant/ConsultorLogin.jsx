@@ -34,16 +34,16 @@ const ConsultorLogin = () => {
       
       if (user) {
         // Login bem-sucedido
-        console.log("✅ Login bem-sucedido:", user.email);
+        console.log(" Login bem-sucedido:", user.email);
         navigate('/consultor/dashboard', { replace: true });
       } else {
         // Se não encontrou user em nenhum lugar
-        console.log("❌ Resposta do signIn:", result);
+        console.log(" Resposta do signIn:", result);
         setError("Usuário não encontrado na resposta");
       }
     } catch (error) {
       // Captura o erro real do Supabase
-      console.error("❌ Erro no login:", error);
+      console.error(" Erro no login:", error);
       
       // Tratamento de erros específicos
       if (error.message?.includes("Invalid login credentials")) {
@@ -139,7 +139,7 @@ const ConsultorLogin = () => {
 
         <div style={styles.features}>
           <div style={styles.feature}>
-            <span style={styles.featureIcon}>&#128202;</span>
+            <span style={styles.featureIcon}>&#cccc0c;</span>
             <span>Relatorios de Desempenho</span>
           </div>
           <div style={styles.feature}>
@@ -194,16 +194,16 @@ const styles = {
     fontSize: "1.1rem",
   },
   infoBox: {
-    backgroundColor: "#e3f2fd",
+    backgroundColor: "#f3e8ff",
     padding: "15px",
     borderRadius: "8px",
     marginBottom: "20px",
-    border: "1px solid #bbdefb",
+    border: "1px solid #f3e8ff",
   },
   infoText: {
     margin: 0,
     fontSize: "14px",
-    color: "#1565c0",
+    color: "#2f0d51",
     textAlign: "center",
   },
   inputGroup: {
@@ -284,7 +284,7 @@ const styles = {
     textAlign: "center",
   },
   backLink: {
-    color: "#2c5aa0",
+    color: "#2f0d51",
     textDecoration: "none",
     fontSize: "14px",
   },

@@ -189,7 +189,7 @@ const RelatoriosConciliacao = ({ lojistaId, onClose }) => {
       return (
         <div style={styles.resumoContainer}>
           <div style={styles.resumoCard}>
-            <h3 style={styles.resumoTitle}>📊 Resumo Executivo</h3>
+            <h3 style={styles.resumoTitle}> Resumo Executivo</h3>
             <p><strong>Período:</strong> {resumo.periodo}</p>
           </div>
 
@@ -226,7 +226,7 @@ const RelatoriosConciliacao = ({ lojistaId, onClose }) => {
 
           {resumo.produtos_mais_vendidos && (
             <div style={styles.subSection}>
-              <h4>🏆 Top 5 Produtos Mais Vendidos</h4>
+              <h4> Top 5 Produtos Mais Vendidos</h4>
               <table style={styles.table}>
                 <thead>
                   <tr style={styles.tableHeader}>
@@ -250,7 +250,7 @@ const RelatoriosConciliacao = ({ lojistaId, onClose }) => {
 
           {resumo.consultores_top_vendas && (
             <div style={styles.subSection}>
-              <h4>👥 Top 5 Consultores por Vendas</h4>
+              <h4> Top 5 Consultores por Vendas</h4>
               <table style={styles.table}>
                 <thead>
                   <tr style={styles.tableHeader}>
@@ -284,7 +284,7 @@ const RelatoriosConciliacao = ({ lojistaId, onClose }) => {
     <div style={styles.overlay} onClick={onClose}>
       <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div style={styles.modalHeader}>
-          <h2 style={styles.modalTitle}>📊 Relatórios de Conciliação</h2>
+          <h2 style={styles.modalTitle}> Relatórios de Conciliação</h2>
           <button style={styles.closeButton} onClick={onClose}>✕</button>
         </div>
 
@@ -298,9 +298,9 @@ const RelatoriosConciliacao = ({ lojistaId, onClose }) => {
                 onChange={(e) => setTipoRelatorio(e.target.value)}
                 style={styles.select}
               >
-                <option value="vendas">📋 Vendas Detalhadas</option>
-                <option value="comissoes">💰 Comissões por Consultor</option>
-                <option value="resumo">📊 Resumo Executivo</option>
+                <option value="vendas"> Vendas Detalhadas</option>
+                <option value="comissoes"> Comissões por Consultor</option>
+                <option value="resumo"> Resumo Executivo</option>
               </select>
             </div>
 
@@ -329,7 +329,7 @@ const RelatoriosConciliacao = ({ lojistaId, onClose }) => {
               disabled={loading}
               style={styles.searchButton}
             >
-              {loading ? '🔄 Carregando...' : '🔍 Buscar Relatório'}
+              {loading ? ' Carregando...' : ' Buscar Relatório'}
             </button>
           </div>
 
@@ -344,10 +344,10 @@ const RelatoriosConciliacao = ({ lojistaId, onClose }) => {
           {dados && dados.length > 0 && (
             <div style={styles.actionsBar}>
               <button onClick={exportarExcel} style={styles.exportButton}>
-                📊 Exportar Excel
+                 Exportar Excel
               </button>
               <button onClick={exportarPDF} style={styles.exportButton}>
-                📄 Exportar PDF
+                 Exportar PDF
               </button>
             </div>
           )}

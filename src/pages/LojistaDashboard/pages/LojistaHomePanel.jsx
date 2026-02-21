@@ -2,6 +2,11 @@
 // DASHBOARD COM DETECÇÃO DE PLANO
 
 import React, { useState, useEffect } from 'react';
+import {
+  CurrencyDollar, ShoppingCart, Receipt, Star,
+  Handshake, Globe, Sparkle, VideoCamera, Headphones,
+  ChatCircle, Warning, ArrowsClockwise, ChartBar, Trophy
+} from '@phosphor-icons/react';
 import { supabase } from '../../../supabaseClient';
 import { usePlano } from '../../../contexts/PlanoContext';
 
@@ -172,9 +177,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
           <h1 style={styles.title}>{nomeLoja}</h1>
           <p style={styles.subtitle}>Dashboard Enterprise</p>
         </div>
-        <button onClick={onRefresh} style={styles.button}>
-          🔄 Atualizar
-        </button>
+        <button onClick={onRefresh} style={styles.button}><ArrowsClockwise size={16} weight="bold" style={{marginRight: 6}} />Atualizar</button>
       </div>
 
       {/* ROI CARD */}
@@ -184,10 +187,10 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
           <div style={styles.roiValueRow}>
             <div style={styles.roiValue}>{metrics.roi.toFixed(1)}x</div>
             <div style={styles.roiBadge}>
-              {metrics.roi >= 5 && '⭐ Excelente'}
-              {metrics.roi >= 3 && metrics.roi < 5 && '✨ Ótimo'}
+              {metrics.roi >= 5 && ' Excelente'}
+              {metrics.roi >= 3 && metrics.roi < 5 && ' Ótimo'}
               {metrics.roi >= 1 && metrics.roi < 3 && '👍 Bom'}
-              {metrics.roi < 1 && '📊 Crescendo'}
+              {metrics.roi < 1 && ' Crescendo'}
             </div>
           </div>
         </div>
@@ -211,7 +214,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
       {/* MÉTRICAS */}
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#f3e8ff'}}><CurrencyDollar size={28} weight="duotone" color="#bb25a6" /></div>
           <div>
             <div style={styles.cardLabel}>Receita Total</div>
             <div style={styles.cardValue}>
@@ -222,7 +225,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#10b981'}}>📦</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#d1fae5'}}><ShoppingCart size={28} weight="duotone" color="#059669" /></div>
           <div>
             <div style={styles.cardLabel}>Vendas Consultores</div>
             <div style={styles.cardValue}>
@@ -233,7 +236,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#f59e0b'}}>⚠️</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#fef3c7'}}><Warning size={28} weight="duotone" color="#f59e0b" /></div>
           <div>
             <div style={styles.cardLabel}>Produtos Críticos</div>
             <div style={styles.cardValue}>{metrics.produtosCriticos}</div>
@@ -242,7 +245,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#8b5cf6'}}>⭐</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#ede9fe'}}><Star size={28} weight="duotone" color="#8b5cf6" /></div>
           <div>
             <div style={styles.cardLabel}>Score Médio</div>
             <div style={styles.cardValue}>{metrics.scoreMedio.toFixed(1)}</div>
@@ -253,22 +256,22 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
 
       {/* VENDAS POR ORIGEM */}
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>📊 Vendas por Origem</h2>
+        <h2 style={styles.sectionTitle}><ChartBar size={20} weight="duotone" color="#2f0d51" style={{marginRight: 8}} />Vendas por Origem</h2>
         <div style={styles.metodosGrid}>
           <div style={styles.metodoCard}>
-            <div style={styles.metodoIcon}>🤝</div>
+            <div style={styles.metodoIcon}><Handshake size={40} weight="duotone" color="#2f0d51" /></div>
             <div style={styles.metodoLabel}>Consultores</div>
             <div style={styles.metodoValue}>{metrics.vendasVideo + metrics.vendasAudio + metrics.vendasChat}</div>
           </div>
 
           <div style={styles.metodoCard}>
-            <div style={styles.metodoIcon}>🌐</div>
+            <div style={styles.metodoIcon}><Globe size={40} weight="duotone" color="#2f0d51" /></div>
             <div style={styles.metodoLabel}>Orgânicas</div>
             <div style={styles.metodoValue}>{metrics.vendasOrganicas}</div>
           </div>
 
           <div style={styles.metodoCard}>
-            <div style={styles.metodoIcon}>💫</div>
+            <div style={styles.metodoIcon}><Sparkle size={40} weight="duotone" color="#bb25a6" /></div>
             <div style={styles.metodoLabel}>Espontâneas</div>
             <div style={styles.metodoValue}>{metrics.vendasEspontaneas}</div>
           </div>
@@ -277,10 +280,10 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
 
       {/* PERFORMANCE POR MÉTODO */}
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>🎬 Performance por Método</h2>
+        <h2 style={styles.sectionTitle}><VideoCamera size={20} weight="duotone" color="#2f0d51" style={{marginRight: 8}} />Performance por Método</h2>
         <div style={styles.metodosGrid}>
           <div style={styles.metodoCard}>
-            <div style={styles.metodoIcon}>📹</div>
+            <div style={styles.metodoIcon}><VideoCamera size={40} weight="duotone" color="#2f0d51" /></div>
             <div style={styles.metodoLabel}>Vídeo</div>
             <div style={styles.metodoValue}>{metrics.vendasVideo}</div>
             <div style={styles.metodoPercentual}>
@@ -289,7 +292,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
           </div>
 
           <div style={styles.metodoCard}>
-            <div style={styles.metodoIcon}>🎧</div>
+            <div style={styles.metodoIcon}><Headphones size={40} weight="duotone" color="#2f0d51" /></div>
             <div style={styles.metodoLabel}>Áudio</div>
             <div style={styles.metodoValue}>{metrics.vendasAudio}</div>
             <div style={styles.metodoPercentual}>
@@ -298,7 +301,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
           </div>
 
           <div style={styles.metodoCard}>
-            <div style={styles.metodoIcon}>💬</div>
+            <div style={styles.metodoIcon}><ChatCircle size={40} weight="duotone" color="#bb25a6" /></div>
             <div style={styles.metodoLabel}>Chat</div>
             <div style={styles.metodoValue}>{metrics.vendasChat}</div>
             <div style={styles.metodoPercentual}>
@@ -311,7 +314,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
       {/* TOP CONSULTORES COM ID */}
       {topConsultores.length > 0 && (
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🏆 Top 5 Consultores</h2>
+          <h2 style={styles.sectionTitle}><Trophy size={20} weight="duotone" color="#bb25a6" style={{marginRight: 8}} />Top 5 Consultores</h2>
           <div style={styles.table}>
             <div style={styles.tableHeader}>
               <div style={styles.tableCell}>ID</div>
@@ -334,7 +337,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
                   </span>
                 </div>
                 <div style={styles.tableCell}>
-                  ⭐ {parseFloat(consultor.score_medio_atendimento || 0).toFixed(1)}
+                   {parseFloat(consultor.score_medio_atendimento || 0).toFixed(1)}
                 </div>
               </div>
             ))}
@@ -346,7 +349,7 @@ const DashboardEnterprise = ({ nomeLoja, metrics, topConsultores, alertasEstoque
       {alertasEstoque.length > 0 && (
         <div style={styles.section}>
           <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
-            <h2 style={styles.sectionTitle}>⚠️ Estoque Crítico por Período</h2>
+            <h2 style={styles.sectionTitle}><Warning size={20} weight="duotone" color="#f59e0b" style={{marginRight: 8}} />Estoque Crítico por Período</h2>
             <select 
               value={filtroEstoque} 
               onChange={(e) => setFiltroEstoque(e.target.value)}
@@ -400,14 +403,12 @@ const DashboardPro = ({ nomeLoja, metrics, onRefresh }) => {
           <h1 style={styles.title}>{nomeLoja}</h1>
           <p style={styles.subtitle}>Dashboard Pro</p>
         </div>
-        <button onClick={onRefresh} style={styles.button}>
-          🔄 Atualizar
-        </button>
+        <button onClick={onRefresh} style={styles.button}><ArrowsClockwise size={16} weight="bold" style={{marginRight: 6}} />Atualizar</button>
       </div>
 
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#f3e8ff'}}><CurrencyDollar size={28} weight="duotone" color="#bb25a6" /></div>
           <div>
             <div style={styles.cardLabel}>Faturamento</div>
             <div style={styles.cardValue}>
@@ -418,7 +419,7 @@ const DashboardPro = ({ nomeLoja, metrics, onRefresh }) => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#10b981'}}>🛒</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#d1fae5'}}><ShoppingCart size={28} weight="duotone" color="#059669" /></div>
           <div>
             <div style={styles.cardLabel}>Vendas</div>
             <div style={styles.cardValue}>{metrics.totalVendas}</div>
@@ -426,7 +427,7 @@ const DashboardPro = ({ nomeLoja, metrics, onRefresh }) => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#f59e0b'}}>📈</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#fef3c7'}}><Receipt size={28} weight="duotone" color="#f59e0b" /></div>
           <div>
             <div style={styles.cardLabel}>Ticket Médio</div>
             <div style={styles.cardValue}>
@@ -436,7 +437,7 @@ const DashboardPro = ({ nomeLoja, metrics, onRefresh }) => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#8b5cf6'}}>⭐</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#ede9fe'}}><Star size={28} weight="duotone" color="#8b5cf6" /></div>
           <div>
             <div style={styles.cardLabel}>Score Médio</div>
             <div style={styles.cardValue}>{metrics.scoreMedio.toFixed(1)}</div>
@@ -446,7 +447,7 @@ const DashboardPro = ({ nomeLoja, metrics, onRefresh }) => {
 
       <div style={styles.infoBox}>
         <p style={styles.infoText}>
-          📊 Dashboard Pro com relatórios avançados disponíveis
+Dashboard Pro com relatórios avançados disponíveis
         </p>
       </div>
     </div>
@@ -464,14 +465,12 @@ const DashboardBasic = ({ nomeLoja, metrics, onRefresh }) => {
           <h1 style={styles.title}>{nomeLoja}</h1>
           <p style={styles.subtitle}>Dashboard Básico</p>
         </div>
-        <button onClick={onRefresh} style={styles.button}>
-          🔄 Atualizar
-        </button>
+        <button onClick={onRefresh} style={styles.button}><ArrowsClockwise size={16} weight="bold" style={{marginRight: 6}} />Atualizar</button>
       </div>
 
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#f3e8ff'}}><CurrencyDollar size={28} weight="duotone" color="#bb25a6" /></div>
           <div>
             <div style={styles.cardLabel}>Faturamento</div>
             <div style={styles.cardValue}>
@@ -481,7 +480,7 @@ const DashboardBasic = ({ nomeLoja, metrics, onRefresh }) => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#10b981'}}>🛒</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#d1fae5'}}><ShoppingCart size={28} weight="duotone" color="#059669" /></div>
           <div>
             <div style={styles.cardLabel}>Vendas</div>
             <div style={styles.cardValue}>{metrics.totalVendas}</div>
@@ -489,7 +488,7 @@ const DashboardBasic = ({ nomeLoja, metrics, onRefresh }) => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#f59e0b'}}>📈</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#fef3c7'}}><Receipt size={28} weight="duotone" color="#f59e0b" /></div>
           <div>
             <div style={styles.cardLabel}>Ticket Médio</div>
             <div style={styles.cardValue}>
@@ -501,7 +500,7 @@ const DashboardBasic = ({ nomeLoja, metrics, onRefresh }) => {
 
       <div style={styles.infoBox}>
         <p style={styles.infoText}>
-          📊 Seus dados aparecerão aqui conforme você realizar vendas
+Seus dados aparecerão aqui conforme você realizar vendas
         </p>
       </div>
     </div>
@@ -650,7 +649,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '1.5rem',
+    flexShrink: 0,
   },
   cardLabel: {
     fontSize: '0.9rem',
@@ -700,7 +699,8 @@ const styles = {
     border: '2px solid #e2e8f0',
   },
   metodoIcon: {
-    fontSize: '2.5rem',
+    display: 'flex',
+    justifyContent: 'center',
     marginBottom: '10px',
   },
   metodoLabel: {

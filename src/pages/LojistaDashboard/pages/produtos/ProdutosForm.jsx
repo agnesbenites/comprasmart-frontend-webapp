@@ -68,7 +68,7 @@ const gerarDescricaoIA = async (produto) => {
     // Verificar se tem API key
     const apiKey = import.meta.env.VITE_GROQ_API_KEY;
     if (!apiKey) {
-      throw new Error('❌ API key do Groq não configurada.\n\n📝 Solução:\n1. Ir em https://console.groq.com/keys\n2. Criar conta grátis\n3. Gerar API key\n4. Adicionar no arquivo .env:\nVITE_GROQ_API_KEY=gsk_sua-chave\n5. Reiniciar o servidor (npm run dev)');
+      throw new Error(' API key do Groq não configurada.\n\n📝 Solução:\n1. Ir em https://console.groq.com/keys\n2. Criar conta grátis\n3. Gerar API key\n4. Adicionar no arquivo .env:\nVITE_GROQ_API_KEY=gsk_sua-chave\n5. Reiniciar o servidor (npm run dev)');
     }
     
     console.log('[IA] Gerando descrição com Groq (LLaMA)...');
@@ -127,11 +127,11 @@ NÃO invente detalhes técnicos que não foram fornecidos.`;
       
       // Mensagens específicas por erro
       if (response.status === 403 || response.status === 401) {
-        throw new Error('❌ Erro de autenticação: API key inválida.\n\n📝 Solução:\n1. Verificar se a chave está correta\n2. Gerar nova chave em https://console.groq.com/keys\n3. Atualizar .env:\nVITE_GROQ_API_KEY=gsk_nova-chave\n4. Reiniciar servidor');
+        throw new Error(' Erro de autenticação: API key inválida.\n\n📝 Solução:\n1. Verificar se a chave está correta\n2. Gerar nova chave em https://console.groq.com/keys\n3. Atualizar .env:\nVITE_GROQ_API_KEY=gsk_nova-chave\n4. Reiniciar servidor');
       }
       
       if (response.status === 429) {
-        throw new Error('❌ Erro 429: Limite de requisições excedido.\n\nLimite grátis: 14,400 requests/dia (10/minuto).\nAguarde alguns segundos e tente novamente.');
+        throw new Error(' Erro 429: Limite de requisições excedido.\n\nLimite grátis: 14,400 requests/dia (10/minuto).\nAguarde alguns segundos e tente novamente.');
       }
       
       throw new Error(errorData.error?.message || `Erro ${response.status}: ${response.statusText}`);
@@ -213,7 +213,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        console.log('📦 Dados recuperados do localStorage');
+        console.log(' Dados recuperados do localStorage');
         setProduto(parsed.produto || produto);
         setFotosPreviews(parsed.fotosPreviews || []);
         setSkuAutoGerado(parsed.skuAutoGerado !== undefined ? parsed.skuAutoGerado : true);
@@ -344,10 +344,10 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
       const previews = files.map(file => URL.createObjectURL(file));
       setFotosPreviews(prev => [...prev, ...previews]);
 
-      alert(`✅ ${files.length} foto(s) enviada(s) com sucesso!`);
+      alert(` ${files.length} foto(s) enviada(s) com sucesso!`);
     } catch (error) {
       console.error('[Upload] Erro:', error);
-      alert('❌ Erro ao fazer upload das fotos');
+      alert(' Erro ao fazer upload das fotos');
     } finally {
       setUploadingFotos(false);
     }
@@ -380,9 +380,9 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
     try {
       const descricao = await gerarDescricaoIA(produto);
       setProduto(prev => ({ ...prev, descricao }));
-      alert('✅ Descrição gerada com sucesso!');
+      alert(' Descrição gerada com sucesso!');
     } catch (error) {
-      alert(`❌ ${error.message}`);
+      alert(` ${error.message}`);
     } finally {
       setLoadingIA(false);
     }
@@ -439,10 +439,10 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
       setSkuAutoGerado(true);
       onSuccess?.();
       
-      alert('✅ Produto cadastrado com sucesso!');
+      alert(' Produto cadastrado com sucesso!');
     } catch (err) {
       console.error(err);
-      alert("❌ Erro ao cadastrar produto.");
+      alert(" Erro ao cadastrar produto.");
     } finally {
       setLoading(false);
     }
@@ -456,7 +456,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
   return (
     <div style={styles.card}>
       <h3 style={styles.cardTitle}>
-        📦 Cadastrar Novo Produto
+         Cadastrar Novo Produto
       </h3>
 
       {/* ALERTA SOBRE IMPORTÂNCIA DA DESCRIÇÃO */}
@@ -468,7 +468,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
         marginBottom: '20px'
       }}>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'start' }}>
-          <span style={{ fontSize: '24px' }}>💡</span>
+          <span style={{ fontSize: '24px' }}></span>
           <div>
             <strong style={{ display: 'block', color: '#1976d2', marginBottom: '8px' }}>
               Importância da Descrição e Fotos:
@@ -681,7 +681,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
                   }}
                   style={styles.secondaryButton}
                 >
-                  🔄 Auto
+                   Auto
                 </button>
               )}
             </div>
@@ -726,7 +726,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
             ⚠️ Produtos com fotos vendem até 5x mais! Adicione pelo menos 3 fotos.
           </small>
           <small style={{ display: 'block', color: '#666', marginTop: '4px' }}>
-            💡 Máximo 5 fotos por produto. Formatos: JPG, PNG, WEBP
+             Máximo 5 fotos por produto. Formatos: JPG, PNG, WEBP
           </small>
 
           {/* Previews das fotos */}
@@ -777,7 +777,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
 
           {uploadingFotos && (
             <div style={{ marginTop: '10px', color: '#6f42c1', fontWeight: '600' }}>
-              ⏳ Fazendo upload das fotos...
+               Fazendo upload das fotos...
             </div>
           )}
         </div>
@@ -792,7 +792,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
             <label style={styles.label}>
-              🤖 Descrição do Produto
+               Descrição do Produto
               <span style={styles.iaBadge}>IA</span>
               <span style={{
                 marginLeft: '10px',
@@ -822,7 +822,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
                 opacity: loadingIA || !produto.nome || !produto.categoria || !produto.preco ? 0.6 : 1
               }}
             >
-              {loadingIA ? '⏳ Gerando...' : '✨ Gerar com IA'}
+              {loadingIA ? ' Gerando...' : ' Gerar com IA'}
             </button>
           </div>
           
@@ -868,7 +868,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
             color: '#6f42c1', 
             fontSize: '0.85rem' 
           }}>
-            💡 A IA cria descrições profissionais e convincentes. Você pode editar após gerar!
+             A IA cria descrições profissionais e convincentes. Você pode editar após gerar!
           </small>
         </div>
 
@@ -889,7 +889,7 @@ const ProdutosForm = ({ lojaId, onSuccess }) => {
             width: '100%'
           }}
         >
-          {loading ? "Salvando..." : "📦 Cadastrar Produto"}
+          {loading ? "Salvando..." : " Cadastrar Produto"}
         </button>
       </form>
     </div>

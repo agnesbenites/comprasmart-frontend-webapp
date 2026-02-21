@@ -147,7 +147,7 @@ const UploadEmLote = ({ lojaId, onSuccess }) => {
     if (!file) return;
 
     if (!lojaId) {
-      alert('❌ Nenhuma loja selecionada!');
+      alert(' Nenhuma loja selecionada!');
       return;
     }
 
@@ -165,7 +165,7 @@ const UploadEmLote = ({ lojaId, onSuccess }) => {
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
       if (jsonData.length === 0) {
-        alert('❌ Planilha vazia!');
+        alert(' Planilha vazia!');
         return;
       }
 
@@ -219,7 +219,7 @@ const UploadEmLote = ({ lojaId, onSuccess }) => {
 
     } catch (error) {
       console.error('[Upload] Erro:', error);
-      alert('❌ Erro ao processar arquivo');
+      alert(' Erro ao processar arquivo');
     } finally {
       setLoading(false);
     }
@@ -232,7 +232,7 @@ const UploadEmLote = ({ lojaId, onSuccess }) => {
     <div style={styles.container}>
       <div style={styles.header}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <h3 style={styles.title}>📊 Upload em Lote</h3>
+          <h3 style={styles.title}> Upload em Lote</h3>
           <InfoButton title="Como funciona o upload em lote?">
             <strong>Passo a passo:</strong>
             <ol style={{ margin: '8px 0', paddingLeft: '20px', fontSize: '0.85rem' }}>
@@ -294,7 +294,7 @@ const UploadEmLote = ({ lojaId, onSuccess }) => {
 
         {loading && (
           <div style={styles.loading}>
-            ⏳ Processando arquivo...
+             Processando arquivo...
           </div>
         )}
 

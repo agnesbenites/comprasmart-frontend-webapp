@@ -6,8 +6,8 @@ import { supabase } from "@/supabaseClient";
 
 // Inicializar Supabase
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 const ReviewsPanel = ({ consultorId }) => {
   const [avaliacoes, setAvaliacoes] = useState([]);
@@ -113,7 +113,7 @@ const ReviewsPanel = ({ consultorId }) => {
     };
 
     carregarAvaliacoes();
-  }, [consultorId]); // ✅ Agora está correto!
+  }, [consultorId]); //  Agora está correto!
 
   const calcularEstatisticas = () => {
     const total = avaliacoes.length;
@@ -169,14 +169,14 @@ const ReviewsPanel = ({ consultorId }) => {
       {/* Header com Estatisticas */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>⭐ Minhas Avaliações</h2>
+          <h2 style={styles.title}> Minhas Avaliações</h2>
           <p style={styles.subtitle}>Veja o feedback dos seus clientes</p>
         </div>
         <button 
           onClick={recarregarAvaliacoes}
           style={styles.refreshButton}
         >
-          🔄 Atualizar
+           Atualizar
         </button>
       </div>
 
@@ -199,7 +199,7 @@ const ReviewsPanel = ({ consultorId }) => {
             
             return (
               <div key={estrela} style={styles.barraRow}>
-                <span style={styles.barraLabel}>{estrela} ⭐</span>
+                <span style={styles.barraLabel}>{estrela} </span>
                 <div style={styles.barraContainer}>
                   <div 
                     style={{
@@ -282,11 +282,11 @@ const ReviewsPanel = ({ consultorId }) => {
 
             <div style={styles.avaliacaoFooter}>
               <div style={styles.footerRow}>
-                <span style={styles.footerLabel}>🏪 Loja:</span>
+                <span style={styles.footerLabel}> Loja:</span>
                 <span style={styles.footerValue}>{avaliacao.loja}</span>
               </div>
               <div style={styles.footerRow}>
-                <span style={styles.footerLabel}>📦 Produtos:</span>
+                <span style={styles.footerLabel}> Produtos:</span>
                 <span style={styles.footerValue}>
                   {avaliacao.produtos.join(', ')}
                 </span>
@@ -299,7 +299,7 @@ const ReviewsPanel = ({ consultorId }) => {
       {/* Mensagem quando nao ha avaliacoes */}
       {avaliacoesFiltradas.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>⭐</div>
+          <div style={styles.emptyIcon}></div>
           <p style={styles.emptyTitle}>Nenhuma avaliação encontrada</p>
           <p style={styles.emptySubtitle}>
             {filtroEstrelas !== 'todas' 
@@ -350,7 +350,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #f3f3f3',
-    borderTop: '4px solid #2c5aa0',
+    borderTop: '4px solid #2f0d51',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },

@@ -91,10 +91,10 @@ export default function ApprovalsPage() {
                 <td className="py-3 px-4">{item.cidade}</td>
                 <td className="py-3 px-4 text-center">
                   {item.aprovado
-                    ? "✅ Aprovado"
+                    ? " Aprovado"
                     : item.motivo_rejeicao
-                    ? "❌ Reprovado"
-                    : "⏳ Pendente"}
+                    ? " Reprovado"
+                    : " Pendente"}
                 </td>
                 <td className="py-3 px-4 text-center space-x-2">
                   <button

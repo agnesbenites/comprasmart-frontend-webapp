@@ -460,7 +460,7 @@ const ChatPanel = () => {
         setShowQRCode(true);
         setSaleStatus('sucesso');
         
-        console.log(`💰 Comissão gerada: R$ ${valorComissao.toFixed(2)} (${percentualComissao}%)`);
+        console.log(` Comissão gerada: R$ ${valorComissao.toFixed(2)} (${percentualComissao}%)`);
       } else {
         throw new Error(stripeData.error || 'Erro ao gerar link de pagamento');
       }
@@ -565,7 +565,7 @@ const ChatPanel = () => {
           
           {/* Header do Chat */}
           <div style={styles.chatHeader}>
-            <h3 style={styles.chatTitle}>💬 Chat de Atendimento</h3>
+            <h3 style={styles.chatTitle}> Chat de Atendimento</h3>
             <div style={styles.chatControls}>
               <button
                 style={isOnCall ? styles.controlButtonActive : styles.controlButton}
@@ -778,7 +778,7 @@ const ChatPanel = () => {
           
           {/* Produtos */}
           <div style={styles.productsSection}>
-            <h4 style={styles.productsTitle}>📦 Produtos Disponíveis</h4>
+            <h4 style={styles.productsTitle}> Produtos Disponíveis</h4>
             <div style={styles.productsList}>
               {produtosFiltrados.map(produto => (
                 <div key={produto.id} style={styles.productCard}>
@@ -831,7 +831,7 @@ const ChatPanel = () => {
                 }}
               >
                 {saleStatus === 'processando' ? (
-                  '🔄 Processando...'
+                  ' Processando...'
                 ) : (
                   <>
                     <FaQrcode /> Finalizar Venda e Gerar QR Code
@@ -840,7 +840,7 @@ const ChatPanel = () => {
               </button>
             ) : saleStatus === 'sucesso' ? (
               <div style={styles.successBox}>
-                <p style={styles.successText}>✅ Venda criada com sucesso!</p>
+                <p style={styles.successText}> Venda criada com sucesso!</p>
                 {showQRCode && vendaId && (
                   <div style={styles.qrBox}>
                     <QRCode 
@@ -878,7 +878,7 @@ const ChatPanel = () => {
               </div>
             ) : (
               <div style={styles.errorBox}>
-                <p style={styles.errorText}>❌ Erro na venda</p>
+                <p style={styles.errorText}> Erro na venda</p>
                 <button
                   onClick={() => setSaleStatus('idle')}
                   style={styles.retryButton}
@@ -925,7 +925,7 @@ const styles = {
     margin: '0 auto',
   },
   pageTitle: {
-    color: '#2c5aa0',
+    color: '#2f0d51',
     fontSize: '24px',
     fontWeight: 'bold',
     marginBottom: '20px',
@@ -937,7 +937,7 @@ const styles = {
   },
   avatar: {
     fontSize: '40px',
-    color: '#2c5aa0',
+    color: '#2f0d51',
   },
   clienteNome: {
     color: '#333333',
@@ -996,7 +996,7 @@ const styles = {
     transition: 'all 0.2s',
   },
   controlButtonActive: {
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     border: 'none',
     borderRadius: '6px',
     padding: '8px 12px',
@@ -1044,7 +1044,7 @@ const styles = {
     gap: '10px',
   },
   msgConsultor: {
-    backgroundColor: '#eaf2ff',
+    backgroundColor: '#f3e8ff',
     padding: '10px 15px',
     borderRadius: '12px 12px 12px 4px',
     maxWidth: '70%',
@@ -1052,7 +1052,7 @@ const styles = {
     position: 'relative',
   },
   msgCliente: {
-    backgroundColor: '#e8f5e9',
+    backgroundColor: '#f3e8ff',
     padding: '10px 15px',
     borderRadius: '12px 12px 4px 12px',
     maxWidth: '70%',
@@ -1120,7 +1120,7 @@ const styles = {
     transition: 'all 0.2s',
   },
   mediaButtonActive: {
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     border: 'none',
     borderRadius: '6px',
     padding: '8px',
@@ -1161,7 +1161,7 @@ const styles = {
     maxHeight: '120px',
   },
   sendButton: {
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: '#ffffff',
     border: 'none',
     borderRadius: '8px',
@@ -1296,7 +1296,7 @@ const styles = {
     padding: '10px',
     borderRadius: '6px',
     marginTop: '10px',
-    border: '1px solid #b3e0ff',
+    border: '1px solid #f3e8ff',
   },
   comissaoItem: {
     display: 'flex',
@@ -1348,11 +1348,11 @@ const styles = {
   productPrice: {
     fontSize: '14px',
     fontWeight: 'bold',
-    color: '#2c5aa0',
+    color: '#2f0d51',
     marginTop: '4px',
   },
   addProductBtn: {
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: '#ffffff',
     border: 'none',
     padding: '6px 12px',
@@ -1392,7 +1392,7 @@ const styles = {
     transition: 'opacity 0.2s',
   },
   successBox: {
-    backgroundColor: '#e8f5e9',
+    backgroundColor: '#f3e8ff',
     padding: '15px',
     borderRadius: '8px',
     textAlign: 'center',
@@ -1425,7 +1425,7 @@ const styles = {
     display: 'inline-block',
     marginTop: '10px',
     padding: '10px 20px',
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: 'white',
     textDecoration: 'none',
     borderRadius: '6px',
@@ -1434,7 +1434,7 @@ const styles = {
     transition: 'background-color 0.2s',
   },
   continueButton: {
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: '#ffffff',
     border: 'none',
     padding: '10px 20px',

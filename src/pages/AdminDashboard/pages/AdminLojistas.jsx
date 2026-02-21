@@ -33,7 +33,7 @@ const AdminLojistas = () => {
       setLojas(data || []);
     } catch (error) {
       console.error('Erro ao carregar lojas:', error);
-      alert('❌ Erro ao carregar lojas');
+      alert(' Erro ao carregar lojas');
     } finally {
       setLoading(false);
     }
@@ -50,14 +50,14 @@ const AdminLojistas = () => {
 
       if (error) throw error;
 
-      alert('✅ Loja aprovada com sucesso!');
+      alert(' Loja aprovada com sucesso!');
       carregarLojas();
 
       // TODO: Enviar email de boas-vindas
 
     } catch (error) {
       console.error('Erro ao aprovar:', error);
-      alert('❌ Erro ao aprovar loja');
+      alert(' Erro ao aprovar loja');
     }
   };
 
@@ -75,12 +75,12 @@ const AdminLojistas = () => {
 
       if (error) throw error;
 
-      alert(`✅ Loja ${novoStatus === 'bloqueado' ? 'bloqueada' : 'desbloqueada'} com sucesso!`);
+      alert(` Loja ${novoStatus === 'bloqueado' ? 'bloqueada' : 'desbloqueada'} com sucesso!`);
       carregarLojas();
 
     } catch (error) {
       console.error(`Erro ao ${acao}:`, error);
-      alert(`❌ Erro ao ${acao} loja`);
+      alert(` Erro ao ${acao} loja`);
     }
   };
 
@@ -98,12 +98,12 @@ const AdminLojistas = () => {
 
       if (error) throw error;
 
-      alert('✅ Loja excluída com sucesso!');
+      alert(' Loja excluída com sucesso!');
       carregarLojas();
 
     } catch (error) {
       console.error('Erro ao excluir:', error);
-      alert('❌ Erro ao excluir loja');
+      alert(' Erro ao excluir loja');
     }
   };
 
@@ -128,13 +128,13 @@ const AdminLojistas = () => {
 
       if (error) throw error;
 
-      alert('✅ Loja atualizada com sucesso!');
+      alert(' Loja atualizada com sucesso!');
       setLojaEditando(null);
       carregarLojas();
 
     } catch (error) {
       console.error('Erro ao salvar:', error);
-      alert('❌ Erro ao salvar alterações');
+      alert(' Erro ao salvar alterações');
     }
   };
 
@@ -146,11 +146,11 @@ const AdminLojistas = () => {
       // TODO: Implementar envio de notificação/email
       console.log('Enviando notificação:', { loja: loja.id, mensagem });
       
-      alert('✅ Notificação enviada!');
+      alert(' Notificação enviada!');
 
     } catch (error) {
       console.error('Erro ao enviar notificação:', error);
-      alert('❌ Erro ao enviar notificação');
+      alert(' Erro ao enviar notificação');
     }
   };
 
@@ -185,13 +185,13 @@ const AdminLojistas = () => {
       {/* Header */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>🏪 Gerenciar Lojas</h1>
+          <h1 style={styles.title}> Gerenciar Lojas</h1>
           <p style={styles.subtitle}>
             {lojasFiltradas.length} de {lojas.length} lojas
           </p>
         </div>
         <button onClick={carregarLojas} style={styles.refreshButton}>
-          🔄 Atualizar
+           Atualizar
         </button>
       </div>
 
@@ -463,9 +463,9 @@ const getStatusColor = (status) => {
 
 const getStatusLabel = (status) => {
   const labels = {
-    ativo: '✅ Ativo',
-    pendente: '⏳ Pendente',
-    bloqueado: '🔒 Bloqueado',
+    ativo: ' Ativo',
+    pendente: ' Pendente',
+    bloqueado: ' Bloqueado',
   };
   return labels[status] || status;
 };

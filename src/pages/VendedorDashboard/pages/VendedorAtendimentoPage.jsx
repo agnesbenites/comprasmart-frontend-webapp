@@ -357,7 +357,7 @@ const VendedorAtendimentoPage = () => {
     return (
       <Layout title="Atendimento" showHeader={true}>
         <div style={{ padding: '40px', textAlign: 'center' }}>
-          <h3>⏳ Carregando...</h3>
+          <h3> Carregando...</h3>
         </div>
       </Layout>
     );
@@ -370,7 +370,7 @@ const VendedorAtendimentoPage = () => {
         {/* FILA DE CLIENTES */}
         {!atendimentoAtual && (
           <div style={styles.filaSection}>
-            <h2 style={styles.sectionTitle}>👥 Fila de Atendimento</h2>
+            <h2 style={styles.sectionTitle}> Fila de Atendimento</h2>
             
             {filaClientes.length === 0 ? (
               <div style={styles.emptyState}>
@@ -392,7 +392,7 @@ const VendedorAtendimentoPage = () => {
                       onClick={() => iniciarAtendimento(cliente)}
                       style={styles.btnAtender}
                     >
-                      📞 Atender
+                       Atender
                     </button>
                   </div>
                 ))}
@@ -408,14 +408,14 @@ const VendedorAtendimentoPage = () => {
             <div style={styles.atendimentoHeader}>
               <div>
                 <h2 style={styles.clienteAtendimentoNome}>
-                  👤 {atendimentoAtual.cliente?.nome || 'Cliente'}
+                   {atendimentoAtual.cliente?.nome || 'Cliente'}
                 </h2>
                 <p style={styles.clienteAtendimentoInfo}>
-                  📞 {atendimentoAtual.cliente?.telefone || 'Sem telefone'}
+                   {atendimentoAtual.cliente?.telefone || 'Sem telefone'}
                 </p>
               </div>
               <button onClick={encerrarAtendimento} style={styles.btnEncerrar}>
-                ✅ Encerrar Atendimento
+                 Encerrar Atendimento
               </button>
             </div>
 
@@ -423,7 +423,7 @@ const VendedorAtendimentoPage = () => {
               
               {/* CHAT */}
               <div style={styles.chatSection}>
-                <h3 style={styles.chatTitle}>💬 Chat</h3>
+                <h3 style={styles.chatTitle}> Chat</h3>
                 
                 <div style={styles.chatMessages}>
                   {mensagensChat.map((msg, index) => (
@@ -466,7 +466,7 @@ const VendedorAtendimentoPage = () => {
                 
                 {/* Carrinho */}
                 <div style={styles.carrinhoCard}>
-                  <h3 style={styles.carrinhoTitle}>🛒 Carrinho</h3>
+                  <h3 style={styles.carrinhoTitle}> Carrinho</h3>
                   
                   {carrinho.length === 0 ? (
                     <p style={styles.carrinhoEmpty}>Carrinho vazio</p>
@@ -510,7 +510,7 @@ const VendedorAtendimentoPage = () => {
                       </div>
 
                       <button onClick={finalizarVenda} style={styles.btnFinalizar}>
-                        💳 Finalizar Venda
+                         Finalizar Venda
                       </button>
                     </>
                   )}
@@ -518,7 +518,7 @@ const VendedorAtendimentoPage = () => {
 
                 {/* Lista de Produtos */}
                 <div style={styles.produtosLista}>
-                  <h3 style={styles.produtosTitle}>📦 Produtos Disponíveis</h3>
+                  <h3 style={styles.produtosTitle}> Produtos Disponíveis</h3>
                   
                   {produtos.length === 0 ? (
                     <p>Nenhum produto disponível</p>
@@ -548,7 +548,7 @@ const VendedorAtendimentoPage = () => {
         {modalPagamento && (
           <div style={styles.modalOverlay}>
             <div style={styles.modalContent}>
-              <h2 style={styles.modalTitle}>✅ Venda Finalizada!</h2>
+              <h2 style={styles.modalTitle}> Venda Finalizada!</h2>
               
               <div style={styles.modalInfo}>
                 <p><strong>Pedido:</strong> #{modalPagamento.pedidoId}</p>
@@ -557,7 +557,7 @@ const VendedorAtendimentoPage = () => {
               </div>
 
               <p style={styles.modalInstrucao}>
-                📱 Copie o link e envie para o cliente:
+                 Copie o link e envie para o cliente:
               </p>
 
               <div style={styles.linkBox}>
@@ -574,7 +574,7 @@ const VendedorAtendimentoPage = () => {
                   }}
                   style={styles.btnCopiar}
                 >
-                  📋 Copiar
+                   Copiar
                 </button>
               </div>
 

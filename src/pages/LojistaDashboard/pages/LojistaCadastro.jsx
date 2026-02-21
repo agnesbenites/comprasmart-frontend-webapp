@@ -18,9 +18,9 @@ const LojistaCadastro = () => {
   });
   const [loading, setLoading] = useState(false);
   const [lojistaId, setLojistaId] = useState(null);
-  const [lojistaInfo, setLojistaInfo] = useState(null); // ✅ NOVO
+  const [lojistaInfo, setLojistaInfo] = useState(null); //  NOVO
   
-  const { enviar: enviarEmailBoasVindas } = useEmailBoasVindas(); // ✅ NOVO
+  const { enviar: enviarEmailBoasVindas } = useEmailBoasVindas(); //  NOVO
 
   // Buscar ID do lojista logado
   useEffect(() => {
@@ -30,7 +30,7 @@ const LojistaCadastro = () => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
-          // ✅ ATUALIZADO - Buscar mais informações
+          //  ATUALIZADO - Buscar mais informações
           const { data, error } = await supabase
             .from('usuarios')
             .select('id, nome, email, periodo_pagamento_comissao')
@@ -45,7 +45,7 @@ const LojistaCadastro = () => {
 
           setLojistaId(data.id);
           
-          // ✅ NOVO - Salvar informações completas
+          //  NOVO - Salvar informações completas
           setLojistaInfo({
             id: data.id,
             nome: data.nome || user.email.split('@')[0],
@@ -96,23 +96,23 @@ const LojistaCadastro = () => {
 
       if (error) throw error;
 
-      alert(`✅ Período de pagamento atualizado com sucesso!\n\n${
+      alert(` Período de pagamento atualizado com sucesso!\n\n${
         configuracoes.periodoPagamentoComissao === 'quinzenal' 
           ? '📅 Quinzenal: Pagamentos nos dias 15 e último dia útil de cada mês' 
           : '📅 Mensal: Pagamento no último dia útil de cada mês'
       }`);
     } catch (error) {
       console.error('Erro ao salvar:', error);
-      alert('❌ Erro ao salvar período de pagamento. Tente novamente.');
+      alert(' Erro ao salvar período de pagamento. Tente novamente.');
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ NOVA FUNÇÃO - Enviar e-mail de boas-vindas
+  //  NOVA FUNÇÃO - Enviar e-mail de boas-vindas
   const handleEnviarEmailBoasVindas = async () => {
     if (!lojistaInfo) {
-      alert('❌ Informações do lojista não carregadas');
+      alert(' Informações do lojista não carregadas');
       return;
     }
 
@@ -127,13 +127,13 @@ const LojistaCadastro = () => {
       });
 
       if (resultado.success) {
-        alert('✅ E-mail de boas-vindas enviado com sucesso!\n\nVerifique sua caixa de entrada.');
+        alert(' E-mail de boas-vindas enviado com sucesso!\n\nVerifique sua caixa de entrada.');
       } else {
         alert(`⚠️ E-mail registrado mas ainda não foi enviado.\n\nMotivo: ${resultado.message}\n\nSerá enviado em breve automaticamente.`);
       }
     } catch (error) {
       console.error('Erro ao enviar e-mail:', error);
-      alert('❌ Erro ao enviar e-mail: ' + error.message);
+      alert(' Erro ao enviar e-mail: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -172,10 +172,10 @@ const LojistaCadastro = () => {
       <h1 style={styles.title}>⚙️ Configuracoes Avancadas</h1>
       <p style={styles.subtitle}>Gerencie integracoes e configuracoes tecnicas da sua loja</p>
 
-      {/* ✅ NOVO - Informações do Lojista */}
+      {/*  NOVO - Informações do Lojista */}
       {lojistaInfo && (
         <div style={styles.infoBar}>
-          <span>👤 <strong>{lojistaInfo.nome}</strong></span>
+          <span> <strong>{lojistaInfo.nome}</strong></span>
           <span>📧 {lojistaInfo.email}</span>
           <span style={{
             backgroundColor: '#bb25a6',
@@ -194,7 +194,7 @@ const LojistaCadastro = () => {
         {/* ========== PERÍODO DE PAGAMENTO ========== */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}>💰 Período de Pagamento de Comissões</h3>
+            <h3 style={styles.cardTitle}> Período de Pagamento de Comissões</h3>
             <span style={styles.statusBadge}>Configurável</span>
           </div>
           <p style={styles.cardDescription}>
@@ -215,8 +215,8 @@ const LojistaCadastro = () => {
             </select>
             <small style={styles.helperText}>
               {configuracoes.periodoPagamentoComissao === 'quinzenal' 
-                ? '✅ Os consultores receberão nos dias 15 e no último dia útil de cada mês'
-                : '✅ Os consultores receberão no último dia útil de cada mês'}
+                ? ' Os consultores receberão nos dias 15 e no último dia útil de cada mês'
+                : ' Os consultores receberão no último dia útil de cada mês'}
             </small>
           </div>
 
@@ -239,11 +239,11 @@ const LojistaCadastro = () => {
             onClick={handleSalvarPeriodoPagamento}
             disabled={loading}
           >
-            {loading ? '⏳ Salvando...' : '💾 Salvar Período de Pagamento'}
+            {loading ? ' Salvando...' : '💾 Salvar Período de Pagamento'}
           </button>
         </div>
 
-        {/* ✅ NOVO CARD - E-mail de Boas-Vindas */}
+        {/*  NOVO CARD - E-mail de Boas-Vindas */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
             <h3 style={styles.cardTitle}>📧 Manual de Uso</h3>
@@ -292,7 +292,7 @@ const LojistaCadastro = () => {
           <div style={styles.erpOptions}>
             <div style={styles.erpOption}>
               <strong>SAP</strong>
-              <span style={styles.erpStatus}>✅ Conectado</span>
+              <span style={styles.erpStatus}> Conectado</span>
             </div>
             <div style={styles.erpOption}>
               <strong>TOTVS</strong>
@@ -331,7 +331,7 @@ const LojistaCadastro = () => {
                   alert("API Key copiada!");
                 }}
               >
-                📋 Copiar
+                 Copiar
               </button>
             </div>
             <small style={styles.helperText}>
@@ -343,10 +343,10 @@ const LojistaCadastro = () => {
               style={styles.secondaryButton}
               onClick={handleGerarAPIKey}
             >
-              🔄 Gerar Nova Key
+               Gerar Nova Key
             </button>
             <button style={styles.secondaryButton}>
-              📊 Ver Logs
+               Ver Logs
             </button>
           </div>
         </div>
@@ -354,7 +354,7 @@ const LojistaCadastro = () => {
         {/* Webhooks */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
-            <h3 style={styles.cardTitle}>🔔 Webhooks</h3>
+            <h3 style={styles.cardTitle}> Webhooks</h3>
             <span style={styles.statusBadge}>Configuravel</span>
           </div>
           <p style={styles.cardDescription}>
@@ -418,7 +418,7 @@ const styles = {
     fontSize: "1.1rem",
     marginBottom: "20px",
   },
-  infoBar: { // ✅ NOVO
+  infoBar: { //  NOVO
     display: 'flex',
     gap: '20px',
     alignItems: 'center',

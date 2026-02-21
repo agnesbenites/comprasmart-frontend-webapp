@@ -22,8 +22,8 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
   });
 
   const cores = {
-    consultor: { primary: '#2c5aa0', light: '#eaf2ff' },
-    vendedor: { primary: '#4a6fa5', light: '#eaf2ff' }
+    consultor: { primary: '#2f0d51', light: '#f3e8ff' },
+    vendedor: { primary: '#bb25a6', light: '#f3e8ff' }
   };
 
   const cor = cores[tipoUsuario] || cores.consultor;
@@ -129,7 +129,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
     e.preventDefault();
 
     if (!novoAgendamento.cliente_nome || !novoAgendamento.data || !novoAgendamento.hora) {
-      alert('❌ Preencha os campos obrigatórios!');
+      alert(' Preencha os campos obrigatórios!');
       return;
     }
 
@@ -153,7 +153,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
 
       if (error) throw error;
 
-      alert('✅ Agendamento criado com sucesso!');
+      alert(' Agendamento criado com sucesso!');
       setMostrarModal(false);
       setNovoAgendamento({
         cliente_nome: '',
@@ -168,7 +168,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
 
     } catch (error) {
       console.error('[Schedule] Erro ao criar:', error);
-      alert('❌ Erro ao criar agendamento: ' + error.message);
+      alert(' Erro ao criar agendamento: ' + error.message);
     }
   };
 
@@ -181,12 +181,12 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
 
       if (error) throw error;
 
-      alert('✅ Agendamento confirmado!');
+      alert(' Agendamento confirmado!');
       await carregarAgendamentos();
 
     } catch (error) {
       console.error('[Schedule] Erro ao confirmar:', error);
-      alert('❌ Erro ao confirmar agendamento');
+      alert(' Erro ao confirmar agendamento');
     }
   };
 
@@ -205,12 +205,12 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
 
       if (error) throw error;
 
-      alert('✅ Agendamento recusado!');
+      alert(' Agendamento recusado!');
       await carregarAgendamentos();
 
     } catch (error) {
       console.error('[Schedule] Erro ao recusar:', error);
-      alert('❌ Erro ao recusar agendamento');
+      alert(' Erro ao recusar agendamento');
     }
   };
 
@@ -249,18 +249,18 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
   const getStatusInfo = (status) => {
     const statusMap = {
       'pendente': { emoji: '🟡', texto: 'Pendente Aprovação', cor: '#ffc107' },
-      'confirmado': { emoji: '✅', texto: 'Confirmado', cor: '#bb25a6' },
-      'cancelado': { emoji: '❌', texto: 'Cancelado', cor: '#dc3545' },
-      'concluido': { emoji: '🎉', texto: 'Concluído', cor: '#6c757d' },
+      'confirmado': { emoji: '', texto: 'Confirmado', cor: '#bb25a6' },
+      'cancelado': { emoji: '', texto: 'Cancelado', cor: '#dc3545' },
+      'concluido': { emoji: '', texto: 'Concluído', cor: '#6c757d' },
     };
     return statusMap[status] || { emoji: '❓', texto: status, cor: '#999' };
   };
 
   const getTipoInfo = (tipo) => {
     const tipoMap = {
-      'presencial': { emoji: '🏪', texto: 'Presencial' },
+      'presencial': { emoji: '', texto: 'Presencial' },
       'remoto': { emoji: '💻', texto: 'Remoto' },
-      'telefone': { emoji: '📞', texto: 'Telefone' },
+      'telefone': { emoji: '', texto: 'Telefone' },
     };
     return tipoMap[tipo] || { emoji: '❓', texto: tipo };
   };
@@ -283,7 +283,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
   if (loading) {
     return (
       <div style={styles.loading}>
-        <div style={styles.loadingSpinner}>🔄</div>
+        <div style={styles.loadingSpinner}></div>
         <p>Carregando agenda...</p>
       </div>
     );
@@ -299,13 +299,13 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
           </h2>
           <div style={styles.statsRow}>
             <div style={styles.statBadge}>
-              📊 Total: <strong>{stats.total}</strong>
+               Total: <strong>{stats.total}</strong>
             </div>
             <div style={{ ...styles.statBadge, backgroundColor: '#fff3cd' }}>
               🟡 Pendentes: <strong>{stats.pendentes}</strong>
             </div>
-            <div style={{ ...styles.statBadge, backgroundColor: '#d4edda' }}>
-              ✅ Confirmados: <strong>{stats.confirmados}</strong>
+            <div style={{ ...styles.statBadge, backgroundColor: '#f3e8ff' }}>
+               Confirmados: <strong>{stats.confirmados}</strong>
             </div>
             <div style={{ ...styles.statBadge, backgroundColor: '#f8d7da' }}>
               🔴 Hoje: <strong>{stats.hoje}</strong>
@@ -390,16 +390,16 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
                 <div style={styles.cardHeader}>
                   <div>
                     <h3 style={styles.clienteNome}>
-                      👤 {nomeCliente}
+                       {nomeCliente}
                     </h3>
                     {agendamento.cliente_telefone && (
                       <p style={styles.clienteTelefone}>
-                        📞 {agendamento.cliente_telefone}
+                         {agendamento.cliente_telefone}
                       </p>
                     )}
                     {agendamento.lojas && (
                       <p style={styles.lojaInfo}>
-                        🏪 {agendamento.lojas.nome_fantasia}
+                         {agendamento.lojas.nome_fantasia}
                       </p>
                     )}
                   </div>
@@ -437,7 +437,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
 
                   {agendamento.produtos_interesse && (
                     <div style={styles.produtosBox}>
-                      <strong>🛒 Produtos de Interesse:</strong>
+                      <strong> Produtos de Interesse:</strong>
                       <ul style={styles.produtosList}>
                         {agendamento.produtos_interesse.map((prod, idx) => (
                           <li key={idx}>{prod}</li>
@@ -462,13 +462,13 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
                         onClick={() => confirmarAgendamento(agendamento.id)}
                         style={styles.btnConfirmar}
                       >
-                        ✅ Confirmar
+                         Confirmar
                       </button>
                       <button
                         onClick={() => recusarAgendamento(agendamento.id)}
                         style={styles.btnRecusar}
                       >
-                        ❌ Recusar
+                         Recusar
                       </button>
                     </>
                   )}
@@ -498,7 +498,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
             
             <form onSubmit={criarAgendamento} style={styles.form}>
               <div style={styles.formGroup}>
-                <label style={styles.label}>👤 Nome do Cliente *</label>
+                <label style={styles.label}> Nome do Cliente *</label>
                 <input
                   type="text"
                   value={novoAgendamento.cliente_nome}
@@ -513,7 +513,7 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
               </div>
 
               <div style={styles.formGroup}>
-                <label style={styles.label}>📞 Telefone</label>
+                <label style={styles.label}> Telefone</label>
                 <input
                   type="tel"
                   value={novoAgendamento.cliente_telefone}
@@ -567,9 +567,9 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
                   })}
                   style={styles.select}
                 >
-                  <option value="presencial">🏪 Presencial</option>
+                  <option value="presencial"> Presencial</option>
                   <option value="remoto">💻 Remoto</option>
-                  <option value="telefone">📞 Telefone</option>
+                  <option value="telefone"> Telefone</option>
                 </select>
               </div>
 
@@ -592,14 +592,14 @@ const SchedulePanel = ({ tipoUsuario = 'consultor' }) => {
                   type="submit"
                   style={{ ...styles.btnSalvar, backgroundColor: cor.primary }}
                 >
-                  ✅ Criar Agendamento
+                   Criar Agendamento
                 </button>
                 <button
                   type="button"
                   onClick={() => setMostrarModal(false)}
                   style={styles.btnCancelarModal}
                 >
-                  ❌ Cancelar
+                   Cancelar
                 </button>
               </div>
             </form>
@@ -770,7 +770,7 @@ const styles = {
     backgroundColor: '#e7f3ff',
     borderRadius: '8px',
     fontSize: '0.9rem',
-    border: '1px solid #b3d9ff',
+    border: '1px solid #f3e8ff',
   },
   produtosList: {
     margin: '8px 0 0 0',
@@ -812,7 +812,7 @@ const styles = {
   },
   btnIniciar: {
     flex: 1,
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: 'white',
     border: 'none',
     padding: '12px',

@@ -30,7 +30,7 @@ const TabelaUnificada = ({
     itens.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     const getTipoTexto = (tipo) => {
-        return tipo === 'produto' ? '📦 Produto' : '🎁 Promoção';
+        return tipo === 'produto' ? ' Produto' : ' Promoção';
     };
 
     const getTipoCor = (tipo) => {
@@ -101,7 +101,7 @@ const TabelaUnificada = ({
                         color: item.ativo ? '#bb25a6' : '#dc3545',
                     }}
                 >
-                    {item.ativo ? '✅ Ativa' : '⏸️ Inativa'}
+                    {item.ativo ? ' Ativa' : '⏸️ Inativa'}
                 </span>
             );
         }
@@ -198,7 +198,7 @@ const TabelaUnificada = ({
                                                                 display: 'inline-block',
                                                                 marginTop: '4px'
                                                             }}>
-                                                                🤖 IA
+                                                                 IA
                                                             </small>
                                                         </>
                                                     )}
@@ -302,7 +302,7 @@ const TabelaUnificada = ({
                                                             fontSize: '0.7rem',
                                                             fontWeight: '600'
                                                         }}>
-                                                            {item._tipo === 'produto' ? '🤖 IA' : 'ℹ️'}
+                                                            {item._tipo === 'produto' ? ' IA' : 'ℹ️'}
                                                         </span>
                                                         <strong style={{ color: '#333' }}>Descrição:</strong>
                                                     </div>

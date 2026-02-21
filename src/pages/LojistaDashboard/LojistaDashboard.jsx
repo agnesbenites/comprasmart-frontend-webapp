@@ -129,8 +129,8 @@ export default function LojistaDashboard() {
         <Route path="vendedores" element={<LojistaVendedores />} />
         <Route path="consultores" element={<LojistaConsultorConfig />} />
         <Route path="filiais" element={<LojistaFiliais />} />
-        <Route path="qrcode" element={<LojistaQRCode />} /> {/* ✅ SEM HÍFEN */}
-        <Route path="notificacoes" element={<NotificacoesPage />} /> {/* ✅ NOVO */}
+        <Route path="qrcode" element={<LojistaQRCode />} /> {/*  SEM HÍFEN */}
+        <Route path="notificacoes" element={<NotificacoesPage />} /> {/*  NOVO */}
         <Route path="relatorios" element={<LojistaRelatorios />} />
         <Route path="treinamentos" element={<TrainingManagementPanel />} />
         <Route path="cadastro" element={<LojistaCadastro />} />
@@ -140,7 +140,7 @@ export default function LojistaDashboard() {
         <Route path="cupom" element={<LojistaCupom />} />
         <Route path="live" element={<LojistaLive />} />
         <Route path="enterprise" element={<DashboardEnterprise />} />
-        {/* ✅ NOVA ROTA DA ARENA DE VENDAS */}
+        {/*  NOVA ROTA DA ARENA DE VENDAS */}
         <Route
           path="arena"
           element={
@@ -152,10 +152,10 @@ export default function LojistaDashboard() {
         />
       </Route>
 
-      {/* ✅ Redireciona /lojista para /lojista/dashboard com CAMINHO ABSOLUTO */}
+      {/*  Redireciona /lojista para /lojista/dashboard com CAMINHO ABSOLUTO */}
       <Route index element={<Navigate to="/lojista/dashboard" replace />} />
       
-      {/* ✅ Qualquer rota não encontrada vai para dashboard com CAMINHO ABSOLUTO */}
+      {/*  Qualquer rota não encontrada vai para dashboard com CAMINHO ABSOLUTO */}
       <Route path="*" element={<Navigate to="/lojista/dashboard" replace />} />
     </Routes>
   );

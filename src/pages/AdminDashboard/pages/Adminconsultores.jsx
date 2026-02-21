@@ -57,7 +57,7 @@ const AdminConsultores = () => {
 
     } catch (error) {
       console.error('Erro ao carregar consultores:', error);
-      alert('❌ Erro ao carregar consultores');
+      alert(' Erro ao carregar consultores');
     } finally {
       setLoading(false);
     }
@@ -74,12 +74,12 @@ const AdminConsultores = () => {
 
       if (error) throw error;
 
-      alert('✅ Consultor aprovado com sucesso!');
+      alert(' Consultor aprovado com sucesso!');
       carregarConsultores();
 
     } catch (error) {
       console.error('Erro ao aprovar:', error);
-      alert('❌ Erro ao aprovar consultor');
+      alert(' Erro ao aprovar consultor');
     }
   };
 
@@ -97,12 +97,12 @@ const AdminConsultores = () => {
 
       if (error) throw error;
 
-      alert(`✅ Consultor ${novoStatus === 'bloqueado' ? 'bloqueado' : 'desbloqueado'} com sucesso!`);
+      alert(` Consultor ${novoStatus === 'bloqueado' ? 'bloqueado' : 'desbloqueado'} com sucesso!`);
       carregarConsultores();
 
     } catch (error) {
       console.error(`Erro ao ${acao}:`, error);
-      alert(`❌ Erro ao ${acao} consultor`);
+      alert(` Erro ao ${acao} consultor`);
     }
   };
 
@@ -120,12 +120,12 @@ const AdminConsultores = () => {
 
       if (error) throw error;
 
-      alert('✅ Consultor excluído com sucesso!');
+      alert(' Consultor excluído com sucesso!');
       carregarConsultores();
 
     } catch (error) {
       console.error('Erro ao excluir:', error);
-      alert('❌ Erro ao excluir consultor');
+      alert(' Erro ao excluir consultor');
     }
   };
 
@@ -139,10 +139,10 @@ const AdminConsultores = () => {
 
     try {
       console.log('Enviando notificação:', { consultor: consultor.id, mensagem });
-      alert('✅ Notificação enviada!');
+      alert(' Notificação enviada!');
     } catch (error) {
       console.error('Erro ao enviar notificação:', error);
-      alert('❌ Erro ao enviar notificação');
+      alert(' Erro ao enviar notificação');
     }
   };
 
@@ -177,13 +177,13 @@ const AdminConsultores = () => {
       {/* Header */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>👥 Gerenciar Consultores</h1>
+          <h1 style={styles.title}> Gerenciar Consultores</h1>
           <p style={styles.subtitle}>
             {consultoresFiltrados.length} de {consultores.length} consultores
           </p>
         </div>
         <button onClick={carregarConsultores} style={styles.refreshButton}>
-          🔄 Atualizar
+           Atualizar
         </button>
       </div>
 
@@ -361,7 +361,7 @@ const AdminConsultores = () => {
       {consultorDetalhes && (
         <div style={styles.modalOverlay} onClick={() => setConsultorDetalhes(null)}>
           <div style={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <h3 style={styles.modalTitle}>📊 Detalhes do Consultor</h3>
+            <h3 style={styles.modalTitle}> Detalhes do Consultor</h3>
             
             <div style={styles.detalhesGrid}>
               <div style={styles.detalheItem}>
@@ -395,7 +395,7 @@ const AdminConsultores = () => {
                 <FaStar color="#ffc107" size={24} />
                 <div>
                   <p style={styles.detalhesStatLabel}>Avaliação Média</p>
-                  <p style={styles.detalhesStatValue}>{consultorDetalhes.mediaAvaliacoes} ⭐</p>
+                  <p style={styles.detalhesStatValue}>{consultorDetalhes.mediaAvaliacoes} </p>
                 </div>
               </div>
               <div style={styles.detalhesStatCard}>
@@ -445,9 +445,9 @@ const getStatusColor = (status) => {
 
 const getStatusLabel = (status) => {
   const labels = {
-    ativo: '✅ Ativo',
-    pendente: '⏳ Pendente',
-    bloqueado: '🔒 Bloqueado',
+    ativo: ' Ativo',
+    pendente: ' Pendente',
+    bloqueado: ' Bloqueado',
   };
   return labels[status] || status;
 };

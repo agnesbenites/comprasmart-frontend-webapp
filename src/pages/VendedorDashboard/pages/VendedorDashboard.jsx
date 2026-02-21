@@ -53,7 +53,7 @@ const VENDEDOR_MENU_ITEMS = [
     { title: "Relatorios", rota: "/vendedor/dashboard/relatorio", icon: "&#128202;", destaque: false },
     { title: "Treinamentos", rota: "/vendedor/dashboard/treinamentos", icon: "&#127891;", destaque: false },
     { title: "Report", rota: "/vendedor/dashboard/report", icon: "&#128221;", destaque: false },
-    { title: "🎯 Arena de Vendas", rota: "/vendedor/dashboard/arena", icon: "🎯", destaque: false },
+    { title: " Arena de Vendas", rota: "/vendedor/dashboard/arena", icon: "", destaque: false },
 ];
 
 // === DADOS MOCKADOS DE CAMPANHAS ===

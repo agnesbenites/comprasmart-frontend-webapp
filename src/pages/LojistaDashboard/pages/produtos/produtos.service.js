@@ -1,7 +1,7 @@
 import { supabase } from "@/supabaseClient";
 
 /* =====================================================
-   🏪 BUSCAR LOJA DO USUÁRIO
+    BUSCAR LOJA DO USUÁRIO
 ===================================================== */
 export async function buscarLojaPorUsuario(userId) {
   if (!userId) {
@@ -110,7 +110,7 @@ export async function criarProduto(produto, lojaId) {
       throw error;
     }
 
-    console.log("[produtos.service] ✅ Produto criado com sucesso:", data);
+    console.log("[produtos.service]  Produto criado com sucesso:", data);
     return data;
   } catch (err) {
     console.error("[produtos.service] Exceção ao criar produto:", err);
@@ -162,19 +162,19 @@ export async function editarProduto(produtoId, updates) {
     throw error;
   }
 
-  console.log("[produtos.service] ✅ Produto editado com sucesso:", data);
+  console.log("[produtos.service]  Produto editado com sucesso:", data);
   return data;
 }
 
 /* =====================================================
-   📦 ATUALIZAR ESTOQUE
+    ATUALIZAR ESTOQUE
 ===================================================== */
 export async function atualizarEstoque(produtoId, estoque) {
   return editarProduto(produtoId, { estoque: Number(estoque) });
 }
 
 /* =====================================================
-   ❌ EXCLUIR PRODUTO
+    EXCLUIR PRODUTO
 ===================================================== */
 export async function excluirProduto(produtoId) {
   console.log("[produtos.service] excluirProduto:", produtoId);

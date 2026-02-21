@@ -78,7 +78,7 @@ const AdminLogin = () => {
 
         {error && (
           <div style={styles.errorBox}>
-            <p style={styles.errorText}>❌ {error}</p>
+            <p style={styles.errorText}> {error}</p>
           </div>
         )}
 
@@ -91,7 +91,7 @@ const AdminLogin = () => {
             cursor: loading ? 'not-allowed' : 'pointer',
           }}
         >
-          {loading ? '🔄 Redirecionando...' : '🔑 Entrar com Google'}
+          {loading ? ' Redirecionando...' : '🔑 Entrar com Google'}
         </button>
 
         <div style={styles.info}>

@@ -46,7 +46,7 @@ const RegisterPage = () => {
       });
       
       setEtapa(2);
-      alert(`✅ Identidade validada! Score: ${result.score}%\n\nDados preenchidos automaticamente.`);
+      alert(` Identidade validada! Score: ${result.score}%\n\nDados preenchidos automaticamente.`);
     }
   };
 
@@ -254,7 +254,7 @@ const RegisterPage = () => {
         // Podemos continuar e tentar salvar depois
       }
 
-      alert("✅ Cadastro realizado com sucesso!\n\nVerifique seu email para confirmar a conta.");
+      alert(" Cadastro realizado com sucesso!\n\nVerifique seu email para confirmar a conta.");
       navigate("/consultor/login");
       
     } catch (error) {
@@ -279,12 +279,12 @@ const RegisterPage = () => {
       {etapa >= 2 && validacaoConcluida && (
         <div style={styles.card}>
           <div style={styles.header}>
-            <h1 style={styles.title}>📋 Cadastro de Consultor</h1>
+            <h1 style={styles.title}> Cadastro de Consultor</h1>
             <p style={styles.subtitle}>Complete seus dados para começar</p>
             
             {/* Badge de validação */}
             <div style={styles.validatedBadge}>
-              ✅ Identidade Verificada - Score: {dadosValidados?.score || 95}%
+               Identidade Verificada - Score: {dadosValidados?.score || 95}%
             </div>
 
             {/* Progress */}
@@ -315,7 +315,7 @@ const RegisterPage = () => {
                     onChange={handleChange}
                     style={{
                       ...styles.input,
-                      backgroundColor: dadosValidados?.nome ? "#e8f5e9" : "white"
+                      backgroundColor: dadosValidados?.nome ? "#f3e8ff" : "white"
                     }}
                     readOnly={!!dadosValidados?.nome}
                   />
@@ -336,7 +336,7 @@ const RegisterPage = () => {
                       maxLength={14}
                       style={{
                         ...styles.input,
-                        backgroundColor: dadosValidados?.cpf ? "#e8f5e9" : "white"
+                        backgroundColor: dadosValidados?.cpf ? "#f3e8ff" : "white"
                       }}
                       readOnly={!!dadosValidados?.cpf}
                     />
@@ -356,7 +356,7 @@ const RegisterPage = () => {
                       maxLength={12}
                       style={{
                         ...styles.input,
-                        backgroundColor: dadosValidados?.rg ? "#e8f5e9" : "white"
+                        backgroundColor: dadosValidados?.rg ? "#f3e8ff" : "white"
                       }}
                       readOnly={!!dadosValidados?.rg}
                     />
@@ -375,7 +375,7 @@ const RegisterPage = () => {
                     onChange={handleChange}
                     style={{
                       ...styles.input,
-                      backgroundColor: dadosValidados?.data_nascimento ? "#e8f5e9" : "white"
+                      backgroundColor: dadosValidados?.data_nascimento ? "#f3e8ff" : "white"
                     }}
                     readOnly={!!dadosValidados?.data_nascimento}
                   />
@@ -507,7 +507,7 @@ const RegisterPage = () => {
 
                 {/* Resumo */}
                 <div style={styles.resumo}>
-                  <h3 style={styles.resumoTitle}>📋 Resumo do Cadastro</h3>
+                  <h3 style={styles.resumoTitle}> Resumo do Cadastro</h3>
                   <div style={styles.resumoItem}>
                     <strong>Nome:</strong> {formData.nome}
                   </div>
@@ -521,7 +521,7 @@ const RegisterPage = () => {
                     <strong>Telefone:</strong> {formData.telefone}
                   </div>
                   <div style={styles.resumoItem}>
-                    <strong>Validação:</strong> ✅ Aprovada ({dadosValidados?.score || 95}%)
+                    <strong>Validação:</strong>  Aprovada ({dadosValidados?.score || 95}%)
                   </div>
                 </div>
 
@@ -563,7 +563,7 @@ const RegisterPage = () => {
                 }}
                 disabled={loading}
               >
-                {loading ? "Enviando..." : etapa === 3 ? "✅ Finalizar Cadastro" : "Próximo →"}
+                {loading ? "Enviando..." : etapa === 3 ? " Finalizar Cadastro" : "Próximo →"}
               </button>
             </div>
 
@@ -619,13 +619,13 @@ const styles = {
   validatedBadge: {
     display: "inline-block",
     padding: "8px 16px",
-    backgroundColor: "#d4edda",
+    backgroundColor: "#f3e8ff",
     color: "#155724",
     borderRadius: "20px",
     fontSize: "0.9rem",
     fontWeight: "600",
     marginBottom: "20px",
-    border: "2px solid #c3e6cb",
+    border: "2px solid #f3e8ff",
   },
   progressBar: {
     display: "flex",

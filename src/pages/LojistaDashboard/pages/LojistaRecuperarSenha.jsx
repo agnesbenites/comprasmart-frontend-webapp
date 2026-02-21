@@ -85,10 +85,10 @@ const LojistaRecuperarSenha = () => {
                 />
               </div>
 
-              {error && <div style={styles.error}>❌ {error}</div>}
+              {error && <div style={styles.error}> {error}</div>}
 
               <button type="submit" style={styles.button} disabled={loading}>
-                {loading ? "⏳ Enviando..." : "📧 Enviar Link de Recuperação"}
+                {loading ? " Enviando..." : "📧 Enviar Link de Recuperação"}
               </button>
             </form>
 
@@ -100,7 +100,7 @@ const LojistaRecuperarSenha = () => {
           </>
         ) : (
           <>
-            <div style={styles.successIcon}>✅</div>
+            <div style={styles.successIcon}></div>
             <h2 style={styles.successTitle}>Email Enviado!</h2>
             <p style={styles.successDescription}>
               Enviamos um link de recuperação para:

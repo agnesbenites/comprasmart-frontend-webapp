@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Calendar--Streamline-Solar" height="24" width="24">
+  <desc>
+    Calendar Streamline Icon: https://streamlinehq.com
+  </desc>
+  <g id="Line Duotone/Time/Calendar">
+    <path id="Vector" stroke="#bb25a6" stroke-linecap="round" d="M7 4V2.5" stroke-width="1.5"></path>
+    <path id="Vector_2" stroke="#bb25a6" stroke-linecap="round" d="M17 4V2.5" stroke-width="1.5"></path>
+    <path id="Vector_3" stroke="#bb25a6" stroke-linecap="round" d="M2.5 9h19" stroke-width="1.5"></path>
+    <path id="Vector_4" stroke="#2f0d51" d="M2 12c0 -3.77124 0 -5.65685 1.17157 -6.82843C4.34315 4 6.22876 4 10 4h4c3.7712 0 5.6569 0 6.8284 1.17157C22 6.34315 22 8.22876 22 12v2c0 3.7712 0 5.6569 -1.1716 6.8284C19.6569 22 17.7712 22 14 22h-4c-3.77124 0 -5.65685 0 -6.82843 -1.1716C2 19.6569 2 17.7712 2 14v-2Z" stroke-width="1.5"></path>
+    <path id="Vector_5" fill="#2f0d51" d="M18 17c0 0.5523 -0.4477 1 -1 1s-1 -0.4477 -1 -1 0.4477 -1 1 -1 1 0.4477 1 1Z" stroke-width="1.5"></path>
+    <path id="Vector_6" fill="#2f0d51" d="M18 13c0 0.5523 -0.4477 1 -1 1s-1 -0.4477 -1 -1 0.4477 -1 1 -1 1 0.4477 1 1Z" stroke-width="1.5"></path>
+    <path id="Vector_7" fill="#2f0d51" d="M13 17c0 0.5523 -0.4477 1 -1 1s-1 -0.4477 -1 -1 0.4477 -1 1 -1 1 0.4477 1 1Z" stroke-width="1.5"></path>
+    <path id="Vector_8" fill="#2f0d51" d="M13 13c0 0.5523 -0.4477 1 -1 1s-1 -0.4477 -1 -1 0.4477 -1 1 -1 1 0.4477 1 1Z" stroke-width="1.5"></path>
+    <path id="Vector_9" fill="#2f0d51" d="M8 17c0 0.5523 -0.44772 1 -1 1s-1 -0.4477 -1 -1 0.44772 -1 1 -1 1 0.4477 1 1Z" stroke-width="1.5"></path>
+    <path id="Vector_10" fill="#2f0d51" d="M8 13c0 0.5523 -0.44772 1 -1 1s-1 -0.4477 -1 -1 0.44772 -1 1 -1 1 0.4477 1 1Z" stroke-width="1.5"></path>
+  </g>
+</svg>

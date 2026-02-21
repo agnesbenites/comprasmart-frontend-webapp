@@ -306,7 +306,7 @@ const RelatorioPageVendedor = () => {
         }}>
           <div>
             <h1 style={{ color: "#bb25a6", margin: "0 0 10px 0" }}>
-              📊 Relatório do Vendedor
+               Relatório do Vendedor
             </h1>
             <p style={{ color: "#666", margin: "0 0 5px 0", fontSize: "18px", fontWeight: "500" }}>
               {dadosVendas.vendedor}
@@ -388,7 +388,7 @@ const RelatorioPageVendedor = () => {
             textAlign: "center",
             borderLeft: "4px solid #bb25a6"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#bb25a6", fontSize: "16px" }}>🛒 Vendas do Período</h3>
+            <h3 style={{ margin: "0 0 10px 0", color: "#bb25a6", fontSize: "16px" }}> Vendas do Período</h3>
             <p style={{ fontSize: "28px", fontWeight: "bold", color: "#bb25a6", margin: "0 0 5px 0" }}>
               {dadosVendas.totalVendas}
             </p>
@@ -411,7 +411,7 @@ const RelatorioPageVendedor = () => {
             textAlign: "center",
             borderLeft: "4px solid #bb25a6"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#bb25a6", fontSize: "16px" }}>💰 Valor Total</h3>
+            <h3 style={{ margin: "0 0 10px 0", color: "#bb25a6", fontSize: "16px" }}> Valor Total</h3>
             <p style={{ fontSize: "28px", fontWeight: "bold", color: "#bb25a6", margin: "0" }}>
               {formatarMoeda(dadosVendas.valorTotal)}
             </p>
@@ -428,7 +428,7 @@ const RelatorioPageVendedor = () => {
             textAlign: "center",
             borderLeft: "4px solid #ffc107"
           }}>
-            <h3 style={{ margin: "0 0 10px 0", color: "#ffc107", fontSize: "16px" }}>📈 Ticket Médio</h3>
+            <h3 style={{ margin: "0 0 10px 0", color: "#ffc107", fontSize: "16px" }}> Ticket Médio</h3>
             <p style={{ fontSize: "28px", fontWeight: "bold", color: "#ffc107", margin: "0" }}>
               {formatarMoeda(dadosVendas.ticketMedio)}
             </p>
@@ -453,10 +453,10 @@ const RelatorioPageVendedor = () => {
           boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
           marginBottom: "30px"
         }}>
-          <h3 style={{ color: "#bb25a6", marginBottom: "15px" }}>📋 Resumo</h3>
+          <h3 style={{ color: "#bb25a6", marginBottom: "15px" }}> Resumo</h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "15px" }}>
             <div>
-              <strong>✅ Status:</strong>
+              <strong> Status:</strong>
               <p style={{ margin: "5px 0", color: "#666" }}>
                 {dadosVendas.totalVendas > 0 ? 
                   "Vendas realizadas" : 
@@ -465,13 +465,13 @@ const RelatorioPageVendedor = () => {
               </p>
             </div>
             <div>
-              <strong>📊 Média Diária:</strong>
+              <strong> Média Diária:</strong>
               <p style={{ margin: "5px 0", color: "#666" }}>
                 {(dadosVendas.totalVendas / dadosVendas.vendasPorDia.length).toFixed(1)} vendas/dia
               </p>
             </div>
             <div>
-              <strong>🎯 Tipo de Venda:</strong>
+              <strong> Tipo de Venda:</strong>
               <p style={{ margin: "5px 0", color: "#666" }}>
                 Vendedor (100% para lojista)
               </p>

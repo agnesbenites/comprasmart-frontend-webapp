@@ -4,7 +4,7 @@ import React from 'react';
 import { FaStar, FaGraduationCap, FaShoppingCart, FaTrophy, FaCheckCircle, FaClock } from 'react-icons/fa';
 
 const LOJISTA_PRIMARY = "#bb25a6";
-const LOJISTA_LIGHT_BG = "#e8f5e9";
+const LOJISTA_LIGHT_BG = "#f3e8ff";
 
 /**
  * Card que o LOJISTA va ao avaliar candidaturas de consultores
@@ -17,7 +17,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
   
   const getNivelBadge = (nivel) => {
     const badges = {
-      'Diamante': { color: '#b9f2ff', icon: '', textColor: '#006d8f' },
+      'Diamante': { color: '#b9f2ff', icon: '', textColor: '#bb25a6' },
       'Ouro': { color: '#ffd700', icon: '', textColor: '#8b6914' },
       'Prata': { color: '#c0c0c0', icon: '', textColor: '#6b6b6b' },
       'Bronze': { color: '#cd7f32', icon: '', textColor: '#5c3a1a' },
@@ -121,7 +121,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
         {/* Treinamentos */}
         <div style={styles.metricaItem}>
           <div style={styles.metricaHeader}>
-            <FaGraduationCap color="#2c5aa0" size={18} />
+            <FaGraduationCap color="#2f0d51" size={18} />
             <span style={styles.metricaLabel}>Treinamentos</span>
           </div>
           <div style={styles.metricaValor}>
@@ -137,7 +137,7 @@ const ConsultorCandidatoCard = ({ consultor, onAprovar, onRecusar }) => {
               style={{
                 ...styles.progressFill,
                 width: `${consultor.score.componentes.treinamentos.percentual}%`,
-                backgroundColor: '#2c5aa0',
+                backgroundColor: '#2f0d51',
               }}
             />
           </div>

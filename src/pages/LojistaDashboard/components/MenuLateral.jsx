@@ -2,125 +2,35 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { usePlano } from '../../../contexts/PlanoContext';
+import {
+  House, Package, ClipboardList, Users, UserTie, Handshake,
+  Buildings, QrCode, Bell, ChartBar, GraduationCap, CreditCard,
+  Tag, VideoCamera, Gear, User, Diamond
+} from '@phosphor-icons/react';
 
 const MenuLateral = () => {
   const location = useLocation();
   const { plano } = usePlano();
 
   const menuItems = [
-    {
-      path: '/lojista/dashboard',
-      label: 'Início',
-      icon: '🏠',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/produtos',
-      label: 'Produtos',
-      icon: '📦',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/pedidos',
-      label: 'Pedidos',
-      icon: '🛒',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/usuarios',
-      label: 'Equipe',
-      icon: '👥',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/vendedores',
-      label: 'Vendedores',
-      icon: '🛍️',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/consultores',
-      label: 'Consultores',
-      icon: '🤝',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/filiais',
-      label: 'Filiais',
-      icon: '🏢',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/qrcode',
-      label: 'QR Codes',
-      icon: '📱',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/notificacoes',
-      label: 'Notificações',
-      icon: '🔔',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/relatorios',
-      label: 'Relatórios',
-      icon: '📊',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/treinamentos',
-      label: 'Treinamentos',
-      icon: '🎓',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/pagamentos',
-      label: 'Planos e Pagamentos',
-      icon: '💳',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/cupom',
-      label: 'Cupom de Desconto',
-      icon: '🎫',
-      requiredPlan: null,
-      badge: 'EM BREVE',
-      badgeColor: '#f59e0b',
-    },
-    {
-      path: '/lojista/dashboard/live',
-      label: 'Live',
-      icon: '📹',
-      requiredPlan: null,
-      badge: 'EM BREVE',
-      badgeColor: '#f59e0b',
-    },
-    {
-      path: '/lojista/dashboard/cadastro',
-      label: 'Configurações',
-      icon: '⚙️',
-      requiredPlan: null,
-    },
-    {
-      path: '/lojista/dashboard/meu-perfil',
-      label: 'Meu Perfil',
-      icon: '👤',
-      requiredPlan: null,
-    },
-    // ENTERPRISE - Separador visual
-    {
-      separator: true,
-      requiredPlan: 'enterprise',
-    },
-    {
-      path: '/lojista/dashboard/enterprise',
-      label: 'Dashboard Enterprise',
-      icon: '💎',
-      requiredPlan: 'enterprise',
-      badge: 'ENTERPRISE',
-      badgeColor: '#f59e0b',
-    },
+    { path: '/lojista/dashboard', label: 'Início', icon: House, requiredPlan: null },
+    { path: '/lojista/dashboard/produtos', label: 'Produtos', icon: Package, requiredPlan: null },
+    { path: '/lojista/dashboard/pedidos', label: 'Pedidos', icon: ClipboardList, requiredPlan: null },
+    { path: '/lojista/dashboard/usuarios', label: 'Equipe', icon: Users, requiredPlan: null },
+    { path: '/lojista/dashboard/vendedores', label: 'Vendedores', icon: UserTie, requiredPlan: null },
+    { path: '/lojista/dashboard/consultores', label: 'Consultores', icon: Handshake, requiredPlan: null },
+    { path: '/lojista/dashboard/filiais', label: 'Filiais', icon: Buildings, requiredPlan: null },
+    { path: '/lojista/dashboard/qrcode', label: 'QR Codes', icon: QrCode, requiredPlan: null },
+    { path: '/lojista/dashboard/notificacoes', label: 'Notificações', icon: Bell, requiredPlan: null },
+    { path: '/lojista/dashboard/relatorios', label: 'Relatórios', icon: ChartBar, requiredPlan: null },
+    { path: '/lojista/dashboard/treinamentos', label: 'Treinamentos', icon: GraduationCap, requiredPlan: null },
+    { path: '/lojista/dashboard/pagamentos', label: 'Planos e Pagamentos', icon: CreditCard, requiredPlan: null },
+    { path: '/lojista/dashboard/cupom', label: 'Cupom de Desconto', icon: Tag, requiredPlan: null, badge: 'EM BREVE', badgeColor: '#f59e0b' },
+    { path: '/lojista/dashboard/live', label: 'Live', icon: VideoCamera, requiredPlan: null, badge: 'EM BREVE', badgeColor: '#f59e0b' },
+    { path: '/lojista/dashboard/cadastro', label: 'Configurações', icon: Gear, requiredPlan: null },
+    { path: '/lojista/dashboard/meu-perfil', label: 'Meu Perfil', icon: User, requiredPlan: null },
+    { separator: true, requiredPlan: 'enterprise' },
+    { path: '/lojista/dashboard/enterprise', label: 'Dashboard Enterprise', icon: Diamond, requiredPlan: 'enterprise', badge: 'ENTERPRISE', badgeColor: '#f59e0b' },
   ];
 
   const canAccessItem = (item) => {
@@ -134,7 +44,6 @@ const MenuLateral = () => {
       {menuItems.map((item, index) => {
         if (!canAccessItem(item)) return null;
 
-        // Separador
         if (item.separator) {
           return (
             <div key={`separator-${index}`} style={styles.separator}>
@@ -144,23 +53,22 @@ const MenuLateral = () => {
         }
 
         const isActive = location.pathname === item.path;
+        const IconComponent = item.icon;
 
         return (
           <Link
             key={item.path}
             to={item.path}
-            style={{
-              ...styles.link,
-              ...(isActive && styles.linkActive),
-            }}
+            style={{ ...styles.link, ...(isActive && styles.linkActive) }}
           >
-            <span style={styles.icon}>{item.icon}</span>
+            <IconComponent
+              size={20}
+              weight="duotone"
+              color={isActive ? 'white' : '#2f0d51'}
+            />
             <span style={styles.label}>{item.label}</span>
             {item.badge && (
-              <span style={{
-                ...styles.badge,
-                backgroundColor: item.badgeColor || '#bb25a6'
-              }}>
+              <span style={{ ...styles.badge, backgroundColor: item.badgeColor || '#bb25a6' }}>
                 {item.badge}
               </span>
             )}
@@ -196,10 +104,6 @@ const styles = {
     backgroundColor: '#bb25a6',
     color: 'white',
     fontWeight: '600',
-  },
-  icon: {
-    fontSize: '1.2rem',
-    flexShrink: 0,
   },
   label: {
     flex: 1,

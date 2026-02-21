@@ -220,7 +220,7 @@ const ProdutosPage = () => {
       {/* Info da loja */}
       {lojaSelecionada && (
         <p style={styles.subtitle}>
-          📍 {lojaSelecionada.nome} 
+           {lojaSelecionada.nome} 
           {lojaSelecionada.id === lojaMatriz?.id && ' (Matriz)'} 
           {lojaSelecionada.cnpj && ` - CNPJ: ${lojaSelecionada.cnpj}`}
         </p>
@@ -244,7 +244,7 @@ const ProdutosPage = () => {
           color: '#1565c0',
           marginBottom: '15px',
         }}>
-          🏪 Selecione a Filial para Gerenciar:
+           Selecione a Filial para Gerenciar:
         </label>
         
         {todasLojas.length === 1 ? (
@@ -291,7 +291,7 @@ const ProdutosPage = () => {
               color: '#1565c0',
               fontSize: '0.9rem',
             }}>
-              💡 Produtos e promoções serão cadastrados na filial selecionada. 
+               Produtos e promoções serão cadastrados na filial selecionada. 
               {lojaSelecionada?.id === lojaMatriz?.id && ' Matriz selecionada por padrão.'}
             </small>
           </>

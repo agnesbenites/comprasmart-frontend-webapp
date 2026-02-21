@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Chart-3--Streamline-Solar" height="24" width="24">
+  <desc>
+    Chart 3 Streamline Icon: https://streamlinehq.com
+  </desc>
+  <g id="Line Duotone/Business Statistic/Chart 3">
+    <path id="Vector" stroke="#bb25a6" stroke-linecap="round" stroke-linejoin="round" d="M3 22h18" stroke-width="1.5"></path>
+    <path id="Vector_2" stroke="#2f0d51" d="M3 11c0 -0.9428 0 -1.41421 0.29289 -1.70711C3.58579 9 4.05719 9 5 9c0.94281 0 1.41421 0 1.70711 0.29289C7 9.58579 7 10.0572 7 11v6c0 0.9428 0 1.4142 -0.29289 1.7071C6.41421 19 5.94281 19 5 19c-0.94281 0 -1.41421 0 -1.70711 -0.2929C3 18.4142 3 17.9428 3 17v-6Z" stroke-width="1.5"></path>
+    <path id="Vector_3" stroke="#2f0d51" d="M10 7c0 -0.94281 0 -1.41421 0.2929 -1.70711C10.5858 5 11.0572 5 12 5c0.9428 0 1.4142 0 1.7071 0.29289C14 5.58579 14 6.05719 14 7v10c0 0.9428 0 1.4142 -0.2929 1.7071C13.4142 19 12.9428 19 12 19c-0.9428 0 -1.4142 0 -1.7071 -0.2929C10 18.4142 10 17.9428 10 17V7Z" stroke-width="1.5"></path>
+    <path id="Vector_4" stroke="#2f0d51" d="M17 4c0 -0.94281 0 -1.41421 0.2929 -1.70711C17.5858 2 18.0572 2 19 2c0.9428 0 1.4142 0 1.7071 0.29289C21 2.58579 21 3.05719 21 4v13c0 0.9428 0 1.4142 -0.2929 1.7071C20.4142 19 19.9428 19 19 19c-0.9428 0 -1.4142 0 -1.7071 -0.2929C17 18.4142 17 17.9428 17 17V4Z" stroke-width="1.5"></path>
+  </g>
+</svg>

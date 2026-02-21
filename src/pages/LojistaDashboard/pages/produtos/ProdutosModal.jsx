@@ -91,10 +91,10 @@ const ProdutosModal = ({
             const previews = files.map(file => URL.createObjectURL(file));
             setFotosPreviews(prev => [...prev, ...previews]);
 
-            alert(`✅ ${files.length} foto(s) adicionada(s)!`);
+            alert(` ${files.length} foto(s) adicionada(s)!`);
         } catch (error) {
             console.error('[Upload] Erro:', error);
-            alert('❌ Erro ao fazer upload');
+            alert(' Erro ao fazer upload');
         } finally {
             setUploadingFotos(false);
         }
@@ -124,12 +124,12 @@ const ProdutosModal = ({
         const estoqueFinal = parseInt(formData.estoque);
 
         if (isNaN(precoFinal) || isNaN(comissaoFinal) || isNaN(estoqueFinal)) {
-            alert("❌ Valores inválidos nos campos numéricos.");
+            alert(" Valores inválidos nos campos numéricos.");
             return;
         }
 
         if (!formData.nome.trim()) {
-            alert("❌ O nome do produto não pode estar vazio.");
+            alert(" O nome do produto não pode estar vazio.");
             return;
         }
 
@@ -185,7 +185,7 @@ const ProdutosModal = ({
                     {/* Preço e Comissão - lado a lado */}
                     <div style={styles.formRow}>
                         <div style={styles.formGroupHalf}>
-                            <label style={styles.label}>💰 Preço (R$) *</label>
+                            <label style={styles.label}> Preço (R$) *</label>
                             <input
                                 type="number"
                                 name="preco"
@@ -200,7 +200,7 @@ const ProdutosModal = ({
                         </div>
 
                         <div style={styles.formGroupHalf}>
-                            <label style={styles.label}>📊 Comissão (%) *</label>
+                            <label style={styles.label}> Comissão (%) *</label>
                             <input
                                 type="number"
                                 name="comissao"
@@ -218,7 +218,7 @@ const ProdutosModal = ({
 
                     {/* Estoque */}
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>📦 Estoque *</label>
+                        <label style={styles.label}> Estoque *</label>
                         <input
                             type="number"
                             name="estoque"
@@ -234,7 +234,7 @@ const ProdutosModal = ({
                     {/* Preview da Venda */}
                     {!isNaN(valorComissao) && !isNaN(valorFinal) && (
                         <div style={styles.previewBox}>
-                            <strong style={styles.previewTitle}>📊 Preview da Venda</strong>
+                            <strong style={styles.previewTitle}> Preview da Venda</strong>
                             <div style={styles.previewRow}>
                                 <span>Preço:</span>
                                 <span>R$ {parseFloat(formData.preco).toFixed(2)}</span>
@@ -252,7 +252,7 @@ const ProdutosModal = ({
 
                     {/* Descrição */}
                     <div style={styles.formGroup}>
-                        <label style={styles.label}>📄 Descrição</label>
+                        <label style={styles.label}> Descrição</label>
                         <textarea
                             name="descricao"
                             value={formData.descricao}
@@ -263,7 +263,7 @@ const ProdutosModal = ({
                             placeholder="Descrição detalhada do produto..."
                         />
                         <small style={{ color: '#666', fontSize: '12px' }}>
-                            💡 Uma boa descrição ajuda o consultor a vender!
+                             Uma boa descrição ajuda o consultor a vender!
                         </small>
                     </div>
 
@@ -308,7 +308,7 @@ const ProdutosModal = ({
 
                         {uploadingFotos && (
                             <div style={styles.uploading}>
-                                ⏳ Fazendo upload...
+                                 Fazendo upload...
                             </div>
                         )}
                     </div>

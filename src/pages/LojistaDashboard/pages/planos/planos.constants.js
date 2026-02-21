@@ -9,7 +9,7 @@ export const STRIPE_LINKS = {
   ADICIONAL_BASIC: "https://buy.stripe.com/aFa28rehOdiIfW60mdgQE04",
   ADICIONAL_VENDEDOR: "https://buy.stripe.com/6oU4gz6Pm1A0cJUed3gQE05",
   ADICIONAL_FILIAL: "https://buy.stripe.com/7sY28r6PmguUcJUglbgQE06",
-  ADICIONAL_PRODUTOS: "https://buy.stripe.com/eVqeVd2z66Uk5hs9WNgQE09", // ✅ CORRIGIDO!
+  ADICIONAL_PRODUTOS: "https://buy.stripe.com/eVqeVd2z66Uk5hs9WNgQE09", //  CORRIGIDO!
   ADICIONAL_ERP: "https://buy.stripe.com/3cI9ATc9G7YodNYfh7gQE08",
 };
 
@@ -46,7 +46,7 @@ export const PLANS_DETAILS = {
 
   "Plano Enterprise": {
     nome: "Plano Enterprise",
-    valor: 499.90, // ✅ CORRIGIDO DE 360 PARA 499.90
+    valor: 499.90, //  CORRIGIDO DE 360 PARA 499.90
     recursos: [
       "Filiais Ilimitadas",
       "Vendedores Ilimitados",

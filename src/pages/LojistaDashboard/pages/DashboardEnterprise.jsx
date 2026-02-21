@@ -163,7 +163,7 @@ const DashboardEnterprise = () => {
             {planoLoja?.toUpperCase() || 'PLANO'}
           </span>
           <button onClick={buscarDados} style={styles.button}>
-            🔄 Atualizar
+             Atualizar
           </button>
         </div>
       </div>
@@ -204,7 +204,7 @@ const DashboardEnterprise = () => {
       {/* MÉTRICAS PRINCIPAIS */}
       <div style={styles.cardsGrid}>
         <div style={styles.card}>
-          <div style={styles.cardIcon}>💰</div>
+          <div style={styles.cardIcon}></div>
           <div>
             <div style={styles.cardLabel}>Receita Total</div>
             <div style={styles.cardValue}>
@@ -215,7 +215,7 @@ const DashboardEnterprise = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={styles.cardIcon}>👥</div>
+          <div style={styles.cardIcon}></div>
           <div>
             <div style={styles.cardLabel}>Vendas Assistidas</div>
             <div style={styles.cardValue}>
@@ -235,7 +235,7 @@ const DashboardEnterprise = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={styles.cardIcon}>⭐</div>
+          <div style={styles.cardIcon}></div>
           <div>
             <div style={styles.cardLabel}>Satisfação</div>
             <div style={styles.cardValue}>{metrics.scoreMedio.toFixed(1)}</div>
@@ -249,19 +249,19 @@ const DashboardEnterprise = () => {
         <h2 style={styles.sectionTitle}>Ações Rápidas</h2>
         <div style={styles.acoesGrid}>
           <Link to="/lojista/vendas" style={styles.acaoButton}>
-            <span style={styles.acaoIcon}>💰</span>
+            <span style={styles.acaoIcon}></span>
             <span>Nova Venda</span>
           </Link>
           <Link to="/lojista/estoque" style={styles.acaoButton}>
-            <span style={styles.acaoIcon}>📦</span>
+            <span style={styles.acaoIcon}></span>
             <span>Gerenciar Estoque</span>
           </Link>
           <Link to="/lojista/consultores" style={styles.acaoButton}>
-            <span style={styles.acaoIcon}>👥</span>
+            <span style={styles.acaoIcon}></span>
             <span>Consultores Online</span>
           </Link>
           <Link to="/lojista/relatorios" style={styles.acaoButton}>
-            <span style={styles.acaoIcon}>📊</span>
+            <span style={styles.acaoIcon}></span>
             <span>Relatórios</span>
           </Link>
           <Link to="/lojista/configuracoes" style={styles.acaoButton}>
@@ -276,7 +276,7 @@ const DashboardEnterprise = () => {
         {/* COLUNA 1: TOP CONSULTORES */}
         <div style={styles.column}>
           <div style={styles.section}>
-            <h2 style={styles.sectionTitle}>🏆 Top Consultores</h2>
+            <h2 style={styles.sectionTitle}> Top Consultores</h2>
             {topConsultores.length === 0 ? (
               <p style={styles.emptyState}>Nenhum consultor ainda. As vendas aparecerão aqui quando houver atendimentos.</p>
             ) : (
@@ -298,7 +298,7 @@ const DashboardEnterprise = () => {
                       </span>
                     </div>
                     <div style={styles.tableCell}>
-                      ⭐ {parseFloat(consultor.score_medio_atendimento || 0).toFixed(1)}
+                       {parseFloat(consultor.score_medio_atendimento || 0).toFixed(1)}
                     </div>
                   </div>
                 ))}
@@ -331,7 +331,7 @@ const DashboardEnterprise = () => {
                     <div style={styles.tableCell}>
                       {venda.metodo_fechamento === 'video' ? '📹' : 
                        venda.metodo_fechamento === 'audio' ? '🎧' : 
-                       venda.metodo_fechamento === 'chat' ? '💬' : '📝'}
+                       venda.metodo_fechamento === 'chat' ? '' : '📝'}
                     </div>
                   </div>
                 ))}
@@ -343,7 +343,7 @@ const DashboardEnterprise = () => {
 
       {/* PERFORMANCE POR MÉTODO */}
       <div style={styles.section}>
-        <h2 style={styles.sectionTitle}>📊 Métodos de Atendimento</h2>
+        <h2 style={styles.sectionTitle}> Métodos de Atendimento</h2>
         <div style={styles.metodosGrid}>
           <div style={styles.metodoCard}>
             <div style={styles.metodoIcon}>📹</div>
@@ -364,7 +364,7 @@ const DashboardEnterprise = () => {
           </div>
 
           <div style={styles.metodoCard}>
-            <div style={styles.metodoIcon}>💬</div>
+            <div style={styles.metodoIcon}></div>
             <div style={styles.metodoLabel}>Chat</div>
             <div style={styles.metodoValue}>{metrics.vendasChat}</div>
             <div style={styles.metodoPercentual}>
@@ -378,7 +378,7 @@ const DashboardEnterprise = () => {
       <div style={styles.section}>
         <h2 style={styles.sectionTitle}>⚠️ Produtos que Precisam de Atenção</h2>
         {alertasEstoque.length === 0 ? (
-          <p style={styles.emptyState}>🎉 Excelente! Nenhum produto crítico no momento.</p>
+          <p style={styles.emptyState}> Excelente! Nenhum produto crítico no momento.</p>
         ) : (
           <div style={styles.table}>
             <div style={styles.tableHeader}>

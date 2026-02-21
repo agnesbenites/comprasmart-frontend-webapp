@@ -144,7 +144,7 @@ const LojistaFiliais = () => {
 
     return (
       <span style={{ ...badgeStyles[status], padding: "4px 12px", borderRadius: "20px", fontSize: "0.8rem", fontWeight: "600", border: "1px solid" }}>
-        {status === "ativa" ? "✅ Ativa" : "❌ Inativa"}
+        {status === "ativa" ? " Ativa" : " Inativa"}
       </span>
     );
   };
@@ -160,7 +160,7 @@ const LojistaFiliais = () => {
         fontWeight: "600",
         border: `1px solid ${tipo === "fisica" ? "#b8daff" : "#ffeaa7"}`,
       }}>
-        {tipo === "fisica" ? "🏪 Física" : "💻 Virtual"}
+        {tipo === "fisica" ? " Física" : "💻 Virtual"}
       </span>
     );
   };
@@ -196,7 +196,7 @@ const LojistaFiliais = () => {
     <div style={styles.container}>
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>🏪 Gestão de Filiais</h1>
+          <h1 style={styles.title}> Gestão de Filiais</h1>
           <p style={styles.subtitle}>Gerencie todas as suas lojas físicas e virtuais</p>
         </div>
         <div style={styles.stats}>
@@ -238,7 +238,7 @@ const LojistaFiliais = () => {
             <div style={styles.formGrid}>
               {/* Dados Básicos */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>📋 Dados Básicos</h3>
+                <h3 style={styles.sectionTitle}> Dados Básicos</h3>
 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>Nome da Filial *</label>
@@ -249,7 +249,7 @@ const LojistaFiliais = () => {
                   <div style={styles.formGroup}>
                     <label style={styles.label}>Tipo *</label>
                     <select name="tipo" value={formData.tipo} onChange={handleInputChange} style={styles.select} required>
-                      <option value="fisica">🏪 Loja Física</option>
+                      <option value="fisica"> Loja Física</option>
                       <option value="virtual">💻 Loja Virtual</option>
                     </select>
                   </div>
@@ -257,8 +257,8 @@ const LojistaFiliais = () => {
                   <div style={styles.formGroup}>
                     <label style={styles.label}>Status *</label>
                     <select name="status" value={formData.status} onChange={handleInputChange} style={styles.select} required>
-                      <option value="ativa">✅ Ativa</option>
-                      <option value="inativa">❌ Inativa</option>
+                      <option value="ativa"> Ativa</option>
+                      <option value="inativa"> Inativa</option>
                     </select>
                   </div>
                 </div>
@@ -305,7 +305,7 @@ const LojistaFiliais = () => {
 
               {/* Contato */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>📞 Contato</h3>
+                <h3 style={styles.sectionTitle}> Contato</h3>
 
                 <div style={styles.formGroup}>
                   <label style={styles.label}>Responsável *</label>
@@ -327,7 +327,7 @@ const LojistaFiliais = () => {
 
               {/* Endereço */}
               <div style={styles.formSection}>
-                <h3 style={styles.sectionTitle}>📍 Endereço</h3>
+                <h3 style={styles.sectionTitle}> Endereço</h3>
 
                 <div style={styles.formRow}>
                   <div style={styles.formGroup}>
@@ -372,8 +372,8 @@ const LojistaFiliais = () => {
             </div>
 
             <div style={styles.formActions}>
-              <button type="button" onClick={handleCancel} style={styles.cancelButton}>❌ Cancelar</button>
-              <button type="submit" style={styles.submitButton}>✅ {editingFilial ? "Atualizar" : "Cadastrar"}</button>
+              <button type="button" onClick={handleCancel} style={styles.cancelButton}> Cancelar</button>
+              <button type="submit" style={styles.submitButton}> {editingFilial ? "Atualizar" : "Cadastrar"}</button>
             </div>
           </form>
         </div>
@@ -382,7 +382,7 @@ const LojistaFiliais = () => {
       {/* Lista de Filiais */}
       {filiais.length > 0 && (
         <div style={styles.listaContainer}>
-          <h2 style={styles.listaTitle}>📋 Filiais Cadastradas ({filiais.length})</h2>
+          <h2 style={styles.listaTitle}> Filiais Cadastradas ({filiais.length})</h2>
 
           <div style={styles.filiaisGrid}>
             {filiais.map((filial) => (
@@ -396,13 +396,13 @@ const LojistaFiliais = () => {
                 </div>
 
                 <div style={styles.filialInfo}>
-                  <p style={styles.filialResponsavel}>👤 <strong>Responsável:</strong> {filial.responsavel}</p>
+                  <p style={styles.filialResponsavel}> <strong>Responsável:</strong> {filial.responsavel}</p>
                   
                   {filial.email && <p style={styles.filialContato}>✉️ {filial.email}</p>}
-                  <p style={styles.filialContato}>📞 {filial.telefone}</p>
+                  <p style={styles.filialContato}> {filial.telefone}</p>
                   
                   <p style={styles.filialEndereco}>
-                    📍 {filial.endereco}, {filial.numero}
+                     {filial.endereco}, {filial.numero}
                     {filial.complemento && ` - ${filial.complemento}`}
                     <br />
                     {filial.cidade}/{filial.estado} - CEP: {filial.cep}
@@ -432,7 +432,7 @@ const LojistaFiliais = () => {
 
       {filiais.length === 0 && !showForm && (
         <div style={styles.emptyState}>
-          <p style={styles.emptyIcon}>🏪</p>
+          <p style={styles.emptyIcon}></p>
           <h2 style={styles.emptyTitle}>Nenhuma filial cadastrada</h2>
           <p style={styles.emptyText}>Clique no botão acima para adicionar sua primeira filial</p>
         </div>

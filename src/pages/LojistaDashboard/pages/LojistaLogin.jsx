@@ -68,7 +68,7 @@ const LojistaLogin = () => {
         return;
       }
 
-      // ✅ USA O AuthContext
+      //  USA O AuthContext
       const { user } = await signIn(email, formData.senha);
 
       // Buscar dados da loja
@@ -100,7 +100,7 @@ const LojistaLogin = () => {
         },
       });
 
-      console.log("✅ Login completo, redirecionando...");
+      console.log(" Login completo, redirecionando...");
       
       // Redirecionar
       navigate("/lojista/dashboard");
@@ -121,7 +121,7 @@ const LojistaLogin = () => {
     <div style={styles.container}>
       <div style={styles.card}>
         <div style={styles.header}>
-          <h1 style={styles.title}>🏪 Login Lojista</h1>
+          <h1 style={styles.title}> Login Lojista</h1>
           <p style={styles.subtitle}>Acesse seu painel administrativo</p>
         </div>
 
@@ -190,14 +190,14 @@ const LojistaLogin = () => {
             />
           </div>
 
-          {erro && <div style={styles.erro}>❌ {erro}</div>}
+          {erro && <div style={styles.erro}> {erro}</div>}
 
           <button
             type="submit"
             style={{ ...styles.button, opacity: loading ? 0.6 : 1 }}
             disabled={loading}
           >
-            {loading ? "⏳ Entrando..." : "Entrar"}
+            {loading ? " Entrando..." : "Entrar"}
           </button>
         </form>
 

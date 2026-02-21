@@ -342,7 +342,7 @@ const KasBook = () => {
           <div style={{ fontWeight: 'bold', marginBottom: '5px', color: isDark ? '#FFF' : colors.text }}>{day}</div>
           {feriado && (
             <div style={{ fontSize: '10px', color: colors.red, fontWeight: 'bold' }}>
-              🎉 {feriado}
+               {feriado}
             </div>
           )}
           {eventosData.map((evt, idx) => (
@@ -1731,7 +1731,7 @@ Seja direto, prático e focado em small business brasileiro. Use emojis para des
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', backgroundColor: colors.bg }}>
         <div style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: '48px', marginBottom: '20px' }}>📊</div>
+          <div style={{ fontSize: '48px', marginBottom: '20px' }}></div>
           <div style={{ color: colors.purple, fontSize: '18px', fontWeight: 'bold' }}>Carregando KasBook...</div>
         </div>
       </div>

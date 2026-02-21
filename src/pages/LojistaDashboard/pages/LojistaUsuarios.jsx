@@ -5,10 +5,10 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
 const LojistaUsuarios = () => {
-  const [activeTab, setActiveTab] = useState('vendedores'); // ✅ Começa em vendedores
+  const [activeTab, setActiveTab] = useState('vendedores'); //  Começa em vendedores
   const [loading, setLoading] = useState(false);
   const [lojaId, setLojaId] = useState(null);
-  const [planoLoja, setPlanoLoja] = useState('basic'); // ✅ Armazena plano
+  const [planoLoja, setPlanoLoja] = useState('basic'); //  Armazena plano
   
   const [admins, setAdmins] = useState([]);
   const [vendedores, setVendedores] = useState([]);
@@ -22,7 +22,7 @@ const LojistaUsuarios = () => {
   
   const [formData, setFormData] = useState({});
   
-  // ✅ PERMISSÕES CORRIGIDAS - SEGUINDO O PADRÃO
+  //  PERMISSÕES CORRIGIDAS - SEGUINDO O PADRÃO
   const [permissoes, setPermissoes] = useState({
     // Produtos
     pode_criar_produto: false,
@@ -62,7 +62,7 @@ const LojistaUsuarios = () => {
       
       if (!user) return;
 
-      // ✅ Buscar loja E plano
+      //  Buscar loja E plano
       const { data: loja } = await supabase
         .from('lojas_corrigida')
         .select('id, plano')
@@ -70,7 +70,7 @@ const LojistaUsuarios = () => {
         .single();
 
       if (!loja) {
-        alert('❌ Erro: Você não está vinculado a nenhuma loja!');
+        alert(' Erro: Você não está vinculado a nenhuma loja!');
         return;
       }
       
@@ -120,16 +120,16 @@ const LojistaUsuarios = () => {
     }
   };
 
-  // ✅ VALIDAR SE PODE ACESSAR ADMINS
+  //  VALIDAR SE PODE ACESSAR ADMINS
   const podeGerenciarAdmins = () => {
     return planoLoja === 'pro' || planoLoja === 'enterprise';
   };
 
-  // ✅ VALIDAR LIMITE DE ADMINS
+  //  VALIDAR LIMITE DE ADMINS
   const validarLimiteAdmins = () => {
     if (planoLoja === 'basic') return false;
     if (planoLoja === 'pro' && admins.length >= 3) {
-      alert('❌ Plano Pro permite até 3 administradores. Faça upgrade para Enterprise!');
+      alert(' Plano Pro permite até 3 administradores. Faça upgrade para Enterprise!');
       return false;
     }
     return true;
@@ -151,7 +151,7 @@ const LojistaUsuarios = () => {
   // ============================================
   const handleAbrirPermissoes = async (admin) => {
     if (!podeGerenciarAdmins()) {
-      alert('❌ Sistema de permissões disponível apenas nos planos Pro e Enterprise!');
+      alert(' Sistema de permissões disponível apenas nos planos Pro e Enterprise!');
       return;
     }
 
@@ -165,7 +165,7 @@ const LojistaUsuarios = () => {
       .single();
     
     if (perms) {
-      // ✅ Garantir compatibilidade com os novos nomes de campos
+      //  Garantir compatibilidade com os novos nomes de campos
       setPermissoes({
         ...permissoes, // Valores padrão
         ...perms // Sobrescreve com os valores do banco
@@ -227,13 +227,13 @@ const LojistaUsuarios = () => {
         if (error) throw error;
       }
       
-      alert('✅ Permissões atualizadas!');
+      alert(' Permissões atualizadas!');
       setModalEditPermissoes(false);
       setAdminSelecionado(null);
       
     } catch (error) {
       console.error('Erro ao salvar permissões:', error);
-      alert('❌ Erro ao salvar permissões');
+      alert(' Erro ao salvar permissões');
     }
   };
 
@@ -244,7 +244,7 @@ const LojistaUsuarios = () => {
     e.preventDefault();
     
     if (!podeGerenciarAdmins()) {
-      alert('❌ Gestão de administradores disponível apenas nos planos Pro e Enterprise!');
+      alert(' Gestão de administradores disponível apenas nos planos Pro e Enterprise!');
       return;
     }
 
@@ -253,7 +253,7 @@ const LojistaUsuarios = () => {
     }
     
     if (!lojaId) {
-      alert('❌ ERRO: ID da loja não encontrado!');
+      alert(' ERRO: ID da loja não encontrado!');
       return;
     }
     
@@ -285,7 +285,7 @@ const LojistaUsuarios = () => {
           }]);
       }
       
-      alert('✅ Administrador adicionado!');
+      alert(' Administrador adicionado!');
       setModalAddAdmin(false);
       setFormData({});
       // Reset para valores padrão
@@ -310,7 +310,7 @@ const LojistaUsuarios = () => {
       carregarDados();
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao adicionar: ' + error.message);
+      alert(' Erro ao adicionar: ' + error.message);
     }
   };
 
@@ -325,10 +325,10 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert('✅ Administrador excluído!');
+      alert(' Administrador excluído!');
       carregarDados();
     } catch (error) {
-      alert('❌ Erro ao excluir');
+      alert(' Erro ao excluir');
     }
   };
 
@@ -341,10 +341,10 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert(`✅ Status alterado!`);
+      alert(` Status alterado!`);
       carregarDados();
     } catch (error) {
-      alert('❌ Erro ao alterar status');
+      alert(' Erro ao alterar status');
     }
   };
 
@@ -355,7 +355,7 @@ const LojistaUsuarios = () => {
     e.preventDefault();
     
     if (!lojaId) {
-      alert('❌ ERRO: ID da loja não encontrado!');
+      alert(' ERRO: ID da loja não encontrado!');
       return;
     }
     
@@ -374,12 +374,12 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert('✅ Vendedor adicionado!');
+      alert(' Vendedor adicionado!');
       setModalAddVendedor(false);
       setFormData({});
       carregarDados();
     } catch (error) {
-      alert('❌ Erro: ' + error.message);
+      alert(' Erro: ' + error.message);
     }
   };
 
@@ -394,10 +394,10 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert('✅ Vendedor excluído!');
+      alert(' Vendedor excluído!');
       carregarDados();
     } catch (error) {
-      alert('❌ Erro ao excluir');
+      alert(' Erro ao excluir');
     }
   };
 
@@ -410,10 +410,10 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert(`✅ Vendedor ${!currentStatus ? 'ativado' : 'desativado'}!`);
+      alert(` Vendedor ${!currentStatus ? 'ativado' : 'desativado'}!`);
       carregarDados();
     } catch (error) {
-      alert('❌ Erro ao alterar status');
+      alert(' Erro ao alterar status');
     }
   };
 
@@ -431,10 +431,10 @@ const LojistaUsuarios = () => {
 
       if (error) throw error;
       
-      alert('✅ Consultor removido!');
+      alert(' Consultor removido!');
       carregarDados();
     } catch (error) {
-      alert('❌ Erro ao remover');
+      alert(' Erro ao remover');
     }
   };
 
@@ -446,7 +446,7 @@ const LojistaUsuarios = () => {
       <h4 style={styles.permissoesTitle}>🔐 Permissões de Acesso</h4>
       
       <div style={styles.permissoesGroup}>
-        <strong style={styles.permissoesGroupTitle}>📦 Produtos</strong>
+        <strong style={styles.permissoesGroupTitle}> Produtos</strong>
         <label style={styles.checkboxLabel}>
           <input type="checkbox" checked={permissoes.pode_criar_produto} onChange={(e) => setPermissoes({...permissoes, pode_criar_produto: e.target.checked})} />
           Criar produtos
@@ -470,7 +470,7 @@ const LojistaUsuarios = () => {
       </div>
 
       <div style={styles.permissoesGroup}>
-        <strong style={styles.permissoesGroupTitle}>🎁 Promoções (corrigidas)</strong>
+        <strong style={styles.permissoesGroupTitle}> Promoções (corrigidas)</strong>
         <label style={styles.checkboxLabel}>
           <input type="checkbox" checked={permissoes.pode_criar_promocoes} onChange={(e) => setPermissoes({...permissoes, pode_criar_promocoes: e.target.checked})} />
           Criar promoções
@@ -490,7 +490,7 @@ const LojistaUsuarios = () => {
       </div>
 
       <div style={styles.permissoesGroup}>
-        <strong style={styles.permissoesGroupTitle}>👥 Equipe</strong>
+        <strong style={styles.permissoesGroupTitle}> Equipe</strong>
         <label style={styles.checkboxLabel}>
           <input type="checkbox" checked={permissoes.pode_gerenciar_vendedores} onChange={(e) => setPermissoes({...permissoes, pode_gerenciar_vendedores: e.target.checked})} />
           Gerenciar vendedores
@@ -510,7 +510,7 @@ const LojistaUsuarios = () => {
       </div>
 
       <div style={styles.permissoesGroup}>
-        <strong style={styles.permissoesGroupTitle}>📈 Marketing</strong>
+        <strong style={styles.permissoesGroupTitle}> Marketing</strong>
         <label style={styles.checkboxLabel}>
           <input type="checkbox" checked={permissoes.pode_usar_marketing_destaque} onChange={(e) => setPermissoes({...permissoes, pode_usar_marketing_destaque: e.target.checked})} />
           Usar marketing de destaque
@@ -518,7 +518,7 @@ const LojistaUsuarios = () => {
       </div>
 
       <div style={styles.permissoesGroup}>
-        <strong style={styles.permissoesGroupTitle}>📊 Outros</strong>
+        <strong style={styles.permissoesGroupTitle}> Outros</strong>
         <label style={styles.checkboxLabel}>
           <input type="checkbox" checked={permissoes.pode_gerenciar_treinamentos} onChange={(e) => setPermissoes({...permissoes, pode_gerenciar_treinamentos: e.target.checked})} />
           Gerenciar treinamentos
@@ -535,20 +535,20 @@ const LojistaUsuarios = () => {
   // RENDERS
   // ============================================
   const renderAdmins = () => {
-    // ✅ Se plano Basic, mostrar mensagem de upgrade
+    //  Se plano Basic, mostrar mensagem de upgrade
     if (!podeGerenciarAdmins()) {
       return (
         <div style={styles.upgradeBox}>
-          <div style={styles.upgradeIcon}>🔒</div>
+          <div style={styles.upgradeIcon}></div>
           <h3 style={styles.upgradeTitle}>Gestão de Administradores</h3>
           <p style={styles.upgradeText}>
             O sistema de permissões e gestão de administradores está disponível apenas nos planos <strong>Pro</strong> e <strong>Enterprise</strong>.
           </p>
           <ul style={styles.upgradeList}>
-            <li>✅ Adicionar múltiplos administradores</li>
-            <li>✅ Customizar permissões por usuário</li>
-            <li>✅ Criar hierarquia de acesso</li>
-            <li>✅ Controle granular de funcionalidades</li>
+            <li> Adicionar múltiplos administradores</li>
+            <li> Customizar permissões por usuário</li>
+            <li> Criar hierarquia de acesso</li>
+            <li> Controle granular de funcionalidades</li>
           </ul>
           <button 
             style={styles.upgradeButton}
@@ -560,12 +560,12 @@ const LojistaUsuarios = () => {
       );
     }
 
-    // ✅ Renderização normal para Pro/Enterprise
+    //  Renderização normal para Pro/Enterprise
     return (
       <div>
         <div style={styles.sectionHeader}>
           <div>
-            <h2>👤 Administradores da Loja</h2>
+            <h2> Administradores da Loja</h2>
             {planoLoja === 'pro' && (
               <small style={{color: '#64748b'}}>
                 Plano Pro: até 3 administradores ({admins.length}/3)
@@ -657,7 +657,7 @@ const LojistaUsuarios = () => {
   const renderVendedores = () => (
     <div>
       <div style={styles.sectionHeader}>
-        <h2>🛍️ Vendedores Próprios</h2>
+        <h2> Vendedores Próprios</h2>
         <button style={styles.btnPrimary} onClick={() => {
           setFormData({});
           setModalAddVendedor(true);
@@ -748,7 +748,7 @@ const LojistaUsuarios = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h1 style={styles.title}>👥 Gestão de Equipe</h1>
+        <h1 style={styles.title}> Gestão de Equipe</h1>
         <p style={styles.subtitle}>Gerencie administradores, vendedores e consultores</p>
       </div>
 
@@ -758,14 +758,14 @@ const LojistaUsuarios = () => {
           onClick={() => setActiveTab('admins')}
           style={{...styles.tab, ...(activeTab === 'admins' ? styles.tabActive : {})}}
         >
-          👤 Administradores
-          {!podeGerenciarAdmins() && <span style={{marginLeft: '8px'}}>🔒</span>}
+           Administradores
+          {!podeGerenciarAdmins() && <span style={{marginLeft: '8px'}}></span>}
         </button>
         <button
           onClick={() => setActiveTab('vendedores')}
           style={{...styles.tab, ...(activeTab === 'vendedores' ? styles.tabActive : {})}}
         >
-          🛍️ Vendedores
+           Vendedores
         </button>
         <button
           onClick={() => setActiveTab('consultores')}
@@ -979,7 +979,7 @@ const styles = {
     padding: '30px',
     boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
   },
-  // ✅ ESTILOS DO UPGRADE BOX
+  //  ESTILOS DO UPGRADE BOX
   upgradeBox: {
     textAlign: 'center',
     padding: '60px 40px',

@@ -1,12 +1,12 @@
 // src/pages/ConsultorDashboard/components/QueuePanel.jsx
-// ✅ VERSÃO APRIMORADA COM FILA INTELIGENTE
+//  VERSÃO APRIMORADA COM FILA INTELIGENTE
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 import { useAuth } from '@/contexts/AuthContext';
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 const QueuePanel = () => {
     const { user } = useAuth();
@@ -154,7 +154,7 @@ const QueuePanel = () => {
             await supabase.rpc('criar_notificacao', {
                 p_usuario_id: item.clientes.user_id, // Precisa adicionar user_id na query
                 p_tipo: 'atendimento_iniciado',
-                p_titulo: '✅ Consultor encontrado!',
+                p_titulo: ' Consultor encontrado!',
                 p_mensagem: 'Seu consultor está pronto para atendê-lo. Abra o app para iniciar o chat.',
                 p_dados: JSON.stringify({ fila_id: item.id })
             });
@@ -216,7 +216,7 @@ const QueuePanel = () => {
                 .eq('id', agendamentoId);
 
             carregarDados();
-            alert('✅ Agendamento confirmado!');
+            alert(' Agendamento confirmado!');
         } catch (error) {
             console.error('Erro ao confirmar:', error);
         }
@@ -255,7 +255,7 @@ const QueuePanel = () => {
         <div style={styles.container}>
             {/* HEADER */}
             <div style={styles.header}>
-                <h2 style={styles.title}>📋 Fila de Atendimento</h2>
+                <h2 style={styles.title}> Fila de Atendimento</h2>
                 <div style={styles.headerActions}>
                     <button
                         onClick={toggleDisponibilidade}
@@ -265,7 +265,7 @@ const QueuePanel = () => {
                         {getStatusText()}
                     </button>
                     <div style={styles.counterBadge}>
-                        👥 {filaAtendimento.length} na fila
+                         {filaAtendimento.length} na fila
                     </div>
                 </div>
             </div>
@@ -277,7 +277,7 @@ const QueuePanel = () => {
                         <p style={styles.atendimentoLabel}>🔴 Atendendo agora:</p>
                         <p style={styles.atendimentoNome}>{getClienteDisplay(atendimentoAtual)}</p>
                         <p style={styles.atendimentoDetalhe}>
-                            🏪 {atendimentoAtual.lojas?.nome} - {atendimentoAtual.segmento}
+                             {atendimentoAtual.lojas?.nome} - {atendimentoAtual.segmento}
                         </p>
                     </div>
                     <div style={styles.atendimentoActions}>
@@ -285,7 +285,7 @@ const QueuePanel = () => {
                             onClick={() => window.location.href = `/consultor/dashboard/chat`}
                             style={styles.chatButton}
                         >
-                            💬 Abrir Chat
+                             Abrir Chat
                         </button>
                         <button
                             onClick={finalizarAtendimento}
@@ -368,7 +368,7 @@ const QueuePanel = () => {
                                 <div style={styles.chamadaInfo}>
                                     <div style={styles.chamadaHeader}>
                                         <span style={styles.chamadaNome}>
-                                            👤 {getClienteDisplay(chamada)}
+                                             {getClienteDisplay(chamada)}
                                         </span>
                                         {chamada.prioridade === 'urgente' && (
                                             <span style={styles.urgenteBadge}>⚡ URGENTE</span>
@@ -376,8 +376,8 @@ const QueuePanel = () => {
                                     </div>
 
                                     <div style={styles.chamadaDetalhes}>
-                                        <p style={styles.detalheItem}>🏪 {chamada.lojas?.nome || 'Loja'}</p>
-                                        <p style={styles.detalheItem}>📦 Setor: {chamada.segmento}</p>
+                                        <p style={styles.detalheItem}> {chamada.lojas?.nome || 'Loja'}</p>
+                                        <p style={styles.detalheItem}> Setor: {chamada.segmento}</p>
                                         <p style={styles.detalheItem}>⏱ Aguardando há {getTempoEspera(chamada.created_at)}</p>
                                     </div>
                                 </div>
@@ -430,7 +430,7 @@ const styles = {
     agendamentoNome: { fontSize: '1rem', fontWeight: '600', color: '#333', margin: '0 0 5px 0' },
     agendamentoDetalhe: { fontSize: '14px', color: '#666', margin: 0 },
     confirmarBtn: { backgroundColor: '#bb25a6', color: 'white', border: 'none', padding: '8px 15px', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
-    confirmadoBadge: { backgroundColor: '#d4edda', color: '#155724', padding: '8px 15px', borderRadius: '20px', fontSize: '14px', fontWeight: '600' },
+    confirmadoBadge: { backgroundColor: '#f3e8ff', color: '#155724', padding: '8px 15px', borderRadius: '20px', fontSize: '14px', fontWeight: '600' },
     emptyState: { textAlign: 'center', padding: '60px 20px' },
     emptyIcon: { fontSize: '4rem', marginBottom: '20px' },
     emptyTitle: { fontSize: '1.3rem', fontWeight: '600', color: '#333', margin: '0 0 10px 0' },

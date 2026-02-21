@@ -3,8 +3,8 @@
 import React, { useState, useRef } from 'react';
 import { FaExclamationTriangle, FaUser, FaStore, FaBox, FaBug, FaCheckCircle, FaUpload, FaTimes, FaImage } from 'react-icons/fa';
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 const ReportPanel = ({ consultorId }) => {
   const [tipoProblema, setTipoProblema] = useState('');
@@ -373,7 +373,7 @@ const ReportPanel = ({ consultorId }) => {
               <div style={styles.filesList}>
                 {arquivos.map((file, index) => (
                   <div key={index} style={styles.fileItem}>
-                    <FaImage color="#2c5aa0" />
+                    <FaImage color="#2f0d51" />
                     <span style={styles.fileName}>{file.name}</span>
                     <span style={styles.fileSize}>
                       ({(file.size / 1024 / 1024).toFixed(2)} MB)
@@ -501,7 +501,7 @@ const styles = {
     margin: 0,
   },
   successCard: {
-    backgroundColor: '#e8f5e9',
+    backgroundColor: '#f3e8ff',
     border: '2px solid #bb25a6',
     borderRadius: '12px',
     padding: '30px',

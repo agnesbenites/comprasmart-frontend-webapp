@@ -17,7 +17,7 @@ const SearchBar = ({
   return (
     <div style={styles.container}>
       <div style={styles.searchContainer}>
-        <div style={styles.searchIcon}>🔍</div>
+        <div style={styles.searchIcon}></div>
         <input
           type="text"
           value={termo}

@@ -66,7 +66,7 @@ const BotaoRelatoriosConciliacao = ({ lojistaId, variant = 'primary' }) => {
           e.target.style.boxShadow = variant === 'secondary' ? 'none' : '0 2px 4px rgba(0,0,0,0.1)';
         }}
       >
-        📊 Relatórios de Conciliação
+         Relatórios de Conciliação
       </button>
 
       {mostrarModal && (

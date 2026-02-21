@@ -80,7 +80,7 @@ const UpgradePlans = ({ planos = [], onSelectPlan }) => {
 
   return (
     <section style={styles.section} data-cy="upgrade-plans">
-      <h2 style={styles.sectionTitle}>📈 Fazer Upgrade de Plano</h2>
+      <h2 style={styles.sectionTitle}> Fazer Upgrade de Plano</h2>
 
       <div style={styles.plansGrid}>
         {planos.map((plano) => (

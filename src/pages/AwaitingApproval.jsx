@@ -25,7 +25,7 @@ const AwaitingApproval = () => {
           textAlign: "center",
         }}
       >
-        <div style={{ fontSize: "80px", marginBottom: "30px" }}>⏳</div>
+        <div style={{ fontSize: "80px", marginBottom: "30px" }}></div>
 
         <h1
           style={{

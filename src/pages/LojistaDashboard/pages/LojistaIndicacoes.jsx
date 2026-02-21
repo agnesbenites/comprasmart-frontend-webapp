@@ -86,17 +86,17 @@ const LojistaIndicacoes = () => {
 
   const handleIndicar = async () => {
     if (!nome.trim() || !email.trim() || !telefone.trim()) {
-      alert('❌ Preencha todos os campos!');
+      alert(' Preencha todos os campos!');
       return;
     }
     
     if (estatisticas.indicacoesMesAtual >= MAX_INDICACOES_MES) {
-      alert(`❌ Você atingiu o limite de ${MAX_INDICACOES_MES} indicações por mês!`);
+      alert(` Você atingiu o limite de ${MAX_INDICACOES_MES} indicações por mês!`);
       return;
     }
     
     if (!email.includes('@')) {
-      alert('❌ Email inválido!');
+      alert(' Email inválido!');
       return;
     }
     
@@ -116,7 +116,7 @@ const LojistaIndicacoes = () => {
       
       if (error) throw error;
       
-      alert('✅ Indicação enviada com sucesso! Entraremos em contato com a loja indicada.');
+      alert(' Indicação enviada com sucesso! Entraremos em contato com a loja indicada.');
       
       setNome('');
       setEmail('');
@@ -127,7 +127,7 @@ const LojistaIndicacoes = () => {
       
     } catch (error) {
       console.error('Erro ao enviar indicação:', error);
-      alert('❌ Erro ao enviar indicação. Tente novamente.');
+      alert(' Erro ao enviar indicação. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -135,12 +135,12 @@ const LojistaIndicacoes = () => {
 
   const handleAtivarUpgrade = () => {
     if (estatisticas.upgradesDisponiveis <= 0) {
-      alert('❌ Você não tem upgrades disponíveis!');
+      alert(' Você não tem upgrades disponíveis!');
       return;
     }
     
     if (estatisticas.upgradesUsados >= MAX_UPGRADES_ANO) {
-      alert(`❌ Você já usou o máximo de ${MAX_UPGRADES_ANO} upgrades este ano!`);
+      alert(` Você já usou o máximo de ${MAX_UPGRADES_ANO} upgrades este ano!`);
       return;
     }
     
@@ -149,7 +149,7 @@ const LojistaIndicacoes = () => {
       const novosUpgradesUsados = estatisticas.upgradesUsados + 1;
       localStorage.setItem(`upgrades_usados_${lojistaId}`, novosUpgradesUsados.toString());
       
-      alert(`✅ Upgrade de ${DIAS_UPGRADE} dias ativado! Aproveite todos os recursos do plano superior.`);
+      alert(` Upgrade de ${DIAS_UPGRADE} dias ativado! Aproveite todos os recursos do plano superior.`);
       
       // Recarregar estatísticas
       carregarDados();
@@ -158,9 +158,9 @@ const LojistaIndicacoes = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      pendente: { color: '#ffc107', bg: '#fff3cd', text: '⏳ Pendente' },
-      aprovado: { color: '#bb25a6', bg: '#d4edda', text: '✅ Aprovado' },
-      recusado: { color: '#dc3545', bg: '#f8d7da', text: '❌ Recusado' },
+      pendente: { color: '#ffc107', bg: '#fff3cd', text: ' Pendente' },
+      aprovado: { color: '#bb25a6', bg: '#d4edda', text: ' Aprovado' },
+      recusado: { color: '#dc3545', bg: '#f8d7da', text: ' Recusado' },
     };
     return badges[status] || badges.pendente;
   };
@@ -172,7 +172,7 @@ const LojistaIndicacoes = () => {
       {/* Header */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>👥 Programa de Indicações</h1>
+          <h1 style={styles.title}> Programa de Indicações</h1>
           <p style={styles.subtitle}>Indique novas lojas e ganhe benefícios!</p>
         </div>
       </div>
@@ -180,7 +180,7 @@ const LojistaIndicacoes = () => {
       {/* Cards de Estatísticas */}
       <div style={styles.statsGrid}>
         <div style={{...styles.statCard, borderLeft: `4px solid ${LOJISTA_PRIMARY}`}}>
-          <div style={styles.statIcon}>🎁</div>
+          <div style={styles.statIcon}></div>
           <div style={styles.statContent}>
             <p style={styles.statLabel}>Créditos Acumulados</p>
             <p style={styles.statValue}>R$ {estatisticas.creditosAcumulados}</p>
@@ -198,7 +198,7 @@ const LojistaIndicacoes = () => {
         </div>
 
         <div style={{...styles.statCard, borderLeft: '4px solid #ffc107'}}>
-          <div style={styles.statIcon}>✅</div>
+          <div style={styles.statIcon}></div>
           <div style={styles.statContent}>
             <p style={styles.statLabel}>Indicações Aprovadas</p>
             <p style={styles.statValue}>{estatisticas.indicacoesAprovadas}</p>
@@ -207,7 +207,7 @@ const LojistaIndicacoes = () => {
         </div>
 
         <div style={{...styles.statCard, borderLeft: '4px solid #6c757d'}}>
-          <div style={styles.statIcon}>📊</div>
+          <div style={styles.statIcon}></div>
           <div style={styles.statContent}>
             <p style={styles.statLabel}>Indicações este Mês</p>
             <p style={styles.statValue}>{estatisticas.indicacoesMesAtual}/{MAX_INDICACOES_MES}</p>
@@ -218,10 +218,10 @@ const LojistaIndicacoes = () => {
 
       {/* Como Funciona */}
       <div style={styles.infoCard}>
-        <h3 style={styles.infoTitle}>🎯 Como Funciona</h3>
+        <h3 style={styles.infoTitle}> Como Funciona</h3>
         <div style={styles.benefitsGrid}>
           <div style={styles.benefitItem}>
-            <div style={styles.benefitIcon}>🎁</div>
+            <div style={styles.benefitIcon}></div>
             <div>
               <h4 style={styles.benefitTitle}>Para Você</h4>
               <p style={styles.benefitText}>
@@ -233,7 +233,7 @@ const LojistaIndicacoes = () => {
           </div>
 
           <div style={styles.benefitItem}>
-            <div style={styles.benefitIcon}>🏪</div>
+            <div style={styles.benefitIcon}></div>
             <div>
               <h4 style={styles.benefitTitle}>Para a Loja Indicada</h4>
               <p style={styles.benefitText}>
@@ -246,7 +246,7 @@ const LojistaIndicacoes = () => {
         </div>
 
         <div style={styles.rulesBox}>
-          <p style={styles.rulesTitle}>📋 Regras:</p>
+          <p style={styles.rulesTitle}> Regras:</p>
           <ul style={styles.rulesList}>
             <li>Máximo {MAX_INDICACOES_MES} indicações por mês</li>
             <li>A loja indicada deve completar o cadastro e assinar um plano</li>
@@ -260,7 +260,7 @@ const LojistaIndicacoes = () => {
       {estatisticas.upgradesDisponiveis > 0 && (
         <div style={styles.upgradeAlert}>
           <div style={styles.upgradeContent}>
-            <span style={styles.upgradeIcon}>🎉</span>
+            <span style={styles.upgradeIcon}></span>
             <div>
               <p style={styles.upgradeTitle}>
                 Você tem {estatisticas.upgradesDisponiveis} upgrade(s) disponível(is)!
@@ -337,7 +337,7 @@ const LojistaIndicacoes = () => {
 
       {/* Lista de Indicações */}
       <div style={styles.listCard}>
-        <h3 style={styles.listTitle}>📋 Minhas Indicações ({estatisticas.totalIndicacoes})</h3>
+        <h3 style={styles.listTitle}> Minhas Indicações ({estatisticas.totalIndicacoes})</h3>
         
         {indicacoes.length === 0 ? (
           <div style={styles.emptyState}>
@@ -356,7 +356,7 @@ const LojistaIndicacoes = () => {
                     <div>
                       <h4 style={styles.indicacaoNome}>{indicacao.nome_indicado}</h4>
                       <p style={styles.indicacaoEmail}>{indicacao.email_indicado}</p>
-                      <p style={styles.indicacaoTelefone}>📞 {indicacao.telefone_indicado}</p>
+                      <p style={styles.indicacaoTelefone}> {indicacao.telefone_indicado}</p>
                     </div>
                     <div style={{
                       ...styles.statusBadge,
@@ -372,7 +372,7 @@ const LojistaIndicacoes = () => {
                     </span>
                     {indicacao.status === 'aprovado' && (
                       <span style={styles.creditosGanhos}>
-                        💰 +R$ {CREDITOS_POR_INDICACAO} em créditos
+                         +R$ {CREDITOS_POR_INDICACAO} em créditos
                       </span>
                     )}
                   </div>

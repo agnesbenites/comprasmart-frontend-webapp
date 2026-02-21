@@ -86,15 +86,15 @@ const StripeSuccess = () => {
         {status === 'processing' && (
           <>
             <div style={styles.spinner}></div>
-            <h2 style={styles.title}>⏳ Processando pagamento...</h2>
+            <h2 style={styles.title}> Processando pagamento...</h2>
             <p style={styles.text}>Aguarde enquanto ativamos sua conta.</p>
           </>
         )}
 
         {status === 'success' && (
           <>
-            <div style={styles.successIcon}>✅</div>
-            <h2 style={styles.title}>🎉 Pagamento Confirmado!</h2>
+            <div style={styles.successIcon}></div>
+            <h2 style={styles.title}> Pagamento Confirmado!</h2>
             <p style={styles.text}>Sua conta foi ativada com sucesso!</p>
             <p style={styles.subtext}>Redirecionando para o dashboard...</p>
           </>
@@ -102,7 +102,7 @@ const StripeSuccess = () => {
 
         {status === 'error' && (
           <>
-            <div style={styles.errorIcon}>❌</div>
+            <div style={styles.errorIcon}></div>
             <h2 style={styles.title}>Ops! Algo deu errado</h2>
             <p style={styles.text}>
               Não conseguimos processar seu pagamento automaticamente.

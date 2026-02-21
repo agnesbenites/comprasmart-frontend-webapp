@@ -82,16 +82,16 @@ const PlanQuiz = () => {
       preco: 99.90,
       stripeUrl: 'https://buy.stripe.com/00w7sL2z6ceE11cd8ZgQE01',
       features: [
-        '📦 Até 100 produtos',
-        '👥 10 consultores',
+        ' Até 100 produtos',
+        ' 10 consultores',
         '🏢 1 Filial + Matriz',
-        '👤 5 vendedores',
+        ' 5 vendedores',
         '⏰ Edição após 24h',
-        '💬 Texto, áudio e imagens',
-        '📊 Analytics mensal',
-        '📍 Marketing: 5km',
+        ' Texto, áudio e imagens',
+        ' Analytics mensal',
+        ' Marketing: 5km',
         '📁 Atualização CSV',
-        '🎁 Pacote R$ 49,90'
+        ' Pacote R$ 49,90'
       ],
       cor: '#1A2332'
     },
@@ -100,15 +100,15 @@ const PlanQuiz = () => {
       preco: 199.90,
       stripeUrl: 'https://buy.stripe.com/dRm8wP7Tq1A011c1qhgQE02',
       features: [
-        '📦 Até 500 produtos',
-        '👥 30 consultores',
+        ' Até 500 produtos',
+        ' 30 consultores',
         '🏢 5 Filiais + Matriz',
-        '👤 20 vendedores',
+        ' 20 vendedores',
         '⏰ Edição após 12h',
-        '💬 Vídeo (15s) + 6 chamadas/mês',
-        '🔄 ERP mensal',
-        '📊 Analytics semanal',
-        '📍 Marketing: 10km'
+        ' Vídeo (15s) + 6 chamadas/mês',
+        ' ERP mensal',
+        ' Analytics semanal',
+        ' Marketing: 10km'
       ],
       cor: '#2f0d51'
     },
@@ -117,15 +117,15 @@ const PlanQuiz = () => {
       preco: 499.00,
       stripeUrl: 'https://buy.stripe.com/6oU28r5LiemMaBM8SJgQE0a',
       features: [
-        '📦 ILIMITADOS',
-        '👥 80 consultores',
+        ' ILIMITADOS',
+        ' 80 consultores',
         '🏢 29 Filiais + Matriz',
-        '👤 60 vendedores',
+        ' 60 vendedores',
         '⏰ Edição: 4h',
-        '📞 Chamadas ILIMITADAS',
-        '🔄 ERP automático',
-        '📊 BI diário',
-        '📍 Marketing: 20km'
+        ' Chamadas ILIMITADAS',
+        ' ERP automático',
+        ' BI diário',
+        ' Marketing: 20km'
       ],
       cor: '#2f0d51'
     }
@@ -225,7 +225,7 @@ const PlanQuiz = () => {
     return (
       <div style={styles.container}>
         <div style={styles.resultadoCard}>
-          <div style={styles.confetti}>🎉</div>
+          <div style={styles.confetti}></div>
           
           <h1 style={styles.resultadoTitle}>
             Seu Plano Ideal é:
@@ -278,7 +278,7 @@ const PlanQuiz = () => {
           </div>
 
           <div style={styles.garantia}>
-            💳 Pagamento 100% seguro via Stripe • ✅ Sem compromisso
+             Pagamento 100% seguro via Stripe •  Sem compromisso
           </div>
         </div>
       </div>

@@ -76,7 +76,7 @@ const Addons = ({ addons = [], onComprarAddon }) => {
 
   return (
     <section style={styles.section} data-cy="addons-section">
-      <h2 style={styles.sectionTitle}>🛒 Recursos Adicionais</h2>
+      <h2 style={styles.sectionTitle}> Recursos Adicionais</h2>
 
       <div style={styles.addonsGrid}>
         {addons.map((addon) => (

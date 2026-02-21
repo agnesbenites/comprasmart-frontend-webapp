@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" id="Scanner--Streamline-Solar" height="24" width="24">
+  <desc>
+    Scanner Streamline Icon: https://streamlinehq.com
+  </desc>
+  <g id="Line Duotone/Security/Scanner">
+    <path id="Vector" stroke="#bb25a6" stroke-linecap="round" d="M10 22c-3.77124 0 -5.65685 0 -6.82843 -1.1716C2 19.6569 2 18.7712 2 15" stroke-width="1.5"></path>
+    <path id="Vector_2" stroke="#bb25a6" stroke-linecap="round" d="M22 15c0 3.7712 0 4.6569 -1.1716 5.8284C19.6569 22 17.7712 22 14 22" stroke-width="1.5"></path>
+    <path id="Vector_3" stroke="#bb25a6" stroke-linecap="round" d="M14 2c3.7712 0 5.6569 0 6.8284 1.17157C22 4.34315 22 5.22876 22 9" stroke-width="1.5"></path>
+    <path id="Vector_4" stroke="#bb25a6" stroke-linecap="round" d="M10 2C6.22876 2 4.34315 2 3.17157 3.17157 2 4.34315 2 5.22876 2 9" stroke-width="1.5"></path>
+    <path id="Vector_5" stroke="#2f0d51" stroke-linecap="round" d="M2 12h20" stroke-width="1.5"></path>
+  </g>
+</svg>

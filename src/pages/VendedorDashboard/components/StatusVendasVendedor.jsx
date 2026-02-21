@@ -85,9 +85,9 @@ const StatusVendasVendedor = () => {
 
   const getStatusPagamentoInfo = (status) => {
     const statusMap = {
-      'aguardando': { emoji: '⏳', texto: 'Aguardando Pagamento', cor: '#ffc107' },
-      'pago': { emoji: '✅', texto: 'Pago', cor: '#bb25a6' },
-      'cancelado': { emoji: '❌', texto: 'Cancelado', cor: '#dc3545' },
+      'aguardando': { emoji: '', texto: 'Aguardando Pagamento', cor: '#ffc107' },
+      'pago': { emoji: '', texto: 'Pago', cor: '#bb25a6' },
+      'cancelado': { emoji: '', texto: 'Cancelado', cor: '#dc3545' },
       'estornado': { emoji: '↩️', texto: 'Estornado', cor: '#6c757d' },
     };
     return statusMap[status] || { emoji: '❓', texto: status, cor: '#999' };
@@ -95,10 +95,10 @@ const StatusVendasVendedor = () => {
 
   const getStatusSeparacaoInfo = (status) => {
     const statusMap = {
-      'aguardando': { emoji: '📦', texto: 'Aguardando Separação', cor: '#ffc107' },
-      'em_separacao': { emoji: '🔄', texto: 'Em Separação', cor: '#17a2b8' },
-      'pronto_retirada': { emoji: '✅', texto: 'Pronto para Retirada', cor: '#bb25a6' },
-      'entregue': { emoji: '🎉', texto: 'Entregue', cor: '#6c757d' },
+      'aguardando': { emoji: '', texto: 'Aguardando Separação', cor: '#ffc107' },
+      'em_separacao': { emoji: '', texto: 'Em Separação', cor: '#17a2b8' },
+      'pronto_retirada': { emoji: '', texto: 'Pronto para Retirada', cor: '#bb25a6' },
+      'entregue': { emoji: '', texto: 'Entregue', cor: '#6c757d' },
     };
     return statusMap[status] || { emoji: '❓', texto: status, cor: '#999' };
   };
@@ -123,7 +123,7 @@ const StatusVendasVendedor = () => {
   if (loading) {
     return (
       <div style={styles.loading}>
-        ⏳ Carregando pedidos...
+         Carregando pedidos...
       </div>
     );
   }
@@ -131,9 +131,9 @@ const StatusVendasVendedor = () => {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <h2 style={styles.title}>📊 Status das Vendas</h2>
+        <h2 style={styles.title}> Status das Vendas</h2>
         <button onClick={carregarPedidos} style={styles.btnAtualizar}>
-          🔄 Atualizar
+           Atualizar
         </button>
       </div>
 
@@ -146,7 +146,7 @@ const StatusVendasVendedor = () => {
             ...(filtro === 'todos' && styles.btnFiltroAtivo)
           }}
         >
-          📋 Todos
+           Todos
         </button>
         <button
           onClick={() => setFiltro('aguardando')}
@@ -155,7 +155,7 @@ const StatusVendasVendedor = () => {
             ...(filtro === 'aguardando' && styles.btnFiltroAtivo)
           }}
         >
-          ⏳ Aguardando Pgto
+           Aguardando Pgto
         </button>
         <button
           onClick={() => setFiltro('em_separacao')}
@@ -164,7 +164,7 @@ const StatusVendasVendedor = () => {
             ...(filtro === 'em_separacao' && styles.btnFiltroAtivo)
           }}
         >
-          🔄 Em Separação
+           Em Separação
         </button>
         <button
           onClick={() => setFiltro('pronto')}
@@ -173,7 +173,7 @@ const StatusVendasVendedor = () => {
             ...(filtro === 'pronto' && styles.btnFiltroAtivo)
           }}
         >
-          ✅ Pronto
+           Pronto
         </button>
         <button
           onClick={() => setFiltro('entregue')}
@@ -182,7 +182,7 @@ const StatusVendasVendedor = () => {
             ...(filtro === 'entregue' && styles.btnFiltroAtivo)
           }}
         >
-          🎉 Entregue
+           Entregue
         </button>
       </div>
 
@@ -209,10 +209,10 @@ const StatusVendasVendedor = () => {
 
                 {/* Cliente */}
                 <div style={styles.pedidoCliente}>
-                  <strong>👤 {pedido.clientes?.nome || 'Cliente'}</strong>
+                  <strong> {pedido.clientes?.nome || 'Cliente'}</strong>
                   {pedido.clientes?.telefone && (
                     <span style={styles.pedidoTelefone}>
-                      📞 {pedido.clientes.telefone}
+                       {pedido.clientes.telefone}
                     </span>
                   )}
                 </div>
@@ -257,7 +257,7 @@ const StatusVendasVendedor = () => {
                     ...styles.timelineStep,
                     ...(pedido.status_pagamento === 'pago' && styles.timelineStepCompleto)
                   }}>
-                    💳
+                    
                   </div>
                   <div style={styles.timelineLine}></div>
                   <div style={{
@@ -266,7 +266,7 @@ const StatusVendasVendedor = () => {
                     ...(pedido.status_separacao === 'pronto_retirada' && styles.timelineStepCompleto),
                     ...(pedido.status_separacao === 'entregue' && styles.timelineStepCompleto)
                   }}>
-                    📦
+                    
                   </div>
                   <div style={styles.timelineLine}></div>
                   <div style={{
@@ -274,14 +274,14 @@ const StatusVendasVendedor = () => {
                     ...(pedido.status_separacao === 'pronto_retirada' && styles.timelineStepAtivo),
                     ...(pedido.status_separacao === 'entregue' && styles.timelineStepCompleto)
                   }}>
-                    ✅
+                    
                   </div>
                   <div style={styles.timelineLine}></div>
                   <div style={{
                     ...styles.timelineStep,
                     ...(pedido.status_separacao === 'entregue' && styles.timelineStepCompleto)
                   }}>
-                    🎉
+                    
                   </div>
                 </div>
 
@@ -289,7 +289,7 @@ const StatusVendasVendedor = () => {
                 {pedido.itens && pedido.itens.length > 0 && (
                   <details style={styles.itensDetails}>
                     <summary style={styles.itensSummary}>
-                      📦 Ver Itens ({pedido.itens.length})
+                       Ver Itens ({pedido.itens.length})
                     </summary>
                     <div style={styles.itensLista}>
                       {pedido.itens.map((item, index) => (
@@ -311,7 +311,7 @@ const StatusVendasVendedor = () => {
                     }}
                     style={styles.btnCopiarLink}
                   >
-                    📋 Copiar Link de Pagamento
+                     Copiar Link de Pagamento
                   </button>
                 )}
               </div>

@@ -149,11 +149,11 @@ const LojistaProfile = () => {
       {/* HEADER COM LOGOUT */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>👤 Perfil do Administrador</h1>
+          <h1 style={styles.title}> Perfil do Administrador</h1>
           <p style={styles.subtitle}>Gerencie suas informacoes e configuracoes da empresa</p>
         </div>
         <button onClick={() => setShowLogoutModal(true)} style={styles.logoutButton}>
-          🚪 Sair
+           Sair
         </button>
       </div>
 
@@ -218,11 +218,11 @@ const LojistaProfile = () => {
 
         {/* Cartoes Cadastrados */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>💳 Cartoes de Credito</h3>
+          <h3 style={styles.cardTitle}> Cartoes de Credito</h3>
           
           {cartoes.map(cartao => (
             <div key={cartao.id} style={styles.cartaoItem}>
-              <div style={styles.cartaoIcon}>💳</div>
+              <div style={styles.cartaoIcon}></div>
               <div style={styles.cartaoInfo}>
                 <div style={styles.cartaoBandeira}>
                   <strong>VISA **** {cartao.ultimosDigitos}</strong>
@@ -260,14 +260,14 @@ const LojistaProfile = () => {
             border: '1px solid #bfdbfe'
           }}>
             <p style={{ margin: 0, color: '#2f0d51', fontSize: '0.95rem' }}>
-              💡 <strong>Dica:</strong> Clique em "Gerenciar Plano" para fazer upgrade, adicionar recursos extras ou visualizar suas faturas.
+               <strong>Dica:</strong> Clique em "Gerenciar Plano" para fazer upgrade, adicionar recursos extras ou visualizar suas faturas.
             </p>
           </div>
         </div>
 
         {/* Configuracoes de Comissao */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>💰 Configuracoes de Comissao</h3>
+          <h3 style={styles.cardTitle}> Configuracoes de Comissao</h3>
           
           <div style={styles.formGroup}>
             <label style={styles.label}>Tipo de Comissao</label>
@@ -327,7 +327,7 @@ const LojistaProfile = () => {
 
         {/* Segmentos e QR Codes */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>🏪 Segmentos da Loja</h3>
+          <h3 style={styles.cardTitle}> Segmentos da Loja</h3>
           <p style={styles.cardSubtitle}>QR Codes para cada setor</p>
           
           <div style={styles.segmentosGrid}>
@@ -355,7 +355,7 @@ const LojistaProfile = () => {
                       style={styles.smallButtonSecondary}
                       onClick={() => copiarLinkQRCode(segmento)}
                     >
-                      📋 Copiar
+                       Copiar
                     </button>
                   </div>
                 </div>
@@ -366,7 +366,7 @@ const LojistaProfile = () => {
 
         {/* Configuracoes de Notificacao */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>🔔 Preferencias de Notificacao</h3>
+          <h3 style={styles.cardTitle}> Preferencias de Notificacao</h3>
           
           <div style={styles.notificacoesList}>
             <label style={styles.checkboxLabel}>

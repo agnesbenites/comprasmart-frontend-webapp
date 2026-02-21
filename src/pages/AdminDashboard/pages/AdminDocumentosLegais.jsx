@@ -97,7 +97,7 @@ const AdminDocumentosLegais = () => {
 
   const handleSalvar = async (documentoId) => {
     if (!formData.titulo || !formData.url_notion) {
-      alert('❌ Preencha todos os campos obrigatórios!');
+      alert(' Preencha todos os campos obrigatórios!');
       return;
     }
 
@@ -140,13 +140,13 @@ const AdminDocumentosLegais = () => {
         if (error) throw error;
       }
 
-      alert('✅ Documento atualizado com sucesso!');
+      alert(' Documento atualizado com sucesso!');
       setEditando(null);
       carregarDocumentos();
 
     } catch (error) {
       console.error('Erro ao salvar documento:', error);
-      alert('❌ Erro ao salvar documento');
+      alert(' Erro ao salvar documento');
     }
   };
 
@@ -156,9 +156,9 @@ const AdminDocumentosLegais = () => {
 
   const getTipoLabel = (tipo) => {
     const labels = {
-      contrato: '📄 Contrato',
-      termos: '📜 Termos',
-      privacidade: '🔒 Privacidade',
+      contrato: ' Contrato',
+      termos: ' Termos',
+      privacidade: ' Privacidade',
     };
     return labels[tipo] || tipo;
   };
@@ -181,11 +181,11 @@ const AdminDocumentosLegais = () => {
       {/* Header */}
       <div style={styles.header}>
         <div>
-          <h1 style={styles.title}>📋 Documentos Legais</h1>
+          <h1 style={styles.title}> Documentos Legais</h1>
           <p style={styles.subtitle}>Gerencie os links dos documentos no Notion</p>
         </div>
         <button onClick={carregarDocumentos} style={styles.refreshButton}>
-          🔄 Atualizar
+           Atualizar
         </button>
       </div>
 
@@ -293,7 +293,7 @@ const AdminDocumentosLegais = () => {
                         style={styles.input}
                       />
                       <small style={styles.helpText}>
-                        💡 Copie o link público do documento no Notion
+                         Copie o link público do documento no Notion
                       </small>
                     </div>
                   </div>
@@ -322,7 +322,7 @@ const AdminDocumentosLegais = () => {
 
       {/* Dicas */}
       <div style={styles.tipsBox}>
-        <h3 style={styles.tipsTitle}>💡 Dicas:</h3>
+        <h3 style={styles.tipsTitle}> Dicas:</h3>
         <ul style={styles.tipsList}>
           <li><strong>Para editar o conteúdo:</strong> Clique em "Abrir no Notion" e edite diretamente lá</li>
           <li><strong>Para mudar o link:</strong> Clique em "Editar" e cole o novo link público do Notion</li>

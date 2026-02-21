@@ -47,11 +47,11 @@ const ExcluirContaConsultor = ({ consultorId }) => {
           window.location.href = '/';
         }, 5000);
       } else {
-        alert('❌ Erro ao excluir conta: ' + result.error);
+        alert(' Erro ao excluir conta: ' + result.error);
       }
     } catch (error) {
       console.error('Erro:', error);
-      alert('❌ Erro ao processar exclusão');
+      alert(' Erro ao processar exclusão');
     } finally {
       setLoading(false);
     }
@@ -79,12 +79,12 @@ const ExcluirContaConsultor = ({ consultorId }) => {
         <div style={styles.warningBox}>
           <h3 style={styles.warningTitle}>⚠️ O que será perdido:</h3>
           <ul style={styles.warningList}>
-            <li>❌ Histórico de atendimentos e vendas</li>
-            <li>❌ Avaliações recebidas de clientes</li>
-            <li>❌ Comissões pendentes (se houver)</li>
-            <li>❌ Estatísticas e relatórios</li>
-            <li>❌ Configurações de perfil</li>
-            <li>❌ Acesso à plataforma</li>
+            <li> Histórico de atendimentos e vendas</li>
+            <li> Avaliações recebidas de clientes</li>
+            <li> Comissões pendentes (se houver)</li>
+            <li> Estatísticas e relatórios</li>
+            <li> Configurações de perfil</li>
+            <li> Acesso à plataforma</li>
           </ul>
         </div>
 
@@ -96,14 +96,14 @@ const ExcluirContaConsultor = ({ consultorId }) => {
         </div>
 
         <div style={styles.infoBox}>
-          <h3 style={styles.infoTitle}>💡 Alternativas:</h3>
+          <h3 style={styles.infoTitle}> Alternativas:</h3>
           <p style={styles.infoText}>
             Antes de excluir, considere:
           </p>
           <ul style={styles.infoList}>
-            <li>✅ Pausar temporariamente sua conta</li>
-            <li>✅ Ajustar suas configurações de disponibilidade</li>
-            <li>✅ Entrar em contato com o suporte</li>
+            <li> Pausar temporariamente sua conta</li>
+            <li> Ajustar suas configurações de disponibilidade</li>
+            <li> Entrar em contato com o suporte</li>
           </ul>
         </div>
 
@@ -207,7 +207,7 @@ const ExcluirContaConsultor = ({ consultorId }) => {
     return (
       <div style={styles.container}>
         <div style={styles.header}>
-          <h2 style={styles.title}>🔒 Confirmação de Identidade</h2>
+          <h2 style={styles.title}> Confirmação de Identidade</h2>
           <p style={styles.subtitle}>Digite sua senha para confirmar a exclusão</p>
         </div>
 
@@ -262,7 +262,7 @@ const ExcluirContaConsultor = ({ consultorId }) => {
             onClick={solicitarExclusao}
             disabled={!senha || loading}
           >
-            {loading ? '⏳ EXCLUINDO...' : '🗑️ EXCLUIR MINHA CONTA AGORA'}
+            {loading ? ' EXCLUINDO...' : '🗑️ EXCLUIR MINHA CONTA AGORA'}
           </button>
         </div>
       </div>
@@ -274,7 +274,7 @@ const ExcluirContaConsultor = ({ consultorId }) => {
     return (
       <div style={styles.container}>
         <div style={styles.successBox}>
-          <div style={styles.successIcon}>✅</div>
+          <div style={styles.successIcon}></div>
           <h2 style={styles.successTitle}>Conta Excluída com Sucesso</h2>
           <p style={styles.successText}>
             Sua conta foi permanentemente excluída da plataforma.
@@ -528,7 +528,7 @@ const styles = {
     marginTop: '15px',
   },
   successBox: {
-    backgroundColor: '#d4edda',
+    backgroundColor: '#f3e8ff',
     border: '3px solid #bb25a6',
     borderRadius: '12px',
     padding: '50px',

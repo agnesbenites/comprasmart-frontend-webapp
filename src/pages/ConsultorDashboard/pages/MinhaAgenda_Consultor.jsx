@@ -71,7 +71,7 @@ const MinhaAgenda = () => {
 
             if (error) throw error;
 
-            alert('✅ Horário adicionado com sucesso!');
+            alert(' Horário adicionado com sucesso!');
             setNovoHorario({
                 dia_semana: 1,
                 hora_inicio: '09:00',
@@ -82,7 +82,7 @@ const MinhaAgenda = () => {
 
         } catch (error) {
             console.error('Erro ao adicionar horário:', error);
-            alert('❌ Erro ao adicionar horário. Verifique se não há conflito.');
+            alert(' Erro ao adicionar horário. Verifique se não há conflito.');
         }
     };
 
@@ -112,12 +112,12 @@ const MinhaAgenda = () => {
 
             if (error) throw error;
 
-            alert('✅ Horário removido com sucesso!');
+            alert(' Horário removido com sucesso!');
             carregarHorarios();
 
         } catch (error) {
             console.error('Erro ao remover:', error);
-            alert('❌ Erro ao remover horário.');
+            alert(' Erro ao remover horário.');
         }
     };
 
@@ -159,12 +159,12 @@ const MinhaAgenda = () => {
 
             if (error) throw error;
 
-            alert('✅ Horários copiados com sucesso!');
+            alert(' Horários copiados com sucesso!');
             carregarHorarios();
 
         } catch (error) {
             console.error('Erro ao copiar:', error);
-            alert('❌ Erro ao copiar horários.');
+            alert(' Erro ao copiar horários.');
         }
     };
 
@@ -192,12 +192,12 @@ const MinhaAgenda = () => {
             <div style={styles.header}>
                 <h2 style={styles.title}>📅 Minha Disponibilidade</h2>
                 <button onClick={copiarSemana} style={styles.copiarBtn}>
-                    📋 Copiar Segunda → Ter a Sex
+                     Copiar Segunda → Ter a Sex
                 </button>
             </div>
 
             <div style={styles.infoBox}>
-                <div style={styles.infoIcon}>💡</div>
+                <div style={styles.infoIcon}></div>
                 <div>
                     <strong>Como funciona:</strong>
                     <p style={styles.infoText}>
@@ -307,11 +307,11 @@ const MinhaAgenda = () => {
 const styles = {
     container: { padding: '30px', backgroundColor: '#f8f9fa', minHeight: '100vh' },
     loading: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', gap: '20px' },
-    spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #2c5aa0', borderRadius: '50%', animation: 'spin 1s linear infinite' },
+    spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #2f0d51', borderRadius: '50%', animation: 'spin 1s linear infinite' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '15px' },
     title: { fontSize: '2rem', color: '#2f0d51', margin: 0 },
     copiarBtn: { backgroundColor: '#bb25a6', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '14px' },
-    infoBox: { backgroundColor: '#e3f2fd', border: '1px solid #90caf9', borderRadius: '8px', padding: '15px', marginBottom: '30px', display: 'flex', gap: '15px', alignItems: 'flex-start' },
+    infoBox: { backgroundColor: '#f3e8ff', border: '1px solid #f3e8ff', borderRadius: '8px', padding: '15px', marginBottom: '30px', display: 'flex', gap: '15px', alignItems: 'flex-start' },
     infoIcon: { fontSize: '2rem' },
     infoText: { fontSize: '14px', color: '#555', margin: '5px 0 0 0', lineHeight: '1.5' },
     addCard: { backgroundColor: '#fff', padding: '25px', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', marginBottom: '30px' },

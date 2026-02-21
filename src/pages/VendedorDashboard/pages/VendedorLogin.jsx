@@ -51,7 +51,7 @@ const VendedorLogin = () => {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
-        <h2 style={styles.title}>🛒 Login Vendedor</h2>
+        <h2 style={styles.title}> Login Vendedor</h2>
         
         <div style={styles.credenciaisBox}>
           <p style={styles.credenciaisText}>
@@ -78,7 +78,7 @@ const VendedorLogin = () => {
 
           {/* Senha */}
           <div style={styles.inputGroup}>
-            <label style={styles.label}>🔒 Senha</label>
+            <label style={styles.label}> Senha</label>
             <input
               type="password"
               value={senha}
@@ -93,7 +93,7 @@ const VendedorLogin = () => {
           {/* Mensagem de erro */}
           {erro && (
             <div style={styles.errorBox}>
-              ❌ {erro}
+               {erro}
             </div>
           )}
 
@@ -107,7 +107,7 @@ const VendedorLogin = () => {
               cursor: loading ? 'not-allowed' : 'pointer'
             }}
           >
-            {loading ? '⏳ Entrando...' : '🔐 Entrar'}
+            {loading ? ' Entrando...' : '🔐 Entrar'}
           </button>
         </form>
 

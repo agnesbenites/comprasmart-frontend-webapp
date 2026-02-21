@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 const SalesTable = () => {
   const [vendas, setVendas] = useState([]);
@@ -66,10 +66,10 @@ const SalesTable = () => {
   const formatarStatus = (status) => {
     const statusMap = {
       'QR Code Gerado!': { emoji: '🔲', cor: '#fbbf24' },
-      'Aguardando Separação': { emoji: '📦', cor: '#60a5fa' },
-      'Pronto para pagamento': { emoji: '💳', cor: '#34d399' },
-      'Pago/Cancelado': { emoji: '✅', cor: '#10b981' },
-      'Retirado pelo Cliente': { emoji: '🎉', cor: '#059669' }
+      'Aguardando Separação': { emoji: '', cor: '#bb25a6' },
+      'Pronto para pagamento': { emoji: '', cor: '#34d399' },
+      'Pago/Cancelado': { emoji: '', cor: '#cccc0c' },
+      'Retirado pelo Cliente': { emoji: '', cor: '#cccc0c' }
     };
 
     const config = statusMap[status] || { emoji: '❓', cor: '#6b7280' };
@@ -105,7 +105,7 @@ const SalesTable = () => {
         {/* Header */}
         <div style={{ marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: CONSULTOR_PRIMARY, marginBottom: '0.5rem' }}>
-            📊 Minhas Vendas
+             Minhas Vendas
           </h1>
           <p style={{ color: '#64748b' }}>
             Histórico completo de todas as suas vendas realizadas
@@ -143,7 +143,7 @@ const SalesTable = () => {
             <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>
               Comissão Total
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#cccc0c' }}>
               R$ {totalComissao.toFixed(2)}
             </div>
           </div>
@@ -250,7 +250,7 @@ const SalesTable = () => {
                       <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '600', color: '#1e293b' }}>
                         R$ {venda.valor_total.toFixed(2)}
                       </td>
-                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '600', color: '#10b981' }}>
+                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: '600', color: '#cccc0c' }}>
                         R$ {(venda.valor_comissao || 0).toFixed(2)}
                       </td>
                     </tr>

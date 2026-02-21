@@ -4,9 +4,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
-const CONSULTOR_PRIMARY = '#2c5aa0';
+const CONSULTOR_PRIMARY = '#2f0d51';
 const CONSULTOR_ACCENT  = '#bb25a6';
-const VERDE_DESTAQUE    = '#6BCB77';
+const VERDE_DESTAQUE    = '#cccc0c';
 
 const styles = {
   container: {
@@ -60,7 +60,7 @@ const styles = {
   },
 
   cenarioBar: {
-    background: '#F0F7FF',
+    background: '#f3e8ff',
     borderBottom: '1px solid #ECECEC',
     padding: '8px 20px',
     display: 'flex',
@@ -172,7 +172,7 @@ const styles = {
     flex: 1,
     padding: '10px 16px',
     borderRadius: 24,
-    border: '2px solid #E8F0F8',
+    border: '2px solid #f3e8ff',
     fontSize: 14,
     outline: 'none',
     resize: 'none',
@@ -324,7 +324,7 @@ function corPontuacao(nota) {
 }
 
 const BADGE_DIFICULDADE = {
-  facil:   { bg: '#E8F5E9', color: '#2E7D32', label: 'Fácil' },
+  facil:   { bg: '#f3e8ff', color: '#cccc0c', label: 'Fácil' },
   medio:   { bg: '#FFF8E1', color: '#F57F17', label: 'Médio' },
   dificil: { bg: '#FCE4EC', color: '#C62828', label: 'Difícil' },
 };
@@ -402,7 +402,7 @@ export default function ArenaSimulador({ sessao, produto, cenario, consultorId, 
         setFeedback(dados.feedback);
 
         const motivo = dados.fechou
-          ? '🎉 O cliente fechou a compra!'
+          ? ' O cliente fechou a compra!'
           : dados.desistiu
             ? 'O cliente decidiu não comprar.'
             : '⏰ Limite de turnos atingido.';
@@ -453,7 +453,7 @@ export default function ArenaSimulador({ sessao, produto, cenario, consultorId, 
 
       <div style={styles.header}>
         <div style={styles.headerEsquerda}>
-          <span style={styles.headerEmoji}>🎯</span>
+          <span style={styles.headerEmoji}></span>
           <div style={styles.headerInfo}>
             <p style={styles.headerProduto}>{produto?.nome}</p>
             <p style={styles.headerCenario}>{cenario?.nome} · {badge.label}</p>
@@ -550,7 +550,7 @@ export default function ArenaSimulador({ sessao, produto, cenario, consultorId, 
           <div style={styles.feedbackCard}>
             <p style={styles.feedbackTitulo}>Resultado</p>
             <p style={styles.feedbackResultado}>
-              {feedback.pontuacao >= 7 ? '🎉 Excelente!' : feedback.pontuacao >= 4 ? '👍 Bom esforço!' : '📚 Vamos melhorar!'}
+              {feedback.pontuacao >= 7 ? ' Excelente!' : feedback.pontuacao >= 4 ? '👍 Bom esforço!' : '📚 Vamos melhorar!'}
             </p>
 
             <div style={{
@@ -564,7 +564,7 @@ export default function ArenaSimulador({ sessao, produto, cenario, consultorId, 
             <p style={styles.feedbackResumo}>"{feedback.resumo}"</p>
 
             <div style={styles.feedbackSeção}>
-              <p style={{ ...styles.feedbackSectionTitulo, color: '#2E7D32' }}>✅ O que foi bem</p>
+              <p style={{ ...styles.feedbackSectionTitulo, color: '#cccc0c' }}> O que foi bem</p>
               {(feedback.areas_bem || []).map((item, i) => (
                 <p key={i} style={styles.feedbackItem}>• {item}</p>
               ))}
@@ -578,7 +578,7 @@ export default function ArenaSimulador({ sessao, produto, cenario, consultorId, 
             </div>
 
             <div style={styles.feedbackSeção}>
-              <p style={{ ...styles.feedbackSectionTitulo, color: CONSULTOR_ACCENT }}>💡 Dicas pra próxima</p>
+              <p style={{ ...styles.feedbackSectionTitulo, color: CONSULTOR_ACCENT }}> Dicas pra próxima</p>
               {(feedback.dicas || []).map((item, i) => (
                 <p key={i} style={styles.feedbackItem}>• {item}</p>
               ))}

@@ -96,7 +96,7 @@ const styles = {
     title: { 
         marginLeft: '15px',
         fontSize: '24px',
-        color: '#364fab',
+        color: '#2f0d51',
         margin: 0,
     },
     logo: {

@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaPlayCircle, FaCheckCircle, FaLock, FaFileAlt, FaClock, FaStore, FaShieldAlt } from 'react-icons/fa';
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 // Componente simples para renderizar Markdown
 const SimpleMarkdown = ({ content }) => {
@@ -216,7 +216,7 @@ Complete este treinamento para avançar no processo de habilitação.`;
     setConteudoMD('');
     calcularProgresso(treinamentosPlataforma, novoConcluidos);
     
-    alert('✅ Treinamento concluído com sucesso!');
+    alert(' Treinamento concluído com sucesso!');
   };
 
   const voltarParaLista = () => {
@@ -372,7 +372,7 @@ Complete este treinamento para avançar no processo de habilitação.`;
       {/* Header com Status de Habilitação */}
       <div style={styles.header}>
         <div>
-          <h2 style={styles.title}>🎓 Treinamentos e Capacitação</h2>
+          <h2 style={styles.title}> Treinamentos e Capacitação</h2>
           <p style={styles.subtitle}>Complete os treinamentos obrigatórios para ficar 100% habilitado</p>
         </div>
 
@@ -382,7 +382,7 @@ Complete este treinamento para avançar no processo de habilitação.`;
               <FaCheckCircle size={40} color="#bb25a6" />
               <div>
                 <p style={styles.statusLabel}>Status</p>
-                <p style={{ ...styles.statusValue, color: '#bb25a6' }}>✅ Habilitado</p>
+                <p style={{ ...styles.statusValue, color: '#bb25a6' }}> Habilitado</p>
               </div>
             </>
           ) : (
@@ -432,23 +432,23 @@ Complete este treinamento para avançar no processo de habilitação.`;
       }}>
         {/* Card 1 - Compliance */}
         <div style={cardStyle}>
-          <div style={iconBoxStyle}><FaShieldAlt size={26} color="#2c5aa0" /></div>
+          <div style={iconBoxStyle}><FaShieldAlt size={26} color="#2f0d51" /></div>
           <h3 style={cardTitleStyle}>Compliance e Ética</h3>
           <p style={cardTextStyle}>Aprenda as diretrizes da Kaslee para um atendimento seguro.</p>
           <div style={cardFooterStyle}>
             <span style={metaItemStyle}><FaClock /> 25 min</span>
-            <span style={metaItemStyle}>📄 Certificação</span>
+            <span style={metaItemStyle}> Certificação</span>
           </div>
         </div>
 
         {/* Card 2 - Gestão de Lojas */}
         <div style={cardStyle}>
-          <div style={iconBoxStyle}><FaStore size={26} color="#2c5aa0" /></div>
+          <div style={iconBoxStyle}><FaStore size={26} color="#2f0d51" /></div>
           <h3 style={cardTitleStyle}>Gestão de Lojas</h3>
           <p style={cardTextStyle}>Como organizar o catálogo e pedidos dos lojistas parceiros.</p>
           <div style={cardFooterStyle}>
             <span style={metaItemStyle}><FaClock /> 40 min</span>
-            <span style={metaItemStyle}>📄 Certificação</span>
+            <span style={metaItemStyle}> Certificação</span>
           </div>
         </div>
       </div>
@@ -584,7 +584,7 @@ const iconBoxStyle = {
   width: '60px',
   height: '60px',
   borderRadius: '12px',
-  backgroundColor: '#eaf2ff',
+  backgroundColor: '#f3e8ff',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -641,7 +641,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #f3f3f3',
-    borderTop: '4px solid #2c5aa0',
+    borderTop: '4px solid #2f0d51',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },
@@ -937,9 +937,9 @@ const styles = {
     marginTop: '30px',
   },
   jaConcluidoMessage: {
-    backgroundColor: '#d4edda',
+    backgroundColor: '#f3e8ff',
     color: '#155724',
-    border: '2px solid #c3e6cb',
+    border: '2px solid #f3e8ff',
     borderRadius: '8px',
     padding: '20px',
     display: 'flex',

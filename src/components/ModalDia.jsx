@@ -273,8 +273,8 @@ const ModalDia = ({ data, onClose, colors, isDark, user }) => {
           {[
             { id: 'notas', label: '📝 Notas', count: nota ? 1 : 0 },
             { id: 'eventos', label: '📅 Eventos', count: eventos.length },
-            { id: 'contas', label: '💰 Contas', count: contas.filter(c => !c.pago).length },
-            { id: 'tarefas', label: '✅ Tarefas', count: tarefas.filter(t => t.status !== 'concluido').length }
+            { id: 'contas', label: ' Contas', count: contas.filter(c => !c.pago).length },
+            { id: 'tarefas', label: ' Tarefas', count: tarefas.filter(t => t.status !== 'concluido').length }
           ].map(aba => (
             <button
               key={aba.id}
@@ -459,7 +459,7 @@ const ModalDia = ({ data, onClose, colors, isDark, user }) => {
 
                   {contas.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
-                      <div style={{ fontSize: '48px', marginBottom: '10px' }}>💰</div>
+                      <div style={{ fontSize: '48px', marginBottom: '10px' }}></div>
                       <p>Nenhuma conta com vencimento neste dia</p>
                     </div>
                   ) : (
@@ -581,7 +581,7 @@ const ModalDia = ({ data, onClose, colors, isDark, user }) => {
 
                   {tarefas.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
-                      <div style={{ fontSize: '48px', marginBottom: '10px' }}>✅</div>
+                      <div style={{ fontSize: '48px', marginBottom: '10px' }}></div>
                       <p>Nenhuma tarefa para este dia</p>
                     </div>
                   ) : (

@@ -18,7 +18,7 @@ const EmDesenvolvimento = ({ titulo = "Funcionalidade", icone = "🚧" }) => {
             🚀 Estamos trabalhando para trazer esta funcionalidade em breve!
           </p>
           <p style={styles.infoText}>
-            💡 Fique atento às atualizações da plataforma.
+             Fique atento às atualizações da plataforma.
           </p>
         </div>
 

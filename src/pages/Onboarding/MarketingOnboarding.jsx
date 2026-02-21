@@ -18,10 +18,10 @@ const MarketingOnboarding = () => {
       subtitle: 'Somos o Complemento Perfeito do Seu Negócio',
       description: 'Seu sistema de gestão continua fazendo o que faz de melhor. A gente entra só com vendedores autônomos sob demanda - quando você precisa, sem custo fixo.',
       benefits: [
-        '✅ Plug & Play com seu sistema atual',
-        '✅ Consultores autônomos especializados quando você precisa',
-        '✅ 15 minutos de correção livre após cadastro',
-        '✅ Zero compromisso de contratação CLT'
+        ' Plug & Play com seu sistema atual',
+        ' Consultores autônomos especializados quando você precisa',
+        ' 15 minutos de correção livre após cadastro',
+        ' Zero compromisso de contratação CLT'
       ],
       color: '#bb25a6',
       badge: 'TODOS OS PLANOS',
@@ -32,44 +32,44 @@ const MarketingOnboarding = () => {
       subtitle: 'Profissionais Sob Demanda',
       description: 'Assim como apps de transporte e entrega revolucionaram seus mercados, aplicamos o mesmo modelo às vendas: profissionais autônomos atendem seus clientes quando seu time está ocupado.',
       benefits: [
-        '✅ SLA de 5 minutos para overflow (Plano Pro)',
-        '✅ Rede de consultores prontos para atender',
-        '✅ Você paga apenas pelas vendas concretizadas',
-        '✅ Sem custo fixo de folha de pagamento'
+        ' SLA de 5 minutos para overflow (Plano Pro)',
+        ' Rede de consultores prontos para atender',
+        ' Você paga apenas pelas vendas concretizadas',
+        ' Sem custo fixo de folha de pagamento'
       ],
       color: '#f53342',
       badge: 'PLANO PRO',
     },
     {
-      icon: '💰',
+      icon: '',
       title: 'Transforme Estoque Parado em Dinheiro',
       subtitle: 'BI Identifica, Consultores Vendem',
       description: 'Produtos parados há 60+ dias viram missões de venda com comissão turbinada. Nossa inteligência detecta automaticamente e mobiliza consultores especializados para escoar.',
       benefits: [
-        '✅ Dashboard identifica itens sem giro',
-        '✅ Comissão extra motiva venda rápida',
-        '✅ ROI calculado em tempo real',
-        '✅ Seu capital volta a circular'
+        ' Dashboard identifica itens sem giro',
+        ' Comissão extra motiva venda rápida',
+        ' ROI calculado em tempo real',
+        ' Seu capital volta a circular'
       ],
       color: '#bb25a6',
       badge: 'PLANO ENTERPRISE',
     },
     {
-      icon: '📊',
+      icon: '',
       title: 'Comissão Inteligente e Justa',
       subtitle: 'Quanto Maior a Venda, Maior o Incentivo',
       description: 'Sistema escalonado que recompensa vendas mais técnicas e de maior ticket, motivando consultores a se especializarem e fecharem negócios complexos.',
       benefits: [
-        '✅ Até R$ 200: 5% (Giro Rápido)',
-        '✅ R$ 201 a R$ 800: 10% (Venda Assistida)',
-        '✅ R$ 801 a R$ 2.000: 15% (Venda Técnica)',
-        '✅ Acima de R$ 2.000: 20% (Venda VIP)'
+        ' Até R$ 200: 5% (Giro Rápido)',
+        ' R$ 201 a R$ 800: 10% (Venda Assistida)',
+        ' R$ 801 a R$ 2.000: 15% (Venda Técnica)',
+        ' Acima de R$ 2.000: 20% (Venda VIP)'
       ],
       color: '#2f0d51',
       badge: 'COMISSÃO DINÂMICA',
     },
     {
-      icon: '🎯',
+      icon: '',
       title: 'Simule Seu Retorno',
       subtitle: 'Quanto Você Perde Por Não Ter Overflow?',
       description: 'Estudos mostram que 30% das vendas são perdidas por demora no atendimento ou equipe sobrecarregada. Calcule quanto isso representa no seu faturamento.',
@@ -80,7 +80,7 @@ const MarketingOnboarding = () => {
     }
   ];
 
-  // ✅ PLANOS 
+  //  PLANOS 
   const planos = [
     {
       id: 'basic',
@@ -88,14 +88,14 @@ const MarketingOnboarding = () => {
       preco: 99.90,
       descricao: 'Ideal para pequenos negócios',
       features: [
-        '📦 Até 100 produtos',
-        '👥 10 consultores disponíveis',
+        ' Até 100 produtos',
+        ' 10 consultores disponíveis',
         '🏢 1 Filial + Matriz',
-        '👤 5 vendedores',
+        ' 5 vendedores',
         '⏰ Edição após 24h',
-        '💬 Texto, áudio e imagens',
-        '📊 Analytics mensal',
-        '📍 Marketing: 5km',
+        ' Texto, áudio e imagens',
+        ' Analytics mensal',
+        ' Marketing: 5km',
         '📁 Atualização CSV'
       ],
       cor: '#1a0a2e',
@@ -107,16 +107,16 @@ const MarketingOnboarding = () => {
       preco: 199.90,
       descricao: 'Para negócios em crescimento',
       features: [
-        '📦 Até 500 produtos',
-        '👥 30 consultores disponíveis',
+        ' Até 500 produtos',
+        ' 30 consultores disponíveis',
         '🏢 5 Filiais + Matriz',
-        '👤 20 vendedores',
+        ' 20 vendedores',
         '⏰ Edição após 12h',
-        '💬 Texto, áudio, imagens e vídeo (15s)',
-        '📞 6 videochamadas/mês',
-        '🔄 Integração ERP mensal',
-        '📊 Analytics semanal e mensal',
-        '📍 Marketing: 10km'
+        ' Texto, áudio, imagens e vídeo (15s)',
+        ' 6 videochamadas/mês',
+        ' Integração ERP mensal',
+        ' Analytics semanal e mensal',
+        ' Marketing: 10km'
       ],
       cor: '#2f0d51',
       stripeUrl: 'https://buy.stripe.com/dRm8wP7Tq1A011c1qhgQE02',
@@ -127,24 +127,24 @@ const MarketingOnboarding = () => {
       preco: 499.00,
       descricao: 'Solução completa para grandes redes',
       features: [
-        '📦 Produtos ILIMITADOS',
-        '👥 80 consultores disponíveis',
+        ' Produtos ILIMITADOS',
+        ' 80 consultores disponíveis',
         '🏢 29 Filiais + Matriz',
-        '👤 60 vendedores',
+        ' 60 vendedores',
         '⏰ Edição após 4h',
-        '💬 Texto, áudio, imagens e vídeo (15s)',
-        '📞 Videochamadas ILIMITADAS',
-        '🔄 Integração ERP automática',
-        '📊 Analytics diário e mensal',
-        '📍 Marketing: 20km',
-        '🤖 BI de Liquidez de Estoque'
+        ' Texto, áudio, imagens e vídeo (15s)',
+        ' Videochamadas ILIMITADAS',
+        ' Integração ERP automática',
+        ' Analytics diário e mensal',
+        ' Marketing: 20km',
+        ' BI de Liquidez de Estoque'
       ],
       cor: '#1a0a2e',
       stripeUrl: 'https://buy.stripe.com/6oU28r5LiemMaBM8SJgQE0a',
     }
   ];
 
-  // ✅ ADDONS CORRETOS
+  //  ADDONS CORRETOS
   const addons = [
     {
       id: 'pacote-basic',
@@ -153,7 +153,7 @@ const MarketingOnboarding = () => {
       descricao: '+1 Filial, +2 Vendedores, +20 Produtos',
       disponivel: ['basic'],
       stripeUrl: 'https://buy.stripe.com/aFa28rehOdiIfW60mdgQE04',
-      icon: '📦'
+      icon: ''
     },
     {
       id: 'produtos-adicionais',
@@ -162,7 +162,7 @@ const MarketingOnboarding = () => {
       descricao: 'Pacotes extras de produtos',
       disponivel: ['basic', 'pro'],
       stripeUrl: 'https://buy.stripe.com/eVqeVd2z66Uk5hs9WNgQE09',
-      icon: '📦'
+      icon: ''
     },
     {
       id: 'filial-adicional',
@@ -180,7 +180,7 @@ const MarketingOnboarding = () => {
       descricao: 'Aumente seu time de vendas',
       disponivel: ['basic', 'pro', 'enterprise'],
       stripeUrl: 'https://buy.stripe.com/6oU4gz6Pm1A0cJUed3gQE05',
-      icon: '👤'
+      icon: ''
     },
     {
       id: 'modulo-erp',
@@ -189,7 +189,7 @@ const MarketingOnboarding = () => {
       descricao: 'Integração automática com seu ERP',
       disponivel: ['basic', 'pro'], // Enterprise já tem
       stripeUrl: 'https://buy.stripe.com/3cI9ATc9G7YodNYfh7gQE08',
-      icon: '🔄'
+      icon: ''
     }
   ];
 
@@ -305,7 +305,7 @@ const MarketingOnboarding = () => {
           {slideAtualData.mostrarCalculadora ? (
             <div style={styles.calculadoraContainer}>
               <div style={styles.inputGroup}>
-                <label style={styles.label}>💰 Faturamento Mensal Estimado:</label>
+                <label style={styles.label}> Faturamento Mensal Estimado:</label>
                 <input
                   type="text"
                   value={formatarMoeda(parseFloat(faturamentoEstimado) || 0)}
@@ -318,7 +318,7 @@ const MarketingOnboarding = () => {
               {faturamentoEstimado && (
                 <div style={styles.roiPreview}>
                   <p style={styles.roiTexto}>
-                    📊 Você pode estar perdendo <strong>{formatarMoeda(roi.receitaRecuperada)}/mês</strong> por falta de overflow!
+                     Você pode estar perdendo <strong>{formatarMoeda(roi.receitaRecuperada)}/mês</strong> por falta de overflow!
                   </p>
                 </div>
               )}
@@ -388,7 +388,7 @@ const MarketingOnboarding = () => {
           {faturamentoEstimado && (
             <div style={styles.roiInfo}>
               <p style={styles.roiInfoTexto}>
-                💰 Com faturamento de <strong>{formatarMoeda(parseFloat(faturamentoEstimado))}/mês</strong>,
+                 Com faturamento de <strong>{formatarMoeda(parseFloat(faturamentoEstimado))}/mês</strong>,
                 você pode recuperar até <strong>{formatarMoeda(roi.receitaRecuperada)}</strong> em vendas perdidas!
               </p>
             </div>
@@ -450,7 +450,7 @@ const MarketingOnboarding = () => {
 
         <div style={styles.planosFooter}>
           <p style={styles.planosFooterTexto}>
-            💳 Pagamento processado via Stripe • 🔒 100% seguro
+             Pagamento processado via Stripe •  100% seguro
           </p>
         </div>
       </div>
@@ -795,9 +795,9 @@ const styles = {
     position: 'relative',
     transition: 'all 0.3s',
     boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-    display: 'flex', // ✅ FLEX
-    flexDirection: 'column', // ✅ COLUNA
-    minHeight: '650px', // ✅ ALTURA MÍNIMA
+    display: 'flex', //  FLEX
+    flexDirection: 'column', //  COLUNA
+    minHeight: '650px', //  ALTURA MÍNIMA
   },
   
   planoTag: {
@@ -861,7 +861,7 @@ const styles = {
     padding: 0,
     marginBottom: '30px',
     textAlign: 'left',
-    flexGrow: 1, // ✅ CRESCE PARA EMPURRAR BOTÃO
+    flexGrow: 1, //  CRESCE PARA EMPURRAR BOTÃO
   },
   
   planoFeature: {
@@ -879,7 +879,7 @@ const styles = {
     fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s',
-    marginTop: 'auto', // ✅ FICA NO FINAL
+    marginTop: 'auto', //  FICA NO FINAL
     boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
   },
   

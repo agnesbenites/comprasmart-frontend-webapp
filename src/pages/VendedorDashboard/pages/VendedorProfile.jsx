@@ -181,7 +181,7 @@ const VendedorProfile = () => {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <p style={{ textAlign: 'center', color: '#666' }}>⏳ Carregando perfil...</p>
+          <p style={{ textAlign: 'center', color: '#666' }}> Carregando perfil...</p>
         </div>
       </div>
     );
@@ -192,7 +192,7 @@ const VendedorProfile = () => {
     return (
       <div style={styles.container}>
         <div style={styles.card}>
-          <p style={{ textAlign: 'center', color: '#dc3545' }}>❌ Erro ao carregar perfil</p>
+          <p style={{ textAlign: 'center', color: '#dc3545' }}> Erro ao carregar perfil</p>
           <button onClick={() => navigate('/vendedor/dashboard')} style={styles.backButton}>
             Voltar ao Dashboard
           </button>
@@ -205,9 +205,9 @@ const VendedorProfile = () => {
     <div style={styles.container}>
       {/* HEADER COM LOGOUT */}
       <div style={styles.header}>
-        <h1 style={styles.title}>👤 Meu Perfil</h1>
+        <h1 style={styles.title}> Meu Perfil</h1>
         <button onClick={handleLogout} style={styles.logoutButton}>
-          🚪 Sair
+           Sair
         </button>
       </div>
       
@@ -240,7 +240,7 @@ const VendedorProfile = () => {
           
           <div style={styles.fotoActions}>
             <label style={styles.uploadButton}>
-              📷 Alterar Foto
+               Alterar Foto
               <input
                 type="file"
                 accept="image/*"
@@ -255,7 +255,7 @@ const VendedorProfile = () => {
 
       {/* Card de Informações Pessoais */}
       <div style={styles.card}>
-        <h2 style={styles.cardTitle}>👤 Informações Pessoais</h2>
+        <h2 style={styles.cardTitle}> Informações Pessoais</h2>
         
         {/* Nome */}
         <div style={styles.infoGroup}>
@@ -275,7 +275,7 @@ const VendedorProfile = () => {
                   disabled={loadingAction}
                   style={styles.saveButton}
                 >
-                  {loadingAction ? "Salvando..." : "✅ Salvar"}
+                  {loadingAction ? "Salvando..." : " Salvar"}
                 </button>
                 <button
                   onClick={() => {
@@ -284,7 +284,7 @@ const VendedorProfile = () => {
                   }}
                   style={styles.cancelButton}
                 >
-                  ❌ Cancelar
+                   Cancelar
                 </button>
               </div>
             </div>
@@ -306,7 +306,7 @@ const VendedorProfile = () => {
           <label style={styles.label}>Email</label>
           <div style={styles.viewContainer}>
             <span style={styles.value}>{vendedor.email || 'Não informado'}</span>
-            <span style={styles.badge}>🔒 Não editável</span>
+            <span style={styles.badge}> Não editável</span>
           </div>
         </div>
 
@@ -334,7 +334,7 @@ const VendedorProfile = () => {
             backgroundColor: vendedor.ativo ? '#d4edda' : '#f8d7da',
             color: vendedor.ativo ? '#155724' : '#721c24'
           }}>
-            {vendedor.ativo ? '✅ Ativo' : '⚠️ Inativo'}
+            {vendedor.ativo ? ' Ativo' : '⚠️ Inativo'}
           </span>
         </div>
       </div>
@@ -342,7 +342,7 @@ const VendedorProfile = () => {
       {/* Card de Informações da Loja */}
       {loja && (
         <div style={styles.card}>
-          <h2 style={styles.cardTitle}>🏪 Loja</h2>
+          <h2 style={styles.cardTitle}> Loja</h2>
           
           <div style={styles.infoGroup}>
             <label style={styles.label}>Nome da Loja</label>
@@ -374,7 +374,7 @@ const VendedorProfile = () => {
 
       {/* Card de Senha */}
       <div style={styles.card}>
-        <h2 style={styles.cardTitle}>🔒 Senha</h2>
+        <h2 style={styles.cardTitle}> Senha</h2>
         
         <div style={styles.alertBox}>
           <strong>⚠️ Senha Padrão Detectada!</strong>
@@ -391,7 +391,7 @@ const VendedorProfile = () => {
             disabled={loadingAction}
             style={styles.resetButton}
           >
-            {loadingAction ? "⏳ Enviando..." : "📧 Alterar Senha"}
+            {loadingAction ? " Enviando..." : "📧 Alterar Senha"}
           </button>
         </div>
 

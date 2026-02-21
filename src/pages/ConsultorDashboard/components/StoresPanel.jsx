@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
 // Cores do Consultor
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 const StoresPanel = ({ consultorId }) => {
   const [lojas, setLojas] = useState([]);
@@ -203,7 +203,7 @@ const StoresPanel = ({ consultorId }) => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        alert('❌ Você precisa estar logado para se candidatar.');
+        alert(' Você precisa estar logado para se candidatar.');
         return;
       }
 
@@ -214,7 +214,7 @@ const StoresPanel = ({ consultorId }) => {
         .single();
 
       if (!consultor) {
-        alert('❌ Erro ao identificar consultor.');
+        alert(' Erro ao identificar consultor.');
         return;
       }
 
@@ -235,7 +235,7 @@ const StoresPanel = ({ consultorId }) => {
         { lojaId, status: 'pendente', dataCandidatura: new Date().toISOString() },
       ]);
 
-      alert('✅ Candidatura enviada com sucesso!');
+      alert(' Candidatura enviada com sucesso!');
       
     } catch (error) {
       console.error('Erro ao candidatar:', error);
@@ -243,18 +243,18 @@ const StoresPanel = ({ consultorId }) => {
       if (error.code === '23505') {
         alert('⚠️ Você já possui uma candidatura para esta loja.');
       } else {
-        alert('❌ Erro ao enviar candidatura. Tente novamente.');
+        alert(' Erro ao enviar candidatura. Tente novamente.');
       }
     }
   };
 
   const getStatusCandidatura = (lojaId, aceitaCandidaturas) => {
     if (lojasAprovadas.includes(lojaId)) {
-      return { status: 'aprovado', label: '✅ Aprovado', cor: '#bb25a6' };
+      return { status: 'aprovado', label: ' Aprovado', cor: '#bb25a6' };
     }
     const candidatura = minhasCandidaturas.find(c => c.lojaId === lojaId);
     if (candidatura) {
-      return { status: 'pendente', label: '⏳ Aguardando Aprovação', cor: '#ffc107' };
+      return { status: 'pendente', label: ' Aguardando Aprovação', cor: '#ffc107' };
     }
     if (!aceitaCandidaturas) {
       return { status: 'sem_vagas', label: '📨 Enviar Convite', cor: '#6c757d' };
@@ -283,7 +283,7 @@ const StoresPanel = ({ consultorId }) => {
   if (loading) {
     return (
       <div style={styles.loadingContainer}>
-        <div style={styles.loadingSpinner}>🔄</div>
+        <div style={styles.loadingSpinner}></div>
         <p>Carregando lojas...</p>
       </div>
     );
@@ -293,7 +293,7 @@ const StoresPanel = ({ consultorId }) => {
     <div style={styles.container}>
       {/* Header */}
       <div style={styles.header}>
-        <h2 style={styles.title}>🏪 Lojas Disponíveis</h2>
+        <h2 style={styles.title}> Lojas Disponíveis</h2>
         
         {/* Estatísticas */}
         <div style={styles.statsContainer}>
@@ -301,7 +301,7 @@ const StoresPanel = ({ consultorId }) => {
             <p style={styles.statLabel}>Candidaturas</p>
             <p style={styles.statValue}>{minhasCandidaturas.length}</p>
           </div>
-          <div style={{ ...styles.statCard, backgroundColor: '#e8f5e9' }}>
+          <div style={{ ...styles.statCard, backgroundColor: '#f3e8ff' }}>
             <p style={styles.statLabel}>Aprovadas</p>
             <p style={{ ...styles.statValue, color: '#bb25a6' }}>{lojasAprovadas.length}</p>
           </div>
@@ -311,7 +311,7 @@ const StoresPanel = ({ consultorId }) => {
       {/* Badge de Segmentos do Consultor */}
       {consultorSegmentos.length > 0 && (
         <div style={styles.segmentosConsultorBanner}>
-          <span style={styles.segmentosBannerIcon}>🎯</span>
+          <span style={styles.segmentosBannerIcon}></span>
           <div style={styles.segmentosBannerContent}>
             <strong>Seus segmentos:</strong>
             <div style={styles.segmentosBannerList}>
@@ -327,7 +327,7 @@ const StoresPanel = ({ consultorId }) => {
       <div style={styles.filtrosContainer}>
         {/* Barra de busca */}
         <div style={styles.searchContainer}>
-          <span style={styles.searchIcon}>🔍</span>
+          <span style={styles.searchIcon}></span>
           <input
             type="text"
             placeholder="Buscar lojas..."
@@ -406,7 +406,7 @@ const StoresPanel = ({ consultorId }) => {
               {/* Badge "Seu Segmento" */}
               {loja.pertenceAoSegmento && (
                 <div style={styles.seuSegmentoBadge}>
-                  🎯 Seu Segmento
+                   Seu Segmento
                 </div>
               )}
 
@@ -417,10 +417,10 @@ const StoresPanel = ({ consultorId }) => {
                 </div>
                 <div style={styles.lojaInfo}>
                   <h3 style={styles.lojaNome}>{loja.nome}</h3>
-                  <p style={styles.lojaLocal}>📍 {loja.cidade}, {loja.estado}</p>
+                  <p style={styles.lojaLocal}> {loja.cidade}, {loja.estado}</p>
                 </div>
                 <div style={styles.avaliacaoContainer}>
-                  <span style={styles.avaliacaoIcon}>⭐</span>
+                  <span style={styles.avaliacaoIcon}></span>
                   <span style={styles.avaliacaoValor}>{loja.avaliacaoLoja}</span>
                 </div>
               </div>
@@ -440,7 +440,7 @@ const StoresPanel = ({ consultorId }) => {
               {/* Comissão */}
               <div style={styles.comissaoContainer}>
                 <div style={styles.comissaoHeader}>
-                  <span>💰 Comissão</span>
+                  <span> Comissão</span>
                 </div>
                 <div style={styles.comissaoDetails}>
                   <div style={styles.comissaoRow}>
@@ -468,7 +468,7 @@ const StoresPanel = ({ consultorId }) => {
                 style={{
                   ...styles.actionButton,
                   backgroundColor: 
-                    statusCandidatura.status === 'aprovado' ? '#e8f5e9' :
+                    statusCandidatura.status === 'aprovado' ? '#f3e8ff' :
                     statusCandidatura.status === 'pendente' ? '#fff3cd' :
                     statusCandidatura.status === 'sem_vagas' ? '#f8f9fa' :
                     CONSULTOR_PRIMARY,
@@ -500,7 +500,7 @@ const StoresPanel = ({ consultorId }) => {
       {/* Mensagem quando não há lojas */}
       {lojasFiltradas.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>🏪</div>
+          <div style={styles.emptyIcon}></div>
           <p style={styles.emptyTitle}>Nenhuma loja encontrada</p>
           <p style={styles.emptySubtitle}>Tente ajustar os filtros de busca</p>
         </div>
@@ -737,14 +737,14 @@ const styles = {
     fontWeight: '500',
   },
   comissaoContainer: {
-    backgroundColor: '#e8f5e9',
+    backgroundColor: '#f3e8ff',
     borderRadius: '10px',
     padding: '12px',
     marginBottom: '15px',
   },
   comissaoHeader: {
     fontWeight: '600',
-    color: '#2e7d32',
+    color: '#cccc0c',
     marginBottom: '8px',
   },
   comissaoDetails: {

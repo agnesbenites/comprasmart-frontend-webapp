@@ -182,7 +182,7 @@ const LojistaRelatoriosEnterprise = () => {
         return (
             <div style={styles.roiSection}>
                 <div style={styles.roiTitleBox}>
-                    <h2 style={styles.roiTitle}>📊 Dashboard ROI</h2>
+                    <h2 style={styles.roiTitle}> Dashboard ROI</h2>
                     <select 
                         value={periodo} 
                         onChange={(e) => setPeriodo(e.target.value)}
@@ -209,7 +209,7 @@ const LojistaRelatoriosEnterprise = () => {
 
                 <div style={styles.roiGrid}>
                     <div style={styles.roiCard}>
-                        <div style={styles.roiCardLabel}>💸 Investimento Total</div>
+                        <div style={styles.roiCardLabel}> Investimento Total</div>
                         <div style={styles.roiCardValue}>
                             R$ {dashboardROI.investimentoTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </div>
@@ -220,7 +220,7 @@ const LojistaRelatoriosEnterprise = () => {
                     </div>
 
                     <div style={styles.roiCard}>
-                        <div style={styles.roiCardLabel}>💰 Retorno Total</div>
+                        <div style={styles.roiCardLabel}> Retorno Total</div>
                         <div style={styles.roiCardValue}>
                             R$ {dashboardROI.retornoTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </div>
@@ -230,7 +230,7 @@ const LojistaRelatoriosEnterprise = () => {
                     </div>
 
                     <div style={styles.roiCard}>
-                        <div style={styles.roiCardLabel}>✅ Lucro Líquido</div>
+                        <div style={styles.roiCardLabel}> Lucro Líquido</div>
                         <div style={{...styles.roiCardValue, color: '#10b981'}}>
                             R$ {dashboardROI.lucroLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </div>
@@ -246,11 +246,11 @@ const LojistaRelatoriosEnterprise = () => {
     const renderEstoqueCritico = () => {
         return (
             <div style={styles.estoqueSection}>
-                <h2 style={styles.sectionTitle}>📦 Estoque Crítico</h2>
+                <h2 style={styles.sectionTitle}> Estoque Crítico</h2>
                 
                 {estoqueCritico.length === 0 ? (
                     <div style={styles.noData}>
-                        <p>✅ Nenhum produto crítico no momento!</p>
+                        <p> Nenhum produto crítico no momento!</p>
                     </div>
                 ) : (
                     <div style={styles.estoqueGrid}>
@@ -277,7 +277,7 @@ const LojistaRelatoriosEnterprise = () => {
                                             <strong>R$ {parseFloat(produto.valor_total_parado || 0).toFixed(2)}</strong>
                                         </div>
                                         <div style={styles.estoqueMetric}>
-                                            <span>📊 Quantidade:</span>
+                                            <span> Quantidade:</span>
                                             <strong>{produto.quantidade || 0}</strong>
                                         </div>
                                     </div>
@@ -297,12 +297,12 @@ const LojistaRelatoriosEnterprise = () => {
 
         return (
             <div style={styles.metricasSection}>
-                <h2 style={styles.sectionTitle}>📈 Análise Avançada</h2>
+                <h2 style={styles.sectionTitle}> Análise Avançada</h2>
                 
                 <div style={styles.analysisGrid}>
                     {/* ORIGEM DAS VENDAS */}
                     <div style={styles.analysisCard}>
-                        <h3 style={styles.analysisCardTitle}>🎯 Origem das Vendas</h3>
+                        <h3 style={styles.analysisCardTitle}> Origem das Vendas</h3>
                         <div style={styles.barContainer}>
                             <div style={styles.barItem}>
                                 <span style={styles.barLabel}>Orgânicas</span>
@@ -355,7 +355,7 @@ const LojistaRelatoriosEnterprise = () => {
                                 <div style={styles.methodValue}>{metricasAvancadas.metodosFechamento.audio}</div>
                             </div>
                             <div style={styles.methodCard}>
-                                <div style={styles.methodIcon}>💬</div>
+                                <div style={styles.methodIcon}></div>
                                 <div style={styles.methodLabel}>Chat</div>
                                 <div style={styles.methodValue}>{metricasAvancadas.metodosFechamento.chat}</div>
                             </div>
@@ -369,7 +369,7 @@ const LojistaRelatoriosEnterprise = () => {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>🏆 Relatórios Enterprise</h1>
+                <h1 style={styles.title}> Relatórios Enterprise</h1>
                 <span style={styles.planBadge}>PLANO ENTERPRISE</span>
             </div>
 

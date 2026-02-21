@@ -4,9 +4,9 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
-const CONSULTOR_PRIMARY = '#2c5aa0';
+const CONSULTOR_PRIMARY = '#2f0d51';
 const CONSULTOR_ACCENT  = '#bb25a6';
-const VERDE_DESTAQUE    = '#6BCB77';
+const VERDE_DESTAQUE    = '#cccc0c';
 
 const styles = {
   container: { padding: 0 },
@@ -18,8 +18,8 @@ const styles = {
     marginBottom: 24,
   },
   resumoCard: {
-    background: '#F0F7FF',
-    border: '1px solid #E8F0F8',
+    background: '#f3e8ff',
+    border: '1px solid #f3e8ff',
     borderRadius: 12,
     padding: '14px 12px',
     textAlign: 'center',
@@ -60,14 +60,14 @@ const styles = {
     fontSize: 12,
     fontWeight: 700,
     color: CONSULTOR_ACCENT,
-    background: '#F0F7FF',
+    background: '#f3e8ff',
     padding: '3px 10px',
     borderRadius: 12,
   },
   evolucaoBarra: {
     width: '100%',
     height: 8,
-    background: '#F0F7FF',
+    background: '#f3e8ff',
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -180,7 +180,7 @@ const styles = {
   },
   nivelCardAtivo: {
     borderColor: CONSULTOR_ACCENT,
-    background: '#F0F7FF',
+    background: '#f3e8ff',
   },
   nivelEmoji: {
     fontSize: 18,
@@ -232,7 +232,7 @@ function corNota(nota) {
 }
 
 const DIF_CORES = {
-  facil:   { bg: '#E8F5E9', color: '#2E7D32' },
+  facil:   { bg: '#f3e8ff', color: '#cccc0c' },
   medio:   { bg: '#FFF8E1', color: '#F57F17' },
   dificil: { bg: '#FCE4EC', color: '#C62828' },
 };
@@ -343,7 +343,7 @@ export default function ArenaProgresso({ consultorId }) {
         <p style={styles.evolucaoTexto}>
           {proximoNivel
             ? `${proximoNivel.minSessoes - totalSessoes} sessões até ${proximoNivel.emoji} ${proximoNivel.nome}`
-            : 'Nível máximo atingido! 🎉'}
+            : 'Nível máximo atingido! '}
         </p>
       </div>
 
@@ -365,7 +365,7 @@ export default function ArenaProgresso({ consultorId }) {
       <div style={{ ...styles.evolucaoBox, marginBottom: 20 }}>
         <div style={styles.evolucaoHeader}>
           <span style={styles.evolucaoTitulo}>Taxa de fechamento</span>
-          <span style={{ ...styles.evolucaoNivel, color: VERDE_DESTAQUE, background: '#E8F5E9' }}>
+          <span style={{ ...styles.evolucaoNivel, color: VERDE_DESTAQUE, background: '#f3e8ff' }}>
             {totalSessoes > 0 ? Math.round((totalFechou / totalSessoes) * 100) : 0}%
           </span>
         </div>
@@ -373,7 +373,7 @@ export default function ArenaProgresso({ consultorId }) {
           <div style={{
             ...styles.evolucaoBarraFill,
             width: `${totalSessoes > 0 ? (totalFechou / totalSessoes) * 100 : 0}%`,
-            background: `linear-gradient(90deg, ${VERDE_DESTAQUE}, #A8E6B0)`
+            background: `linear-gradient(90deg, ${VERDE_DESTAQUE}, #cccc0c)`
           }}></div>
         </div>
         <p style={styles.evolucaoTexto}>
@@ -418,8 +418,8 @@ export default function ArenaProgresso({ consultorId }) {
 
                 <span style={{
                   ...styles.resultadoBadge,
-                  background: s.resultado_fechou ? '#E8F5E9' : '#FFF3E0',
-                  color: s.resultado_fechou ? '#2E7D32' : '#E65100'
+                  background: s.resultado_fechou ? '#f3e8ff' : '#FFF3E0',
+                  color: s.resultado_fechou ? '#cccc0c' : '#E65100'
                 }}>
                   {s.resultado_fechou ? '✓ Fechou' : '✗ Não fechou'}
                 </span>

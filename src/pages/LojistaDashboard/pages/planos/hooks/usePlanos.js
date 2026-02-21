@@ -41,7 +41,7 @@ export const usePlanos = () => {
   };
 
   /* =========================
-     FILTRAR ADDONS POR PLANO ✅ NOVO
+     FILTRAR ADDONS POR PLANO  NOVO
   ========================== */
   const filtrarAddonsPorPlano = (todosAddons, planoNome) => {
     if (!todosAddons || !planoNome) return [];
@@ -85,7 +85,7 @@ export const usePlanos = () => {
       setLoading(true);
       setError(null);
 
-      // ✅ USAR O PLANO DO PLANOCONTEXT
+      //  USAR O PLANO DO PLANOCONTEXT
       const planoNome = mapearPlano(planoAtualTipo);
       const planoInfo = PLANS_DETAILS[planoNome] || PLANS_DETAILS["Plano Basico"];
       
@@ -112,7 +112,7 @@ export const usePlanos = () => {
       }
       setAvailableUpgrades(upgradesDisponiveis);
 
-      // ✅ FILTRAR add-ons disponíveis baseado no plano
+      //  FILTRAR add-ons disponíveis baseado no plano
       const todosAddons = ADDONS_DETAILS.map((addon, index) => ({
         id: index + 1,
         ...addon,
@@ -220,7 +220,7 @@ export const usePlanos = () => {
     const stripeStatus = urlParams.get("stripe_status") || urlParams.get("success");
     
     if (stripeStatus === "success" || stripeStatus === "true") {
-      setSuccess("🎉 Pagamento realizado com sucesso! Seu plano foi atualizado.");
+      setSuccess(" Pagamento realizado com sucesso! Seu plano foi atualizado.");
       localStorage.removeItem("stripe_redirect_pending");
       window.history.replaceState({}, document.title, window.location.pathname);
     } else if (stripeStatus === "cancel" || stripeStatus === "false") {

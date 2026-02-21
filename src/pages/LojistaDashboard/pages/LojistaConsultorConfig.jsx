@@ -186,7 +186,7 @@ const LojistaConsultorConfig = () => {
         <div>
           <h1 style={styles.title}>🤝 Performance de Consultores</h1>
           <p style={styles.subtitle}>Análise de vendas assistidas - {getPeriodoLabel()}</p>
-          <p style={styles.privacyNote}>🔒 Dados anonimizados para proteção de privacidade</p>
+          <p style={styles.privacyNote}> Dados anonimizados para proteção de privacidade</p>
         </div>
         <div style={styles.headerRight}>
           <select value={periodo} onChange={(e) => setPeriodo(e.target.value)} style={styles.select}>
@@ -196,7 +196,7 @@ const LojistaConsultorConfig = () => {
             <option value="ano">Último ano</option>
           </select>
           <button onClick={carregarDados} style={styles.button}>
-            🔄 Atualizar
+             Atualizar
           </button>
         </div>
       </div>
@@ -213,7 +213,7 @@ const LojistaConsultorConfig = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}>💰</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#bb25a6'}}></div>
           <div>
             <div style={styles.cardLabel}>Faturamento Total</div>
             <div style={styles.cardValue}>
@@ -235,7 +235,7 @@ const LojistaConsultorConfig = () => {
         </div>
 
         <div style={styles.card}>
-          <div style={{...styles.cardIcon, backgroundColor: '#8b5cf6'}}>⭐</div>
+          <div style={{...styles.cardIcon, backgroundColor: '#8b5cf6'}}></div>
           <div>
             <div style={styles.cardLabel}>Score Médio</div>
             <div style={styles.cardValue}>{metrics.scoreMedio.toFixed(1)}</div>
@@ -247,7 +247,7 @@ const LojistaConsultorConfig = () => {
       {/* TOP 5 CONSULTORES - DESTAQUE */}
       {consultores.length > 0 && (
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🏆 Top 5 Consultores do Período</h2>
+          <h2 style={styles.sectionTitle}> Top 5 Consultores do Período</h2>
           <div style={styles.top5Grid}>
             {consultores.slice(0, 5).map((consultor, i) => (
               <div key={consultor.id} style={styles.top5Card}>
@@ -262,7 +262,7 @@ const LojistaConsultorConfig = () => {
                 <div style={styles.top5Comissao}>
                   💵 R$ {consultor.comissoes.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                 </div>
-                <div style={styles.top5Score}>⭐ {consultor.scoreMedio.toFixed(1)}</div>
+                <div style={styles.top5Score}> {consultor.scoreMedio.toFixed(1)}</div>
               </div>
             ))}
           </div>
@@ -272,7 +272,7 @@ const LojistaConsultorConfig = () => {
       {/* TABELA COMPLETA DE CONSULTORES */}
       {consultores.length > 0 && (
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📋 Todos os Consultores</h2>
+          <h2 style={styles.sectionTitle}> Todos os Consultores</h2>
           <div style={styles.table}>
             <div style={styles.tableHeader}>
               <div style={styles.tableCellRank}>#</div>
@@ -324,7 +324,7 @@ const LojistaConsultorConfig = () => {
                         <span style={styles.metodoBadge} title="Áudio">🎧 {consultor.vendasAudio}</span>
                       )}
                       {consultor.vendasChat > 0 && (
-                        <span style={styles.metodoBadge} title="Chat">💬 {consultor.vendasChat}</span>
+                        <span style={styles.metodoBadge} title="Chat"> {consultor.vendasChat}</span>
                       )}
                     </div>
                   </div>
@@ -343,7 +343,7 @@ const LojistaConsultorConfig = () => {
                   <div style={styles.detailsRow}>
                     <div style={styles.detailsGrid}>
                       <div style={styles.detailCard}>
-                        <div style={styles.detailLabel}>📦 Produto Mais Vendido</div>
+                        <div style={styles.detailLabel}> Produto Mais Vendido</div>
                         <div style={styles.detailValue}>Produto Premium</div>
                         <div style={styles.detailSubtext}>15 unidades</div>
                       </div>
@@ -355,26 +355,26 @@ const LojistaConsultorConfig = () => {
                         <div style={styles.detailSubtext}>por venda</div>
                       </div>
                       <div style={styles.detailCard}>
-                        <div style={styles.detailLabel}>💰 Total em Comissões</div>
+                        <div style={styles.detailLabel}> Total em Comissões</div>
                         <div style={styles.detailValue}>
                           R$ {consultor.comissoes.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </div>
                         <div style={styles.detailSubtext}>no período</div>
                       </div>
                       <div style={styles.detailCard}>
-                        <div style={styles.detailLabel}>⭐ Avaliações</div>
+                        <div style={styles.detailLabel}> Avaliações</div>
                         <div style={styles.detailValue}>{consultor.scoreMedio.toFixed(1)}</div>
                         <div style={styles.detailSubtext}>{consultor.totalVendas} avaliações</div>
                       </div>
                       <div style={styles.detailCard}>
-                        <div style={styles.detailLabel}>📈 Ticket Médio</div>
+                        <div style={styles.detailLabel}> Ticket Médio</div>
                         <div style={styles.detailValue}>
                           R$ {consultor.ticketMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </div>
                         <div style={styles.detailSubtext}>por venda</div>
                       </div>
                       <div style={styles.detailCard}>
-                        <div style={styles.detailLabel}>🎯 Taxa de Conversão</div>
+                        <div style={styles.detailLabel}> Taxa de Conversão</div>
                         <div style={styles.detailValue}>75%</div>
                         <div style={styles.detailSubtext}>média</div>
                       </div>
@@ -409,7 +409,7 @@ const LojistaConsultorConfig = () => {
               <div style={styles.metodoSubtext}>vendas</div>
             </div>
             <div style={styles.metodoCard}>
-              <div style={styles.metodoIcon}>💬</div>
+              <div style={styles.metodoIcon}></div>
               <div style={styles.metodoLabel}>Chat</div>
               <div style={styles.metodoValue}>
                 {consultores.reduce((sum, c) => sum + c.vendasChat, 0)}

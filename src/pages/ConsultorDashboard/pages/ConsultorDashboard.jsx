@@ -3,7 +3,13 @@
 import React from "react";
 import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/supabaseClient"; // ✅ ADICIONAR IMPORT
+import { supabase } from "@/supabaseClient"; //  ADICIONAR IMPORT
+
+// === ÍCONES KASLEE ===
+const BASE = "/img/kaslee_icon";
+const Icon = ({ name, className = "w-5 h-5" }) => (
+    <img src={`${BASE}/${name}.svg`} alt={name} className={className} />
+);
 
 // =============================================================
 // === IMPORTAÇÕES DOS COMPONENTES REAIS ===
@@ -20,7 +26,7 @@ import SalesTable from "../components/SalesTable";
 import StoresPanel from "../components/StoresPanel";
 import TrainingPanel from "../components/TrainingPanel";
 import StatusVendaConsultor from "../components/StatusVendaConsultor";
-import MeusClientes from "./MeusClientes"; // ✅ NOVO
+import MeusClientes from "./MeusClientes"; //  NOVO
 
 // --- DADOS E CONSTANTES GLOBAIS ---
 const MOCK_CONSULTOR_INFO = {
@@ -32,21 +38,21 @@ const MOCK_CONSULTOR_INFO = {
     ratingMedio: 4.8,
 };
 
-// ✅ MENU COM EMOJIS COMPLETO
+//  MENU COM ÍCONES KASLEE
 const CONSULTOR_MENU_ITEMS = [
-    { title: "🏠 Home", icon: "🏠", rota: "/consultor/dashboard" },
-    { title: "📋 Fila de Atendimento", icon: "📋", rota: "/consultor/dashboard/fila" },
-    { title: "💬 Atendimento Ativo", icon: "💬", rota: "/consultor/dashboard/chat" },
-    { title: "📜 Histórico", icon: "📜", rota: "/consultor/dashboard/historico" },
-    { title: "📊 Status da Venda", icon: "📊", rota: "/consultor/dashboard/status-venda" },
-    { title: "💰 Comissões", icon: "💰", rota: "/consultor/dashboard/analytics" },
-    { title: "🏪 Minhas Lojas", icon: "🏪", rota: "/consultor/dashboard/lojas" },
-    { title: "👥 Meus Clientes", icon: "👥", rota: "/consultor/dashboard/clientes" }, // ✅ NOVO
-    { title: "⭐ Avaliações", icon: "⭐", rota: "/consultor/dashboard/reviews" },
-    { title: "🎓 Treinamentos", icon: "🎓", rota: "/consultor/dashboard/treinamentos" },
-    { title: "📈 Minhas Vendas", icon: "📈", rota: "/consultor/dashboard/vendas" },
-    { title: "📊 Report", icon: "📊", rota: "/consultor/dashboard/report" },
-    { title: "👤 Perfil", icon: "👤", rota: "/consultor/dashboard/profile" },
+    { title: "Home", icon: "home", rota: "/consultor/dashboard" },
+    { title: "Fila de Atendimento", icon: "wating", rota: "/consultor/dashboard/fila" },
+    { title: "Atendimento Ativo", icon: "aceitar-chamada", rota: "/consultor/dashboard/chat" },
+    { title: "Histórico", icon: "finalizado", rota: "/consultor/dashboard/historico" },
+    { title: "Status da Venda", icon: "ticket-sales", rota: "/consultor/dashboard/status-venda" },
+    { title: "Comissões", icon: "comissão", rota: "/consultor/dashboard/analytics" },
+    { title: "Minhas Lojas", icon: "favorite-shop", rota: "/consultor/dashboard/lojas" },
+    { title: "Meus Clientes", icon: "consultores", rota: "/consultor/dashboard/clientes" },
+    { title: "Avaliações", icon: "avaliações", rota: "/consultor/dashboard/reviews" },
+    { title: "Treinamentos", icon: "conquistas-consultores-vendedores", rota: "/consultor/dashboard/treinamentos" },
+    { title: "Minhas Vendas", icon: "grafico-análise", rota: "/consultor/dashboard/vendas" },
+    { title: "Report", icon: "dashboard", rota: "/consultor/dashboard/report" },
+    { title: "Perfil", icon: "perfil", rota: "/consultor/dashboard/profile" },
 ];
 
 // --- COMPONENTE DE LAYOUT (SIDEBAR) ---
@@ -78,8 +84,8 @@ const DashboardLayout = () => {
                             to={item.rota}
                             className={getMenuItemStyle(item.rota)}
                         >
-                            <span className="mr-3 text-lg">{item.icon}</span>
-                            {item.title.substring(item.title.indexOf(' ') + 1)}
+                            <Icon name={item.icon} className="w-5 h-5 mr-3 flex-shrink-0" />
+                            {item.title}
                         </Link>
                     ))}
                 </nav>
@@ -87,7 +93,7 @@ const DashboardLayout = () => {
                     onClick={signOut}
                     className="m-6 p-3 bg-red-50 text-red-600 font-bold rounded-xl hover:bg-red-100 transition-colors"
                 >
-                    🚪 Sair
+                     Sair
                 </button>
             </div>
 
@@ -102,7 +108,7 @@ const DashboardLayout = () => {
                         to="/consultor/dashboard/profile"
                         className="flex items-center gap-2 p-2 px-4 rounded-full bg-purple-50 text-[#9e1e8e] hover:bg-purple-100 transition-colors"
                     >
-                        <span className="text-lg">👤</span>
+                        <Icon name="perfil" className="w-5 h-5" />
                         <span className="text-sm font-medium">Meu Perfil</span>
                     </Link>
                 </header>
@@ -122,7 +128,7 @@ export const ConsultorHomePanel = () => {
     const [consultorInfo, setConsultorInfo] = React.useState(MOCK_CONSULTOR_INFO);
     const [loadingStats, setLoadingStats] = React.useState(true);
 
-    // ✅ BUSCAR DADOS REAIS DO CONSULTOR
+    //  BUSCAR DADOS REAIS DO CONSULTOR
     React.useEffect(() => {
         const buscarDadosReais = async () => {
             if (!user?.id) return;
@@ -189,7 +195,7 @@ export const ConsultorHomePanel = () => {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="text-center">
-                    <div className="animate-spin text-[#2f0d51] text-4xl mb-4">🔄</div>
+                <div className="animate-spin w-10 h-10 mb-4"><Icon name="atualizar" className="w-10 h-10" /></div>
                     <p className="text-gray-600 font-medium">Carregando dados do consultor...</p>
                 </div>
             </div>
@@ -225,10 +231,10 @@ export const ConsultorHomePanel = () => {
     }
 
     const atalhos = [
-        { titulo: "▶️ Próximo da Fila", descricao: "Iniciar um novo atendimento", cor: "bg-purple-500", rota: "/consultor/dashboard/fila" },
-        { titulo: "🔄 Status Venda", descricao: "Acompanhar carrinho do cliente", cor: "bg-purple-500", rota: "/consultor/dashboard/status-venda" },
-        { titulo: "💸 Sacar Comissão", descricao: "Ver saldo e solicitar saque", cor: "bg-yellow-500", rota: "/consultor/dashboard/analytics" },
-        { titulo: "💬 Chat Ativo", descricao: "Falar com clientes", cor: "bg-teal-500", rota: "/consultor/dashboard/chat" }
+        { titulo: "Próximo da Fila", descricao: "Iniciar um novo atendimento", cor: "bg-purple-500", icon: "wating", rota: "/consultor/dashboard/fila" },
+        { titulo: "Status Venda", descricao: "Acompanhar carrinho do cliente", cor: "bg-purple-500", icon: "ticket-sales", rota: "/consultor/dashboard/status-venda" },
+        { titulo: "Sacar Comissão", descricao: "Ver saldo e solicitar saque", cor: "bg-yellow-500", icon: "comissão", rota: "/consultor/dashboard/analytics" },
+        { titulo: "Chat Ativo", descricao: "Falar com clientes", cor: "bg-teal-500", icon: "aceitar-chamada", rota: "/consultor/dashboard/chat" }
     ];
 
     return (
@@ -243,7 +249,7 @@ export const ConsultorHomePanel = () => {
                     </p>
                     <div className="flex items-center">
                         <h3 className="text-lg font-semibold text-gray-700 mr-4">
-                            <span className="inline mr-2 text-teal-600">✅</span> Atendendo {consultorInfo.lojasAtendidas} Lojas
+                            <span className="inline mr-2 text-teal-600"></span> Atendendo {consultorInfo.lojasAtendidas} Lojas
                         </h3>
                         <button 
                             onClick={() => navigate("/consultor/dashboard/lojas")}
@@ -255,7 +261,7 @@ export const ConsultorHomePanel = () => {
                 </div>
 
                 <div className="text-center bg-green-50 p-4 rounded-xl border-2 border-green-300 min-w-[200px] shadow-inner">
-                    <div className="text-xs text-green-700 font-medium mb-1">💰 Comissão (Mês)</div>
+                    <div className="text-xs text-green-700 font-medium mb-1"> Comissão (Mês)</div>
                     <div className="text-3xl font-extrabold text-green-600 mb-3">
                         R$ {consultorInfo.comissaoAcumulada.toFixed(2).replace('.', ',')}
                     </div>
@@ -272,6 +278,7 @@ export const ConsultorHomePanel = () => {
                         onClick={() => navigate(atalho.rota)}
                         className={`bg-white p-6 rounded-xl shadow-md cursor-pointer transition-all hover:scale-[1.02] border-l-4 ${atalho.cor.replace('bg-', 'border-')}`}
                     >
+                        <Icon name={atalho.icon} className="w-8 h-8 mb-3" />
                         <h3 className="text-xl font-bold text-gray-800">{atalho.titulo}</h3>
                         <p className="text-gray-500 mt-2 text-sm">{atalho.descricao}</p>
                     </div>
@@ -281,7 +288,7 @@ export const ConsultorHomePanel = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2">
                     <div className="bg-white p-6 rounded-xl shadow-md mb-6">
-                        <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Performance</h3>
+                        <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><Icon name="grafico-análise" className="w-5 h-5" /> Performance</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-purple-50 p-4 rounded-lg">
                                 <p className="text-sm text-gray-600">ATENDIMENTOS (MÊS)</p>
@@ -289,13 +296,13 @@ export const ConsultorHomePanel = () => {
                             </div>
                             <div className="bg-yellow-50 p-4 rounded-lg">
                                 <p className="text-sm text-gray-600">AVALIAÇÃO MÉDIA</p>
-                                <p className="text-3xl font-bold text-yellow-600">{consultorInfo.ratingMedio} ⭐</p>
+                                <p className="text-3xl font-bold text-yellow-600">{consultorInfo.ratingMedio} </p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="bg-white p-6 rounded-xl shadow-md">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">📱 Status do App</h3>
+                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><Icon name="dashboard" className="w-5 h-5" /> Status do App</h3>
                     <StatusVendaConsultor consultorId={user?.id} />
                 </div>
             </div>
@@ -319,7 +326,7 @@ export default function ConsultorDashboard() {
                 <Route path="resumo-venda/:vendaId" element={<AttendanceSummaryPanel />} />
                 <Route path="analytics" element={<AnalyticsPanel />} />
                 <Route path="lojas" element={<StoresPanel />} />
-                <Route path="clientes" element={<MeusClientes />} /> {/* ✅ ROTA NOVA */}
+                <Route path="clientes" element={<MeusClientes />} /> {/*  ROTA NOVA */}
                 <Route path="profile" element={<ProfilePanel />} />
                 <Route path="historico" element={<HistoryPanel />} />
                 <Route path="reviews" element={<ReviewsPanel />} />

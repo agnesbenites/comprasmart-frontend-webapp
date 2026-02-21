@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 const HistoryPanel = () => {
   const [atendimentos, setAtendimentos] = useState([]);
@@ -87,10 +87,10 @@ const HistoryPanel = () => {
   const formatarStatus = (status) => {
     const statusMap = {
       'QR Code Gerado!': { emoji: '🔲', cor: '#fbbf24', texto: 'Aguardando Pagamento' },
-      'Aguardando Separação': { emoji: '📦', cor: '#60a5fa', texto: 'Em Separação' },
-      'Pronto para pagamento': { emoji: '💳', cor: '#34d399', texto: 'Pronto' },
-      'Pago/Cancelado': { emoji: '✅', cor: '#10b981', texto: 'Pago' },
-      'Retirado pelo Cliente': { emoji: '🎉', cor: '#059669', texto: 'Concluído' }
+      'Aguardando Separação': { emoji: '', cor: '#bb25a6', texto: 'Em Separação' },
+      'Pronto para pagamento': { emoji: '', cor: '#34d399', texto: 'Pronto' },
+      'Pago/Cancelado': { emoji: '', cor: '#cccc0c', texto: 'Pago' },
+      'Retirado pelo Cliente': { emoji: '', cor: '#cccc0c', texto: 'Concluído' }
     };
 
     const config = statusMap[status] || { emoji: '❓', cor: '#6b7280', texto: status };
@@ -180,7 +180,7 @@ const HistoryPanel = () => {
             <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>
               Concluídos
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#cccc0c' }}>
               {concluidos}
             </div>
           </div>
@@ -292,12 +292,12 @@ const HistoryPanel = () => {
                           : 'Cliente Anônimo'}
                       </div>
                       <div style={{ fontSize: '0.875rem', color: '#475569' }}>
-                        🏪 {atendimento.loja?.nome_fantasia} - {atendimento.loja?.cidade}/{atendimento.loja?.estado}
+                         {atendimento.loja?.nome_fantasia} - {atendimento.loja?.cidade}/{atendimento.loja?.estado}
                       </div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
                       {formatarStatus(atendimento.status)}
-                      <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#10b981', marginTop: '0.5rem' }}>
+                      <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#cccc0c', marginTop: '0.5rem' }}>
                         R$ {atendimento.valor_total.toFixed(2)}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b' }}>

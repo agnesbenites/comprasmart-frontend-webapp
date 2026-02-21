@@ -240,7 +240,7 @@ const Landingpage = () => {
             <a href="#como-funciona" style={S.navA}>Como Funciona</a>
             <a href="#beneficios" style={S.navA}>Benefícios</a>
             <a href="#planos" style={S.navA}>Planos</a>
-            <NavButton onClick={() => navigate('/quiz')}>🎯 Descubra Seu Plano</NavButton>
+            <NavButton onClick={() => navigate('/quiz')}> Descubra Seu Plano</NavButton>
             <NavButton onClick={() => navigate('/login')}>Entrar</NavButton>
             <NavButton onClick={() => navigate('/onboarding')}>Começar Agora</NavButton>
           </nav>
@@ -373,7 +373,7 @@ const Landingpage = () => {
             boxShadow: '0 4px 20px rgba(47,13,81,0.08)',
           }}>
             <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 20, fontWeight: 700, color: '#2f0d51', marginBottom: 8 }}>
-              🏆 Arena de Vendas
+               Arena de Vendas
             </h3>
             <p style={{ fontSize: 15, color: '#555', lineHeight: 1.65, marginBottom: 16 }}>
               Sistema de gamificação para treinamento de equipes de vendas. Consultores praticam com personas reais, ganham pontos, desbloqueiam novas habilidades e sobem no ranking.
@@ -532,7 +532,7 @@ const Landingpage = () => {
         </div>
         <Reveal delay={0.3}>
           <p style={{ textAlign: 'center', color: '#757575', fontSize: 15, marginTop: 36 }}>
-            🎁 <strong>Teste por 30 dias</strong> em todos os planos &nbsp;
+             <strong>Teste por 30 dias</strong> em todos os planos &nbsp;
           </p>
         </Reveal>
       </section>
@@ -570,12 +570,12 @@ const Landingpage = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
-                { emoji: '🤖', title: 'IA Integrada', desc: 'Otimizamos vendas, sugerimos produtos, analisamos desempenho e fornecemos feedback personalizado com inteligência artificial em toda a plataforma.' },
-                { emoji: '🎯', title: 'Algoritmo de Matching', desc: 'Conectamos consultores aos produtos certos com base em histórico de vendas, especialização e localização geográfica.' },
-                { emoji: '📊', title: 'Uso Inteligente de Dados', desc: 'Relatórios detalhados sobre quais produtos vendem mais, em quais horários e por quais consultores. Tudo em conformidade com a LGPD.' },
-                { emoji: '🔒', title: 'Segurança e LGPD', desc: 'Dados criptografados, pagamentos pela Stripe e total conformidade com a Lei Geral de Proteção de Dados.' },
+                { emoji: '', title: 'IA Integrada', desc: 'Otimizamos vendas, sugerimos produtos, analisamos desempenho e fornecemos feedback personalizado com inteligência artificial em toda a plataforma.' },
+                { emoji: '', title: 'Algoritmo de Matching', desc: 'Conectamos consultores aos produtos certos com base em histórico de vendas, especialização e localização geográfica.' },
+                { emoji: '', title: 'Uso Inteligente de Dados', desc: 'Relatórios detalhados sobre quais produtos vendem mais, em quais horários e por quais consultores. Tudo em conformidade com a LGPD.' },
+                { emoji: '', title: 'Segurança e LGPD', desc: 'Dados criptografados, pagamentos pela Stripe e total conformidade com a Lei Geral de Proteção de Dados.' },
                 { emoji: '🔗', title: 'Integrações e API', desc: 'Conecte seu ERP, gestão de estoque e ferramentas de marketing. Nossa API automatiza processos e integra sua operação.' },
-                { emoji: '📈', title: 'BI e Previsão de Vendas', desc: 'Business Intelligence avançado com previsão baseada em dados históricos, tendências e identificação de produtos com baixo giro.' },
+                { emoji: '', title: 'BI e Previsão de Vendas', desc: 'Business Intelligence avançado com previsão baseada em dados históricos, tendências e identificação de produtos com baixo giro.' },
                 { emoji: '🎮', title: 'Arena de Vendas', desc: 'Gamificação com simulações de personas reais, ranking, badges e feedback da IA para treinar equipes de forma prática.' },
                 { emoji: '🎛️', title: 'Controle Total', desc: 'O lojista define preços, comissões, regras e acompanha em tempo real cada etapa: carrinho, pagamento, separação e entrega.' },
               ].map((item, i) => (
@@ -607,7 +607,7 @@ const Landingpage = () => {
             </button>
 
             <div style={{ textAlign: 'center', marginBottom: 28 }}>
-              <span style={{ fontSize: 48 }}>🏆</span>
+              <span style={{ fontSize: 48 }}></span>
               <h2 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 26, fontWeight: 800, color: '#2f0d51', marginTop: 12 }}>
                 Kaslee Arena de Vendas
               </h2>
@@ -638,12 +638,12 @@ const Landingpage = () => {
             {/* FUNCIONALIDADES */}
             <div style={S.arenaGrid}>
               {[
-                { emoji: '🎯', title: 'Simulação com Personas', desc: 'Personas com objeções realistas. Dificuldade crescente conforme seu desempenho.' },
-                { emoji: '⭐', title: 'Pontos e Ranking', desc: 'De 10 a 200 pts por ação. Ranking geral, por segmento e semanal.' },
-                { emoji: '🏅', title: '5 Níveis', desc: 'Iniciante → Aprendiz → Vendedor → Especialista → Mestre de Vendas.' },
+                { emoji: '', title: 'Simulação com Personas', desc: 'Personas com objeções realistas. Dificuldade crescente conforme seu desempenho.' },
+                { emoji: '', title: 'Pontos e Ranking', desc: 'De 10 a 200 pts por ação. Ranking geral, por segmento e semanal.' },
+                { emoji: '', title: '5 Níveis', desc: 'Iniciante → Aprendiz → Vendedor → Especialista → Mestre de Vendas.' },
                 { emoji: '🔓', title: 'Desbloqueio de Habilidades', desc: 'Complete trilhas e desbloqueie novos segmentos. Candidatura automática a lojas.' },
                 { emoji: '⏱️', title: 'Timer Inteligente', desc: 'Pausa quando atende cliente real. Restaura de onde parou.' },
-                { emoji: '🤖', title: 'IA Adaptativa', desc: 'Feedback detalhado, dicas de estudo e relatórios de evolução pessoal.' },
+                { emoji: '', title: 'IA Adaptativa', desc: 'Feedback detalhado, dicas de estudo e relatórios de evolução pessoal.' },
               ].map((item, i) => (
                 <div key={i} style={S.arenaGridItem}>
                   <span style={{ fontSize: 24 }}>{item.emoji}</span>

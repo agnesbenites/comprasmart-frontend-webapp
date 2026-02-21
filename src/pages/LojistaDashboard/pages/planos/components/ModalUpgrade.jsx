@@ -119,7 +119,7 @@ const ModalUpgrade = ({
             onClick={() => onConfirmar(planoSelecionado)}
             data-cy="confirmar-upgrade"
           >
-            💳 Ir para Pagamento
+             Ir para Pagamento
           </button>
         </div>
       </div>

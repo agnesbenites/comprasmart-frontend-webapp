@@ -171,7 +171,7 @@ const LojistaRegisterPage = () => {
       });
       
       setEtapa(2);
-      alert("✅ Identidade validada! Score: " + result.score + "%");
+      alert(" Identidade validada! Score: " + result.score + "%");
     }
   };
 
@@ -450,7 +450,7 @@ const LojistaRegisterPage = () => {
       });
 
       if (resultado.success) {
-        // ✅ Salva dados temporários para após o pagamento (incluindo senha)
+        //  Salva dados temporários para após o pagamento (incluindo senha)
         localStorage.setItem("cadastro_pendente", JSON.stringify({
           email: tipoPessoa === "PJ" ? dadosPJ.emailRepresentante : dadosPF.email,
           senha: acesso.senha,
@@ -460,18 +460,18 @@ const LojistaRegisterPage = () => {
           timestamp: Date.now()
         }));
 
-        // ✅ Configura URLs de retorno do Stripe
+        //  Configura URLs de retorno do Stripe
         const baseUrl = window.location.origin;
         const successUrl = `${baseUrl}/stripe-success?success=true`;
         const cancelUrl = `${baseUrl}/cadastro/lojista`;
         
-        // ✅ Adiciona parâmetros de retorno na URL do Stripe
+        //  Adiciona parâmetros de retorno na URL do Stripe
         const stripeBaseUrl = STRIPE_LINKS[planoSelecionado];
         const stripeUrl = `${stripeBaseUrl}?success_url=${encodeURIComponent(successUrl)}&cancel_url=${encodeURIComponent(cancelUrl)}`;
         
         if (stripeBaseUrl) {
           alert(
-            `✅ Cadastro realizado com sucesso!\n\n` +
+            ` Cadastro realizado com sucesso!\n\n` +
             `Você será redirecionado para o pagamento do plano ${PLANOS.find(p => p.id === planoSelecionado)?.nome}.\n\n` +
             `Após o pagamento, seu acesso será liberado automaticamente.`
           );
@@ -481,7 +481,7 @@ const LojistaRegisterPage = () => {
         } else {
           // Plano gratuito ou erro - vai direto pro login
           alert(
-            `✅ Cadastro realizado com sucesso!\n\n` +
+            ` Cadastro realizado com sucesso!\n\n` +
             `Um email de confirmação foi enviado para ${tipoPessoa === "PJ" ? dadosPJ.emailRepresentante : dadosPF.email}`
           );
           navigate("/lojista/login");
@@ -540,12 +540,12 @@ const LojistaRegisterPage = () => {
       {etapa >= 2 && validacaoConcluida && (
         <div style={styles.card}>
           <div style={styles.header}>
-            <h1 style={styles.title}>🏪 Cadastro de Lojista</h1>
+            <h1 style={styles.title}> Cadastro de Lojista</h1>
             <p style={styles.subtitle}>Configure sua loja e escolha o plano</p>
             
             {/* Badge validação */}
             <div style={styles.validatedBadge}>
-              ✅ Identidade Verificada - Score: {dadosValidados?.score || 95}%
+               Identidade Verificada - Score: {dadosValidados?.score || 95}%
             </div>
 
             {/* Progress */}
@@ -574,7 +574,7 @@ const LojistaRegisterPage = () => {
             {/* ETAPA 2: TIPO PJ/PF + DADOS */}
             {etapa === 2 && (
               <div style={styles.etapa}>
-                <h2 style={styles.etapaTitle}>📋 Dados da Empresa</h2>
+                <h2 style={styles.etapaTitle}> Dados da Empresa</h2>
                 
                 {/* Toggle */}
                 <div style={styles.toggleGroup}>
@@ -590,7 +590,7 @@ const LojistaRegisterPage = () => {
                     backgroundColor: tipoPessoa === "PF" ? "#bb25a6" : "#f8f9fa",
                     color: tipoPessoa === "PF" ? "white" : "#666"
                   }}>
-                    👤 Pessoa Física (MEI)
+                     Pessoa Física (MEI)
                   </button>
                 </div>
 
@@ -621,15 +621,15 @@ const LojistaRegisterPage = () => {
                     <h3 style={{...styles.label, marginTop: "24px", marginBottom: "16px"}}>📎 Documentos</h3>
                     
                     <div style={styles.fileUpload}>
-                      <label style={styles.label}>📄 Cartão CNPJ *</label>
+                      <label style={styles.label}> Cartão CNPJ *</label>
                       <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileChange(e, "cartoeCNPJ")} style={styles.fileInput} />
-                      {dadosPJ.cartoeCNPJ && <span style={styles.fileName}>✅ {dadosPJ.cartoeCNPJ.name}</span>}
+                      {dadosPJ.cartoeCNPJ && <span style={styles.fileName}> {dadosPJ.cartoeCNPJ.name}</span>}
                     </div>
                     
                     <div style={styles.fileUpload}>
-                      <label style={styles.label}>📄 Contrato Social (opcional)</label>
+                      <label style={styles.label}> Contrato Social (opcional)</label>
                       <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileChange(e, "contratoSocial")} style={styles.fileInput} />
-                      {dadosPJ.contratoSocial && <span style={styles.fileName}>✅ {dadosPJ.contratoSocial.name}</span>}
+                      {dadosPJ.contratoSocial && <span style={styles.fileName}> {dadosPJ.contratoSocial.name}</span>}
                     </div>
                   </>
                 )}
@@ -646,7 +646,7 @@ const LojistaRegisterPage = () => {
                         style={{...styles.input, backgroundColor: "#e8f5e9"}} 
                         readOnly 
                       />
-                      <span style={styles.autoFilled}>✅ Extraído do documento</span>
+                      <span style={styles.autoFilled}> Extraído do documento</span>
                     </div>
                     <div style={styles.inputGroup}>
                       <label style={styles.label}>Nome Completo *</label>
@@ -657,7 +657,7 @@ const LojistaRegisterPage = () => {
                         style={{...styles.input, backgroundColor: "#e8f5e9"}} 
                         readOnly 
                       />
-                      <span style={styles.autoFilled}>✅ Extraído do documento</span>
+                      <span style={styles.autoFilled}> Extraído do documento</span>
                     </div>
                     <div style={styles.inputGroup}>
                       <label style={styles.label}>Nome da Loja *</label>
@@ -671,7 +671,7 @@ const LojistaRegisterPage = () => {
             {/* ETAPA 3: CONTATO/REPRESENTANTE */}
             {etapa === 3 && (
               <div style={styles.etapa}>
-                <h2 style={styles.etapaTitle}>{tipoPessoa === "PJ" ? "👔 Representante Legal" : "📞 Contato"}</h2>
+                <h2 style={styles.etapaTitle}>{tipoPessoa === "PJ" ? "👔 Representante Legal" : " Contato"}</h2>
                 {tipoPessoa === "PJ" ? (
                   <>
                     <div style={styles.inputGroup}>
@@ -701,9 +701,9 @@ const LojistaRegisterPage = () => {
                     </div>
                     
                     <div style={styles.fileUpload}>
-                      <label style={styles.label}>📄 Documento do Representante (opcional)</label>
+                      <label style={styles.label}> Documento do Representante (opcional)</label>
                       <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileChange(e, "docRepresentante")} style={styles.fileInput} />
-                      {dadosPJ.docRepresentante && <span style={styles.fileName}>✅ {dadosPJ.docRepresentante.name}</span>}
+                      {dadosPJ.docRepresentante && <span style={styles.fileName}> {dadosPJ.docRepresentante.name}</span>}
                     </div>
                   </>
                 ) : (
@@ -725,7 +725,7 @@ const LojistaRegisterPage = () => {
             {/* ETAPA 4: ENDEREÇO */}
             {etapa === 4 && (
               <div style={styles.etapa}>
-                <h2 style={styles.etapaTitle}>📍 Endereço da Loja</h2>
+                <h2 style={styles.etapaTitle}> Endereço da Loja</h2>
                 <div style={styles.inputGroup}>
                   <label style={styles.label}>CEP *</label>
                   <div style={styles.cepGroup}>
@@ -739,7 +739,7 @@ const LojistaRegisterPage = () => {
                       style={{...styles.input, marginBottom: 0}} 
                       maxLength={9}
                     />
-                    <button type="button" onClick={buscarCEP} style={styles.cepButton}>🔍 Buscar</button>
+                    <button type="button" onClick={buscarCEP} style={styles.cepButton}> Buscar</button>
                   </div>
                 </div>
                 <div style={styles.inputGroup}>
@@ -788,7 +788,7 @@ const LojistaRegisterPage = () => {
                       transform: planoSelecionado === plano.id ? "scale(1.02)" : "scale(1)",
                       cursor: "pointer"
                     }}>
-                      {plano.popular && <div style={styles.popularBadge}>⭐ POPULAR</div>}
+                      {plano.popular && <div style={styles.popularBadge}> POPULAR</div>}
                       <h3 style={{...styles.planoNome, color: plano.cor}}>{plano.nome}</h3>
                       <div style={styles.planoPreco}>
                         <span style={styles.preco}>{plano.preco}</span>
@@ -802,7 +802,7 @@ const LojistaRegisterPage = () => {
                           }}>{r}</li>
                         ))}
                       </ul>
-                      {planoSelecionado === plano.id && <div style={styles.selecionadoCheck}>✅ Selecionado</div>}
+                      {planoSelecionado === plano.id && <div style={styles.selecionadoCheck}> Selecionado</div>}
                     </div>
                   ))}
                 </div>
@@ -818,7 +818,7 @@ const LojistaRegisterPage = () => {
                 {/* VENDEDORES */}
                 {planoAtual.limites.vendedores > 0 && (
                   <div style={styles.secao}>
-                    <h3 style={styles.secaoTitle}>👥 Vendedores ({vendedores.length}/{planoAtual.limites.vendedores})</h3>
+                    <h3 style={styles.secaoTitle}> Vendedores ({vendedores.length}/{planoAtual.limites.vendedores})</h3>
                     <div style={styles.formInline}>
                       <input type="text" placeholder="Nome" value={novoVendedor.nome} onChange={(e) => setNovoVendedor({...novoVendedor, nome: e.target.value})} style={styles.inputInline} />
                       <input type="text" placeholder="CPF" value={novoVendedor.cpf} onChange={(e) => setNovoVendedor({...novoVendedor, cpf: formatarCPF(e.target.value)})} style={styles.inputInline} maxLength={14} />
@@ -909,7 +909,7 @@ const LojistaRegisterPage = () => {
                 </div>
 
                 <div style={styles.resumo}>
-                  <h3 style={styles.resumoTitle}>📋 Resumo do Cadastro</h3>
+                  <h3 style={styles.resumoTitle}> Resumo do Cadastro</h3>
                   <p><strong>Plano:</strong> {planoAtual?.nome} - {planoAtual?.preco}{planoAtual?.periodo}</p>
                   <p><strong>{tipoPessoa === "PJ" ? "Empresa" : "Loja"}:</strong> {tipoPessoa === "PJ" ? dadosPJ.nomeFantasia : dadosPF.nomeLoja}</p>
                   {tipoPessoa === "PJ" && <p><strong>CNPJ:</strong> {dadosPJ.cnpj}</p>}
@@ -918,7 +918,7 @@ const LojistaRegisterPage = () => {
                   {vendedores.length > 0 && <p><strong>Vendedores:</strong> {vendedores.length}</p>}
                   {filiais.length > 0 && <p><strong>Filiais:</strong> {filiais.length}</p>}
                   {integracao.erpSelecionado && <p><strong>ERP:</strong> {ERPS_DISPONIVEIS.find(e => e.id === integracao.erpSelecionado)?.nome}</p>}
-                  <p><strong>Validação:</strong> ✅ Aprovada ({dadosValidados?.score || 95}%)</p>
+                  <p><strong>Validação:</strong>  Aprovada ({dadosValidados?.score || 95}%)</p>
                 </div>
 
                 <div style={styles.termos}>
@@ -937,7 +937,7 @@ const LojistaRegisterPage = () => {
             )}
 
             {/* ERRO */}
-            {erro && <div style={styles.erro}>❌ {erro}</div>}
+            {erro && <div style={styles.erro}> {erro}</div>}
 
             {/* BOTÕES */}
             <div style={styles.buttonGroup}>
@@ -952,7 +952,7 @@ const LojistaRegisterPage = () => {
                 style={{...styles.buttonPrimary, opacity: loading ? 0.6 : 1}} 
                 disabled={loading}
               >
-                {loading ? "⏳ Processando..." : etapa === 7 ? "✅ Finalizar Cadastro" : "Próximo →"}
+                {loading ? " Processando..." : etapa === 7 ? " Finalizar Cadastro" : "Próximo →"}
               </button>
             </div>
 

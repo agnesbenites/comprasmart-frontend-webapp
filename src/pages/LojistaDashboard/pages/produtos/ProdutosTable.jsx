@@ -85,7 +85,7 @@ const ProdutosTable = ({ produtos, onEdit, onDelete, getStatusEstoque }) => {
                                 display: 'inline-block',
                                 marginTop: '4px'
                               }}>
-                                🤖 IA
+                                 IA
                               </small>
                             </>
                           )}
@@ -212,7 +212,7 @@ const ProdutosTable = ({ produtos, onEdit, onDelete, getStatusEstoque }) => {
                               fontSize: '0.7rem',
                               fontWeight: '600'
                             }}>
-                              🤖 IA
+                               IA
                             </span>
                             <strong style={{ color: '#333' }}>Descrição:</strong>
                           </div>

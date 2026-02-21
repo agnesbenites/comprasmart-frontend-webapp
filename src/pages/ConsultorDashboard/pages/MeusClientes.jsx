@@ -6,10 +6,10 @@ import {
 } from 'recharts';
 
 /**
- * 👥 MEUS CLIENTES - CONSULTOR
+ *  MEUS CLIENTES - CONSULTOR
  * 
- * ✅ CPF usado APENAS como filtro interno (não exibe)
- * ✅ Emojis em todos os títulos
+ *  CPF usado APENAS como filtro interno (não exibe)
+ *  Emojis em todos os títulos
  */
 
 const MeusClientes = () => {
@@ -122,13 +122,13 @@ const MeusClientes = () => {
             const loja = pedido.lojas_corrigida;
             if (!cliente || !cliente.cpf) return;
             
-            const cpf = cliente.cpf; // ✅ USA CPF como chave interna
+            const cpf = cliente.cpf; //  USA CPF como chave interna
             
             if (!clientesMap[cpf]) {
                 clientesMap[cpf] = {
                     id: cliente.id,
                     nome: cliente.nome || 'Cliente sem nome',
-                    // ❌ NÃO GUARDA CPF AQUI!
+                    //  NÃO GUARDA CPF AQUI!
                     email: cliente.email,
                     telefone: cliente.telefone,
                     primeiroAtendimento: pedido.data_pedido,
@@ -250,12 +250,12 @@ const MeusClientes = () => {
         );
     }
 
-    const COLORS = ['#364fab', '#bb25a6', '#ffc107', '#dc3545', '#17a2b8'];
+    const COLORS = ['#2f0d51', '#bb25a6', '#ffc107', '#dc3545', '#17a2b8'];
 
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h2 style={styles.title}>👥 Meus Clientes</h2>
+                <h2 style={styles.title}> Meus Clientes</h2>
                 
                 <div style={styles.filters}>
                     <select value={periodo} onChange={(e) => setPeriodo(e.target.value)} style={styles.select}>
@@ -272,15 +272,15 @@ const MeusClientes = () => {
             </div>
 
             <div style={styles.cardsGrid}>
-                <MetricCard title="Total de Clientes" value={metricas.totalClientes} icon="👥" color="#364fab" />
-                <MetricCard title="Clientes Recorrentes" value={metricas.clientesRecorrentes} icon="🔄" color="#bb25a6" />
-                <MetricCard title="Taxa de Retorno" value={`${metricas.taxaRetorno}%`} icon="📈" color="#ffc107" />
-                <MetricCard title="Comissão Média/Cliente" value={`R$ ${metricas.valorMedioPorCliente.toFixed(2)}`} icon="💰" color="#bb25a6" />
+                <MetricCard title="Total de Clientes" value={metricas.totalClientes} icon="" color="#2f0d51" />
+                <MetricCard title="Clientes Recorrentes" value={metricas.clientesRecorrentes} icon="" color="#bb25a6" />
+                <MetricCard title="Taxa de Retorno" value={`${metricas.taxaRetorno}%`} icon="" color="#ffc107" />
+                <MetricCard title="Comissão Média/Cliente" value={`R$ ${metricas.valorMedioPorCliente.toFixed(2)}`} icon="" color="#bb25a6" />
             </div>
 
             <div style={styles.chartsGrid}>
                 <div style={styles.card}>
-                    <h3 style={styles.cardTitle}>📊 Distribuição de Atendimentos</h3>
+                    <h3 style={styles.cardTitle}> Distribuição de Atendimentos</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
                             <Pie
@@ -311,14 +311,14 @@ const MeusClientes = () => {
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey="quantidade" fill="#364fab" name="Clientes" />
+                            <Bar dataKey="quantidade" fill="#2f0d51" name="Clientes" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
             </div>
 
             <div style={styles.card}>
-                <h3 style={styles.cardTitle}>🏆 Meus Top 10 Clientes</h3>
+                <h3 style={styles.cardTitle}> Meus Top 10 Clientes</h3>
                 <div style={styles.tableContainer}>
                     <table style={styles.table}>
                         <thead>
@@ -370,24 +370,24 @@ const MeusClientes = () => {
             </div>
 
             <div style={styles.card}>
-                <h3 style={styles.cardTitle}>💡 Dicas para Fidelizar</h3>
+                <h3 style={styles.cardTitle}> Dicas para Fidelizar</h3>
                 <div style={styles.insightsList}>
                     <div style={styles.insightItem}>
-                        <span style={styles.insightIcon}>🎯</span>
+                        <span style={styles.insightIcon}></span>
                         <div>
                             <strong>Retenção:</strong> {metricas.clientesRecorrentes} clientes ({metricas.taxaRetorno}%) voltaram com você!
                             {metricas.taxaRetorno < 30 && ' Tente entrar em contato com quem atendeu só 1 vez.'}
                         </div>
                     </div>
                     <div style={styles.insightItem}>
-                        <span style={styles.insightIcon}>📞</span>
+                        <span style={styles.insightIcon}></span>
                         <div>
                             <strong>Reengajamento:</strong> {metricas.topClientes.filter(c => c.diasDesdeUltimo > 30).length} clientes fiéis sem atender há mais de 30 dias.
                             {metricas.topClientes.filter(c => c.diasDesdeUltimo > 30).length > 0 && ' Mande uma mensagem para eles!'}
                         </div>
                     </div>
                     <div style={styles.insightItem}>
-                        <span style={styles.insightIcon}>💰</span>
+                        <span style={styles.insightIcon}></span>
                         <div>
                             <strong>Oportunidade:</strong> Clientes recorrentes geram R$ {metricas.valorMedioPorCliente.toFixed(2)} em comissão em média.
                             Quanto mais você fidelizar, mais ganha!
@@ -412,7 +412,7 @@ const MetricCard = ({ title, value, icon, color }) => (
 const styles = {
     container: { padding: '30px', backgroundColor: '#f8f9fa', minHeight: '100vh', fontFamily: 'Inter, -apple-system, sans-serif', overflowY: 'auto' },
     loading: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', gap: '20px' },
-    spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #364fab', borderRadius: '50%', animation: 'spin 1s linear infinite' },
+    spinner: { width: '50px', height: '50px', border: '5px solid #f3f3f3', borderTop: '5px solid #2f0d51', borderRadius: '50%', animation: 'spin 1s linear infinite' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', flexWrap: 'wrap', gap: '20px' },
     title: { fontSize: '1.8rem', color: '#2f0d51', margin: 0 },
     filters: { display: 'flex', gap: '15px' },
@@ -436,11 +436,11 @@ const styles = {
     tdCenter: { padding: '12px', textAlign: 'center', borderBottom: '1px solid #eee', fontSize: '14px' },
     tdRight: { padding: '12px', textAlign: 'right', borderBottom: '1px solid #eee', fontSize: '14px' },
     trEven: { backgroundColor: '#f8f9fa' },
-    rank: { display: 'inline-block', width: '28px', height: '28px', lineHeight: '28px', textAlign: 'center', backgroundColor: '#364fab', color: 'white', borderRadius: '50%', fontWeight: 'bold', fontSize: '13px' },
-    badge: { display: 'inline-block', padding: '4px 12px', backgroundColor: '#364fab', color: 'white', borderRadius: '12px', fontSize: '13px', fontWeight: '600' },
+    rank: { display: 'inline-block', width: '28px', height: '28px', lineHeight: '28px', textAlign: 'center', backgroundColor: '#2f0d51', color: 'white', borderRadius: '50%', fontWeight: 'bold', fontSize: '13px' },
+    badge: { display: 'inline-block', padding: '4px 12px', backgroundColor: '#2f0d51', color: 'white', borderRadius: '12px', fontSize: '13px', fontWeight: '600' },
     dias: { fontWeight: '600', fontSize: '13px' },
     insightsList: { display: 'flex', flexDirection: 'column', gap: '20px' },
-    insightItem: { display: 'flex', gap: '15px', padding: '20px', backgroundColor: '#e3f2fd', borderRadius: '8px', border: '1px solid #364fab', alignItems: 'flex-start' },
+    insightItem: { display: 'flex', gap: '15px', padding: '20px', backgroundColor: '#f3e8ff', borderRadius: '8px', border: '1px solid #2f0d51', alignItems: 'flex-start' },
     insightIcon: { fontSize: '2rem' }
 };
 

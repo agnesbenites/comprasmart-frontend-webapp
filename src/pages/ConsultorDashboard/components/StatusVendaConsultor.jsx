@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { supabase } from "../../../supabaseClient";
 
 // Componente ProgressBar inline
-const ProgressBar = ({ percentual, label, cor = "#2c5aa0" }) => (
+const ProgressBar = ({ percentual, label, cor = "#2f0d51" }) => (
   <div style={{ width: '100%', marginBottom: '8px' }}>
     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
       <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#6b7280', textTransform: 'uppercase' }}>{label}</span>
@@ -116,7 +116,7 @@ const StatusVendaConsultor = ({ consultorId }) => {
   if (loading) {
     return (
       <div style={{ padding: '40px', textAlign: 'center', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-        <div style={{ fontSize: '24px', marginBottom: '8px' }}>🔄</div>
+        <div style={{ fontSize: '24px', marginBottom: '8px' }}></div>
         <p style={{ color: '#6b7280', fontWeight: '500' }}>Buscando venda ativa...</p>
       </div>
     );
@@ -125,7 +125,7 @@ const StatusVendaConsultor = ({ consultorId }) => {
   if (!pedido) {
     return (
       <div style={{ padding: '40px', textAlign: 'center', backgroundColor: '#f9fafb', borderRadius: '12px', border: '2px dashed #d1d5db' }}>
-        <div style={{ fontSize: '48px', marginBottom: '12px' }}>📦</div>
+        <div style={{ fontSize: '48px', marginBottom: '12px' }}></div>
         <p style={{ color: '#4b5563', fontWeight: '600', marginBottom: '4px' }}>Nenhuma venda ativa</p>
         <p style={{ color: '#9ca3af', fontSize: '12px' }}>
           Quando um cliente iniciar um carrinho no App, os dados aparecerão aqui.
@@ -145,7 +145,7 @@ const StatusVendaConsultor = ({ consultorId }) => {
         borderRadius: '12px', 
         backgroundColor: 'white', 
         boxShadow: '0 4px 6px rgba(0,0,0,0.1)', 
-        border: animar ? '2px solid #10b981' : '2px solid transparent',
+        border: animar ? '2px solid #cccc0c' : '2px solid transparent',
         transition: 'all 0.5s',
         transform: animar ? 'scale(1.02)' : 'scale(1)'
       }}
@@ -161,7 +161,7 @@ const StatusVendaConsultor = ({ consultorId }) => {
             borderRadius: '9999px', 
             fontSize: '10px', 
             fontWeight: '900',
-            backgroundColor: isPago ? '#10b981' : '#2f0d51',
+            backgroundColor: isPago ? '#cccc0c' : '#2f0d51',
             color: 'white'
           }}
         >
@@ -173,7 +173,7 @@ const StatusVendaConsultor = ({ consultorId }) => {
       <ProgressBar 
         percentual={isPago ? 100 : 40} 
         label={pedido.status_separacao || "EM ANDAMENTO"} 
-        cor={isPago ? "#10b981" : "#2c5aa0"} 
+        cor={isPago ? "#cccc0c" : "#2f0d51"} 
       />
 
       {/* Valores da Venda */}
@@ -186,12 +186,12 @@ const StatusVendaConsultor = ({ consultorId }) => {
               R$ {(pedido.valor_anterior || pedido.valor_total || 0).toFixed(2)}
             </p>
           </div>
-          <div style={{ fontSize: '20px', color: animar ? '#10b981' : '#d1d5db', transform: animar ? 'scale(1.25)' : 'scale(1)', transition: 'all 0.3s' }}>
+          <div style={{ fontSize: '20px', color: animar ? '#cccc0c' : '#d1d5db', transform: animar ? 'scale(1.25)' : 'scale(1)', transition: 'all 0.3s' }}>
             →
           </div>
           <div>
             <p style={{ fontSize: '9px', color: '#9ca3af', textTransform: 'uppercase', fontWeight: 'bold' }}>Atual</p>
-            <p style={{ fontSize: '20px', fontWeight: '900', color: '#1e3a8a' }}>
+            <p style={{ fontSize: '20px', fontWeight: '900', color: '#2f0d51' }}>
               R$ {(pedido.valor_total || 0).toFixed(2)}
             </p>
           </div>
@@ -201,20 +201,20 @@ const StatusVendaConsultor = ({ consultorId }) => {
       {/* Comissão do Consultor */}
       <div style={{ backgroundColor: '#ecfdf5', padding: '16px', borderRadius: '8px', border: '2px solid #a7f3d0' }}>
         <p style={{ fontSize: '9px', color: '#047857', textTransform: 'uppercase', fontWeight: 'bold', marginBottom: '8px' }}>
-          💰 Sua Comissão ({pedido.percentual_comissao || 10}%)
+           Sua Comissão ({pedido.percentual_comissao || 10}%)
         </p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ fontSize: '9px', color: '#059669', textTransform: 'uppercase', fontWeight: 'bold' }}>Anterior</p>
-            <p style={{ color: '#059669', textDecoration: 'line-through', fontSize: '14px' }}>
+            <p style={{ fontSize: '9px', color: '#cccc0c', textTransform: 'uppercase', fontWeight: 'bold' }}>Anterior</p>
+            <p style={{ color: '#cccc0c', textDecoration: 'line-through', fontSize: '14px' }}>
               R$ {comissaoAnterior.toFixed(2)}
             </p>
           </div>
-          <div style={{ fontSize: '20px', color: animar ? '#059669' : '#a7f3d0', transform: animar ? 'scale(1.25)' : 'scale(1)', transition: 'all 0.3s' }}>
+          <div style={{ fontSize: '20px', color: animar ? '#cccc0c' : '#a7f3d0', transform: animar ? 'scale(1.25)' : 'scale(1)', transition: 'all 0.3s' }}>
             →
           </div>
           <div>
-            <p style={{ fontSize: '9px', color: '#059669', textTransform: 'uppercase', fontWeight: 'bold' }}>Atual</p>
+            <p style={{ fontSize: '9px', color: '#cccc0c', textTransform: 'uppercase', fontWeight: 'bold' }}>Atual</p>
             <p style={{ fontSize: '24px', fontWeight: '900', color: '#047857' }}>
               R$ {valorComissao.toFixed(2)}
             </p>
@@ -230,12 +230,12 @@ const StatusVendaConsultor = ({ consultorId }) => {
           alignItems: 'center', 
           gap: '8px', 
           marginTop: '12px', 
-          color: '#059669', 
+          color: '#cccc0c', 
           fontSize: '10px', 
           fontWeight: 'bold',
           animation: 'bounce 1s infinite'
         }}>
-          <span style={{ animation: 'spin 1s linear infinite' }}>🔄</span> CARRINHO ATUALIZADO!
+          <span style={{ animation: 'spin 1s linear infinite' }}></span> CARRINHO ATUALIZADO!
         </div>
       )}
     </div>

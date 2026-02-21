@@ -84,7 +84,7 @@ const IntegracaoERP = () => {
     return (
       <div style={styles.container}>
         <div style={styles.bloqueioCard}>
-          <div style={styles.lockIcon}>🔒</div>
+          <div style={styles.lockIcon}></div>
           <h2 style={styles.bloqueioTitle}>Integração ERP</h2>
           <p style={styles.bloqueioDescription}>
             A integração com sistemas ERP não está disponível no <strong>Plano Básico</strong>.
@@ -93,11 +93,11 @@ const IntegracaoERP = () => {
           <div style={styles.beneficiosBox}>
             <h3 style={styles.beneficiosTitle}>Contrate o Módulo ERP e tenha acesso a:</h3>
             <ul style={styles.beneficiosList}>
-              <li>✅ Sincronização automática de produtos</li>
-              <li>✅ Atualização de estoque em tempo real</li>
-              <li>✅ Integração com SAP, TOTVS, BLING e OMIE</li>
-              <li>✅ Gestão completa de pedidos e vendas</li>
-              <li>✅ Relatórios integrados</li>
+              <li> Sincronização automática de produtos</li>
+              <li> Atualização de estoque em tempo real</li>
+              <li> Integração com SAP, TOTVS, BLING e OMIE</li>
+              <li> Gestão completa de pedidos e vendas</li>
+              <li> Relatórios integrados</li>
             </ul>
           </div>
 
@@ -128,7 +128,7 @@ const IntegracaoERP = () => {
     );
   }
 
-  // ✅ MOSTRAR INTEGRAÇÕES
+  //  MOSTRAR INTEGRAÇÕES
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -198,7 +198,7 @@ const ERPCard = ({ nome, icon, conectado, onConectar, onDesconectar, onConfigura
     {conectado ? (
       <>
         <div style={styles.statusConectado}>
-          ✅ Conectado
+           Conectado
         </div>
         <div style={styles.erpActions}>
           <button onClick={onConfigurar} style={styles.configurarButton}>

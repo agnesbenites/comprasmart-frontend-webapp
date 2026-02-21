@@ -1,13 +1,18 @@
 import React from "react";
 
-const CardMetrica = ({ icone, valor, label, cor = "#bb25a6", onClick }) => {
+const CardMetrica = ({ icone: IconComponent, valor, label, cor = "#bb25a6", onClick }) => {
   return (
-    <div 
-      style={styles.card} 
+    <div
+      style={styles.card}
       onClick={onClick}
       className={onClick ? "clickable" : ""}
     >
-      <div style={{...styles.icone, color: cor}}>{icone}</div>
+      <div style={{ ...styles.icone, color: cor }}>
+        {typeof IconComponent === 'string'
+          ? IconComponent
+          : IconComponent && <IconComponent size={32} weight="duotone" color={cor} />
+        }
+      </div>
       <div style={styles.conteudo}>
         <div style={styles.valor}>{valor}</div>
         <div style={styles.label}>{label}</div>

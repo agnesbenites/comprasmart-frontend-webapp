@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
-const CONSULTOR_LIGHT_BG = "#eaf2ff";
+const CONSULTOR_PRIMARY = "#2f0d51";
+const CONSULTOR_LIGHT_BG = "#f3e8ff";
 
 const AnalyticsPanel = () => {
   const [analytics, setAnalytics] = useState({
@@ -143,7 +143,7 @@ const AnalyticsPanel = () => {
         {/* Header */}
         <div style={{ marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: CONSULTOR_PRIMARY, marginBottom: '0.5rem' }}>
-            💰 Analítico de Comissões
+             Analítico de Comissões
           </h1>
           <p style={{ color: '#64748b' }}>
             Acompanhe suas métricas de desempenho e vendas
@@ -163,12 +163,12 @@ const AnalyticsPanel = () => {
             padding: '1.5rem',
             borderRadius: '12px',
             boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-            border: '2px solid #10b981'
+            border: '2px solid #cccc0c'
           }}>
             <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>
-              💰 Comissão do Mês
+               Comissão do Mês
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#10b981' }}>
+            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#cccc0c' }}>
               R$ {analytics.totalComissao.toFixed(2)}
             </div>
           </div>
@@ -182,7 +182,7 @@ const AnalyticsPanel = () => {
             border: '2px solid ' + CONSULTOR_PRIMARY
           }}>
             <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>
-              📊 Vendas do Mês
+               Vendas do Mês
             </div>
             <div style={{ fontSize: '2rem', fontWeight: 'bold', color: CONSULTOR_PRIMARY }}>
               {analytics.vendasMes}
@@ -198,7 +198,7 @@ const AnalyticsPanel = () => {
             border: '2px solid #f59e0b'
           }}>
             <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>
-              💳 Ticket Médio
+               Ticket Médio
             </div>
             <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#f59e0b' }}>
               R$ {analytics.ticketMedio.toFixed(2)}
@@ -214,7 +214,7 @@ const AnalyticsPanel = () => {
             border: '2px solid #8b5cf6'
           }}>
             <div style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.5rem' }}>
-              📞 Atendimentos Hoje
+               Atendimentos Hoje
             </div>
             <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#8b5cf6' }}>
               {analytics.atendimentosHoje}
@@ -231,7 +231,7 @@ const AnalyticsPanel = () => {
           marginBottom: '2rem'
         }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: CONSULTOR_PRIMARY, marginBottom: '1rem' }}>
-            🔍 Buscar Produto
+             Buscar Produto
           </h2>
           <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
             <input
@@ -292,13 +292,13 @@ const AnalyticsPanel = () => {
                           SKU: {produto.sku} | Estoque: {produto.estoque} unidades
                         </div>
                         <div style={{ fontSize: '0.875rem', color: '#475569', marginTop: '0.25rem' }}>
-                          📍 {produto.loja.nome_fantasia} - {produto.loja.cidade}/{produto.loja.estado}
+                           {produto.loja.nome_fantasia} - {produto.loja.cidade}/{produto.loja.estado}
                         </div>
                       </div>
                       <div style={{ 
                         fontSize: '1.25rem', 
                         fontWeight: 'bold', 
-                        color: '#10b981',
+                        color: '#cccc0c',
                         whiteSpace: 'nowrap'
                       }}>
                         R$ {produto.preco.toFixed(2)}
@@ -319,7 +319,7 @@ const AnalyticsPanel = () => {
           boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
         }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', color: CONSULTOR_PRIMARY, marginBottom: '1rem' }}>
-            🏪 Lojas Associadas ({analytics.lojas.length})
+             Lojas Associadas ({analytics.lojas.length})
           </h2>
           {analytics.lojas.length === 0 ? (
             <p style={{ color: '#64748b', textAlign: 'center', padding: '2rem' }}>
@@ -349,7 +349,7 @@ const AnalyticsPanel = () => {
                     {loja.nome_fantasia}
                   </div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>
-                    📍 {loja.cidade}/{loja.estado}
+                     {loja.cidade}/{loja.estado}
                   </div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b', marginTop: '0.25rem' }}>
                     🏷️ {loja.segmento}

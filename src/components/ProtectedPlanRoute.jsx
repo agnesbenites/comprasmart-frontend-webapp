@@ -26,7 +26,7 @@ const ProtectedPlanRoute = ({ children, requiredPlan }) => {
   if (plano.tipo !== requiredPlan) {
     return (
       <div style={styles.blocked}>
-        <div style={styles.blockedIcon}>🔒</div>
+        <div style={styles.blockedIcon}></div>
         <h2 style={styles.blockedTitle}>Recurso Exclusivo Enterprise</h2>
         <p style={styles.blockedText}>
           Este Dashboard Enterprise com BI e ROI está disponível apenas para o plano <strong>ENTERPRISE</strong>.
@@ -39,10 +39,10 @@ const ProtectedPlanRoute = ({ children, requiredPlan }) => {
           <h3 style={styles.benefitsTitle}>🚀 O que você ganha no Enterprise:</h3>
           <ul style={styles.benefitsList}>
             <li>💎 Dashboard com ROI e Estoque Recuperado</li>
-            <li>📊 Relatórios avançados estilo Totvs</li>
+            <li> Relatórios avançados estilo Totvs</li>
             <li>🗂️ Exportação XML Fiscal</li>
-            <li>💰 Múltiplas contas Stripe</li>
-            <li>📈 Métricas de performance Uber-style</li>
+            <li> Múltiplas contas Stripe</li>
+            <li> Métricas de performance Uber-style</li>
             <li>∞ Tudo ilimitado (filiais, vendedores, produtos)</li>
           </ul>
         </div>

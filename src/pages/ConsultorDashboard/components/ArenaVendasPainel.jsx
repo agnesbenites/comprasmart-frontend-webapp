@@ -9,9 +9,9 @@ import ArenaSimulador from './ArenaSimulador';
 import ArenaProgresso from './ArenaProgresso';
 
 // ─── CORES (baseadas na paleta do consultor) ──────
-const CONSULTOR_PRIMARY = '#2c5aa0';
+const CONSULTOR_PRIMARY = '#2f0d51';
 const CONSULTOR_ACCENT  = '#bb25a6';
-const VERDE_DESTAQUE    = '#6BCB77';
+const VERDE_DESTAQUE    = '#cccc0c';
 
 // ─── STYLES ────────────────────────────────────────
 const styles = {
@@ -74,7 +74,7 @@ const styles = {
     width: 8,
     height: 8,
     borderRadius: '50%',
-    background: '#A8E6B0',
+    background: '#cccc0c',
   },
 
   // Corpo
@@ -114,7 +114,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    background: '#F0F7FF',
+    background: '#f3e8ff',
     border: `1px solid ${CONSULTOR_ACCENT}33`,
     borderRadius: 10,
     padding: '10px 16px',
@@ -133,14 +133,14 @@ const styles = {
   contadorBarra: {
     width: 120,
     height: 6,
-    background: '#E8F0F8',
+    background: '#f3e8ff',
     borderRadius: 3,
     overflow: 'hidden',
   },
   contadorBarraFill: {
     height: '100%',
     borderRadius: 3,
-    background: `linear-gradient(90deg, ${VERDE_DESTAQUE}, #A8E6B0)`,
+    background: `linear-gradient(90deg, ${VERDE_DESTAQUE}, #cccc0c)`,
     transition: 'width 0.4s ease',
   },
 
@@ -196,7 +196,7 @@ const styles = {
   },
   cardProdutoAtivo: {
     borderColor: CONSULTOR_ACCENT,
-    background: '#F0F7FF',
+    background: '#f3e8ff',
     boxShadow: `0 0 0 3px ${CONSULTOR_ACCENT}22`,
   },
   cardProdutoEmoji: {
@@ -236,7 +236,7 @@ const styles = {
   },
   cardCenarioAtivo: {
     borderColor: CONSULTOR_ACCENT,
-    background: '#F0F7FF',
+    background: '#f3e8ff',
     boxShadow: `0 0 0 3px ${CONSULTOR_ACCENT}22`,
   },
   cenarioBadge: {
@@ -327,17 +327,17 @@ const styles = {
 // ─── MAPEAMENTO: categoria → emoji ────────────────
 const EMOJI_CATEGORIA = {
   'Eletrônicos':      '📺', // Mudado de celular para TV/Monitor
-  'Eletrodomésticos': '🏠',
+  'Eletrodomésticos': '',
   'Moda':             '👗',
   'Calçados':         '👡', // Mudado de tênis para sandália feminina
   'Acessórios':       '🕶️', // Mudado para óculos
   'Esportes':         '👟', // Tênis fica aqui
-  'Outros':           '📦',
+  'Outros':           '',
 };
 
 // ─── CORES das badges de dificuldade ───────────────
 const BADGE_DIFICULDADE = {
-  facil:   { bg: '#E8F5E9', color: '#2E7D32' },
+  facil:   { bg: '#f3e8ff', color: '#cccc0c' },
   medio:   { bg: '#FFF8E1', color: '#F57F17' },
   dificil: { bg: '#FCE4EC', color: '#C62828' },
 };
@@ -427,7 +427,7 @@ export default function ArenaVendasPainel({ consultorId, lojaId }) {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <div style={styles.headerLogoBox}>🎯</div>
+        <div style={styles.headerLogoBox}></div>
         <div style={styles.headerTexto}>
           <p style={styles.headerTitulo}>Arena de Vendas</p>
           <p style={styles.headerSubtitulo}>
@@ -466,7 +466,7 @@ export default function ArenaVendasPainel({ consultorId, lojaId }) {
           <>
             {acesso && !acesso.pode && acesso.motivo === 'limite_atingido' && (
               <div style={styles.alerteLimite}>
-                <span style={{ fontSize: 20 }}>⏳</span>
+                <span style={{ fontSize: 20 }}></span>
                 <div>
                   <p style={styles.alerteLimiteTexto}>Limite semanal atingido</p>
                   <p style={styles.alerteLimiteDesc}>
@@ -538,7 +538,7 @@ export default function ArenaVendasPainel({ consultorId, lojaId }) {
                   onClick={() => setProdutoSelecionado(produto)}
                 >
                   <span style={styles.cardProdutoEmoji}>
-                    {EMOJI_CATEGORIA[produto.categoria] || '📦'}
+                    {EMOJI_CATEGORIA[produto.categoria] || ''}
                   </span>
                   
                   {/* EXIBE APENAS O NOME DO PRODUTO (Sem marca ou preço) */}
@@ -576,7 +576,7 @@ export default function ArenaVendasPainel({ consultorId, lojaId }) {
 
                     <div style={styles.cenarioTexto}>
                       <p style={styles.cenarioNome}>
-                        {cenario.nome} {bloqueadoPelaRegra && '🔒'}
+                        {cenario.nome} {bloqueadoPelaRegra && ''}
                       </p>
                       <p style={styles.cenarioDesc}>{cenario.descricao}</p>
                       {bloqueadoPelaRegra && (
@@ -598,7 +598,7 @@ export default function ArenaVendasPainel({ consultorId, lojaId }) {
               onClick={handleIniciar}
               disabled={!podeIniciar}
             >
-              {acesso?.pode ? '▶ Iniciar Simulação' : '⏳ Limite Atingido'}
+              {acesso?.pode ? '▶ Iniciar Simulação' : ' Limite Atingido'}
             </button>
           </>
         )}

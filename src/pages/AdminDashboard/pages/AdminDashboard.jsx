@@ -196,12 +196,12 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      alert('✅ Aprovado com sucesso!');
+      alert(' Aprovado com sucesso!');
       carregarDados();
 
     } catch (error) {
       console.error('Erro ao aprovar:', error);
-      alert('❌ Erro ao aprovar');
+      alert(' Erro ao aprovar');
     }
   };
 
@@ -219,12 +219,12 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      alert('✅ Reprovado!');
+      alert(' Reprovado!');
       carregarDados();
 
     } catch (error) {
       console.error('Erro ao reprovar:', error);
-      alert('❌ Erro ao reprovar');
+      alert(' Erro ao reprovar');
     }
   };
 
@@ -250,7 +250,7 @@ const AdminDashboard = () => {
             🛠️ Manutenção
           </button>
           <button onClick={carregarDados} style={styles.refreshButton}>
-            🔄 Atualizar
+             Atualizar
           </button>
         </div>
       </div>
@@ -305,7 +305,7 @@ const AdminDashboard = () => {
       <div style={styles.contentGrid}>
         {/* Usuários Online */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>👥 Usuários Online ({usuariosOnline.length})</h3>
+          <h3 style={styles.cardTitle}> Usuários Online ({usuariosOnline.length})</h3>
           <div style={styles.onlineList}>
             {usuariosOnline.map(usuario => (
               <div key={usuario.id} style={styles.onlineItem}>
@@ -321,17 +321,17 @@ const AdminDashboard = () => {
 
         {/* Últimas Pendências */}
         <div style={styles.card}>
-          <h3 style={styles.cardTitle}>⏳ Aprovações Pendentes</h3>
+          <h3 style={styles.cardTitle}> Aprovações Pendentes</h3>
           <div style={styles.pendenciasList}>
             {ultimasPendencias.length === 0 ? (
-              <p style={styles.emptyText}>✅ Nenhuma pendência!</p>
+              <p style={styles.emptyText}> Nenhuma pendência!</p>
             ) : (
               ultimasPendencias.map(item => (
                 <div key={`${item.tipo}-${item.id}`} style={styles.pendenciaItem}>
                   <div style={styles.pendenciaInfo}>
                     <p style={styles.pendenciaNome}>{item.nome_fantasia}</p>
                     <p style={styles.pendenciaTipo}>
-                      {item.tipo === 'loja' ? '🏪 Loja' : '👤 Consultor'}
+                      {item.tipo === 'loja' ? ' Loja' : ' Consultor'}
                     </p>
                   </div>
                   <div style={styles.pendenciaActions}>
@@ -362,7 +362,7 @@ const AdminDashboard = () => {
         <h3 style={styles.sectionTitle}>⚡ Ações Rápidas</h3>
         <div style={styles.actionsGrid}>
           <ActionButton
-            icon="✅"
+            icon=""
             label="Aprovar Cadastros"
             onClick={() => navigate('/admin/aprovacoes')}
           />
@@ -372,7 +372,7 @@ const AdminDashboard = () => {
             onClick={() => navigate('/admin/notificacoes')}
           />
           <ActionButton
-            icon="📊"
+            icon=""
             label="Relatórios"
             onClick={() => navigate('/admin/relatorios')}
           />

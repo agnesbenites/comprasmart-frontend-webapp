@@ -23,7 +23,7 @@ const TermsPage = () => {
             onError={(e) => e.target.style.display = 'none'}
           />
           <h1 style={styles.title}>
-            📜 Termos e Condições de Uso
+             Termos e Condições de Uso
           </h1>
           <p style={styles.subtitle}>Kaslee</p>
           <div style={styles.versionBox}>
@@ -43,7 +43,7 @@ const TermsPage = () => {
         {/* 1. ACEITAÇÃO DOS TERMOS */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            ✅ 1. Aceitação dos Termos
+             1. Aceitação dos Termos
           </h2>
           <p style={styles.paragraph}>
             Ao clicar em "Aceito os Termos", você concorda integralmente com todas as condições estabelecidas neste documento, de acordo com a <strong>Lei nº 12.965/2014 (Marco Civil da Internet)</strong> e o <strong>Código Civil Brasileiro</strong>.
@@ -58,13 +58,13 @@ const TermsPage = () => {
         {/* 2. DESCRIÇÃO DO SERVIÇO */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            🔍 2. O que é a Kaslee
+             2. O que é a Kaslee
           </h2>
           <p style={styles.paragraph}>
             A Kaslee é uma plataforma digital que conecta <strong>Lojistas</strong>, <strong>Consultores</strong> e <strong>Clientes</strong> para facilitar vendas com atendimento personalizado.
           </p>
           <div style={styles.highlightBox}>
-            <h3 style={styles.highlightTitle}>✨ Principais funcionalidades:</h3>
+            <h3 style={styles.highlightTitle}> Principais funcionalidades:</h3>
             <ul style={styles.list}>
               <li>Sistema de matching entre Clientes e Consultores</li>
               <li>Chat em tempo real</li>
@@ -88,10 +88,10 @@ const TermsPage = () => {
         {/* 3. CADASTRO E CONTA */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            👤 3. Cadastro e Conta de Usuário
+             3. Cadastro e Conta de Usuário
           </h2>
           <div style={styles.highlightBox}>
-            <h3 style={styles.highlightTitle}>📋 Requisitos para Cadastro:</h3>
+            <h3 style={styles.highlightTitle}> Requisitos para Cadastro:</h3>
             <ul style={styles.list}>
               <li>Ter no mínimo <strong>18 anos de idade</strong></li>
               <li>Fornecer informações <strong>verdadeiras e completas</strong></li>
@@ -156,7 +156,7 @@ const TermsPage = () => {
         {/* 6. PAGAMENTOS */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            💳 6. Pagamentos e Taxas
+             6. Pagamentos e Taxas
           </h2>
           <p style={styles.paragraph}>
             Pagamentos são processados através do <strong>Stripe</strong>, sob responsabilidade do gateway de pagamento.
@@ -177,7 +177,7 @@ const TermsPage = () => {
         {/* 7. PRIVACIDADE */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            🔒 7. Privacidade e Proteção de Dados
+             7. Privacidade e Proteção de Dados
           </h2>
           <p style={styles.paragraph}>
             O tratamento de dados pessoais é regido por nossa <strong>Política de Privacidade</strong>, em conformidade com a <strong>LGPD (Lei nº 13.709/2018)</strong>.
@@ -217,7 +217,7 @@ const TermsPage = () => {
         {/* 9. SUSPENSÃO E EXCLUSÃO */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            🔒 9. Suspensão e Exclusão de Conta
+             9. Suspensão e Exclusão de Conta
           </h2>
           <div style={styles.highlightBox}>
             <h3 style={styles.highlightTitle}>Suspensão Temporária (até 30 dias)</h3>
@@ -246,7 +246,7 @@ const TermsPage = () => {
         {/* 10. MODIFICAÇÕES */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            🔄 10. Modificações dos Termos
+             10. Modificações dos Termos
           </h2>
           <p style={styles.paragraph}>
             A Kaslee pode modificar estes Termos a qualquer momento. Alterações significativas serão comunicadas por e-mail e/ou notificação na Plataforma.
@@ -283,7 +283,7 @@ const TermsPage = () => {
         {/* LINKS PARA OUTROS DOCUMENTOS */}
         <section style={styles.section}>
           <h2 style={styles.sectionTitle}>
-            📋 Documentos Relacionados
+             Documentos Relacionados
           </h2>
           <div style={styles.linksBox}>
             <a 
@@ -292,7 +292,7 @@ const TermsPage = () => {
               rel="noopener noreferrer"
               style={styles.documentLink}
             >
-              📄 Termo de Adesão e Contratação de Serviços
+               Termo de Adesão e Contratação de Serviços
             </a>
             <a 
               href="https://www.notion.so/Pol-tica-de-Privacidade-2d1cb8e924318015a8b0dea48170d820" 
@@ -300,7 +300,7 @@ const TermsPage = () => {
               rel="noopener noreferrer"
               style={styles.documentLink}
             >
-              🔒 Política de Privacidade
+               Política de Privacidade
             </a>
           </div>
         </section>
@@ -308,7 +308,7 @@ const TermsPage = () => {
         {/* RODAPÉ COM ACEITAÇÃO */}
         <footer style={styles.footer}>
           <div style={styles.acceptanceBox}>
-            <h3 style={styles.acceptanceTitle}>✅ Confirmação de Aceitação</h3>
+            <h3 style={styles.acceptanceTitle}> Confirmação de Aceitação</h3>
             <p style={styles.acceptanceText}>
               Ao clicar em "Aceito os Termos", você declara que:
             </p>
@@ -325,7 +325,7 @@ const TermsPage = () => {
               ← Voltar
             </button>
             <button onClick={handleAccept} style={styles.acceptButton}>
-              ✅ Aceito os Termos e Quero Continuar
+               Aceito os Termos e Quero Continuar
             </button>
           </div>
 
