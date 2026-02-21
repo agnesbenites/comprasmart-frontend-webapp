@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 // Cores do Consultor
 const CONSULTOR_PRIMARY = "#2f0d51";
@@ -500,7 +501,7 @@ const StoresPanel = ({ consultorId }) => {
       {/* Mensagem quando não há lojas */}
       {lojasFiltradas.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}></div>
+          <div style={styles.emptyIcon}><HourglassHigh size={80} weight="duotone" color="#2f0d51" /></div>
           <p style={styles.emptyTitle}>Nenhuma loja encontrada</p>
           <p style={styles.emptySubtitle}>Tente ajustar os filtros de busca</p>
         </div>

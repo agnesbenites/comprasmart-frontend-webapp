@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 // IMPORTANTE: Assumimos que 'Buffer' esta disponivel globalmente (via polyfill ou Webpack)
 // Se nao estiver, esta linha deve ser ajustada.
 
@@ -189,7 +190,7 @@ const AplicativoConfirmacao = () => {
           <div style={styles.resultSection}>
             {resultado.success ? (
               <div style={styles.successResult}>
-                <div style={styles.successIcon}></div>
+                <div style={styles.successIcon}><CheckCircle size={80} weight="duotone" color="#bb25a6" /></div>
                 <h2 style={styles.successTitle}>Pagamento Confirmado!</h2>
                 
                 <div style={styles.successDetails}>

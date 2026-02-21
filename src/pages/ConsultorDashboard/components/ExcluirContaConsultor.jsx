@@ -1,6 +1,7 @@
 // app-frontend/src/pages/ConsultorDashboard/components/ExcluirContaConsultor.jsx
 
 import React, { useState } from 'react';
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const ExcluirContaConsultor = ({ consultorId }) => {
   const [etapa, setEtapa] = useState('inicial'); // inicial, confirmacao, senha, concluido
@@ -274,7 +275,7 @@ const ExcluirContaConsultor = ({ consultorId }) => {
     return (
       <div style={styles.container}>
         <div style={styles.successBox}>
-          <div style={styles.successIcon}></div>
+          <div style={styles.successIcon}><CheckCircle size={80} weight="duotone" color="#bb25a6" /></div>
           <h2 style={styles.successTitle}>Conta Excluída com Sucesso</h2>
           <p style={styles.successText}>
             Sua conta foi permanentemente excluída da plataforma.

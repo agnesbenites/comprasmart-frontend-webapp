@@ -3,6 +3,7 @@
 // CORRECAO: Removido o atributo 'style' duplicado nas divs de canto.
 
 import React, { useState, useRef } from "react";
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const BiometricValidation = ({ onValidationComplete, userType = "lojista" }) => {
   const [etapa, setEtapa] = useState("inicio"); // inicio, documento, selfie, processando, resultado
@@ -469,7 +470,7 @@ const BiometricValidation = ({ onValidationComplete, userType = "lojista" }) => 
           <div style={styles.resultContainer}>
             {resultado.status === 'aprovado' ? (
               <>
-                <div style={styles.successIcon}></div>
+                <div style={styles.successIcon}><CheckCircle size={80} weight="duotone" color="#bb25a6" /></div>
                 <h2 style={styles.successTitle}>Validacao Aprovada!</h2>
                 <p style={styles.successText}>
                   Sua identidade foi verificada com sucesso

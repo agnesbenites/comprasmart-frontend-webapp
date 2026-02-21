@@ -1,6 +1,7 @@
 // src/pages/AdminCadastroVendedor.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const AdminCadastroVendedor = () => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const AdminCadastroVendedor = () => {
       <div style={styles.card}>
         {/* Cabecalho com identificacao clara que e area restrita */}
         <div style={styles.header}>
-          <div style={styles.headerIcon}></div>
+          <div style={styles.headerIcon}><House size={24} weight="duotone" color="#2f0d51" /></div>
           <h1 style={styles.title}>Cadastro de Vendedor Interno</h1>
           <p style={styles.subtitle}>
             rea exclusiva para administradores - Sistema Interno

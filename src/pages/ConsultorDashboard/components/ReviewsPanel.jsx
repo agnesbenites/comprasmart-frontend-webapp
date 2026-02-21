@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaStar, FaRegStar, FaFilter } from 'react-icons/fa';
 import { supabase } from "@/supabaseClient";
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 // Inicializar Supabase
 
@@ -299,7 +300,7 @@ const ReviewsPanel = ({ consultorId }) => {
       {/* Mensagem quando nao ha avaliacoes */}
       {avaliacoesFiltradas.length === 0 && (
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}></div>
+          <div style={styles.emptyIcon}><HourglassHigh size={80} weight="duotone" color="#2f0d51" /></div>
           <p style={styles.emptyTitle}>Nenhuma avaliação encontrada</p>
           <p style={styles.emptySubtitle}>
             {filtroEstrelas !== 'todas' 

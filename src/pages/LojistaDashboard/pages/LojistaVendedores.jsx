@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../supabaseClient';
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const LojistaVendedores = () => {
   const [loading, setLoading] = useState(true);
@@ -305,7 +306,7 @@ const LojistaVendedores = () => {
       {/* EMPTY STATE */}
       {vendedores.length === 0 && (
         <div style={styles.empty}>
-          <p style={styles.emptyIcon}></p>
+          <div style={styles.emptyIcon}><HourglassHigh size={80} weight="duotone" color="#2f0d51" /></div>
           <p style={styles.emptyText}>Nenhum vendedor cadastrado</p>
           <button style={styles.emptyButton}>+ Cadastrar Primeiro Vendedor</button>
         </div>

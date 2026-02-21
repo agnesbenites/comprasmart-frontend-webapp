@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const StripeSuccess = () => {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ const StripeSuccess = () => {
 
         {status === 'success' && (
           <>
-            <div style={styles.successIcon}></div>
+            <div style={styles.successIcon}><CheckCircle size={80} weight="duotone" color="#bb25a6" /></div>
             <h2 style={styles.title}> Pagamento Confirmado!</h2>
             <p style={styles.text}>Sua conta foi ativada com sucesso!</p>
             <p style={styles.subtext}>Redirecionando para o dashboard...</p>

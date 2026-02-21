@@ -1,6 +1,7 @@
 // src/components/NotificationBell.jsx
 import React, { useState, useRef, useEffect } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const NotificationBell = () => {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
@@ -80,7 +81,7 @@ const NotificationBell = () => {
           <div style={styles.notificationsList}>
             {notifications.length === 0 ? (
               <div style={styles.emptyState}>
-                <span style={styles.emptyIcon}></span>
+                <div style={styles.emptyIcon}><HourglassHigh size={80} weight="duotone" color="#2f0d51" /></div>
                 <p>Nenhuma notificacao</p>
               </div>
             ) : (

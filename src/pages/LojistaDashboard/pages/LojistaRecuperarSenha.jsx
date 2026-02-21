@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../supabaseClient";
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const LojistaRecuperarSenha = () => {
   const navigate = useNavigate();
@@ -100,7 +101,7 @@ const LojistaRecuperarSenha = () => {
           </>
         ) : (
           <>
-            <div style={styles.successIcon}></div>
+            <div style={styles.successIcon}><CheckCircle size={80} weight="duotone" color="#bb25a6" /></div>
             <h2 style={styles.successTitle}>Email Enviado!</h2>
             <p style={styles.successDescription}>
               Enviamos um link de recuperação para:

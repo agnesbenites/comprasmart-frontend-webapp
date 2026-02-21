@@ -2,6 +2,7 @@
 // VERSÃO COM HORÁRIO DE FUNCIONAMENTO
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { House, CheckCircle, XCircle, Clock, Tag, HourglassHigh, Lifebuoy, Storefront, ChatCircle } from '@phosphor-icons/react';
 
 const LojistaFiliais = () => {
   const navigate = useNavigate();
@@ -432,7 +433,7 @@ const LojistaFiliais = () => {
 
       {filiais.length === 0 && !showForm && (
         <div style={styles.emptyState}>
-          <p style={styles.emptyIcon}></p>
+          <div style={styles.emptyIcon}><HourglassHigh size={80} weight="duotone" color="#2f0d51" /></div>
           <h2 style={styles.emptyTitle}>Nenhuma filial cadastrada</h2>
           <p style={styles.emptyText}>Clique no botão acima para adicionar sua primeira filial</p>
         </div>
