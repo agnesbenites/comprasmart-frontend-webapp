@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaGraduationCap, FaCheckCircle, FaLock, FaPlay, FaFileAlt, FaVideo, FaExclamationTriangle, FaClock, FaStore, FaShieldAlt } from 'react-icons/fa';
 
-const CONSULTOR_PRIMARY = "#2c5aa0";
+const CONSULTOR_PRIMARY = "#2f0d51";
 const CONSULTOR_LIGHT_BG = "#eaf2ff";
 
 const TrainingPanel = ({ consultorId }) => {
@@ -519,7 +519,7 @@ const styles = {
     width: '50px',
     height: '50px',
     border: '4px solid #f3f3f3',
-    borderTop: '4px solid #2c5aa0',
+    borderTop: '4px solid #2f0d51',
     borderRadius: '50%',
     animation: 'spin 1s linear infinite',
   },

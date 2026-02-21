@@ -457,7 +457,7 @@ const PromocoesSection = ({ userId, todasLojas, lojaSelecionada, onSuccess }) =>
                   onClick={() => handleEditar(promocao)}
                   style={{
                     ...styles.actionButton,
-                    backgroundColor: '#17a2b8',
+                    backgroundColor: '#bb25a6',
                   }}
                 >
                   ✏️ Editar

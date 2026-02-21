@@ -1,0 +1,144 @@
+/* =====================================================
+   KASLEE - RESPONSIVE STYLES
+   Mobile-first para consultores, lojistas e vendedores
+   ===================================================== */
+
+/* --- Hamburger: escondido no desktop --- */
+.hamburger-btn {
+  display: none !important;
+}
+
+/* --- Sidebar close btn: escondido no desktop --- */
+.sidebar-close-btn {
+  display: none !important;
+}
+
+/* --- Banner mobile: escondido no desktop --- */
+.mobile-banner {
+  display: none !important;
+}
+
+/* =====================================================
+   MOBILE (<768px)
+   ===================================================== */
+@media (max-width: 768px) {
+
+  /* Hamburger visível */
+  .hamburger-btn {
+    display: flex !important;
+  }
+
+  /* Sidebar fechada por padrão */
+  .lojista-sidebar,
+  .vendedor-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    z-index: 30 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s ease !important;
+    overflow-y: auto !important;
+  }
+
+  /* Sidebar aberta */
+  .lojista-sidebar.sidebar-open,
+  .vendedor-sidebar.sidebar-open {
+    transform: translateX(0) !important;
+  }
+
+  /* Botão fechar visível quando sidebar aberta */
+  .sidebar-open .sidebar-close-btn {
+    display: block !important;
+  }
+
+  /* Main content ocupa tudo */
+  .lojista-main {
+    width: 100% !important;
+  }
+
+  /* Banner desktop hint visível */
+  .mobile-banner {
+    display: block !important;
+  }
+
+  /* Padding reduzido no conteúdo */
+  .content-area-mobile {
+    padding: 16px !important;
+  }
+
+  /* Tabelas com scroll horizontal */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* Cards grid em coluna */
+  .cards-grid-mobile {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Texto menor em headers */
+  h1 {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* =====================================================
+   TABLET (768px - 1024px)
+   ===================================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hamburger-btn {
+    display: none !important;
+  }
+}
+
+/* =====================================================
+   LANDING PAGE RESPONSIVA
+   ===================================================== */
+
+/* Desktop nav visível, hamburger escondido */
+.desktop-nav {
+  display: flex !important;
+}
+.mobile-hamburger {
+  display: none !important;
+}
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Nav */
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-hamburger {
+    display: flex !important;
+  }
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  /* Hero stack vertical */
+  .hero-inner-mobile {
+    flex-direction: column !important;
+    text-align: center !important;
+  }
+  .hero-right-mobile {
+    order: -1;
+    margin-bottom: 24px;
+  }
+
+  /* Números bar sem margem negativa */
+  .numbers-bar-mobile {
+    margin-top: 0 !important;
+  }
+
+  /* Plan cards full width */
+  .plan-card-mobile {
+    width: 100% !important;
+    transform: none !important;
+  }
+}

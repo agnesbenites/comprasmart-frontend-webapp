@@ -384,7 +384,7 @@ const styles = {
   },
   infoBox: {
     backgroundColor: '#d1ecf1',
-    border: '2px solid #17a2b8',
+    border: '2px solid #bb25a6',
     borderRadius: '12px',
     padding: '20px',
     marginBottom: '25px',

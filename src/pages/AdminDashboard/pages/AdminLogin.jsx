@@ -203,7 +203,7 @@ const styles = {
     marginTop: '25px',
   },
   backLink: {
-    color: '#2c5aa0',
+    color: "#2f0d51",
     textDecoration: 'none',
     fontSize: '14px',
     fontWeight: '500',

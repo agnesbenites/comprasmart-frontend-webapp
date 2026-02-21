@@ -176,7 +176,7 @@ const ScoreStatisticsPanel = () => {
             titulo="Treinamentos" 
             nota={estatisticas.mediaTreinamentos} 
             peso={25}
-            color="#2c5aa0"
+            color="#2f0d51"
           />
         </div>
       </div>

@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext"; //  CORRETO
 import App from "./App.jsx";
 import "./index.css";
+import "./responsive.css";
 
 // Importa o cliente Supabase
 import { supabase } from "./supabaseClient.js";

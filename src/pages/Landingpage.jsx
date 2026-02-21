@@ -159,7 +159,7 @@ const HoverImageCard = ({ src, label, sublabel }) => {
 
 const PlanCard = ({ name, price, period, description, features, color, highlighted, onBuy }) => (
   <div style={{
-    background: color, borderRadius: 24, padding: '44px 34px 38px', width: 340,
+    background: color, borderRadius: 24, padding: '36px 24px 32px', width: 'min(340px, 100%)',
     textAlign: 'center', position: 'relative', display: 'flex', flexDirection: 'column', minHeight: 650,
     border: highlighted ? '3px solid #bb25a6' : '1px solid rgba(255,255,255,0.08)',
     transform: highlighted ? 'scale(1.04)' : 'scale(1)',
@@ -201,6 +201,7 @@ const Landingpage = () => {
   const navigate = useNavigate();
   const [showArenaModal, setShowArenaModal] = useState(false);
   const [showSaibaMais, setShowSaibaMais] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const scrollToPlanos = () => { document.getElementById('planos')?.scrollIntoView({ behavior: 'smooth' }); };
 
   const STRIPE_URLS = {
@@ -213,10 +214,9 @@ const Landingpage = () => {
   return (
     <div style={S.page}>
 
-      {/* ══════ NAVBAR — só Logo Clara (nome) ══════ */}
+      {/* ══════ NAVBAR RESPONSIVA ══════ */}
       <header style={S.navbar}>
         <div style={S.navInner}>
-          {/* Logo + Sobre a Kaslee juntos à esquerda */}
           <div style={S.logoArea}>
             <a href="#" style={S.logoLink}>
               <img
@@ -226,25 +226,60 @@ const Landingpage = () => {
                 onError={e => {
                   e.target.onerror = null; e.target.style.display = 'none';
                   e.target.parentElement.insertAdjacentHTML('beforeend',
-                    '<span style="font-size:30px;font-weight:800;color:#2f0d51;font-family:Poppins,sans-serif;letter-spacing:-0.5px">Kaslee</span>'
+                    '<span style="font-size:24px;font-weight:800;color:#2f0d51;font-family:Poppins,sans-serif;">Kaslee</span>'
                   );
                 }}
               />
             </a>
-            <button onClick={() => navigate('/institucional')} style={S.navBtnSobre}>
+            <button onClick={() => navigate('/institucional')} style={{...S.navBtnSobre, display: mobileMenuOpen ? 'none' : undefined}} className="hide-on-mobile">
               Sobre a Kaslee
             </button>
           </div>
 
-          <nav style={S.navLinks}>
+          {/* Desktop nav */}
+          <nav style={S.navLinks} className="desktop-nav">
             <a href="#como-funciona" style={S.navA}>Como Funciona</a>
             <a href="#beneficios" style={S.navA}>Benefícios</a>
             <a href="#planos" style={S.navA}>Planos</a>
-            <NavButton onClick={() => navigate('/quiz')}> Descubra Seu Plano</NavButton>
+            <NavButton onClick={() => navigate('/quiz')}>Descubra Seu Plano</NavButton>
             <NavButton onClick={() => navigate('/login')}>Entrar</NavButton>
             <NavButton onClick={() => navigate('/onboarding')}>Começar Agora</NavButton>
           </nav>
+
+          {/* Hamburger mobile */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="mobile-hamburger"
+            style={{
+              display: 'none', background: 'none', border: 'none',
+              cursor: 'pointer', flexDirection: 'column', gap: '5px', padding: '4px',
+            }}
+          >
+            <span style={{ width: 24, height: 2, backgroundColor: '#2f0d51', display: 'block', transition: 'all 0.3s',
+              transform: mobileMenuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }}></span>
+            <span style={{ width: 24, height: 2, backgroundColor: '#2f0d51', display: 'block',
+              opacity: mobileMenuOpen ? 0 : 1, transition: 'all 0.3s' }}></span>
+            <span style={{ width: 24, height: 2, backgroundColor: '#2f0d51', display: 'block', transition: 'all 0.3s',
+              transform: mobileMenuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }}></span>
+          </button>
         </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="mobile-menu" style={{
+            display: 'flex', flexDirection: 'column', gap: 8,
+            padding: '16px 24px 20px', borderTop: '1px solid #eee',
+            backgroundColor: '#fff',
+          }}>
+            <a href="#como-funciona" style={{...S.navA, padding: '10px 0', borderBottom: '1px solid #f0f0f0'}} onClick={() => setMobileMenuOpen(false)}>Como Funciona</a>
+            <a href="#beneficios" style={{...S.navA, padding: '10px 0', borderBottom: '1px solid #f0f0f0'}} onClick={() => setMobileMenuOpen(false)}>Benefícios</a>
+            <a href="#planos" style={{...S.navA, padding: '10px 0', borderBottom: '1px solid #f0f0f0'}} onClick={() => setMobileMenuOpen(false)}>Planos</a>
+            <button onClick={() => navigate('/institucional')} style={{...S.navBtnSobre, marginTop: 4, width: '100%'}}>Sobre a Kaslee</button>
+            <NavButton onClick={() => { navigate('/quiz'); setMobileMenuOpen(false); }} style={{width: '100%', marginTop: 4}}>Descubra Seu Plano</NavButton>
+            <NavButton onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} style={{width: '100%', marginTop: 4}}>Entrar</NavButton>
+            <NavButton onClick={() => { navigate('/onboarding'); setMobileMenuOpen(false); }} style={{width: '100%', marginTop: 4, background: '#bb25a6', color: '#fff'}}>Começar Agora</NavButton>
+          </div>
+        )}
       </header>
 
       {/* ══════ HERO — Logo GRANDE no lado direito ══════ */}
@@ -704,7 +739,7 @@ const S = {
   navbar: {
     position: 'sticky', top: 0, zIndex: 100,
     background: '#fff', borderBottom: '1px solid rgba(0,0,0,0.06)',
-    padding: '14px 48px',
+    padding: '12px 20px',
   },
   navInner: {
     maxWidth: 1200, margin: '0 auto',
@@ -712,7 +747,7 @@ const S = {
   },
   logoLink: { display: 'flex', alignItems: 'center', textDecoration: 'none' },
   logoArea: { display: 'flex', alignItems: 'center', gap: 16 },
-  navLogoName: { height: 100, width: 'auto', objectFit: 'contain' },
+  navLogoName: { height: 48, width: 'auto', objectFit: 'contain', maxWidth: 140 },
   navLinks: { display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' },
   navA: { textDecoration: 'none', color: '#555', fontSize: 14, fontWeight: 500 },
   navBtn: {
@@ -741,22 +776,23 @@ const S = {
 
   hero: {
     background: 'linear-gradient(160deg,#f3eef8 0%,#e8d9f0 30%,#d9c4e8 60%,#e0cde9 100%)',
-    padding: '80px 48px 100px',
+    padding: '60px 24px 80px',
   },
-  heroInner: { maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 10 },
+  heroInner: { maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' },
   heroLeft: { flex: 1, maxWidth: 580 },
   heroTitle: {
-    fontFamily: "'Poppins',sans-serif", fontSize: 50, fontWeight: 800,
-    lineHeight: 1.12, color: '#2f0d51', letterSpacing: -1.5, marginBottom: 20,
+    fontFamily: "'Poppins',sans-serif", fontSize: 'clamp(28px, 6vw, 50px)', fontWeight: 800,
+    lineHeight: 1.12, color: '#2f0d51', letterSpacing: -1, marginBottom: 20,
   },
   heroSub: { fontSize: 18, lineHeight: 1.7, color: '#555', marginBottom: 36, maxWidth: 480 },
-  heroBtns: { display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 32 },
+  heroBtns: { display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 32 },
   btnPrimary: {
     background: '#f53342', color: '#fff', border: 'none',
-    padding: '15px 32px', borderRadius: 50,
-    fontFamily: "'Poppins',sans-serif", fontSize: 20, fontWeight: 700,
+    padding: '14px 28px', borderRadius: 50,
+    fontFamily: "'Poppins',sans-serif", fontSize: 'clamp(14px, 3vw, 18px)', fontWeight: 700,
     cursor: 'pointer', display: 'inline-flex', alignItems: 'center',
     boxShadow: '0 4px 20px rgba(233,30,99,0.3)', transition: 'all .3s',
+    whiteSpace: 'nowrap',
   },
   btnSecondary: {
     background: '#fff', color: '#bb25a6',
@@ -769,8 +805,9 @@ const S = {
 
   heroRight: { flexShrink: 0, display: 'flex', justifyContent: 'center', alignItems: 'center' },
   heroSacola: {
-    height: 600, width: 'auto', objectFit: 'contain',
+    height: 'clamp(200px, 40vw, 500px)', width: 'auto', objectFit: 'contain',
     filter: 'drop-shadow(0 16px 40px rgba(123,63,160,0.25))',
+    maxWidth: '100%',
   },
 
   numbersBar: {
@@ -786,10 +823,10 @@ const S = {
   numVal: { fontFamily: "'Poppins',sans-serif", fontSize: 32, fontWeight: 600, color: '#2f0d51', marginBottom: 6 },
   numLabel: { fontSize: 14, color: '#888' },
 
-  section: { padding: '50px 40px', maxWidth: 1200, margin: '0 auto' },
-  fullSection: { padding: '60px 40px', maxWidth: '100%' },
+  section: { padding: '40px 20px', maxWidth: 1200, margin: '0 auto' },
+  fullSection: { padding: '40px 20px', maxWidth: '100%' },
   inner: { maxWidth: 1200, margin: '0 auto' },
-  secTitle: { fontFamily: "'Poppins',sans-serif", fontSize: 40, fontWeight: 800, textAlign: 'center', color: '#2f0d51', marginBottom: 16 },
+  secTitle: { fontFamily: "'Poppins',sans-serif", fontSize: 'clamp(22px, 5vw, 40px)', fontWeight: 800, textAlign: 'center', color: '#2f0d51', marginBottom: 16 },
   secSub: { fontSize: 18, textAlign: 'center', color: '#777', marginBottom: 52 },
   secHeader: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 8 },
   secTitleLeft: { fontFamily: "'Poppins',sans-serif", fontSize: 36, fontWeight: 800, color: '#2f0d51', margin: 0 },
@@ -908,7 +945,7 @@ const S = {
     margin: '0 auto',
   },
 
-  plansRow: { display: 'flex', justifyContent: 'center', gap: 28, flexWrap: 'wrap', marginTop: 40 },
+  plansRow: { display: 'flex', justifyContent: 'center', gap: 20, flexWrap: 'wrap', marginTop: 40, padding: '0 8px' },
 
   ctaFinal: {
     background: 'linear-gradient(135deg,#2f0d51,#bb25a6)',
@@ -943,7 +980,7 @@ const S = {
     transition: 'all .3s',
   },
 
-  footer: { background: '#2f0d51', padding: '52px 48px 24px', color: '#fff' },
+  footer: { background: '#2f0d51', padding: '40px 20px 24px', color: '#fff' },
   footerInner: {
     maxWidth: 1200, margin: '0 auto',
     display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',

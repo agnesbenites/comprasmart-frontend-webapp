@@ -95,7 +95,7 @@ const ProdutosTable = ({ produtos, onEdit, onDelete, getStatusEstoque }) => {
                             <>
                               <br />
                               <small style={{ 
-                                backgroundColor: '#17a2b8',
+                                backgroundColor: '#bb25a6',
                                 color: 'white',
                                 padding: '2px 6px',
                                 borderRadius: '10px',

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/supabaseClient';
 import Layout from '@/components/Layout';
 
-const VENDOR_PRIMARY = "#4a6fa5";
+const VENDOR_PRIMARY = "#2f0d51";
 const VENDOR_LIGHT_BG = "#eaf2ff";
 const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 

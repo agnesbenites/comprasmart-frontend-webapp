@@ -608,7 +608,7 @@ const styles = {
   title: {
     fontSize: "2rem",
     fontWeight: "700",
-    color: "#17a2b8",
+    color: "#bb25a6",
     marginBottom: "8px",
   },
   subtitle: {
@@ -656,7 +656,7 @@ const styles = {
     color: "#999",
   },
   labelActive: {
-    color: "#17a2b8",
+    color: "#bb25a6",
     fontWeight: "600",
   },
   form: {
@@ -741,7 +741,7 @@ const styles = {
     marginTop: "3px",
   },
   link: {
-    color: "#17a2b8",
+    color: "#bb25a6",
     textDecoration: "none",
     fontWeight: "600",
   },
@@ -762,7 +762,7 @@ const styles = {
   buttonPrimary: {
     flex: 1,
     padding: "14px",
-    backgroundColor: "#17a2b8",
+    backgroundColor: "#bb25a6",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -795,7 +795,7 @@ const styles = {
   linkButton: {
     background: "none",
     border: "none",
-    color: "#17a2b8",
+    color: "#bb25a6",
     fontSize: "0.9rem",
     fontWeight: "600",
     cursor: "pointer",

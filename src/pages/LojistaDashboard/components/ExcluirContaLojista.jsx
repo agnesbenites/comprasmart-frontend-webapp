@@ -321,7 +321,7 @@ const styles = {
   },
   infoBox: {
     backgroundColor: '#d1ecf1',
-    border: '2px solid #17a2b8',
+    border: '2px solid #bb25a6',
     borderRadius: '12px',
     padding: '20px',
     marginBottom: '25px',
@@ -413,7 +413,7 @@ const styles = {
     cursor: 'pointer',
   },
   primaryButton: {
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: 'white',
     border: 'none',
     padding: '15px 30px',

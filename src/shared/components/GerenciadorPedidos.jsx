@@ -8,7 +8,7 @@ import { supabase } from '../../supabaseClient';
 const STATUS_PEDIDO = [
     { value: 'QR Code Gerado!', label: 'QR Code Gerado!', cor: '#6c757d', icon: '📱' },
     { value: 'Aguardando Separação', label: 'Aguardando Separacao', cor: '#ffc107', icon: '📦' },
-    { value: 'Pronto para pagamento', label: 'Pronto para Pagamento', cor: '#17a2b8', icon: '💳' },
+    { value: 'Pronto para pagamento', label: 'Pronto para Pagamento', cor: '#bb25a6', icon: '💳' },
     { value: 'Pago/Cancelado', label: 'Pago/Cancelado', cor: '#bb25a6', icon: '✅' },
     { value: 'Retirado pelo Cliente', label: 'Retirado pelo Cliente', cor: '#6f42c1', icon: '🛍️' }
 ];
@@ -202,7 +202,7 @@ const GerenciadorPedidos = ({ tipoUsuario = 'vendedor' }) => {
             {/* Cards de Resumo */}
             <div style={styles.resumoGrid}>
                 <div 
-                    style={{...styles.resumoCard, borderLeft: '4px solid #2c5aa0'}}
+                    style={{...styles.resumoCard, borderLeft: '4px solid #2f0d51'}}
                     onClick={() => setFiltroStatus('todos')}
                 >
                     <span style={styles.resumoIcon}>📋</span>
@@ -361,7 +361,7 @@ const styles = {
         minHeight: '100vh'
     },
     title: {
-        color: '#2c5aa0',
+        color: "#2f0d51",
         fontSize: '1.8rem',
         marginBottom: '5px'
     },
@@ -425,7 +425,7 @@ const styles = {
     resumoNumero: {
         fontSize: '1.5rem',
         fontWeight: 'bold',
-        color: '#2c5aa0',
+        color: "#2f0d51",
         margin: 0,
         lineHeight: 1
     },
@@ -456,7 +456,7 @@ const styles = {
         minWidth: '160px'
     },
     btnAtualizar: {
-        backgroundColor: '#2c5aa0',
+        backgroundColor: '#2f0d51',
         color: 'white',
         border: 'none',
         padding: '10px 20px',
@@ -483,7 +483,7 @@ const styles = {
     pedidoId: {
         fontFamily: 'monospace',
         backgroundColor: '#eaf2ff',
-        color: '#2c5aa0',
+        color: "#2f0d51",
         padding: '4px 8px',
         borderRadius: '4px',
         fontWeight: 'bold',
@@ -502,7 +502,7 @@ const styles = {
     pedidoValor: {
         fontSize: '1.4rem',
         fontWeight: 'bold',
-        color: '#2c5aa0',
+        color: "#2f0d51",
         marginBottom: '12px'
     },
     pedidoStatus: {
@@ -515,7 +515,7 @@ const styles = {
     },
     btnAtualizarCard: {
         width: '100%',
-        backgroundColor: '#17a2b8',
+        backgroundColor: '#bb25a6',
         color: 'white',
         border: 'none',
         padding: '10px',
@@ -553,7 +553,7 @@ const styles = {
         textAlign: 'center'
     },
     modalTitle: {
-        color: '#2c5aa0',
+        color: "#2f0d51",
         marginBottom: '10px'
     },
     modalSubtitle: {

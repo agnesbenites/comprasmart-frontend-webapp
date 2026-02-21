@@ -1,15 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Crown, Briefcase, Storefront, Users, ChartBar, Gear, Headset, ShoppingCart, Package, ChatCircle, Rocket, Notepad } from "@phosphor-icons/react";
 
 // ----------------------------------------
-// ESTILOS CONVERTIDOS PARA STYLED COMPONENTS
+// ESTILOS
 // ----------------------------------------
-
 const Container = styled.div`
   min-height: 100vh;
   background-color: #f8f9fa;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
 `;
 
 const Content = styled.div`
@@ -20,7 +20,7 @@ const Content = styled.div`
 
 const Header = styled.div`
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 `;
 
 const LogoWrapper = styled.div`
@@ -28,22 +28,25 @@ const LogoWrapper = styled.div`
 `;
 
 const LogoImage = styled.img`
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 15px auto;
+  height: 90px;
+  width: auto;
+  margin: 0 auto 12px auto;
   display: block;
+  object-fit: contain;
 `;
 
 const LogoText = styled.h1`
-  font-size: 36px;
-  font-weight: bold;
-  color: #2c5aa0;
-  margin: 0 0 5px 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: #2f0d51;
+  margin: 0 0 4px 0;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const LogoSubtitle = styled.p`
-  font-size: 18px;
+  font-size: 16px;
   color: #666;
+  margin: 0;
 `;
 
 const MainContent = styled.div`
@@ -53,19 +56,21 @@ const MainContent = styled.div`
 
 const WelcomeSection = styled.div`
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 `;
 
 const WelcomeTitle = styled.h2`
-  font-size: 32px;
-  color: #333;
-  font-weight: bold;
+  font-size: 28px;
+  color: #2f0d51;
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const WelcomeText = styled.p`
-  font-size: 18px;
+  font-size: 16px;
   color: #666;
-  line-height: 1.5;
+  line-height: 1.6;
   max-width: 600px;
   margin: 0 auto;
 `;
@@ -73,47 +78,52 @@ const WelcomeText = styled.p`
 const CardsContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 50px;
+  gap: 28px;
+  margin-bottom: 40px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 `;
 
 const Card = styled.div`
   background-color: white;
-  border-radius: 15px;
-  padding: 40px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
   border: 2px solid transparent;
   transition: all 0.3s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  height: 480px;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    border-color: #2c5aa0;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(47,13,81,0.15);
+    border-color: #bb25a6;
   }
 `;
 
-const CardIcon = styled.div`
-  font-size: 60px;
-  margin-bottom: 25px;
-  text-align: center;
+const CardIconWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #f3e8ff;
+  align-items: center;
+  margin: 0 auto 20px auto;
 `;
 
-const CardContent = styled.div``;
-
 const CardTitle = styled.h3`
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin: 0 0 15px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2f0d51;
+  margin: 0 0 12px 0;
   text-align: center;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const CardDescription = styled.p`
@@ -121,14 +131,13 @@ const CardDescription = styled.p`
   line-height: 1.6;
   margin-bottom: 20px;
   text-align: center;
+  font-size: 14px;
 `;
 
 const FeaturesList = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 25px 0;
-  color: #333;
-  text-align: left;
+  margin: 0 0 24px 0;
 `;
 
 const FeatureListItem = styled.li`
@@ -136,132 +145,148 @@ const FeatureListItem = styled.li`
   color: #444;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 8px;
+  font-size: 14px;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #bb25a6;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
 `;
 
 const CardAction = styled.div`
   margin-top: auto;
+  padding-top: 16px;
 `;
 
 const CardButton = styled.button`
   width: 100%;
-  padding: 15px;
-  background-color: #2c5aa0;
+  padding: 14px;
+  background: linear-gradient(135deg, #2f0d51, #bb25a6);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #1b3670;
-  }
-`;
-
-const Footer = styled.div`
-  text-align: center;
-`;
-
-const BackButton = styled.button`
-  padding: 12px 30px;
-  background-color: transparent;
-  color: #666;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
   transition: all 0.3s;
+  font-family: 'Poppins', sans-serif;
 
   &:hover {
-    background-color: #f8f9fa;
-    border-color: #999;
+    opacity: 0.9;
+    transform: scale(1.02);
   }
 `;
 
 const RegisterSection = styled.div`
   text-align: center;
-  margin-top: 40px;
-  padding: 30px;
-  background-color: #e8f4fd;
-  border-radius: 12px;
-  border: 2px dashed #2c5aa0;
+  padding: 28px 24px;
+  background: linear-gradient(135deg, #f3e8ff, #fce7f3);
+  border-radius: 14px;
+  border: 2px dashed #bb25a6;
+  margin-bottom: 30px;
 `;
 
 const RegisterText = styled.p`
   font-size: 16px;
-  color: #333;
-  margin-bottom: 15px;
+  color: #2f0d51;
+  margin-bottom: 16px;
+  font-weight: 500;
 `;
 
 const RegisterButton = styled.button`
-  padding: 15px 40px;
-  background-color: #bb25a6;
+  padding: 14px 36px;
+  background: #bb25a6;
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Poppins', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover {
+    background: #9e1e8e;
+    transform: scale(1.02);
+  }
+`;
+
+const Footer = styled.div`
+  text-align: center;
+  margin-top: 20px;
+`;
+
+const BackButton = styled.button`
+  padding: 12px 28px;
+  background-color: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 15px;
   transition: all 0.3s;
 
   &:hover {
-    background-color: #218838;
-    transform: scale(1.02);
+    background-color: #f3e8ff;
+    border-color: #bb25a6;
+    color: #2f0d51;
   }
 `;
 
 // ----------------------------------------
 // COMPONENTE PRINCIPAL
 // ----------------------------------------
-
 const LojistaEscolha = () => {
   const navigate = useNavigate();
 
   return (
     <Container>
       <Content>
-        {/* Header */}
         <Header>
           <LogoWrapper>
             <LogoImage
-              src="/img/logo_compra_smart.png"
-              alt="Logo Kaslee"
+              src="/img/Logo Clara.png"
+              alt="Kaslee"
+              onError={e => { e.target.style.display = 'none'; }}
             />
-            <LogoText>Kaslee</LogoText>
+            
             <LogoSubtitle>Área do Lojista</LogoSubtitle>
           </LogoWrapper>
         </Header>
 
-        {/* Conteudo Principal */}
         <MainContent>
           <WelcomeSection>
             <WelcomeTitle>Selecione o Tipo de Acesso</WelcomeTitle>
             <WelcomeText>
-              Escolha abaixo o tipo de acesso que deseja para gerenciar seu
-              estabelecimento.
+              Escolha abaixo o tipo de acesso que deseja para gerenciar seu estabelecimento.
             </WelcomeText>
           </WelcomeSection>
 
           <CardsContainer>
-            {/* Card Admin/Lojista */}
+            {/* Card Lojista Admin */}
             <Card onClick={() => navigate("/lojista/login")}>
-              <CardIcon>👑</CardIcon>
-              <CardContent>
-                <CardTitle>Lojista (Admin)</CardTitle>
-                <CardDescription>
-                  Acesso completo ao painel administrativo com gestão de lojas,
-                  vendedores, relatórios e configurações do sistema.
-                </CardDescription>
-                <FeaturesList>
-                  <FeatureListItem>✓ Gestão de múltiplas lojas</FeatureListItem>
-                  <FeatureListItem>✓ Cadastro de vendedores</FeatureListItem>
-                  <FeatureListItem>✓ Relatórios detalhados</FeatureListItem>
-                  <FeatureListItem>✓ Configurações do sistema</FeatureListItem>
-                </FeaturesList>
-              </CardContent>
+              <CardIconWrap>
+                <Crown size={32} weight="duotone" color="#bb25a6" />
+              </CardIconWrap>
+              <CardTitle>Lojista (Admin)</CardTitle>
+              <CardDescription>
+                Acesso completo ao painel administrativo com gestão de lojas,
+                vendedores, relatórios e configurações do sistema.
+              </CardDescription>
+              <FeaturesList>
+                <FeatureListItem>Gestão de múltiplas lojas</FeatureListItem>
+                <FeatureListItem>Cadastro de vendedores</FeatureListItem>
+                <FeatureListItem>Relatórios detalhados</FeatureListItem>
+                <FeatureListItem>Configurações do sistema</FeatureListItem>
+              </FeaturesList>
               <CardAction>
                 <CardButton>Acessar Painel Admin</CardButton>
               </CardAction>
@@ -269,38 +294,37 @@ const LojistaEscolha = () => {
 
             {/* Card Vendedor */}
             <Card onClick={() => navigate("/vendedor/login")}>
-              <CardIcon>💼</CardIcon>
-              <CardContent>
-                <CardTitle>Vendedor</CardTitle>
-                <CardDescription>
-                  Acesso ao sistema de vendas com ferramentas para atendimento,
-                  gestão de pedidos e comunicação integrada.
-                </CardDescription>
-                <FeaturesList>
-                  <FeatureListItem>✓ Atendimento ao cliente</FeatureListItem>
-                  <FeatureListItem>✓ Sistema de chamadas/vídeo</FeatureListItem>
-                  <FeatureListItem>✓ Gestão de pedidos</FeatureListItem>
-                  <FeatureListItem>✓ Mensagens integradas</FeatureListItem>
-                </FeaturesList>
-              </CardContent>
+              <CardIconWrap style={{ background: '#ede9fe' }}>
+                <Briefcase size={32} weight="duotone" color="#2f0d51" />
+              </CardIconWrap>
+              <CardTitle>Vendedor</CardTitle>
+              <CardDescription>
+                Acesso ao sistema de vendas com ferramentas para atendimento,
+                gestão de pedidos e comunicação integrada.
+              </CardDescription>
+              <FeaturesList>
+                <FeatureListItem>Atendimento ao cliente</FeatureListItem>
+                <FeatureListItem>Sistema de chamadas/vídeo</FeatureListItem>
+                <FeatureListItem>Gestão de pedidos</FeatureListItem>
+                <FeatureListItem>Mensagens integradas</FeatureListItem>
+              </FeaturesList>
               <CardAction>
                 <CardButton>Acessar Sistema</CardButton>
               </CardAction>
             </Card>
           </CardsContainer>
 
-          {/* Seção de Cadastro */}
           <RegisterSection>
             <RegisterText>
-              🚀 <strong>Ainda não usa o Kaslee?</strong> Cadastre sua loja e comece a vender hoje mesmo!
+              <strong>Ainda não usa o Kaslee?</strong> Cadastre sua loja e comece a vender hoje mesmo!
             </RegisterText>
             <RegisterButton onClick={() => navigate("/lojista/cadastro")}>
-              📝 Cadastre-se Grátis
+              <Rocket size={18} weight="duotone" />
+              Cadastre-se Grátis
             </RegisterButton>
           </RegisterSection>
 
-          {/* Botao Voltar */}
-          <Footer style={{ marginTop: "30px" }}>
+          <Footer>
             <BackButton onClick={() => navigate("/entrar")}>
               ← Voltar para escolha de perfil
             </BackButton>

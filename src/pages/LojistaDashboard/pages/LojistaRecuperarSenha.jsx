@@ -148,7 +148,7 @@ const styles = {
   },
   title: {
     textAlign: "center",
-    color: "#2c5aa0",
+    color: "#2f0d51",
     marginBottom: "10px",
     fontSize: "1.8rem",
     fontWeight: "700",
@@ -206,7 +206,7 @@ const styles = {
   linkButton: {
     background: "none",
     border: "none",
-    color: "#2c5aa0",
+    color: "#2f0d51",
     textDecoration: "underline",
     fontSize: "0.9rem",
     cursor: "pointer",

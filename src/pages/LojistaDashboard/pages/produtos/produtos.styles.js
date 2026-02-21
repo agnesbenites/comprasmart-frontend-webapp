@@ -4,7 +4,7 @@ const styles = {
         fontFamily: "Inter, sans-serif",
     },
     title: {
-        color: "#2c5aa0",
+        color: "#2f0d51",
         fontSize: "2rem",
         marginBottom: "10px",
     },
@@ -28,9 +28,9 @@ const styles = {
         transition: "all 0.3s ease",
     },
     abaAtiva: {
-        backgroundColor: "#2c5aa0",
+        backgroundColor: "#2f0d51",
         color: "white",
-        borderColor: "#2c5aa0",
+        borderColor: "#2f0d51",
     },
     card: {
         backgroundColor: "white",
@@ -168,8 +168,8 @@ const styles = {
         padding: "12px 15px",
         textAlign: "left",
         fontWeight: "600",
-        color: "#2c5aa0",
-        borderBottom: "2px solid #2c5aa0",
+        color: "#2f0d51",
+        borderBottom: "2px solid #2f0d51",
     },
     td: {
         padding: "12px 15px",
@@ -187,7 +187,7 @@ const styles = {
         fontWeight: "600",
     },
     smallButton: {
-        backgroundColor: "#17a2b8",
+        backgroundColor: "#bb25a6",
         color: "white",
         border: "none",
         padding: "6px 10px",
@@ -227,7 +227,7 @@ const styles = {
     },
     modalTitle: {
         fontSize: "1.5rem",
-        color: "#2c5aa0",
+        color: "#2f0d51",
         marginBottom: "20px",
     },
     modalActions: {

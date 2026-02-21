@@ -14,7 +14,7 @@ const Message = ({ sender, text, timestamp, isConsultor = false }) => {
       maxWidth: '70%',
       padding: '12px 16px',
       borderRadius: '12px',
-      backgroundColor: isConsultor ? '#2c5aa0' : '#f1f3f5',
+      backgroundColor: isConsultor ? '#2f0d51' : '#f1f3f5',
       color: isConsultor ? '#ffffff' : '#333',
       wordWrap: 'break-word',
       boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
@@ -29,7 +29,7 @@ const Message = ({ sender, text, timestamp, isConsultor = false }) => {
     },
     sender: {
       fontWeight: '600',
-      color: isConsultor ? '#ffffff' : '#2c5aa0',
+      color: isConsultor ? '#ffffff' : '#2f0d51',
     },
     timestamp: {
       fontSize: '0.7rem',

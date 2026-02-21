@@ -394,7 +394,7 @@ const styles = {
   modalTitle: {
     margin: 0,
     fontSize: '1.5rem',
-    color: '#2c5aa0',
+    color: "#2f0d51",
   },
   closeButton: {
     background: 'none',
@@ -442,7 +442,7 @@ const styles = {
     padding: '10px 20px',
     fontSize: '1rem',
     fontWeight: '600',
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: '#fff',
     border: 'none',
     borderRadius: '6px',
@@ -481,7 +481,7 @@ const styles = {
     fontSize: '0.9rem',
   },
   tableHeader: {
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: '#fff',
   },
   th: {
@@ -532,7 +532,7 @@ const styles = {
   metricValue: {
     fontSize: '1.8rem',
     fontWeight: 'bold',
-    color: '#2c5aa0',
+    color: "#2f0d51",
     marginBottom: '8px',
   },
   metricLabel: {

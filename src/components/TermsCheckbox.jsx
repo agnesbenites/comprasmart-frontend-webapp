@@ -100,7 +100,7 @@ const styles = {
     lineHeight: '1.6',
   },
   link: {
-    color: '#2c5aa0',
+    color: "#2f0d51",
     textDecoration: 'none',
     fontWeight: '600',
     borderBottom: '1px solid transparent',

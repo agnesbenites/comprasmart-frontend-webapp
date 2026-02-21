@@ -17,7 +17,7 @@ const TermsPage = () => {
         {/* HEADER */}
         <header style={styles.header}>
           <img 
-            src="/img/logo_compra_smart.png" 
+            src="/img/Logo Clara.png" 
             alt="Kaslee" 
             style={styles.logo}
             onError={(e) => e.target.style.display = 'none'}

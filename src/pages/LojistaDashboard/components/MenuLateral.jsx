@@ -1,25 +1,39 @@
-// src/pages/LojistaDashboard/components/MenuLateral.jsx - VERSÃO FINAL
+// src/pages/LojistaDashboard/components/MenuLateral.jsx
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { usePlano } from '../../../contexts/PlanoContext';
 import {
-  House, Package, ClipboardList, Users, UserTie, Handshake,
-  Buildings, QrCode, Bell, ChartBar, GraduationCap, CreditCard,
-  Tag, VideoCamera, Gear, User, Diamond
+  House,
+  Package,
+  ClipboardText,
+  Users,
+  UserCircle,
+  Handshake,
+  Building,
+  QrCode,
+  Bell,
+  ChartBar,
+  GraduationCap,
+  CreditCard,
+  Tag,
+  VideoCamera,
+  Gear,
+  User,
+  Diamond
 } from '@phosphor-icons/react';
 
-const MenuLateral = () => {
+const MenuLateral = ({ onNavigate }) => {
   const location = useLocation();
   const { plano } = usePlano();
 
   const menuItems = [
     { path: '/lojista/dashboard', label: 'Início', icon: House, requiredPlan: null },
     { path: '/lojista/dashboard/produtos', label: 'Produtos', icon: Package, requiredPlan: null },
-    { path: '/lojista/dashboard/pedidos', label: 'Pedidos', icon: ClipboardList, requiredPlan: null },
+    { path: '/lojista/dashboard/pedidos', label: 'Pedidos', icon: ClipboardText, requiredPlan: null },
     { path: '/lojista/dashboard/usuarios', label: 'Equipe', icon: Users, requiredPlan: null },
-    { path: '/lojista/dashboard/vendedores', label: 'Vendedores', icon: UserTie, requiredPlan: null },
+    { path: '/lojista/dashboard/vendedores', label: 'Vendedores', icon: UserCircle, requiredPlan: null },
     { path: '/lojista/dashboard/consultores', label: 'Consultores', icon: Handshake, requiredPlan: null },
-    { path: '/lojista/dashboard/filiais', label: 'Filiais', icon: Buildings, requiredPlan: null },
+    { path: '/lojista/dashboard/filiais', label: 'Filiais', icon: Building, requiredPlan: null },
     { path: '/lojista/dashboard/qrcode', label: 'QR Codes', icon: QrCode, requiredPlan: null },
     { path: '/lojista/dashboard/notificacoes', label: 'Notificações', icon: Bell, requiredPlan: null },
     { path: '/lojista/dashboard/relatorios', label: 'Relatórios', icon: ChartBar, requiredPlan: null },
@@ -60,6 +74,7 @@ const MenuLateral = () => {
             key={item.path}
             to={item.path}
             style={{ ...styles.link, ...(isActive && styles.linkActive) }}
+            onClick={onNavigate}
           >
             <IconComponent
               size={20}

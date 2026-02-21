@@ -149,7 +149,7 @@ const styles = {
   },
   title: {
     textAlign: "center",
-    color: "#2c5aa0",
+    color: "#2f0d51",
     marginBottom: "20px",
     fontSize: "1.8rem",
     fontWeight: "700",
@@ -231,7 +231,7 @@ const styles = {
     marginTop: "20px",
   },
   backLink: {
-    color: "#2c5aa0",
+    color: "#2f0d51",
     textDecoration: "none",
     fontSize: "14px",
   },

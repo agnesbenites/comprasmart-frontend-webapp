@@ -38,7 +38,7 @@ const styles = {
     display: 'inline-block',
   },
   button: {
-    backgroundColor: '#17a2b8',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     borderRadius: '50%',

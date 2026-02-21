@@ -4,7 +4,7 @@
 import React, { useState, useRef } from 'react';
 import { FaExclamationTriangle, FaUser, FaStore, FaBox, FaBug, FaCheckCircle, FaUpload, FaTimes, FaImage } from 'react-icons/fa';
 
-const VENDOR_PRIMARY = "#4a6fa5";
+const VENDOR_PRIMARY = "#2f0d51";
 const VENDOR_LIGHT_BG = "#eaf2ff";
 
 const ReportPanel = ({ vendedorId }) => {

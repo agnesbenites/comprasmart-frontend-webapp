@@ -828,7 +828,7 @@ const styles = {
         boxShadow: "0 2px 8px rgba(0,0,0,0.08)" 
     },
     cardTitle: { 
-        color: "#2c5aa0", 
+        color: "#2f0d51", 
         marginBottom: "20px",
         fontSize: '1.3rem',
         fontWeight: '600'
@@ -941,7 +941,7 @@ const styles = {
     },
     summaryValue: {
         fontWeight: '600',
-        color: '#2c5aa0',
+        color: "#2f0d51",
         marginLeft: '10px'
     },
     formGroup: {

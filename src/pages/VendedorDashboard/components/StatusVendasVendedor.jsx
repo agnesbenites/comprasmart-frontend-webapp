@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/supabaseClient';
 
-const VENDOR_PRIMARY = "#4a6fa5";
+const VENDOR_PRIMARY = "#2f0d51";
 
 const StatusVendasVendedor = () => {
   const [vendedorId, setVendedorId] = useState(null);
@@ -96,7 +96,7 @@ const StatusVendasVendedor = () => {
   const getStatusSeparacaoInfo = (status) => {
     const statusMap = {
       'aguardando': { emoji: '', texto: 'Aguardando Separação', cor: '#ffc107' },
-      'em_separacao': { emoji: '', texto: 'Em Separação', cor: '#17a2b8' },
+      'em_separacao': { emoji: '', texto: 'Em Separação', cor: '#bb25a6' },
       'pronto_retirada': { emoji: '', texto: 'Pronto para Retirada', cor: '#bb25a6' },
       'entregue': { emoji: '', texto: 'Entregue', cor: '#6c757d' },
     };
@@ -519,7 +519,7 @@ const styles = {
   },
   btnCopiarLink: {
     width: '100%',
-    backgroundColor: '#17a2b8',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px',

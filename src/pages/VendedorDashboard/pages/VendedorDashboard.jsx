@@ -1,7 +1,7 @@
 // src/pages/VendedorDashboard/pages/VendedorDashboard.jsx
 // VERSAO ATUALIZADA - Com Schedule e Status de Vendas
 
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 
 // =============================================================
@@ -31,11 +31,12 @@ import SchedulePanel from "../../ConsultorDashboard/components/SchedulePanel";
 
 // Importar ArenaVendasPainel do ConsultorDashboard
 import ArenaVendasPainel from "../../ConsultorDashboard/components/ArenaVendasPainel";
+import { User } from '@phosphor-icons/react';
 
 // =============================================================
 // === CORES E CONSTANTES ===
 // =============================================================
-const VENDOR_PRIMARY = "#4a6fa5";
+const VENDOR_PRIMARY = "#2f0d51";
 const VENDOR_PRIMARY_DARK = "#2f0d51";
 const VENDOR_SECONDARY = "#f8f9fa";
 const VENDOR_LIGHT_BG = "#eaf2ff";
@@ -59,7 +60,7 @@ const VENDEDOR_MENU_ITEMS = [
 // === DADOS MOCKADOS DE CAMPANHAS ===
 const MOCK_CAMPAIGNS_VENDEDOR = [
     { id: 1, loja: "Loja Central - Shopping Ibirapuera", nome: "Black Friday Antecipada", validade: "Ate 30/11", destaque: true, cor: VENDOR_PRIMARY },
-    { id: 2, loja: "Loja Central - Shopping Ibirapuera", nome: "Cashback em Eletros", validade: "Ate 15/12", destaque: false, cor: "#17a2b8" },
+    { id: 2, loja: "Loja Central - Shopping Ibirapuera", nome: "Cashback em Eletros", validade: "Ate 15/12", destaque: false, cor: "#bb25a6" },
 ];
 
 // =============================================================
@@ -92,7 +93,7 @@ export const VendedorHomePanel = () => {
         {
             titulo: "Status Vendas",
             descricao: "Acompanhar pagamentos e entregas",
-            cor: "#17a2b8",
+            cor: "#bb25a6",
             rota: "/vendedor/dashboard/status",
             icon: "&#128202;"
         },
@@ -288,38 +289,71 @@ const VendedorProdutosPage = () => (
 // =============================================================
 // === LAYOUT DO DASHBOARD ===
 // =============================================================
+const VENDEDOR_MOBILE_PRIORITY = [
+    "/vendedor/dashboard",
+    "/vendedor/dashboard/pedidos",
+    "/vendedor/dashboard/atendimento",
+    "/vendedor/dashboard/status",
+    "/vendedor/dashboard/profile",
+];
+
 const VendedorDashboardLayout = () => {
     const location = useLocation();
     const currentPath = location.pathname;
     const vendedorNome = localStorage.getItem("vendedorNome") || "Vendedor";
+    const [menuAberto, setMenuAberto] = useState(false);
+
+    const isMobilePriority = VENDEDOR_MOBILE_PRIORITY.some(r =>
+        currentPath === r || currentPath.startsWith(r + "/")
+    );
 
     const getMenuItemStyle = (item) => {
         const rota = item.rota;
         const isExactMatch = rota === currentPath;
         const isPrefixMatch = currentPath.startsWith(rota + "/");
-
         let isActive = false;
-
         if (rota === "/vendedor/dashboard") {
             isActive = isExactMatch;
         } else {
             isActive = isExactMatch || isPrefixMatch;
         }
-
         if (item.destaque) {
             return isActive ? sidebarStyles.menuItemDestaqueActive : sidebarStyles.menuItemDestaque;
         }
-
         return isActive ? sidebarStyles.menuItemActive : sidebarStyles.menuItem;
     };
 
     return (
         <div style={sidebarStyles.dashboardContainer}>
-            <div style={sidebarStyles.sidebar}>
-                <h2 style={sidebarStyles.logoTitle}>Kaslee Vendedor</h2>
+
+            {/* OVERLAY mobile */}
+            {menuAberto && (
+                <div
+                    onClick={() => setMenuAberto(false)}
+                    style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 20 }}
+                />
+            )}
+
+            {/* SIDEBAR */}
+            <div style={{
+                ...sidebarStyles.sidebar,
+                position: menuAberto ? 'fixed' : 'relative',
+                top: 0, left: 0,
+                height: menuAberto ? '100vh' : undefined,
+                zIndex: 30,
+                overflowY: 'auto',
+            }} className={`vendedor-sidebar${menuAberto ? ' sidebar-open' : ''}`}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 20px 0' }}>
+                    <h2 style={{ ...sidebarStyles.logoTitle, padding: 0, borderBottom: 'none', marginBottom: '10px' }}>Kaslee</h2>
+                    <button
+                        onClick={() => setMenuAberto(false)}
+                        className="sidebar-close-btn"
+                        style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer', color: '#999' }}
+                    >✕</button>
+                </div>
                 <nav>
                     {VENDEDOR_MENU_ITEMS.map((item) => (
-                        <Link key={item.rota} to={item.rota} style={getMenuItemStyle(item)}>
+                        <Link key={item.rota} to={item.rota} style={getMenuItemStyle(item)} onClick={() => setMenuAberto(false)}>
                             <span dangerouslySetInnerHTML={{ __html: item.icon }} style={{ marginRight: "10px" }} />
                             {item.title}
                         </Link>
@@ -327,6 +361,7 @@ const VendedorDashboardLayout = () => {
                     <Link
                         to="/vendedor/dashboard/profile"
                         style={getMenuItemStyle({ rota: "/vendedor/dashboard/profile", destaque: false })}
+                        onClick={() => setMenuAberto(false)}
                     >
                         <span dangerouslySetInnerHTML={{ __html: "&#128100;" }} style={{ marginRight: "10px" }} />
                         Meu Perfil
@@ -334,18 +369,35 @@ const VendedorDashboardLayout = () => {
                 </nav>
             </div>
 
-            <main style={sidebarStyles.mainContent}>
-                <header style={sidebarStyles.header}>
-                    <div>
-                        <h1 style={sidebarStyles.headerTitle}>Dashboard Vendedor</h1>
-                        <p style={sidebarStyles.headerSubtitle}>Bem-vindo, {vendedorNome}</p>
+            <main style={{ ...sidebarStyles.mainContent, minWidth: 0 }}>
+                <header style={{ ...sidebarStyles.header, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <button
+                            onClick={() => setMenuAberto(true)}
+                            className="hamburger-btn"
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: '4px', padding: '4px' }}
+                        >
+                            <span style={{ width: '20px', height: '2px', backgroundColor: '#2f0d51', display: 'block' }}></span>
+                            <span style={{ width: '20px', height: '2px', backgroundColor: '#2f0d51', display: 'block' }}></span>
+                            <span style={{ width: '20px', height: '2px', backgroundColor: '#2f0d51', display: 'block' }}></span>
+                        </button>
+                        <div>
+                            <h1 style={sidebarStyles.headerTitle}>Dashboard Vendedor</h1>
+                            <p style={sidebarStyles.headerSubtitle}>Bem-vindo, {vendedorNome}</p>
+                        </div>
                     </div>
-                    <Link to="/vendedor/dashboard/profile" style={sidebarStyles.profileButton}>
+                    <Link to="/vendedor/dashboard/profile" style={sidebarStyles.profileButton} onClick={() => setMenuAberto(false)}>
                         <span style={sidebarStyles.profileName}>
-                            <span dangerouslySetInnerHTML={{ __html: "&#128100;" }} /> Meu Perfil
+                            <User size={20} weight="duotone" color="currentColor" /> Meu Perfil
                         </span>
                     </Link>
                 </header>
+
+                {!isMobilePriority && (
+                    <div className="mobile-banner" style={{ backgroundColor: '#fffbeb', borderBottom: '1px solid #fcd34d', padding: '8px 16px', fontSize: '0.8rem', color: '#92400e' }}>
+                        💻 Esta tela é melhor no computador. No celular, use: Pedidos, Atendimento e Status.
+                    </div>
+                )}
 
                 <div style={{ padding: "20px" }}>
                     <Outlet />

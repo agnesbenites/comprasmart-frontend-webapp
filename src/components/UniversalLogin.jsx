@@ -61,7 +61,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
           backgroundColor: '#f8f9fa', 
           borderRadius: '8px',
           marginBottom: '20px',
-          borderLeft: '4px solid #2c5aa0'
+          borderLeft: '4px solid #2f0d51'
         }}>
           {companyName && <p><strong> Empresa:</strong> {companyName}</p>}
           {cnpj && <p><strong> CNPJ:</strong> {cnpj}</p>}
@@ -70,7 +70,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
             style={{
               background: 'none',
               border: 'none',
-              color: '#2c5aa0',
+              color: "#2f0d51",
               cursor: 'pointer',
               fontSize: '14px',
               padding: '5px 0'
@@ -83,7 +83,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
 
       <h2 style={{ 
         textAlign: 'center', 
-        color: '#2c5aa0', 
+        color: "#2f0d51", 
         marginBottom: '10px' 
       }}>
         {getLoginTitle(userType)}
@@ -104,7 +104,7 @@ const UniversalLogin = ({ userType = 'lojista', companyName = '', cnpj = '' }) =
             style={{
               width: '100%',
               padding: '15px',
-              backgroundColor: '#2c5aa0',
+              backgroundColor: '#2f0d51',
               color: 'white',
               border: 'none',
               borderRadius: '8px',

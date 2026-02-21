@@ -29,7 +29,7 @@ const AwaitingApproval = () => {
 
         <h1
           style={{
-            color: "#2c5aa0",
+            color: "#2f0d51",
             fontSize: "2rem",
             fontWeight: "bold",
             marginBottom: "20px",

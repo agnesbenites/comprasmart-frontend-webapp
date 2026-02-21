@@ -270,7 +270,7 @@ const AdminDashboard = () => {
           label="Consultores Ativos"
           value={metricas.consultoresAtivos}
           subtitle={`${metricas.consultoresPendentes} pendentes`}
-          color="#2c5aa0"
+          color="#2f0d51"
           onClick={() => navigate('/admin/consultores')}
         />
         <MetricCard

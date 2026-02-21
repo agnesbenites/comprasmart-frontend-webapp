@@ -995,7 +995,7 @@ const styles = {
   fileName: { display: "block", marginTop: "8px", fontSize: "0.9rem", color: "#bb25a6", fontWeight: "600" },
   autoFilled: { display: "block", marginTop: "4px", fontSize: "0.8rem", color: "#bb25a6", fontWeight: "600" },
   cepGroup: { display: "flex", gap: "8px" },
-  cepButton: { padding: "12px 20px", backgroundColor: "#17a2b8", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap", fontWeight: "600" },
+  cepButton: { padding: "12px 20px", backgroundColor: "#bb25a6", color: "white", border: "none", borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap", fontWeight: "600" },
   planosGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px" },
   planoCard: { padding: "24px", borderRadius: "12px", transition: "all 0.3s", position: "relative", backgroundColor: "white" },
   popularBadge: { position: "absolute", top: "10px", right: "10px", backgroundColor: "#ffc107", color: "#000", padding: "4px 12px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: "700" },

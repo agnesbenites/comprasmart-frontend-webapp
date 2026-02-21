@@ -25,7 +25,7 @@ const RegisterPage = () => {
   const [loading, setLoading] = useState(false);
 
   const colors = {
-    consultor: { primary: "#17a2b8", bg: "#e0f7fa" },
+    consultor: { primary: "#bb25a6", bg: "#e0f7fa" },
     lojista: { primary: "#bb25a6", bg: "#e8f5e9" },
   };
 

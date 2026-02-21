@@ -4,7 +4,7 @@
 import React, { useState, useRef } from 'react';
 import { FaExclamationTriangle, FaUser, FaShoppingCart, FaBox, FaBug, FaCheckCircle, FaUpload, FaTimes, FaImage, FaHeadset, FaCreditCard } from 'react-icons/fa';
 
-const LOJISTA_PRIMARY = "#2c5aa0";
+const LOJISTA_PRIMARY = "#2f0d51";
 const LOJISTA_LIGHT_BG = "#eaf2ff";
 
 const ReportPanelLojista = ({ lojistaId }) => {
@@ -110,7 +110,7 @@ const ReportPanelLojista = ({ lojistaId }) => {
       label: 'Problema com Vendedor',
       icon: <FaUser />,
       descricao: 'Questoes relacionadas a vendedores da sua equipe',
-      color: '#17a2b8',
+      color: '#bb25a6',
       opcoes: [
         'Vendedor nao consegue acessar o sistema',
         'Vendedor com dificuldades tecnicas',

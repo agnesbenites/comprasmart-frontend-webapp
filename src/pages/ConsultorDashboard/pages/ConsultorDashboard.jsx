@@ -1,19 +1,15 @@
 // src/pages/ConsultorDashboard/pages/ConsultorDashboard.jsx
-
-import React from "react";
-import { Routes, Route, Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/supabaseClient"; //  ADICIONAR IMPORT
+import { supabase } from "@/supabaseClient";
+import {
+  House, Queue, Chat, ClockCounterClockwise, Tag, ChartBar,
+  Storefront, Users, Star, GraduationCap, Receipt,
+  ClipboardText, User, SignOut, List, X
+} from '@phosphor-icons/react';
 
-// === ÍCONES KASLEE ===
-const BASE = "/img/kaslee_icon";
-const Icon = ({ name, className = "w-5 h-5" }) => (
-    <img src={`${BASE}/${name}.svg`} alt={name} className={className} />
-);
-
-// =============================================================
-// === IMPORTAÇÕES DOS COMPONENTES REAIS ===
-// =============================================================
+// Componentes
 import AnalyticsPanel from "../components/AnalyticsPanel";
 import AttendanceSummaryPanel from "../components/AttendanceSummaryPanel";
 import ChatPanel from "../components/ChatPanel";
@@ -26,315 +22,206 @@ import SalesTable from "../components/SalesTable";
 import StoresPanel from "../components/StoresPanel";
 import TrainingPanel from "../components/TrainingPanel";
 import StatusVendaConsultor from "../components/StatusVendaConsultor";
-import MeusClientes from "./MeusClientes"; //  NOVO
+import MeusClientes from "./MeusClientes";
 
-// --- DADOS E CONSTANTES GLOBAIS ---
-const MOCK_CONSULTOR_INFO = {
-    nome: "Agnes Consultora",
-    segmentos: ["Eletrodomésticos", "Tecnologia", "Móveis"],
-    lojasAtendidas: 7,
-    comissaoAcumulada: 12500.50,
-    atendimentosMes: 45,
-    ratingMedio: 4.8,
-};
+const PRIMARY = '#2f0d51';
+const ACCENT = '#bb25a6';
 
-//  MENU COM ÍCONES KASLEE
-const CONSULTOR_MENU_ITEMS = [
-    { title: "Home", icon: "home", rota: "/consultor/dashboard" },
-    { title: "Fila de Atendimento", icon: "wating", rota: "/consultor/dashboard/fila" },
-    { title: "Atendimento Ativo", icon: "aceitar-chamada", rota: "/consultor/dashboard/chat" },
-    { title: "Histórico", icon: "finalizado", rota: "/consultor/dashboard/historico" },
-    { title: "Status da Venda", icon: "ticket-sales", rota: "/consultor/dashboard/status-venda" },
-    { title: "Comissões", icon: "comissão", rota: "/consultor/dashboard/analytics" },
-    { title: "Minhas Lojas", icon: "favorite-shop", rota: "/consultor/dashboard/lojas" },
-    { title: "Meus Clientes", icon: "consultores", rota: "/consultor/dashboard/clientes" },
-    { title: "Avaliações", icon: "avaliações", rota: "/consultor/dashboard/reviews" },
-    { title: "Treinamentos", icon: "conquistas-consultores-vendedores", rota: "/consultor/dashboard/treinamentos" },
-    { title: "Minhas Vendas", icon: "grafico-análise", rota: "/consultor/dashboard/vendas" },
-    { title: "Report", icon: "dashboard", rota: "/consultor/dashboard/report" },
-    { title: "Perfil", icon: "perfil", rota: "/consultor/dashboard/profile" },
+const MENU_ITEMS = [
+  { title: "Home",               icon: House,              rota: "/consultor/dashboard" },
+  { title: "Fila de Atendimento",icon: Queue,              rota: "/consultor/dashboard/fila" },
+  { title: "Atendimento Ativo",  icon: Chat,               rota: "/consultor/dashboard/chat" },
+  { title: "Histórico",          icon: ClockCounterClockwise, rota: "/consultor/dashboard/historico" },
+  { title: "Status da Venda",    icon: Tag,                rota: "/consultor/dashboard/status-venda" },
+  { title: "Comissões",          icon: ChartBar,           rota: "/consultor/dashboard/analytics" },
+  { title: "Minhas Lojas",       icon: Storefront,         rota: "/consultor/dashboard/lojas" },
+  { title: "Meus Clientes",      icon: Users,              rota: "/consultor/dashboard/clientes" },
+  { title: "Avaliações",         icon: Star,               rota: "/consultor/dashboard/reviews" },
+  { title: "Treinamentos",       icon: GraduationCap,      rota: "/consultor/dashboard/treinamentos" },
+  { title: "Minhas Vendas",      icon: Receipt,            rota: "/consultor/dashboard/vendas" },
+  { title: "Report",             icon: ClipboardText,      rota: "/consultor/dashboard/report" },
+  { title: "Perfil",             icon: User,               rota: "/consultor/dashboard/profile" },
 ];
 
-// --- COMPONENTE DE LAYOUT (SIDEBAR) ---
+const MOBILE_PRIORITY = [
+  "/consultor/dashboard/fila",
+  "/consultor/dashboard/chat",
+  "/consultor/dashboard/status-venda",
+  "/consultor/dashboard/profile",
+  "/consultor/dashboard",
+];
+
 const DashboardLayout = () => {
-    const { user, signOut } = useAuth();
-    const location = useLocation();
-    const currentPath = location.pathname;
+  const { user, signOut } = useAuth();
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const [menuAberto, setMenuAberto] = useState(false);
 
-    const getMenuItemStyle = (rota) => {
-        const isActive = currentPath === rota || (rota !== "/consultor/dashboard" && currentPath.startsWith(rota));
-        return `flex items-center p-3 my-1 rounded-l-full mr-4 transition-all duration-200 text-sm ${
-            isActive
-            ? 'bg-purple-100 font-bold text-[#2f0d51] border-l-4 border-[#2f0d51]'
-            : 'text-gray-600 hover:bg-purple-50 hover:text-[#9e1e8e]'
-        }`;
-    };
+  const isMobilePriority = MOBILE_PRIORITY.some(r =>
+    currentPath === r || currentPath.startsWith(r + "/")
+  );
 
-    return (
-        <div className="flex min-h-screen bg-gray-50">
-            {/* Sidebar */}
-            <div className="w-64 bg-white shadow-xl flex-shrink-0 flex flex-col">
-                <h2 className="text-2xl font-extrabold text-[#2f0d51] p-6 text-center border-b border-gray-100">
-                    Autônomo
-                </h2>
-                <nav className="mt-4 flex-1">
-                    {CONSULTOR_MENU_ITEMS.map((item) => (
-                        <Link
-                            key={item.rota}
-                            to={item.rota}
-                            className={getMenuItemStyle(item.rota)}
-                        >
-                            <Icon name={item.icon} className="w-5 h-5 mr-3 flex-shrink-0" />
-                            {item.title}
-                        </Link>
-                    ))}
-                </nav>
-                <button 
-                    onClick={signOut}
-                    className="m-6 p-3 bg-red-50 text-red-600 font-bold rounded-xl hover:bg-red-100 transition-colors"
-                >
-                     Sair
-                </button>
-            </div>
+  const isActive = (rota) =>
+    rota === "/consultor/dashboard"
+      ? currentPath === rota
+      : currentPath === rota || currentPath.startsWith(rota + "/");
 
-            {/* Conteúdo Principal */}
-            <main className="flex-grow flex flex-col w-[calc(100%-16rem)] overflow-x-hidden">
-                <header className="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-10">
-                    <div>
-                        <h1 className="text-xl font-semibold text-[#2f0d51]">Painel do Consultor</h1>
-                        <p className="text-sm text-gray-500">Bem-vindo(a), {user?.nome || 'Agnes Consultora'}</p>
-                    </div>
-                    <Link
-                        to="/consultor/dashboard/profile"
-                        className="flex items-center gap-2 p-2 px-4 rounded-full bg-purple-50 text-[#9e1e8e] hover:bg-purple-100 transition-colors"
-                    >
-                        <Icon name="perfil" className="w-5 h-5" />
-                        <span className="text-sm font-medium">Meu Perfil</span>
-                    </Link>
-                </header>
+  const handleLogout = async () => {
+    if (window.confirm('Tem certeza que deseja sair?')) {
+      await supabase.auth.signOut();
+      localStorage.clear();
+      window.location.href = '/consultor/login';
+    }
+  };
 
-                <div className="p-4 md:p-8">
-                    <Outlet />
-                </div>
-            </main>
+  return (
+    <div style={{ display:'flex', minHeight:'100vh', backgroundColor:'#f8f9fa' }}>
+
+      {/* Overlay mobile */}
+      {menuAberto && (
+        <div onClick={() => setMenuAberto(false)}
+          style={{ position:'fixed', inset:0, backgroundColor:'rgba(0,0,0,0.5)', zIndex:20 }} />
+      )}
+
+      {/* Sidebar */}
+      <aside style={{
+        width: 240, backgroundColor:'white', boxShadow:'2px 0 8px rgba(0,0,0,0.07)',
+        display:'flex', flexDirection:'column', flexShrink:0,
+        position: menuAberto ? 'fixed' : 'relative',
+        top:0, left:0, height: menuAberto ? '100vh' : undefined,
+        zIndex:30, overflowY:'auto',
+        transform: 'translateX(0)',
+      }} className={`consultor-sidebar${menuAberto ? ' sidebar-open' : ''}`}>
+
+        {/* Logo */}
+        <div style={{ padding:'20px 16px 16px', borderBottom:'1px solid #f0f0f0', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <img src="/img/Logo Clara.png" alt="Kaslee" style={{ height:44, width:'auto', objectFit:'contain' }}
+            onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='block'; }} />
+          <span style={{ display:'none', fontSize:20, fontWeight:800, color:PRIMARY, fontFamily:'Poppins,sans-serif' }}>Kaslee</span>
+          <button onClick={() => setMenuAberto(false)} className="sidebar-close-btn"
+            style={{ background:'none', border:'none', cursor:'pointer', color:'#999', display:'none' }}>
+            <X size={20} />
+          </button>
         </div>
-    );
+
+        {/* Menu */}
+        <nav style={{ flex:1, padding:'12px 8px' }}>
+          {MENU_ITEMS.map(({ title, icon: Icon, rota }) => {
+            const active = isActive(rota);
+            return (
+              <Link key={rota} to={rota} onClick={() => setMenuAberto(false)} style={{
+                display:'flex', alignItems:'center', gap:10, padding:'10px 14px',
+                borderRadius:8, marginBottom:2, textDecoration:'none', fontSize:14, fontWeight: active ? 700 : 400,
+                backgroundColor: active ? ACCENT : 'transparent',
+                color: active ? 'white' : '#475569',
+                transition:'all 0.2s',
+              }}>
+                <Icon size={18} weight="duotone" color={active ? 'white' : PRIMARY} />
+                {title}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Logout */}
+        <div style={{ padding:'12px 8px', borderTop:'1px solid #f0f0f0' }}>
+          <button onClick={handleLogout} style={{
+            width:'100%', display:'flex', alignItems:'center', gap:10, padding:'10px 14px',
+            borderRadius:8, border:'none', cursor:'pointer', fontSize:14, fontWeight:600,
+            backgroundColor:'#fff0f0', color:'#dc3545',
+          }}>
+            <SignOut size={18} weight="duotone" color="#dc3545" /> Sair
+          </button>
+        </div>
+      </aside>
+
+      {/* Conteúdo */}
+      <main style={{ flex:1, display:'flex', flexDirection:'column', minWidth:0 }}>
+        <header style={{ backgroundColor:'white', padding:'14px 20px', borderBottom:'1px solid #e2e8f0', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+            {/* Hamburger */}
+            <button onClick={() => setMenuAberto(true)} className="hamburger-btn"
+              style={{ background:'none', border:'none', cursor:'pointer', flexDirection:'column', gap:4, padding:4, display:'none' }}>
+              <span style={{ width:20, height:2, backgroundColor:PRIMARY, display:'block' }} />
+              <span style={{ width:20, height:2, backgroundColor:PRIMARY, display:'block' }} />
+              <span style={{ width:20, height:2, backgroundColor:PRIMARY, display:'block' }} />
+            </button>
+            <div>
+              <h1 style={{ fontSize:'1.1rem', fontWeight:700, color:PRIMARY, margin:0 }}>Dashboard Consultor</h1>
+              <p style={{ fontSize:'0.8rem', color:'#888', margin:0 }} className="hidden sm:block">
+                Bem-vindo, {user?.user_metadata?.nome || 'Consultor'}
+              </p>
+            </div>
+          </div>
+          <Link to="/consultor/dashboard/profile"
+            style={{ display:'flex', alignItems:'center', gap:8, textDecoration:'none', color:PRIMARY, fontSize:14, fontWeight:600,
+              padding:'8px 14px', borderRadius:8, border:`2px solid #f3e8ff`, backgroundColor:'white' }}>
+            <User size={18} weight="duotone" color={ACCENT} />
+            <span className="hidden sm:inline">Meu Perfil</span>
+          </Link>
+        </header>
+
+        {!isMobilePriority && (
+          <div className="mobile-banner" style={{ display:'none', backgroundColor:'#fffbeb', borderBottom:'1px solid #fcd34d', padding:'8px 16px', fontSize:'0.8rem', color:'#92400e' }}>
+            💻 Esta tela é melhor no computador. No celular, use: Fila, Chat e Status da Venda.
+          </div>
+        )}
+
+        <div style={{ flex:1, padding:'24px 20px', overflowY:'auto' }}>
+          <Routes>
+            <Route index element={<ConsultorHome />} />
+            <Route path="fila" element={<QueuePanel />} />
+            <Route path="chat" element={<ChatPanel />} />
+            <Route path="historico" element={<HistoryPanel />} />
+            <Route path="status-venda" element={<StatusVendaConsultor />} />
+            <Route path="analytics" element={<AnalyticsPanel />} />
+            <Route path="lojas" element={<StoresPanel />} />
+            <Route path="clientes" element={<MeusClientes />} />
+            <Route path="reviews" element={<ReviewsPanel />} />
+            <Route path="treinamentos" element={<TrainingPanel />} />
+            <Route path="vendas" element={<SalesTable />} />
+            <Route path="report" element={<ReportPanel />} />
+            <Route path="profile" element={<ProfilePanel />} />
+            <Route path="summary" element={<AttendanceSummaryPanel />} />
+            <Route path="*" element={<Navigate to="/consultor/dashboard" replace />} />
+          </Routes>
+        </div>
+      </main>
+    </div>
+  );
 };
 
-// --- CONSULTOR HOME PANEL ---
-export const ConsultorHomePanel = () => {
-    const { user, loading } = useAuth();
-    const navigate = useNavigate();
-    const [consultorInfo, setConsultorInfo] = React.useState(MOCK_CONSULTOR_INFO);
-    const [loadingStats, setLoadingStats] = React.useState(true);
-
-    //  BUSCAR DADOS REAIS DO CONSULTOR
-    React.useEffect(() => {
-        const buscarDadosReais = async () => {
-            if (!user?.id) return;
-            
-            setLoadingStats(true);
-            try {
-                // 1. Buscar lojas onde o consultor tem pedidos
-                const { data: pedidos } = await supabase
-                    .from('pedidos')
-                    .select('lojista_id')
-                    .eq('consultor_id', user.id)
-                    .not('status_separacao', 'eq', 'Cancelado');
-
-                const lojasUnicas = new Set(pedidos?.map(p => p.lojista_id) || []);
-                const totalLojas = lojasUnicas.size;
-
-                // 2. Buscar comissão do mês
-                const mesAtual = new Date();
-                const inicioMes = new Date(mesAtual.getFullYear(), mesAtual.getMonth(), 1);
-                
-                const { data: pedidosFinalizados } = await supabase
-                    .from('pedidos')
-                    .select('valor_total, valor_comissao, percentual_comissao')
-                    .eq('consultor_id', user.id)
-                    .eq('status_separacao', 'Retirado pelo Cliente')
-                    .gte('data_pedido', inicioMes.toISOString());
-
-                const comissaoTotal = pedidosFinalizados?.reduce((sum, p) => {
-                    const comissao = p.valor_comissao || ((p.valor_total || 0) * (p.percentual_comissao || 10) / 100);
-                    return sum + comissao;
-                }, 0) || 0;
-
-                const atendimentosMes = pedidosFinalizados?.length || 0;
-
-                // 3. Buscar avaliações
-                const { data: avaliacoes } = await supabase
-                    .from('avaliacoes')
-                    .select('estrelas')
-                    .eq('consultor_id', user.id);
-
-                const ratingMedio = avaliacoes?.length > 0 
-                    ? (avaliacoes.reduce((sum, a) => sum + (a.estrelas || 0), 0) / avaliacoes.length).toFixed(1)
-                    : 0;
-
-                setConsultorInfo({
-                    ...MOCK_CONSULTOR_INFO,
-                    lojasAtendidas: totalLojas,
-                    comissaoAcumulada: comissaoTotal,
-                    atendimentosMes,
-                    ratingMedio: parseFloat(ratingMedio)
-                });
-
-            } catch (error) {
-                console.error('[Home] Erro ao buscar dados:', error);
-            } finally {
-                setLoadingStats(false);
-            }
-        };
-
-        buscarDadosReais();
-    }, [user]);
-
-    if (loading || loadingStats) {
-        return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <div className="text-center">
-                <div className="animate-spin w-10 h-10 mb-4"><Icon name="atualizar" className="w-10 h-10" /></div>
-                    <p className="text-gray-600 font-medium">Carregando dados do consultor...</p>
-                </div>
+const ConsultorHome = () => {
+  const navigate = useNavigate();
+  const atalhos = [
+    { titulo:'Fila de Atendimento', icon: Queue,    cor:ACCENT,     rota:'/consultor/dashboard/fila' },
+    { titulo:'Atendimento Ativo',   icon: Chat,     cor:'#059669',  rota:'/consultor/dashboard/chat' },
+    { titulo:'Status da Venda',     icon: Tag,      cor:'#f59e0b',  rota:'/consultor/dashboard/status-venda' },
+    { titulo:'Comissões',           icon: ChartBar, cor:PRIMARY,    rota:'/consultor/dashboard/analytics' },
+    { titulo:'Meus Clientes',       icon: Users,    cor:'#6366f1',  rota:'/consultor/dashboard/clientes' },
+    { titulo:'Avaliações',          icon: Star,     cor:'#f59e0b',  rota:'/consultor/dashboard/reviews' },
+  ];
+  return (
+    <div style={{ maxWidth:900, margin:'0 auto' }}>
+      <h2 style={{ fontSize:'1.4rem', fontWeight:700, color:PRIMARY, marginBottom:20 }}>Acesso Rápido</h2>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:16 }}>
+        {atalhos.map(({ titulo, icon: Icon, cor, rota }) => (
+          <div key={rota} onClick={() => navigate(rota)}
+            style={{ background:'white', borderRadius:12, padding:24, boxShadow:'0 2px 10px rgba(0,0,0,0.07)',
+              cursor:'pointer', textAlign:'center', transition:'all 0.2s', border:`2px solid transparent` }}
+            onMouseEnter={e => { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.borderColor=cor; }}
+            onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.borderColor='transparent'; }}>
+            <div style={{ width:52, height:52, borderRadius:'50%', background:cor+'18', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 12px' }}>
+              <Icon size={26} weight="duotone" color={cor} />
             </div>
-        );
-    }
-
-    if (!user) {
-        return (
-            <div className="max-w-2xl mx-auto mt-10">
-                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-8 text-center">
-                    <div className="text-red-600 text-5xl mb-4">⚠️</div>
-                    <h2 className="text-2xl font-bold text-red-800 mb-3">Usuário não carregado</h2>
-                    <p className="text-gray-700 mb-4">O sistema não conseguiu identificar suas credenciais.</p>
-                    
-                    <div className="bg-white p-4 rounded-lg mb-4 text-left">
-                        <p className="text-sm font-mono text-gray-600">
-                            <strong>Debug Info:</strong><br/>
-                            Loading: {loading ? 'true' : 'false'}<br/>
-                            User: {user ? 'exists' : 'null'}<br/>
-                            Token exists: {localStorage.getItem('sb-vluxffbornrlxcepqmzr-auth-token') ? 'yes' : 'no'}
-                        </p>
-                    </div>
-
-                    <button 
-                        onClick={() => window.location.href = '/entrar'}
-                        className="bg-[#9e1e8e] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#7d1870]"
-                    >
-                        Fazer Login Novamente
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    const atalhos = [
-        { titulo: "Próximo da Fila", descricao: "Iniciar um novo atendimento", cor: "bg-purple-500", icon: "wating", rota: "/consultor/dashboard/fila" },
-        { titulo: "Status Venda", descricao: "Acompanhar carrinho do cliente", cor: "bg-purple-500", icon: "ticket-sales", rota: "/consultor/dashboard/status-venda" },
-        { titulo: "Sacar Comissão", descricao: "Ver saldo e solicitar saque", cor: "bg-yellow-500", icon: "comissão", rota: "/consultor/dashboard/analytics" },
-        { titulo: "Chat Ativo", descricao: "Falar com clientes", cor: "bg-teal-500", icon: "aceitar-chamada", rota: "/consultor/dashboard/chat" }
-    ];
-
-    return (
-        <div className="max-w-7xl mx-auto">
-            <div className="bg-white p-6 rounded-xl shadow-lg mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center">
-                <div className="mb-4 lg:mb-0">
-                    <h1 className="text-3xl font-bold text-[#2f0d51] mb-1">
-                        👋 Olá, {user?.nome || user?.email || 'Agnes Consultora'}!
-                    </h1>
-                    <p className="text-gray-600 mb-4">
-                        Segmentos de Atuação: {consultorInfo.segmentos.join(', ')}
-                    </p>
-                    <div className="flex items-center">
-                        <h3 className="text-lg font-semibold text-gray-700 mr-4">
-                            <span className="inline mr-2 text-teal-600"></span> Atendendo {consultorInfo.lojasAtendidas} Lojas
-                        </h3>
-                        <button 
-                            onClick={() => navigate("/consultor/dashboard/lojas")}
-                            className="text-sm bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-[#9e1e8e]"
-                        >
-                            Ver Detalhes das Lojas
-                        </button>
-                    </div>
-                </div>
-
-                <div className="text-center bg-green-50 p-4 rounded-xl border-2 border-green-300 min-w-[200px] shadow-inner">
-                    <div className="text-xs text-green-700 font-medium mb-1"> Comissão (Mês)</div>
-                    <div className="text-3xl font-extrabold text-green-600 mb-3">
-                        R$ {consultorInfo.comissaoAcumulada.toFixed(2).replace('.', ',')}
-                    </div>
-                    <button onClick={() => navigate("/consultor/dashboard/analytics")} className="w-full bg-green-600 text-white font-bold px-4 py-2 rounded-lg text-sm hover:bg-green-700">
-                        Sacar Agora
-                    </button>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                {atalhos.map((atalho, index) => (
-                    <div
-                        key={index}
-                        onClick={() => navigate(atalho.rota)}
-                        className={`bg-white p-6 rounded-xl shadow-md cursor-pointer transition-all hover:scale-[1.02] border-l-4 ${atalho.cor.replace('bg-', 'border-')}`}
-                    >
-                        <Icon name={atalho.icon} className="w-8 h-8 mb-3" />
-                        <h3 className="text-xl font-bold text-gray-800">{atalho.titulo}</h3>
-                        <p className="text-gray-500 mt-2 text-sm">{atalho.descricao}</p>
-                    </div>
-                ))}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                    <div className="bg-white p-6 rounded-xl shadow-md mb-6">
-                        <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><Icon name="grafico-análise" className="w-5 h-5" /> Performance</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-purple-50 p-4 rounded-lg">
-                                <p className="text-sm text-gray-600">ATENDIMENTOS (MÊS)</p>
-                                <p className="text-3xl font-bold text-[#bb25a6]">{consultorInfo.atendimentosMes}</p>
-                            </div>
-                            <div className="bg-yellow-50 p-4 rounded-lg">
-                                <p className="text-sm text-gray-600">AVALIAÇÃO MÉDIA</p>
-                                <p className="text-3xl font-bold text-yellow-600">{consultorInfo.ratingMedio} </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-white p-6 rounded-xl shadow-md">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><Icon name="dashboard" className="w-5 h-5" /> Status do App</h3>
-                    <StatusVendaConsultor consultorId={user?.id} />
-                </div>
-            </div>
-        </div>
-    );
+            <p style={{ margin:0, fontWeight:600, color:'#333', fontSize:14 }}>{titulo}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
-// =============================================================
-// === COMPONENTE PRINCIPAL COM ROTAS ===
-// =============================================================
 export default function ConsultorDashboard() {
-    return (
-        <Routes>
-            <Route path="/" element={<DashboardLayout />}>
-                <Route index element={<ConsultorHomePanel />} />
-                <Route path="dashboard" element={<ConsultorHomePanel />} />
-                
-                {/* Sub-rotas */}
-                <Route path="fila" element={<QueuePanel />} />
-                <Route path="chat" element={<ChatPanel />} />
-                <Route path="resumo-venda/:vendaId" element={<AttendanceSummaryPanel />} />
-                <Route path="analytics" element={<AnalyticsPanel />} />
-                <Route path="lojas" element={<StoresPanel />} />
-                <Route path="clientes" element={<MeusClientes />} /> {/*  ROTA NOVA */}
-                <Route path="profile" element={<ProfilePanel />} />
-                <Route path="historico" element={<HistoryPanel />} />
-                <Route path="reviews" element={<ReviewsPanel />} />
-                <Route path="treinamentos" element={<TrainingPanel />} />
-                <Route path="vendas" element={<SalesTable />} />
-                <Route path="report" element={<ReportPanel />} />
-                <Route path="status-venda" element={<StatusVendaConsultor />} />
-            </Route>
-        </Routes>
-    );
+  return <DashboardLayout />;
 }

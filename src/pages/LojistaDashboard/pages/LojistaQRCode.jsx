@@ -70,7 +70,7 @@ const LojistaQRCode = () => {
             boxShadow: '0 5px 20px rgba(0,0,0,0.08)',
         },
         title: {
-            color: '#2c5aa0',
+            color: "#2f0d51",
             fontSize: '2rem',
             marginBottom: '20px',
             borderBottom: '2px solid #eee',
@@ -133,10 +133,10 @@ const LojistaQRCode = () => {
         },
         th: {
             backgroundColor: '#e9f1ff',
-            borderBottom: '2px solid #2c5aa0',
+            borderBottom: '2px solid #2f0d51',
             padding: '12px 15px',
             textAlign: 'left',
-            color: '#2c5aa0',
+            color: "#2f0d51",
             fontSize: '0.9rem',
         },
         td: {
@@ -311,7 +311,7 @@ const LojistaQRCode = () => {
 
                 {generatedLink && (
                     <div style={styles.generatedBox}>
-                        <h3 style={{ color: '#2c5aa0', marginTop: 0, fontSize: '1.2rem' }}>QR Code Gerado!</h3>
+                        <h3 style={{ color: "#2f0d51", marginTop: 0, fontSize: '1.2rem' }}>QR Code Gerado!</h3>
                         <p style={{ color: '#333', marginBottom: '15px' }}>
                             Compartilhe este link ou imprima o QR Code (simulado abaixo).
                         </p>

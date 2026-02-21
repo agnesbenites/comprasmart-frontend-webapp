@@ -30,7 +30,7 @@ const NominatePanel = () => {
         <div style={styles.container}>
             {/* LOGO E TTULO */}
             <div style={styles.header}>
-                <img src="/img/logo_compra_smart.png" alt="Kaslee Logo" style={styles.logo} />
+                <img src="/img/Logo Clara.png" alt="Kaslee Logo" style={styles.logo} />
                 <h2 style={styles.title}>Indique e Cresca Conosco!</h2>
             </div>
 

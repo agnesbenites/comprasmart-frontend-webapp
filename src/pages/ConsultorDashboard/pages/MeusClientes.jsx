@@ -250,7 +250,7 @@ const MeusClientes = () => {
         );
     }
 
-    const COLORS = ['#2f0d51', '#bb25a6', '#ffc107', '#dc3545', '#17a2b8'];
+    const COLORS = ['#2f0d51', '#bb25a6', '#ffc107', '#dc3545', '#bb25a6'];
 
     return (
         <div style={styles.container}>

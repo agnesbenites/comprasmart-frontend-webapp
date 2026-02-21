@@ -48,7 +48,7 @@ const Layout = ({ children, title, showHeader = true }) => {
       {showHeader && title && (
         <header
           style={{
-            backgroundColor: "#2c5aa0",
+            backgroundColor: "#2f0d51",
             color: "white",
             padding: "1rem 2rem",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",

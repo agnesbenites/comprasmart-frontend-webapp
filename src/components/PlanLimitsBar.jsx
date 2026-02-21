@@ -92,12 +92,12 @@ const styles = {
         color: '#333'
     },
     planName: {
-        color: '#2c5aa0',
+        color: "#2f0d51",
         fontWeight: 'bold'
     },
     upgradeLink: {
         padding: '8px 16px',
-        backgroundColor: '#2c5aa0',
+        backgroundColor: '#2f0d51',
         color: 'white',
         textDecoration: 'none',
         borderRadius: '6px',

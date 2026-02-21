@@ -336,7 +336,7 @@ const styles = {
   upgradeButton: {
     width: '100%',
     padding: '14px',
-    backgroundColor: '#2c5aa0',
+    backgroundColor: '#2f0d51',
     color: 'white',
     border: 'none',
     borderRadius: '12px',

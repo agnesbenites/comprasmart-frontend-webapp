@@ -78,7 +78,7 @@ const DescricaoInteligente = ({ value, onChange, nomeProduto, categoria, tags })
       <div style={{
         position: 'relative',
         borderRadius: '12px',
-        border: isFocused ? '2px solid #2c5aa0' : '1px solid #e2e8f0',
+        border: isFocused ? '2px solid #2f0d51' : '1px solid #e2e8f0',
         backgroundColor: '#fff',
         transition: 'all 0.2s'
       }}>

@@ -1,171 +1,89 @@
 // src/pages/ConsultorDashboard/components/ProfilePanel.jsx
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../supabaseClient';
+import {
+  User, Envelope, Phone, IdentificationCard, Calendar, MapPin,
+  House, Buildings, SignOut, PencilSimple, FloppyDisk, X,
+  FilePdf, DownloadSimple, UploadSimple, ChartBar, CurrencyDollar,
+  Star, Storefront, Plus, Trash, Spinner
+} from '@phosphor-icons/react';
 
-const CONSULTOR_PRIMARY = '#2f0d51';
-const BASE_ICON = "/img/kaslee_icon";
-const Icon = ({ name, size = 20, style = {} }) => (
-  <img src={`${BASE_ICON}/${name}`} alt={name} style={{ width: size, height: size, ...style }} />
-);
+const PRIMARY = '#2f0d51';
+const ACCENT = '#bb25a6';
 
-// Segmentos disponíveis com ícones
 const SEGMENTOS_DISPONIVEIS = [
-  { id: 'Smartphones', nome: 'Smartphones', icon: '', cor: '#bb25a6' },
-  { id: 'Notebooks', nome: 'Notebooks', icon: '💻', cor: '#9b59b6' },
-  { id: 'TVs', nome: 'TVs', icon: '📺', cor: '#e74c3c' },
-  { id: 'Informática', nome: 'Informática', icon: '🖥️', cor: '#2f0d51' },
-  { id: 'Games', nome: 'Games', icon: '🎮', cor: '#e67e22' },
-  { id: 'Áudio', nome: 'Áudio', icon: '🎧', cor: '#16a085' },
-  { id: 'Móveis', nome: 'Móveis', icon: '🛋️', cor: '#8e44ad' },
-  { id: 'Decoração', nome: 'Decoração', icon: '🪴', cor: '#bb25a6' },
-  { id: 'Iluminação', nome: 'Iluminação', icon: '', cor: '#f39c12' },
-  { id: 'Eletrodomésticos', nome: 'Eletrodomésticos', icon: '', cor: '#2f0d51' },
-  { id: 'Moda', nome: 'Moda', icon: '👔', cor: '#c0392b' },
-  { id: 'Beleza', nome: 'Beleza', icon: '💄', cor: '#f53342' },
-  { id: 'Esportes', nome: 'Esportes', icon: '⚽', cor: '#ff5722' },
-  { id: 'Livros', nome: 'Livros', icon: '📚', cor: '#795548' },
+  { id: 'Smartphones',      nome: 'Smartphones',      cor: '#bb25a6' },
+  { id: 'Notebooks',        nome: 'Notebooks',         cor: '#9b59b6' },
+  { id: 'TVs',              nome: 'TVs',               cor: '#e74c3c' },
+  { id: 'Informática',      nome: 'Informática',       cor: '#2f0d51' },
+  { id: 'Games',            nome: 'Games',             cor: '#e67e22' },
+  { id: 'Áudio',            nome: 'Áudio',             cor: '#16a085' },
+  { id: 'Móveis',           nome: 'Móveis',            cor: '#8e44ad' },
+  { id: 'Decoração',        nome: 'Decoração',         cor: '#bb25a6' },
+  { id: 'Iluminação',       nome: 'Iluminação',        cor: '#f39c12' },
+  { id: 'Eletrodomésticos', nome: 'Eletrodomésticos',  cor: '#2f0d51' },
+  { id: 'Moda',             nome: 'Moda',              cor: '#c0392b' },
+  { id: 'Beleza',           nome: 'Beleza',            cor: '#f53342' },
+  { id: 'Esportes',         nome: 'Esportes',          cor: '#ff5722' },
+  { id: 'Livros',           nome: 'Livros',            cor: '#795548' },
 ];
 
 const ProfilePanel = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-
   const [isEditing, setIsEditing] = useState(false);
   const [uploadingCurriculo, setUploadingCurriculo] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const [perfil, setPerfil] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
-    cpf: '',
-    dataNascimento: '',
-    endereco: '',
-    bairro: '',
-    cidade: '',
-    estado: '',
-    cep: '',
-    bio: '',
-    curriculoUrl: null,
-    curriculoNome: null,
-    dataUploadCurriculo: null,
-    segmentosAtendidos: [], // NOVO
-  });
-
-  const [editedPerfil, setEditedPerfil] = useState({...perfil});
   const [showAddSegmento, setShowAddSegmento] = useState(false);
 
-  // Carregar dados do consultor
-  useEffect(() => {
-    carregarPerfil();
-  }, []);
+  const empty = {
+    nome: '', email: '', telefone: '', cpf: '', dataNascimento: '',
+    endereco: '', bairro: '', cidade: '', estado: '', cep: '',
+    bio: '', curriculoUrl: null, curriculoNome: null,
+    dataUploadCurriculo: null, segmentosAtendidos: [],
+  };
+  const [perfil, setPerfil] = useState(empty);
+  const [editedPerfil, setEditedPerfil] = useState(empty);
+
+  useEffect(() => { carregarPerfil(); }, []);
 
   const carregarPerfil = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        navigate('/consultor/login');
-        return;
-      }
-
-      const { data: consultor, error } = await supabase
-        .from('consultores')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
+      if (!user) { navigate('/consultor/login'); return; }
+      const { data: c, error } = await supabase.from('consultores').select('*').eq('user_id', user.id).single();
       if (error) throw error;
-
-      setPerfil({
-        nome: consultor.nome || '',
-        email: user.email || '',
-        telefone: consultor.telefone || '',
-        cpf: consultor.cpf || '',
-        dataNascimento: consultor.data_nascimento || '',
-        endereco: consultor.endereco || '',
-        bairro: consultor.bairro || '',
-        cidade: consultor.cidade || '',
-        estado: consultor.estado || '',
-        cep: consultor.cep || '',
-        bio: consultor.bio || '',
-        curriculoUrl: consultor.curriculo_url || null,
-        curriculoNome: consultor.curriculo_nome || null,
-        dataUploadCurriculo: consultor.curriculo_upload_data || null,
-        segmentosAtendidos: consultor.segmentos_atendidos || [],
-      });
-
-      setEditedPerfil({
-        nome: consultor.nome || '',
-        email: user.email || '',
-        telefone: consultor.telefone || '',
-        cpf: consultor.cpf || '',
-        dataNascimento: consultor.data_nascimento || '',
-        endereco: consultor.endereco || '',
-        bairro: consultor.bairro || '',
-        cidade: consultor.cidade || '',
-        estado: consultor.estado || '',
-        cep: consultor.cep || '',
-        bio: consultor.bio || '',
-        curriculoUrl: consultor.curriculo_url || null,
-        curriculoNome: consultor.curriculo_nome || null,
-        dataUploadCurriculo: consultor.curriculo_upload_data || null,
-        segmentosAtendidos: consultor.segmentos_atendidos || [],
-      });
-
-      setLoading(false);
-      
-    } catch (error) {
-      console.error('Erro ao carregar perfil:', error);
-      setLoading(false);
-    }
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    setEditedPerfil({...perfil});
+      const p = {
+        nome: c.nome || '', email: user.email || '', telefone: c.telefone || '',
+        cpf: c.cpf || '', dataNascimento: c.data_nascimento || '',
+        endereco: c.endereco || '', bairro: c.bairro || '', cidade: c.cidade || '',
+        estado: c.estado || '', cep: c.cep || '', bio: c.bio || '',
+        curriculoUrl: c.curriculo_url || null, curriculoNome: c.curriculo_nome || null,
+        dataUploadCurriculo: c.curriculo_upload_data || null,
+        segmentosAtendidos: c.segmentos_atendidos || [],
+      };
+      setPerfil(p); setEditedPerfil(p);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   };
 
   const handleSave = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
       if (!user) return;
-
-      const { error } = await supabase
-        .from('consultores')
-        .update({
-          nome: editedPerfil.nome,
-          telefone: editedPerfil.telefone,
-          cpf: editedPerfil.cpf,
-          data_nascimento: editedPerfil.dataNascimento,
-          endereco: editedPerfil.endereco,
-          bairro: editedPerfil.bairro,
-          cidade: editedPerfil.cidade,
-          estado: editedPerfil.estado,
-          cep: editedPerfil.cep,
-          bio: editedPerfil.bio,
-          segmentos_atendidos: editedPerfil.segmentosAtendidos,
-        })
-        .eq('user_id', user.id);
-
+      const { error } = await supabase.from('consultores').update({
+        nome: editedPerfil.nome, telefone: editedPerfil.telefone, cpf: editedPerfil.cpf,
+        data_nascimento: editedPerfil.dataNascimento, endereco: editedPerfil.endereco,
+        bairro: editedPerfil.bairro, cidade: editedPerfil.cidade, estado: editedPerfil.estado,
+        cep: editedPerfil.cep, bio: editedPerfil.bio,
+        segmentos_atendidos: editedPerfil.segmentosAtendidos,
+      }).eq('user_id', user.id);
       if (error) throw error;
-
-      setPerfil({...editedPerfil});
+      setPerfil({ ...editedPerfil });
       setIsEditing(false);
-      alert(' Perfil atualizado com sucesso!');
-      
-    } catch (error) {
-      console.error('Erro ao salvar perfil:', error);
-      alert(' Erro ao salvar perfil. Tente novamente.');
-    }
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setEditedPerfil({...perfil});
+      alert('Perfil atualizado com sucesso!');
+    } catch (e) { console.error(e); alert('Erro ao salvar perfil.'); }
   };
 
   const handleLogout = async () => {
@@ -179,807 +97,257 @@ const ProfilePanel = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    const allowedTypes = ['application/pdf', 'application/msword', 
-                         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    if (!allowedTypes.includes(file.type)) {
-      alert(' Formato inválido. Use PDF, DOC ou DOCX.');
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert(' Arquivo muito grande. Máximo 5MB.');
-      return;
-    }
-
+    const allowed = ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowed.includes(file.type)) { alert('Formato inválido. Use PDF, DOC ou DOCX.'); return; }
+    if (file.size > 5 * 1024 * 1024) { alert('Arquivo muito grande. Máximo 5MB.'); return; }
     setUploadingCurriculo(true);
-
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-
-      // Upload para Supabase Storage
       const fileName = `curriculos/${user.id}/${Date.now()}_${file.name}`;
-      
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('documentos')
-        .upload(fileName, file);
-
+      const { error: uploadError } = await supabase.storage.from('documentos').upload(fileName, file);
       if (uploadError) throw uploadError;
-
-      // Obter URL pública
-      const { data: urlData } = supabase.storage
-        .from('documentos')
-        .getPublicUrl(fileName);
-
-      // Atualizar no banco
-      const { error: updateError } = await supabase
-        .from('consultores')
-        .update({
-          curriculo_url: urlData.publicUrl,
-          curriculo_nome: file.name,
-          curriculo_upload_data: new Date().toISOString(),
-        })
-        .eq('user_id', user.id);
-
-      if (updateError) throw updateError;
-
-      setPerfil({
-        ...perfil,
-        curriculoUrl: urlData.publicUrl,
-        curriculoNome: file.name,
-        dataUploadCurriculo: new Date().toISOString(),
-      });
-
-      alert(' Currículo enviado com sucesso!');
-      
-    } catch (error) {
-      console.error('Erro ao enviar currículo:', error);
-      alert(' Erro ao enviar currículo. Tente novamente.');
-    } finally {
-      setUploadingCurriculo(false);
-    }
+      const { data: urlData } = supabase.storage.from('documentos').getPublicUrl(fileName);
+      await supabase.from('consultores').update({
+        curriculo_url: urlData.publicUrl, curriculo_nome: file.name,
+        curriculo_upload_data: new Date().toISOString(),
+      }).eq('user_id', user.id);
+      setPerfil({ ...perfil, curriculoUrl: urlData.publicUrl, curriculoNome: file.name, dataUploadCurriculo: new Date().toISOString() });
+      alert('Currículo enviado com sucesso!');
+    } catch (e) { console.error(e); alert('Erro ao enviar currículo.'); }
+    finally { setUploadingCurriculo(false); }
   };
 
-  // NOVO: Adicionar segmento
-  const adicionarSegmento = (segmento) => {
-    if (!editedPerfil.segmentosAtendidos.includes(segmento.id)) {
-      setEditedPerfil({
-        ...editedPerfil,
-        segmentosAtendidos: [...editedPerfil.segmentosAtendidos, segmento.id],
-      });
-    }
+  const adicionarSegmento = (seg) => {
+    if (!editedPerfil.segmentosAtendidos.includes(seg.id))
+      setEditedPerfil({ ...editedPerfil, segmentosAtendidos: [...editedPerfil.segmentosAtendidos, seg.id] });
     setShowAddSegmento(false);
   };
+  const removerSegmento = (id) => setEditedPerfil({
+    ...editedPerfil, segmentosAtendidos: editedPerfil.segmentosAtendidos.filter(s => s !== id)
+  });
+  const getSegData = (id) => SEGMENTOS_DISPONIVEIS.find(s => s.id === id) || { id, nome: id, cor: '#95a5a6' };
 
-  // NOVO: Remover segmento
-  const removerSegmento = (segmentoId) => {
-    setEditedPerfil({
-      ...editedPerfil,
-      segmentosAtendidos: editedPerfil.segmentosAtendidos.filter(s => s !== segmentoId),
-    });
-  };
+  const up = (field) => (value) => setEditedPerfil({ ...editedPerfil, [field]: value });
+  const cur = (field) => isEditing ? editedPerfil[field] : perfil[field];
 
-  // NOVO: Obter dados do segmento
-  const getSegmentoData = (segmentoId) => {
-    return SEGMENTOS_DISPONIVEIS.find(s => s.id === segmentoId) || 
-      { id: segmentoId, nome: segmentoId, icon: '', cor: '#95a5a6' };
-  };
-
-  if (loading) {
-    return (
-      <div style={styles.loadingContainer}>
-        <div style={styles.loadingSpinner}><Icon name="carregando.png" size={48} /></div>
-        <p>Carregando perfil...</p>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'60vh', gap:16 }}>
+      <Spinner size={48} color={PRIMARY} style={{ animation:'spin 1s linear infinite' }} />
+      <p style={{ color:'#666' }}>Carregando perfil...</p>
+    </div>
+  );
 
   return (
-    <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <div style={styles.avatar}>
-            {perfil.nome.charAt(0) || 'C'}
-          </div>
-          <div>
-            <h1 style={styles.nome}>{perfil.nome || 'Consultor'}</h1>
-            <p style={styles.email}>{perfil.email}</p>
-          </div>
-        </div>
+    <div style={{ backgroundColor:'#f8f9fa', minHeight:'100vh', padding:'24px' }}>
 
-        <div style={styles.headerActions}>
-          {!isEditing ? (
-            <>
-              <button onClick={handleEdit} style={styles.editButton}>
-                <Icon name="user.png" size={16} /> Editar Perfil
-              </button>
-              <button onClick={handleLogout} style={styles.logoutButton}>
-                <Icon name="logout.png" size={16} /> Sair
-              </button>
-            </>
-          ) : (
-            <>
-              <button onClick={handleSave} style={styles.saveButton}>
-                <Icon name="atualizar.svg" size={16} /> Salvar
-              </button>
-              <button onClick={handleCancel} style={styles.cancelButton}>
-                <Icon name="excluir.svg" size={16} /> Cancelar
-              </button>
-            </>
-          )}
+      {/* Header */}
+      <div style={S.card}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+            <div style={{ width:72, height:72, borderRadius:'50%', background:`linear-gradient(135deg,${PRIMARY},${ACCENT})`, color:'white', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'2rem', fontWeight:'bold' }}>
+              {perfil.nome.charAt(0) || 'C'}
+            </div>
+            <div>
+              <h1 style={{ fontSize:'1.6rem', fontWeight:700, color:PRIMARY, margin:'0 0 4px 0' }}>{perfil.nome || 'Consultor'}</h1>
+              <p style={{ color:'#666', margin:0, display:'flex', alignItems:'center', gap:6 }}>
+                <Envelope size={14} /> {perfil.email}
+              </p>
+            </div>
+          </div>
+          <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+            {!isEditing ? (
+              <>
+                <button onClick={() => { setIsEditing(true); setEditedPerfil({...perfil}); }} style={S.btnPrimary}>
+                  <PencilSimple size={16} weight="duotone" /> Editar
+                </button>
+                <button onClick={handleLogout} style={S.btnDanger}>
+                  <SignOut size={16} weight="duotone" /> Sair
+                </button>
+              </>
+            ) : (
+              <>
+                <button onClick={handleSave} style={S.btnSuccess}>
+                  <FloppyDisk size={16} weight="duotone" /> Salvar
+                </button>
+                <button onClick={() => { setIsEditing(false); setEditedPerfil({...perfil}); }} style={S.btnGray}>
+                  <X size={16} /> Cancelar
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* NOVO: Card de Segmentos Atendidos - DESTAQUE */}
-      <div style={styles.segmentosDestaque}>
-        <div style={styles.segmentosHeader}>
-          <h2 style={styles.segmentosTitle}><Icon name="loja-consultor.png" size={22} style={{marginRight:8, verticalAlign:'middle'}} />Segmentos Atendidos</h2>
+      {/* Segmentos */}
+      <div style={{ ...S.card, border:`2px solid ${PRIMARY}`, marginBottom:24 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+          <h2 style={{ fontSize:'1.2rem', fontWeight:700, color:PRIMARY, margin:0, display:'flex', alignItems:'center', gap:8 }}>
+            <Storefront size={22} weight="duotone" color={ACCENT} /> Segmentos Atendidos
+          </h2>
           {isEditing && (
-            <button 
-              onClick={() => setShowAddSegmento(!showAddSegmento)}
-              style={styles.addSegmentoBtn}
-            >
-              <Icon name="usuário-incluído.svg" size={16} /> Adicionar
+            <button onClick={() => setShowAddSegmento(!showAddSegmento)} style={S.btnPrimary}>
+              <Plus size={16} /> Adicionar
             </button>
           )}
         </div>
 
         {showAddSegmento && isEditing && (
-          <div style={styles.segmentosDisponiveis}>
-            <p style={styles.segmentosHelp}>Clique para adicionar:</p>
-            <div style={styles.segmentosGrid}>
-              {SEGMENTOS_DISPONIVEIS
-                .filter(seg => !editedPerfil.segmentosAtendidos.includes(seg.id))
-                .map(segmento => (
-                  <button
-                    key={segmento.id}
-                    onClick={() => adicionarSegmento(segmento)}
-                    style={{
-                      ...styles.segmentoDisponivel,
-                      borderColor: segmento.cor,
-                    }}
-                  >
-                    <span style={styles.segmentoIcon}>{segmento.icon}</span>
-                    <span>{segmento.nome}</span>
-                  </button>
-                ))}
+          <div style={{ background:'#f8f9fa', borderRadius:10, padding:14, marginBottom:16 }}>
+            <p style={{ fontSize:13, color:'#666', marginBottom:10 }}>Clique para adicionar:</p>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:8 }}>
+              {SEGMENTOS_DISPONIVEIS.filter(s => !editedPerfil.segmentosAtendidos.includes(s.id)).map(seg => (
+                <button key={seg.id} onClick={() => adicionarSegmento(seg)} style={{ border:`2px solid ${seg.cor}`, background:'white', borderRadius:20, padding:'6px 14px', fontSize:13, fontWeight:500, cursor:'pointer', color:seg.cor }}>
+                  {seg.nome}
+                </button>
+              ))}
             </div>
           </div>
         )}
 
-        <div style={styles.segmentosList}>
-          {(isEditing ? editedPerfil.segmentosAtendidos : perfil.segmentosAtendidos).length === 0 ? (
-            <div style={styles.noSegmentos}>
-              <p>Nenhum segmento selecionado</p>
-              {isEditing && (
-                <small>Clique em "Adicionar" para escolher seus segmentos</small>
-              )}
-            </div>
-          ) : (
-            (isEditing ? editedPerfil.segmentosAtendidos : perfil.segmentosAtendidos).map(segId => {
-              const segData = getSegmentoData(segId);
-              return (
-                <div
-                  key={segId}
-                  style={{
-                    ...styles.segmentoCard,
-                    backgroundColor: segData.cor + '15',
-                    borderColor: segData.cor,
-                  }}
-                >
-                  <span style={styles.segmentoCardIcon}>{segData.icon}</span>
-                  <span style={styles.segmentoCardNome}>{segData.nome}</span>
-                  {isEditing && (
-                    <button
-                      onClick={() => removerSegmento(segId)}
-                      style={styles.removeSegmentoBtn}
-                      title="Remover segmento"
-                    >
-                      <Icon name="excluir.svg" size={12} />
-                    </button>
-                  )}
-                </div>
-              );
-            })
-          )}
+        <div style={{ display:'flex', flexWrap:'wrap', gap:10, minHeight:48 }}>
+          {(isEditing ? editedPerfil.segmentosAtendidos : perfil.segmentosAtendidos).length === 0
+            ? <p style={{ color:'#aaa', padding:'12px 0' }}>Nenhum segmento selecionado</p>
+            : (isEditing ? editedPerfil.segmentosAtendidos : perfil.segmentosAtendidos).map(id => {
+                const seg = getSegData(id);
+                return (
+                  <div key={id} style={{ background:seg.cor+'18', border:`2px solid ${seg.cor}`, borderRadius:20, padding:'6px 14px', display:'flex', alignItems:'center', gap:8, fontSize:14, fontWeight:600 }}>
+                    <span style={{ color:seg.cor }}>{seg.nome}</span>
+                    {isEditing && (
+                      <button onClick={() => removerSegmento(id)} style={{ background:'none', border:'none', cursor:'pointer', padding:0, display:'flex', color:'#dc3545' }}>
+                        <Trash size={14} />
+                      </button>
+                    )}
+                  </div>
+                );
+              })
+          }
         </div>
       </div>
 
-      {/* Conteúdo Principal */}
-      <div style={styles.content}>
-        {/* Coluna Esquerda - Dados Pessoais */}
-        <div style={styles.leftColumn}>
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}><Icon name="dados-pessoais.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Dados Pessoais</h3>
-            <div style={styles.infoGrid}>
-              <InfoField
-                label="Nome Completo"
-                value={isEditing ? editedPerfil.nome : perfil.nome}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, nome: value})}
-              />
-              <InfoField
-                label="Email"
-                value={isEditing ? editedPerfil.email : perfil.email}
-                isEditing={false} // Email não editável
-                onChange={() => {}}
-              />
-              <InfoField
-                label="Telefone"
-                value={isEditing ? editedPerfil.telefone : perfil.telefone}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, telefone: value})}
-              />
-              <InfoField
-                label="CPF"
-                value={isEditing ? editedPerfil.cpf : perfil.cpf}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, cpf: value})}
-              />
-              <InfoField
-                label="Data de Nascimento"
-                value={isEditing ? editedPerfil.dataNascimento : perfil.dataNascimento}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, dataNascimento: value})}
-              />
-              <InfoField
-                label="CEP"
-                value={isEditing ? editedPerfil.cep : perfil.cep}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, cep: value})}
-              />
-            </div>
-          </div>
+      {/* Conteúdo em 2 colunas */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(340px, 1fr))', gap:24 }}>
 
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}><Icon name="endereco.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Endereço</h3>
-            <div style={styles.infoGrid}>
-              <InfoField
-                label="Rua"
-                value={isEditing ? editedPerfil.endereco : perfil.endereco}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, endereco: value})}
-              />
-              <InfoField
-                label="Bairro"
-                value={isEditing ? editedPerfil.bairro : perfil.bairro}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, bairro: value})}
-              />
-              <InfoField
-                label="Cidade"
-                value={isEditing ? editedPerfil.cidade : perfil.cidade}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, cidade: value})}
-              />
-              <InfoField
-                label="Estado"
-                value={isEditing ? editedPerfil.estado : perfil.estado}
-                isEditing={isEditing}
-                onChange={(value) => setEditedPerfil({...editedPerfil, estado: value})}
-              />
-            </div>
-          </div>
+        {/* Coluna esquerda */}
+        <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
+          <Section title="Dados Pessoais" icon={<User size={20} weight="duotone" color={ACCENT} />}>
+            <InfoGrid>
+              <InfoField label="Nome Completo" icon={<User size={14}/>} value={cur('nome')} isEditing={isEditing} onChange={up('nome')} />
+              <InfoField label="E-mail" icon={<Envelope size={14}/>} value={cur('email')} isEditing={false} onChange={() => {}} />
+              <InfoField label="Telefone" icon={<Phone size={14}/>} value={cur('telefone')} isEditing={isEditing} onChange={up('telefone')} />
+              <InfoField label="CPF" icon={<IdentificationCard size={14}/>} value={cur('cpf')} isEditing={isEditing} onChange={up('cpf')} />
+              <InfoField label="Data de Nascimento" icon={<Calendar size={14}/>} value={cur('dataNascimento')} isEditing={isEditing} onChange={up('dataNascimento')} />
+              <InfoField label="CEP" icon={<MapPin size={14}/>} value={cur('cep')} isEditing={isEditing} onChange={up('cep')} />
+            </InfoGrid>
+          </Section>
 
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}><Icon name="biografia.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Biografia</h3>
-            {isEditing ? (
-              <textarea
-                value={editedPerfil.bio}
-                onChange={(e) => setEditedPerfil({...editedPerfil, bio: e.target.value})}
-                style={styles.bioTextarea}
-                rows={4}
-                placeholder="Conte um pouco sobre sua experiência como consultor..."
-              />
-            ) : (
-              <p style={styles.bioText}>{perfil.bio || 'Nenhuma biografia adicionada ainda.'}</p>
-            )}
-          </div>
+          <Section title="Endereço" icon={<House size={20} weight="duotone" color={ACCENT} />}>
+            <InfoGrid>
+              <InfoField label="Rua" value={cur('endereco')} isEditing={isEditing} onChange={up('endereco')} />
+              <InfoField label="Bairro" value={cur('bairro')} isEditing={isEditing} onChange={up('bairro')} />
+              <InfoField label="Cidade" value={cur('cidade')} isEditing={isEditing} onChange={up('cidade')} />
+              <InfoField label="Estado" value={cur('estado')} isEditing={isEditing} onChange={up('estado')} />
+            </InfoGrid>
+          </Section>
+
+          <Section title="Biografia" icon={<IdentificationCard size={20} weight="duotone" color={ACCENT} />}>
+            {isEditing
+              ? <textarea value={editedPerfil.bio} onChange={e => setEditedPerfil({...editedPerfil, bio: e.target.value})}
+                  style={{ width:'100%', padding:'10px 12px', border:'2px solid #e0e0e0', borderRadius:8, fontSize:'0.95rem', fontFamily:'inherit', resize:'vertical', boxSizing:'border-box' }} rows={4}
+                  placeholder="Conte um pouco sobre sua experiência..." />
+              : <p style={{ color:'#555', lineHeight:1.7, margin:0 }}>{perfil.bio || 'Nenhuma biografia adicionada ainda.'}</p>
+            }
+          </Section>
         </div>
 
-        {/* Coluna Direita - Currículo e Estatísticas */}
-        <div style={styles.rightColumn}>
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}><Icon name="curriculo.png" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Currículo</h3>
-            
+        {/* Coluna direita */}
+        <div style={{ display:'flex', flexDirection:'column', gap:24 }}>
+          <Section title="Currículo" icon={<FilePdf size={20} weight="duotone" color={ACCENT} />}>
             {perfil.curriculoUrl ? (
-              <div style={styles.curriculoCard}>
-                <div style={styles.curriculoIcon}>
-                  <Icon name="curriculo.png" size={40} />
-                </div>
-                <div style={styles.curriculoInfo}>
-                  <p style={styles.curriculoNome}>{perfil.curriculoNome}</p>
-                  <p style={styles.curriculoData}>
+              <div style={{ display:'flex', alignItems:'center', gap:12, padding:14, background:'#f8f9fa', borderRadius:10, marginBottom:14 }}>
+                <FilePdf size={36} weight="duotone" color={ACCENT} />
+                <div style={{ flex:1 }}>
+                  <p style={{ margin:'0 0 4px', fontWeight:600, color:'#333', fontSize:14 }}>{perfil.curriculoNome}</p>
+                  <p style={{ margin:0, fontSize:12, color:'#888' }}>
                     Enviado em: {new Date(perfil.dataUploadCurriculo).toLocaleDateString('pt-BR')}
                   </p>
                 </div>
-                <a 
-                  href={perfil.curriculoUrl} 
-                  download 
-                  style={styles.downloadLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  📥 Baixar
+                <a href={perfil.curriculoUrl} download target="_blank" rel="noopener noreferrer"
+                  style={{ background:PRIMARY, color:'white', borderRadius:8, padding:'8px 14px', textDecoration:'none', fontSize:13, fontWeight:600, display:'flex', alignItems:'center', gap:6 }}>
+                  <DownloadSimple size={16} /> Baixar
                 </a>
               </div>
             ) : (
-              <div style={styles.noCurriculoCard}>
-              <Icon name="curriculo.png" size={40} style={{ opacity: 0.3 }} />
-                <p style={styles.noCurriculoText}>Nenhum currículo enviado</p>
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', padding:32, background:'#f8f9fa', borderRadius:10, marginBottom:14, color:'#aaa' }}>
+                <FilePdf size={40} weight="duotone" color="#ccc" />
+                <p style={{ marginTop:10 }}>Nenhum currículo enviado</p>
               </div>
             )}
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf,.doc,.docx"
-              onChange={handleFileUpload}
-              style={styles.fileInput}
-            />
-
-            <button
-              onClick={() => fileInputRef.current.click()}
-              disabled={uploadingCurriculo}
-              style={styles.uploadButton}
-            >
-              <Icon name="adicionar-foto.svg" size={16} />
+            <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx" onChange={handleFileUpload} style={{ display:'none' }} />
+            <button onClick={() => fileInputRef.current.click()} disabled={uploadingCurriculo}
+              style={{ ...S.btnPrimary, width:'100%', justifyContent:'center', marginBottom:8 }}>
+              <UploadSimple size={16} weight="duotone" />
               {uploadingCurriculo ? 'Enviando...' : 'Substituir Currículo'}
             </button>
+            <p style={{ fontSize:12, color:'#999', textAlign:'center', margin:0 }}>PDF, DOC, DOCX (máx. 5MB)</p>
+          </Section>
 
-            <p style={styles.uploadHint}>
-              Formatos aceitos: PDF, DOC, DOCX (máx. 5MB)
-            </p>
-          </div>
-
-          <div style={styles.section}>
-            <h3 style={styles.sectionTitle}><Icon name="grafico-análise.svg" size={20} style={{marginRight:8, verticalAlign:'middle'}} />Estatísticas Rápidas</h3>
-            <div style={styles.statsGrid}>
-              <StatCard icon="vendas.png" label="Vendas no Mês" value="156" />
-              <StatCard icon="comissoes.png" label="Comissão Acumulada" value="R$ 6.240" />
-              <StatCard icon="star.png" label="Avaliação Média" value="4.8" />
-              <StatCard icon="loja-consultor.png" label="Lojas Ativas" value={perfil.segmentosAtendidos.length} />
+          <Section title="Estatísticas Rápidas" icon={<ChartBar size={20} weight="duotone" color={ACCENT} />}>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+              {[
+                { icon: <ChartBar size={28} weight="duotone" color={ACCENT} />, label:'Vendas no Mês', value:'156' },
+                { icon: <CurrencyDollar size={28} weight="duotone" color={ACCENT} />, label:'Comissão Acumulada', value:'R$ 6.240' },
+                { icon: <Star size={28} weight="duotone" color={ACCENT} />, label:'Avaliação Média', value:'4.8' },
+                { icon: <Storefront size={28} weight="duotone" color={ACCENT} />, label:'Segmentos Ativos', value: perfil.segmentosAtendidos.length },
+              ].map((s, i) => (
+                <div key={i} style={{ padding:'18px 14px', background:'#f8f9fa', borderRadius:10, textAlign:'center' }}>
+                  <div style={{ marginBottom:8 }}>{s.icon}</div>
+                  <p style={{ fontSize:12, color:'#888', margin:'0 0 6px' }}>{s.label}</p>
+                  <p style={{ fontSize:'1.2rem', fontWeight:700, color:PRIMARY, margin:0 }}>{s.value}</p>
+                </div>
+              ))}
             </div>
-          </div>
+          </Section>
         </div>
       </div>
     </div>
   );
 };
 
-// Componente auxiliar para campos de informação
-const InfoField = ({ label, value, isEditing, onChange }) => (
-  <div style={styles.infoField}>
-    <label style={styles.infoLabel}>{label}</label>
-    {isEditing ? (
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        style={styles.infoInput}
-      />
-    ) : (
-      <p style={styles.infoValue}>{value || '-'}</p>
-    )}
+const Section = ({ title, icon, children }) => (
+  <div style={{ background:'white', borderRadius:12, padding:24, boxShadow:'0 2px 10px rgba(0,0,0,0.07)' }}>
+    <h3 style={{ fontSize:'1.1rem', fontWeight:700, color:'#333', marginBottom:16, paddingBottom:10, borderBottom:'2px solid #f0f0f0', display:'flex', alignItems:'center', gap:8 }}>
+      {icon} {title}
+    </h3>
+    {children}
   </div>
 );
 
-// Componente auxiliar para cards de estatística
-const StatCard = ({ icon, label, value }) => (
-  <div style={styles.statCard}>
-    <Icon name={icon} size={36} style={{ marginBottom: 10 }} />
-    <p style={styles.statLabel}>{label}</p>
-    <p style={styles.statValue}>{value}</p>
+const InfoGrid = ({ children }) => (
+  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(220px, 1fr))', gap:14 }}>
+    {children}
   </div>
 );
 
-const styles = {
-  container: {
-    backgroundColor: '#f8f9fa',
-    minHeight: '100vh',
-    padding: '25px',
-  },
-  loadingContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-    gap: '15px',
-  },
-  loadingSpinner: {
-    fontSize: '3rem',
-    animation: 'spin 1s linear infinite',
-  },
-  header: {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    padding: '25px',
-    marginBottom: '25px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: '20px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-  },
-  headerLeft: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '20px',
-  },
-  avatar: {
-    width: '80px',
-    height: '80px',
-    borderRadius: '50%',
-    backgroundColor: CONSULTOR_PRIMARY,
-    color: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '2rem',
-    fontWeight: 'bold',
-  },
-  nome: {
-    fontSize: '1.8rem',
-    fontWeight: 'bold',
-    color: '#333',
-    margin: '0 0 5px 0',
-  },
-  email: {
-    fontSize: '1rem',
-    color: '#666',
-    margin: 0,
-  },
-  headerActions: {
-    display: 'flex',
-    gap: '10px',
-  },
-  editButton: {
-    backgroundColor: CONSULTOR_PRIMARY,
-    color: 'white',
-    border: 'none',
-    padding: '12px 20px',
-    borderRadius: '8px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '14px',
-  },
-  saveButton: {
-    backgroundColor: '#bb25a6',
-    color: 'white',
-    border: 'none',
-    padding: '12px 20px',
-    borderRadius: '8px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '14px',
-  },
-  cancelButton: {
-    backgroundColor: '#6c757d',
-    color: 'white',
-    border: 'none',
-    padding: '12px 20px',
-    borderRadius: '8px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '14px',
-  },
-  logoutButton: {
-    backgroundColor: '#dc3545',
-    color: 'white',
-    border: 'none',
-    padding: '12px 20px',
-    borderRadius: '8px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '14px',
-  },
-  
-  // NOVO: Estilos do Card de Segmentos Atendidos
-  segmentosDestaque: {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    padding: '25px',
-    marginBottom: '25px',
-    boxShadow: '0 4px 15px rgba(44, 90, 160, 0.15)',
-    border: '2px solid ' + CONSULTOR_PRIMARY,
-  },
-  segmentosHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
-  },
-  segmentosTitle: {
-    fontSize: '1.5rem',
-    fontWeight: '700',
-    color: CONSULTOR_PRIMARY,
-    margin: 0,
-  },
-  addSegmentoBtn: {
-    backgroundColor: CONSULTOR_PRIMARY,
-    color: 'white',
-    border: 'none',
-    padding: '10px 16px',
-    borderRadius: '8px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    fontSize: '14px',
-  },
-  segmentosDisponiveis: {
-    backgroundColor: '#f8f9fa',
-    padding: '15px',
-    borderRadius: '8px',
-    marginBottom: '20px',
-  },
-  segmentosHelp: {
-    fontSize: '14px',
-    color: '#666',
-    marginBottom: '10px',
-  },
-  segmentosGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
-    gap: '10px',
-  },
-  segmentoDisponivel: {
-    backgroundColor: 'white',
-    border: '2px solid',
-    borderRadius: '8px',
-    padding: '10px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '14px',
-    fontWeight: '500',
-    transition: 'all 0.2s',
-  },
-  segmentosList: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '12px',
-    minHeight: '60px',
-  },
-  segmentoCard: {
-    border: '2px solid',
-    borderRadius: '12px',
-    padding: '12px 18px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    fontSize: '15px',
-    fontWeight: '600',
-    position: 'relative',
-  },
-  segmentoCardIcon: {
-    fontSize: '1.5rem',
-  },
-  segmentoCardNome: {
-    color: '#333',
-  },
-  removeSegmentoBtn: {
-    backgroundColor: '#dc3545',
-    color: 'white',
-    border: 'none',
-    borderRadius: '50%',
-    width: '24px',
-    height: '24px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    marginLeft: '8px',
-  },
-  noSegmentos: {
-    textAlign: 'center',
-    padding: '30px',
-    color: '#999',
-  },
-  
-  content: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '25px',
-  },
-  leftColumn: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '25px',
-  },
-  rightColumn: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '25px',
-  },
-  section: {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    padding: '25px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-  },
-  sectionTitle: {
-    fontSize: '1.3rem',
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: '20px',
-    borderBottom: '2px solid #f0f0f0',
-    paddingBottom: '10px',
-  },
-  infoGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '15px',
-  },
-  infoField: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  infoLabel: {
-    fontSize: '0.85rem',
-    color: '#666',
-    marginBottom: '5px',
-    fontWeight: '500',
-  },
-  infoValue: {
-    fontSize: '1rem',
-    color: '#333',
-    margin: 0,
-  },
-  infoInput: {
-    padding: '8px 12px',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '1rem',
-  },
-  bioTextarea: {
-    width: '100%',
-    padding: '12px',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '1rem',
-    fontFamily: 'inherit',
-    resize: 'vertical',
-  },
-  bioText: {
-    fontSize: '1rem',
-    color: '#555',
-    lineHeight: '1.6',
-    margin: 0,
-  },
-  curriculoCard: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '15px',
-    padding: '15px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '8px',
-    marginBottom: '15px',
-  },
-  curriculoIcon: {
-    flexShrink: 0,
-  },
-  curriculoInfo: {
-    flex: 1,
-  },
-  curriculoNome: {
-    margin: '0 0 5px 0',
-    fontWeight: '600',
-    color: '#333',
-  },
-  curriculoData: {
-    margin: 0,
-    fontSize: '0.85rem',
-    color: '#666',
-  },
-  downloadLink: {
-    padding: '8px 16px',
-    backgroundColor: CONSULTOR_PRIMARY,
-    color: 'white',
-    borderRadius: '6px',
-    textDecoration: 'none',
-    fontSize: '0.9rem',
-    fontWeight: '600',
-  },
-  noCurriculoCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '40px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '8px',
-    marginBottom: '15px',
-  },
-  noCurriculoText: {
-    marginTop: '15px',
-    color: '#999',
-  },
-  fileInput: {
-    display: 'none',
-  },
-  uploadButton: {
-    width: '100%',
-    padding: '12px',
-    backgroundColor: CONSULTOR_PRIMARY,
-    color: 'white',
-    border: 'none',
-    borderRadius: '8px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '8px',
-    marginBottom: '10px',
-  },
-  uploadHint: {
-    fontSize: '0.85rem',
-    color: '#666',
-    textAlign: 'center',
-    margin: 0,
-  },
-  statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '15px',
-  },
-  statCard: {
-    padding: '20px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '8px',
-    textAlign: 'center',
-  },
-  statIcon: {
-    fontSize: '2rem',
-    marginBottom: '10px',
-    display: 'block',
-  },
-  statLabel: {
-    fontSize: '0.85rem',
-    color: '#666',
-    margin: '0 0 8px 0',
-  },
-  statValue: {
-    fontSize: '1.3rem',
-    fontWeight: 'bold',
-    color: CONSULTOR_PRIMARY,
-    margin: 0,
-  },
-};
-
-// Adicionar animação de loading
-if (typeof document !== 'undefined') {
-  const styleSheet = document.styleSheets[0];
-  if (styleSheet) {
-    try {
-      styleSheet.insertRule(`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `, styleSheet.cssRules.length);
-    } catch (e) {
-      // Ignora se já existir
+const InfoField = ({ label, icon, value, isEditing, onChange }) => (
+  <div>
+    <label style={{ display:'flex', alignItems:'center', gap:4, fontSize:'0.8rem', color:'#888', fontWeight:600, marginBottom:4 }}>
+      {icon} {label}
+    </label>
+    {isEditing
+      ? <input type="text" value={value} onChange={e => onChange(e.target.value)}
+          style={{ width:'100%', padding:'8px 12px', border:'2px solid #e0e0e0', borderRadius:8, fontSize:'0.95rem', boxSizing:'border-box' }} />
+      : <p style={{ margin:0, color:'#333', fontSize:'0.95rem' }}>{value || '—'}</p>
     }
-  }
-}
+  </div>
+);
+
+const S = {
+  card: { background:'white', borderRadius:12, padding:24, boxShadow:'0 2px 10px rgba(0,0,0,0.07)', marginBottom:24 },
+  btnPrimary: { background:`linear-gradient(135deg,${PRIMARY},${ACCENT})`, color:'white', border:'none', padding:'10px 18px', borderRadius:8, fontWeight:600, cursor:'pointer', display:'flex', alignItems:'center', gap:8, fontSize:14 },
+  btnSuccess: { background:'#059669', color:'white', border:'none', padding:'10px 18px', borderRadius:8, fontWeight:600, cursor:'pointer', display:'flex', alignItems:'center', gap:8, fontSize:14 },
+  btnDanger: { background:'#dc3545', color:'white', border:'none', padding:'10px 18px', borderRadius:8, fontWeight:600, cursor:'pointer', display:'flex', alignItems:'center', gap:8, fontSize:14 },
+  btnGray: { background:'#6c757d', color:'white', border:'none', padding:'10px 18px', borderRadius:8, fontWeight:600, cursor:'pointer', display:'flex', alignItems:'center', gap:8, fontSize:14 },
+};
 
 export default ProfilePanel;

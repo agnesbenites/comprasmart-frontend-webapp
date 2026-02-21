@@ -157,7 +157,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart, supabase }) => {
     title: {
       fontSize: '1.3rem',
       fontWeight: 'bold',
-      color: '#2c5aa0',
+      color: "#2f0d51",
       marginBottom: '15px',
     },
     filters: {
@@ -219,7 +219,7 @@ const ProductCatalog = ({ lojistaId, onAddToCart, supabase }) => {
     productPrice: {
       fontSize: '1.2rem',
       fontWeight: 'bold',
-      color: '#2c5aa0',
+      color: "#2f0d51",
       marginBottom: '10px',
     },
     productStock: {

@@ -189,7 +189,7 @@ const AdminConsultores = () => {
 
       {/* Estatísticas */}
       <div style={styles.statsGrid}>
-        <StatCard label="Total" value={estatisticas.total} color="#2c5aa0" />
+        <StatCard label="Total" value={estatisticas.total} color="#2f0d51" />
         <StatCard label="Ativos" value={estatisticas.ativos} color="#bb25a6" />
         <StatCard label="Pendentes" value={estatisticas.pendentes} color="#ffc107" />
         <StatCard label="Bloqueados" value={estatisticas.bloqueados} color="#dc3545" />

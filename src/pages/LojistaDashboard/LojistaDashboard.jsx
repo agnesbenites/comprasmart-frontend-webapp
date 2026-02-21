@@ -1,5 +1,5 @@
 // src/pages/LojistaDashboard/LojistaDashboard.jsx - VERSÃO FINAL CORRIGIDA
-import React from "react";
+import React, { useState } from "react";
 import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 
 /* ===================== PÁGINAS ===================== */
@@ -86,20 +86,60 @@ const styles = {
 /* ===================== LAYOUT ===================== */
 const LojistaDashboardLayout = () => {
   const empresaNome = localStorage.getItem("lojistaNome") || "Empresa 999999";
+  const [menuAberto, setMenuAberto] = useState(false);
 
   return (
     <div style={styles.dashboardContainer}>
-      {/* SIDEBAR COM MENU LATERAL */}
-      <aside style={styles.sidebar}>
-        <h2 style={styles.logoTitle}>Kaslee</h2>
-        <MenuLateral />
+
+      {/* OVERLAY mobile */}
+      {menuAberto && (
+        <div
+          onClick={() => setMenuAberto(false)}
+          style={{
+            position: 'fixed', inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            zIndex: 20,
+          }}
+        />
+      )}
+
+      {/* SIDEBAR */}
+      <aside style={{
+        ...styles.sidebar,
+        position: menuAberto ? 'fixed' : 'relative',
+        top: 0, left: 0, height: menuAberto ? '100vh' : undefined,
+        zIndex: 30,
+        transform: 'translateX(0)',
+      }} className={`lojista-sidebar${menuAberto ? ' sidebar-open' : ''}`}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={styles.logoTitle}>Kaslee</h2>
+          <button
+            onClick={() => setMenuAberto(false)}
+            className="sidebar-close-btn"
+            style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer', color: '#999', paddingRight: '16px' }}
+          >✕</button>
+        </div>
+        <MenuLateral onNavigate={() => setMenuAberto(false)} />
       </aside>
 
       {/* CONTEÚDO PRINCIPAL */}
-      <main style={styles.mainContent}>
-        <header style={styles.header}>
-          <h1 style={styles.headerTitle}>Dashboard Lojista</h1>
-          <p style={styles.headerSubtitle}>Bem-vindo, {empresaNome}</p>
+      <main style={{ ...styles.mainContent, minWidth: 0 }}>
+        <header style={{ ...styles.header, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button
+              onClick={() => setMenuAberto(true)}
+              className="hamburger-btn"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', flexDirection: 'column', gap: '4px', padding: '4px' }}
+            >
+              <span style={{ width: '20px', height: '2px', backgroundColor: '#2f0d51', display: 'block' }}></span>
+              <span style={{ width: '20px', height: '2px', backgroundColor: '#2f0d51', display: 'block' }}></span>
+              <span style={{ width: '20px', height: '2px', backgroundColor: '#2f0d51', display: 'block' }}></span>
+            </button>
+            <div>
+              <h1 style={styles.headerTitle}>Dashboard Lojista</h1>
+              <p style={styles.headerSubtitle}>Bem-vindo, {empresaNome}</p>
+            </div>
+          </div>
         </header>
 
         <div style={styles.contentArea}>

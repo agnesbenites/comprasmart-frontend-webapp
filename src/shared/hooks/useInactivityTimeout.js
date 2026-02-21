@@ -73,7 +73,7 @@ export const useInactivityTimeout = (timeoutMinutes = 10, enabled = true) => {
           <button 
             id="stay-logged-in-btn"
             style="
-              background: #2c5aa0;
+              background: #2f0d51;
               color: white;
               border: none;
               padding: 12px 30px;

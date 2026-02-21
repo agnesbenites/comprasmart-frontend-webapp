@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@contexts/AuthContext";
+import { ChartBar, Briefcase, Lock } from "@phosphor-icons/react";
 
 const ConsultorLogin = () => {
   const navigate = useNavigate();
@@ -13,14 +14,12 @@ const ConsultorLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Se ja esta autenticado, redireciona para o dashboard
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/consultor/dashboard', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
-  // Funcao de login - VERSÃO CORRIGIDA
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -28,30 +27,18 @@ const ConsultorLogin = () => {
 
     try {
       const result = await signIn(email, password);
-      
-      // VERIFICAÇÃO FLEXÍVEL - aceita ambas as formas
       const user = result?.user || result?.data?.user;
       
       if (user) {
-        // Login bem-sucedido
-        console.log(" Login bem-sucedido:", user.email);
         navigate('/consultor/dashboard', { replace: true });
       } else {
-        // Se não encontrou user em nenhum lugar
-        console.log(" Resposta do signIn:", result);
         setError("Usuário não encontrado na resposta");
       }
     } catch (error) {
-      // Captura o erro real do Supabase
-      console.error(" Erro no login:", error);
-      
-      // Tratamento de erros específicos
       if (error.message?.includes("Invalid login credentials")) {
         setError("E-mail ou senha incorretos");
       } else if (error.message?.includes("Email not confirmed")) {
         setError("E-mail não confirmado. Verifique sua caixa de entrada");
-      } else if (error.message?.includes("Invalid")) {
-        setError("Credenciais inválidas");
       } else {
         setError(error.message || "Erro inesperado. Tente novamente.");
       }
@@ -60,7 +47,6 @@ const ConsultorLogin = () => {
     }
   };
 
-  // Estado de loading do contexto
   if (authLoading) {
     return (
       <div style={styles.container}>
@@ -119,7 +105,7 @@ const ConsultorLogin = () => {
             type="submit"
             style={{
               ...styles.loginButton,
-              backgroundColor: loading ? '#6c757d' : '#17a2b8',
+              backgroundColor: loading ? '#6c757d' : '#bb25a6',
               cursor: loading ? 'not-allowed' : 'pointer'
             }}
             disabled={loading}
@@ -130,7 +116,7 @@ const ConsultorLogin = () => {
 
         <div style={styles.links}>
           <a href="/consultor/cadastro" style={styles.link}>
-            Nao tem conta? Cadastre-se
+            Não tem conta? Cadastre-se
           </a>
           <a href="/recuperar-senha" style={styles.link}>
             Esqueceu a senha?
@@ -139,15 +125,15 @@ const ConsultorLogin = () => {
 
         <div style={styles.features}>
           <div style={styles.feature}>
-            <span style={styles.featureIcon}>&#cccc0c;</span>
-            <span>Relatorios de Desempenho</span>
+            <ChartBar size={20} weight="duotone" color="#bb25a6" />
+            <span>Relatórios de Desempenho</span>
           </div>
           <div style={styles.feature}>
-            <span style={styles.featureIcon}>&#128188;</span>
-            <span>Gestao de Consultoria</span>
+            <Briefcase size={20} weight="duotone" color="#2f0d51" />
+            <span>Gestão de Consultoria</span>
           </div>
           <div style={styles.feature}>
-            <span style={styles.featureIcon}>&#128274;</span>
+            <Lock size={20} weight="duotone" color="#2f0d51" />
             <span>Dados Protegidos</span>
           </div>
         </div>
@@ -163,7 +149,6 @@ const ConsultorLogin = () => {
 };
 
 const styles = {
-  // ... (mantenha os mesmos estilos)
   container: {
     minHeight: "100vh",
     backgroundColor: "#f8f9fa",
@@ -183,7 +168,7 @@ const styles = {
   },
   title: {
     textAlign: "center",
-    color: "#17a2b8",
+    color: "#2f0d51",
     marginBottom: "20px",
     fontSize: "1.8rem",
     fontWeight: "700",
@@ -198,7 +183,7 @@ const styles = {
     padding: "15px",
     borderRadius: "8px",
     marginBottom: "20px",
-    border: "1px solid #f3e8ff",
+    border: "1px solid #e9d5ff",
   },
   infoText: {
     margin: 0,
@@ -256,11 +241,10 @@ const styles = {
     marginBottom: "20px",
   },
   link: {
-    color: "#17a2b8",
+    color: "#bb25a6",
     textDecoration: "none",
     fontSize: "14px",
     textAlign: "center",
-    transition: "color 0.3s ease",
   },
   features: {
     display: "flex",
@@ -276,9 +260,7 @@ const styles = {
     backgroundColor: "#f8f9fa",
     borderRadius: "6px",
     fontSize: "14px",
-  },
-  featureIcon: {
-    fontSize: "16px",
+    color: "#333",
   },
   footer: {
     textAlign: "center",

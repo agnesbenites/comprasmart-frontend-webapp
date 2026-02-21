@@ -380,7 +380,7 @@ const styles = {
     flexWrap: 'wrap',
   },
   downloadButton: {
-    backgroundColor: '#17a2b8',
+    backgroundColor: '#bb25a6',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -403,7 +403,7 @@ const styles = {
   loading: {
     textAlign: 'center',
     padding: '20px',
-    color: '#17a2b8',
+    color: '#bb25a6',
     fontSize: '1rem',
     fontWeight: '600',
   },
