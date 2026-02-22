@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { BetaSection, NovidadesSection } from './components/BetaSection';
 import {
   FaStore, FaUserTie, FaShoppingCart, FaChartLine,
   FaUsers, FaBox, FaBullhorn, FaMoneyBillWave,
@@ -241,6 +242,8 @@ const Landingpage = () => {
             <a href="#como-funciona" style={S.navA}>Como Funciona</a>
             <a href="#beneficios" style={S.navA}>Benefícios</a>
             <a href="#planos" style={S.navA}>Planos</a>
+            <a href="#beta" style={S.navA}>Beta</a>
+            <a href="#novidades" style={S.navA}>Novidades</a>
             <NavButton onClick={() => navigate('/quiz')}>Descubra Seu Plano</NavButton>
             <NavButton onClick={() => navigate('/login')}>Entrar</NavButton>
             <NavButton onClick={() => navigate('/onboarding')}>Começar Agora</NavButton>
@@ -274,6 +277,7 @@ const Landingpage = () => {
             <a href="#como-funciona" style={{...S.navA, padding: '10px 0', borderBottom: '1px solid #f0f0f0'}} onClick={() => setMobileMenuOpen(false)}>Como Funciona</a>
             <a href="#beneficios" style={{...S.navA, padding: '10px 0', borderBottom: '1px solid #f0f0f0'}} onClick={() => setMobileMenuOpen(false)}>Benefícios</a>
             <a href="#planos" style={{...S.navA, padding: '10px 0', borderBottom: '1px solid #f0f0f0'}} onClick={() => setMobileMenuOpen(false)}>Planos</a>
+            <a href="#beta" style={{...S.navA, padding: '10px 0', borderBottom: '1px solid #f0f0f0'}} onClick={() => setMobileMenuOpen(false)}>Beta</a>
             <button onClick={() => navigate('/institucional')} style={{...S.navBtnSobre, marginTop: 4, width: '100%'}}>Sobre a Kaslee</button>
             <NavButton onClick={() => { navigate('/quiz'); setMobileMenuOpen(false); }} style={{width: '100%', marginTop: 4}}>Descubra Seu Plano</NavButton>
             <NavButton onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} style={{width: '100%', marginTop: 4}}>Entrar</NavButton>
@@ -323,6 +327,11 @@ const Landingpage = () => {
           </div>
         </div>
       </section>
+
+      {/* ══════ BETA TESTERS ══════ */}
+      <div id="beta">
+        <BetaSection />
+      </div>
 
       {/* ══════ NÚMEROS ══════ */}
       <section style={S.numbersBar}>

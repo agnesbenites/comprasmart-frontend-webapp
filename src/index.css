@@ -1,9 +1,0 @@
-/* Index.css - Tailwind + GlobalStyles */
-
-/* Importa seus estilos globais customizados PRIMEIRO */
-@import './GlobalStyles.css';
-
-/* Diretivas do Tailwind CSS */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
