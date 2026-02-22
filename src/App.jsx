@@ -16,7 +16,7 @@ import MarketingOnboarding from "./pages/Onboarding/MarketingOnboarding";
 import PlanQuiz from "./pages/Quiz/PlanQuiz";
 import StripeSuccess from "./pages/StripeSuccess";
 import Institucional from "./pages/Institucional";
-import KasBook from "./pages/KasBook";
+// import KasBook from "./pages/KasBook";
 
 // Importações de registro
 import RegisterPage from "./pages/RegisterPage";
@@ -160,7 +160,7 @@ function App() {
         <Route path="/aprovacoes" element={<ApprovalsPage />} />
         <Route path="/aplicativo-confirmacao" element={<AplicativoConfirmacao />} />
         <Route path="/callback" element={<SupabaseCallback />} />
-	<Route path="/kasbook" element={<KasBook />} />
+	{/* <Route path="/kasbook" element={<KasBook />} /> */}
 
         {/* LOGINS ESPECÍFICOS */}
         <Route path="/consultor/login" element={<ConsultorLogin />} />
