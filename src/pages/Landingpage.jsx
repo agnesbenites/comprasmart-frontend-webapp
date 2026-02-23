@@ -241,6 +241,7 @@ const Landingpage = () => {
             <a href="#como-funciona" style={S.navA}>Como Funciona</a>
             <a href="#beneficios" style={S.navA}>Benefícios</a>
             <a href="#planos" style={S.navA}>Planos</a>
+            <a href="#beta" style={S.navA}>Beta</a>
             <NavButton onClick={() => navigate('/quiz')}>Descubra Seu Plano</NavButton>
             <NavButton onClick={() => navigate('/login')}>Entrar</NavButton>
             <NavButton onClick={() => navigate('/onboarding')}>Começar Agora</NavButton>
@@ -699,6 +700,97 @@ const Landingpage = () => {
           </div>
         </div>
       )}
+
+
+      {/* ══════ BETA — Faixa CTA Impactante ══════ */}
+      <section id="beta" style={{
+        background: 'linear-gradient(135deg, #2f0d51 0%, #1a0730 50%, #2f0d51 100%)',
+        padding: '72px 24px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}>
+        {/* Círculos decorativos */}
+        <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', background: 'rgba(187,37,166,0.12)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -60, left: -60, width: 240, height: 240, borderRadius: '50%', background: 'rgba(187,37,166,0.08)', pointerEvents: 'none' }} />
+
+        <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <Reveal>
+            <div style={{ textAlign: 'center', marginBottom: 52 }}>
+              <span style={{ background: '#bb25a6', color: 'white', padding: '6px 20px', borderRadius: 20, fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>
+                🚀 Beta Aberto — Vagas Limitadas
+              </span>
+              <h2 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 'clamp(28px,5vw,48px)', fontWeight: 800, color: '#fff', margin: '20px 0 12px', lineHeight: 1.2 }}>
+                Faça parte da<br />primeira turma Kaslee
+              </h2>
+              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
+                Teste a plataforma gratuitamente, dê feedback direto com a fundadora e ajude a moldar o futuro do varejo conectado.
+              </p>
+            </div>
+          </Reveal>
+
+          {/* Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px,1fr))', gap: 24, marginBottom: 48 }}>
+            {/* Lojista */}
+            <Reveal delay={0.1}>
+              <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 24, padding: '36px 32px', backdropFilter: 'blur(10px)' }}>
+                <div style={{ fontSize: 40, marginBottom: 16 }}>🏪</div>
+                <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 22, fontWeight: 700, color: '#fff', margin: '0 0 10px' }}>Sou Lojista</h3>
+                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 24 }}>
+                  Cadastre sua loja, conecte consultores e venda mais — sem pagar nada durante o beta.
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px' }}>
+                  {['Acesso completo grátis', 'Sem taxa de setup', 'Suporte prioritário', 'Feedback direto com a fundadora'].map((b, i) => (
+                    <li key={i} style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ color: '#0accbd', fontWeight: 700 }}>✓</span> {b}
+                    </li>
+                  ))}
+                </ul>
+                <a href="https://forms.office.com/r/cb1fKfHX25" target="_blank" rel="noopener noreferrer" style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  background: '#fff', color: '#2f0d51', borderRadius: 50, padding: '14px 24px',
+                  fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: 15,
+                  textDecoration: 'none', transition: 'all 0.25s',
+                }}>
+                  Quero ser Beta Tester →
+                </a>
+              </div>
+            </Reveal>
+
+            {/* Consultor */}
+            <Reveal delay={0.2}>
+              <div style={{ background: 'linear-gradient(135deg, rgba(187,37,166,0.25), rgba(187,37,166,0.08))', border: '1px solid rgba(187,37,166,0.4)', borderRadius: 24, padding: '36px 32px' }}>
+                <div style={{ fontSize: 40, marginBottom: 16 }}>🎯</div>
+                <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 22, fontWeight: 700, color: '#fff', margin: '0 0 10px' }}>Sou Consultor</h3>
+                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 24 }}>
+                  Construa sua carteira de clientes, ganhe comissão desde o primeiro atendimento.
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px' }}>
+                  {['Primeiras comissões garantidas', 'Treinamentos exclusivos', 'Badge de Beta Consultor', 'Comunidade fechada'].map((b, i) => (
+                    <li key={i} style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ color: '#bb25a6', fontWeight: 700 }}>✓</span> {b}
+                    </li>
+                  ))}
+                </ul>
+                <a href="https://forms.office.com/r/7KuKzZkZvp" target="_blank" rel="noopener noreferrer" style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  background: '#bb25a6', color: '#fff', borderRadius: 50, padding: '14px 24px',
+                  fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: 15,
+                  textDecoration: 'none', boxShadow: '0 4px 20px rgba(187,37,166,0.4)',
+                }}>
+                  Quero ser Beta Consultor →
+                </a>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Frase de urgência */}
+          <Reveal delay={0.3}>
+            <p style={{ textAlign: 'center', fontSize: 14, color: 'rgba(255,255,255,0.45)' }}>
+              ⚡ Vagas limitadas para lojistas e consultores. Garanta a sua agora.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ══════ FOOTER — só Logo Bag ══════ */}
       <footer style={S.footer}>
