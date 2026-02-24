@@ -197,6 +197,179 @@ const PlanCard = ({ name, price, period, description, features, color, highlight
 /* ═════════════════════════════════════════════
    LANDING PAGE
    ═════════════════════════════════════════════ */
+
+/* ─── BETA SECTION COM TABS ─── */
+const BETA_PERFIS = {
+  consultor: {
+    emoji: '🎯',
+    titulo: 'Para Consultores',
+    subtitulo: 'Autonomia, comissão e crescimento sem depender de empregador',
+    desc: 'Conecte-se a lojistas parceiros, atenda clientes qualificados e receba comissão desde o primeiro atendimento. Você define seus horários e segmentos.',
+    beneficios: [
+      'Comissão por venda, sem teto de ganhos',
+      'Escolha os segmentos que domina',
+      'Treinamentos e Arena de Vendas inclusos',
+      'Badge de Beta Consultor exclusivo',
+      'Comunidade fechada de consultores',
+      'Suporte direto com a fundadora',
+    ],
+    cta: 'Quero ser Beta Consultor',
+    link: 'https://forms.office.com/r/7KuKzZkZvp',
+    cor: '#bb25a6',
+    bg: 'linear-gradient(135deg, rgba(187,37,166,0.18), rgba(187,37,166,0.05))',
+    border: 'rgba(187,37,166,0.35)',
+    btnBg: '#bb25a6',
+    btnColor: '#fff',
+  },
+  lojista: {
+    emoji: '🏪',
+    titulo: 'Para Lojistas',
+    subtitulo: 'Expanda suas vendas sem contratar mais funcionários',
+    desc: 'Conecte sua loja a consultores especializados no seu segmento. Você controla preços, comissões e recebe automaticamente. Zero custo fixo.',
+    beneficios: [
+      'Acesso completo grátis durante o beta',
+      'Sem taxa de setup nem mensalidade inicial',
+      'Consultores pré-selecionados por segmento',
+      'Dashboard de controle completo',
+      'Relatórios de vendas em tempo real',
+      'Suporte prioritário com a fundadora',
+    ],
+    cta: 'Quero ser Beta Lojista',
+    link: 'https://forms.office.com/r/cb1fKfHX25',
+    cor: '#2f0d51',
+    bg: 'linear-gradient(135deg, rgba(47,13,81,0.18), rgba(47,13,81,0.05))',
+    border: 'rgba(47,13,81,0.25)',
+    btnBg: '#fff',
+    btnColor: '#2f0d51',
+  },
+  vendedor: {
+    emoji: '💼',
+    titulo: 'Para Vendedores',
+    subtitulo: 'Faça parte da equipe interna de uma loja parceira',
+    desc: 'Trabalhe como vendedor vinculado a uma loja específica, gerencie pedidos e atenda clientes com suporte total da plataforma Kaslee.',
+    beneficios: [
+      'Acesso ao painel de vendas da loja',
+      'Gestão de pedidos em tempo real',
+      'Histórico de atendimentos',
+      'Treinamentos da Arena de Vendas',
+      'Relatórios de performance',
+      'Integração com o app do cliente',
+    ],
+    cta: 'Quero ser Beta Vendedor',
+    link: 'https://forms.office.com/r/cb1fKfHX25',
+    cor: '#059669',
+    bg: 'linear-gradient(135deg, rgba(5,150,105,0.15), rgba(5,150,105,0.04))',
+    border: 'rgba(5,150,105,0.3)',
+    btnBg: '#059669',
+    btnColor: '#fff',
+  },
+};
+
+const BetaSection = () => {
+  const [aba, setAba] = React.useState('consultor');
+  const perfil = BETA_PERFIS[aba];
+
+  return (
+    <section id="beta" style={{
+      background: 'linear-gradient(135deg, #2f0d51 0%, #1a0730 50%, #2f0d51 100%)',
+      padding: '72px 24px',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Decoração */}
+      <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', background: 'rgba(187,37,166,0.1)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: -60, left: -60, width: 240, height: 240, borderRadius: '50%', background: 'rgba(187,37,166,0.07)', pointerEvents: 'none' }} />
+
+      <div style={{ maxWidth: 900, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <span style={{ background: '#bb25a6', color: 'white', padding: '6px 20px', borderRadius: 20, fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>
+            🚀 Beta Aberto — Vagas Limitadas
+          </span>
+          <h2 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 'clamp(26px,4vw,42px)', fontWeight: 800, color: '#fff', margin: '18px 0 10px', lineHeight: 1.2 }}>
+            Faça parte da primeira turma Kaslee
+          </h2>
+          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.65)', maxWidth: 500, margin: '0 auto', lineHeight: 1.7 }}>
+            Teste gratuitamente, dê feedback direto com a fundadora e ajude a moldar o futuro do varejo conectado.
+          </p>
+        </div>
+
+        {/* Tabs */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 32, flexWrap: 'wrap' }}>
+          {Object.entries(BETA_PERFIS).map(([key, p]) => (
+            <button
+              key={key}
+              onClick={() => setAba(key)}
+              style={{
+                padding: '10px 24px', borderRadius: 50, fontSize: 14, fontWeight: 700,
+                cursor: 'pointer', transition: 'all 0.25s', border: 'none',
+                background: aba === key ? p.cor : 'rgba(255,255,255,0.1)',
+                color: aba === key ? '#fff' : 'rgba(255,255,255,0.65)',
+                boxShadow: aba === key ? `0 4px 16px ${p.cor}55` : 'none',
+              }}
+            >
+              {p.emoji} {p.titulo.replace('Para ', '')}
+            </button>
+          ))}
+        </div>
+
+        {/* Card do perfil selecionado */}
+        <div style={{
+          background: perfil.bg,
+          border: `1px solid ${perfil.border}`,
+          borderRadius: 24, padding: '40px 36px',
+          backdropFilter: 'blur(10px)',
+          transition: 'all 0.3s',
+        }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 32, alignItems: 'start' }}>
+
+            {/* Esquerda */}
+            <div>
+              <div style={{ fontSize: 48, marginBottom: 16 }}>{perfil.emoji}</div>
+              <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 24, fontWeight: 800, color: '#fff', margin: '0 0 8px' }}>{perfil.titulo}</h3>
+              <p style={{ fontSize: 14, color: perfil.cor === '#fff' ? 'rgba(255,255,255,0.9)' : '#bb25a6', fontWeight: 600, marginBottom: 14 }}>{perfil.subtitulo}</p>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, marginBottom: 28 }}>{perfil.desc}</p>
+              <a
+                href={perfil.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: perfil.btnBg, color: perfil.btnColor,
+                  borderRadius: 50, padding: '14px 28px',
+                  fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: 15,
+                  textDecoration: 'none',
+                  boxShadow: `0 4px 20px ${perfil.cor}44`,
+                  transition: 'all 0.25s',
+                }}
+              >
+                {perfil.cta} →
+              </a>
+            </div>
+
+            {/* Direita — benefícios */}
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 16 }}>O que você ganha:</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {perfil.beneficios.map((b, i) => (
+                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: 'rgba(255,255,255,0.88)', marginBottom: 12, padding: '8px 12px', background: 'rgba(255,255,255,0.06)', borderRadius: 10 }}>
+                    <span style={{ color: '#0accbd', fontWeight: 700, fontSize: 16 }}>✓</span> {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p style={{ textAlign: 'center', fontSize: 13, color: 'rgba(255,255,255,0.35)', marginTop: 24 }}>
+          ⚡ Vagas limitadas. Garanta a sua agora.
+        </p>
+      </div>
+    </section>
+  );
+};
+
 const Landingpage = () => {
   const navigate = useNavigate();
   const [showArenaModal, setShowArenaModal] = useState(false);
@@ -702,95 +875,8 @@ const Landingpage = () => {
       )}
 
 
-      {/* ══════ BETA — Faixa CTA Impactante ══════ */}
-      <section id="beta" style={{
-        background: 'linear-gradient(135deg, #2f0d51 0%, #1a0730 50%, #2f0d51 100%)',
-        padding: '72px 24px',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* Círculos decorativos */}
-        <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', background: 'rgba(187,37,166,0.12)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: -60, left: -60, width: 240, height: 240, borderRadius: '50%', background: 'rgba(187,37,166,0.08)', pointerEvents: 'none' }} />
-
-        <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-          <Reveal>
-            <div style={{ textAlign: 'center', marginBottom: 52 }}>
-              <span style={{ background: '#bb25a6', color: 'white', padding: '6px 20px', borderRadius: 20, fontSize: 12, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' }}>
-                🚀 Beta Aberto — Vagas Limitadas
-              </span>
-              <h2 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 'clamp(28px,5vw,48px)', fontWeight: 800, color: '#fff', margin: '20px 0 12px', lineHeight: 1.2 }}>
-                Faça parte da<br />primeira turma Kaslee
-              </h2>
-              <p style={{ fontSize: 17, color: 'rgba(255,255,255,0.7)', maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>
-                Teste a plataforma gratuitamente, dê feedback direto com a fundadora e ajude a moldar o futuro do varejo conectado.
-              </p>
-            </div>
-          </Reveal>
-
-          {/* Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px,1fr))', gap: 24, marginBottom: 48 }}>
-            {/* Lojista */}
-            <Reveal delay={0.1}>
-              <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 24, padding: '36px 32px', backdropFilter: 'blur(10px)' }}>
-                <div style={{ fontSize: 40, marginBottom: 16 }}>🏪</div>
-                <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 22, fontWeight: 700, color: '#fff', margin: '0 0 10px' }}>Sou Lojista</h3>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 24 }}>
-                  Cadastre sua loja, conecte consultores e venda mais — sem pagar nada durante o beta.
-                </p>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px' }}>
-                  {['Acesso completo grátis', 'Sem taxa de setup', 'Suporte prioritário', 'Feedback direto com a fundadora'].map((b, i) => (
-                    <li key={i} style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ color: '#0accbd', fontWeight: 700 }}>✓</span> {b}
-                    </li>
-                  ))}
-                </ul>
-                <a href="https://forms.office.com/r/cb1fKfHX25" target="_blank" rel="noopener noreferrer" style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  background: '#fff', color: '#2f0d51', borderRadius: 50, padding: '14px 24px',
-                  fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: 15,
-                  textDecoration: 'none', transition: 'all 0.25s',
-                }}>
-                  Quero ser Beta Tester →
-                </a>
-              </div>
-            </Reveal>
-
-            {/* Consultor */}
-            <Reveal delay={0.2}>
-              <div style={{ background: 'linear-gradient(135deg, rgba(187,37,166,0.25), rgba(187,37,166,0.08))', border: '1px solid rgba(187,37,166,0.4)', borderRadius: 24, padding: '36px 32px' }}>
-                <div style={{ fontSize: 40, marginBottom: 16 }}>🎯</div>
-                <h3 style={{ fontFamily: "'Poppins',sans-serif", fontSize: 22, fontWeight: 700, color: '#fff', margin: '0 0 10px' }}>Sou Consultor</h3>
-                <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 24 }}>
-                  Construa sua carteira de clientes, ganhe comissão desde o primeiro atendimento.
-                </p>
-                <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px' }}>
-                  {['Primeiras comissões garantidas', 'Treinamentos exclusivos', 'Badge de Beta Consultor', 'Comunidade fechada'].map((b, i) => (
-                    <li key={i} style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ color: '#bb25a6', fontWeight: 700 }}>✓</span> {b}
-                    </li>
-                  ))}
-                </ul>
-                <a href="https://forms.office.com/r/7KuKzZkZvp" target="_blank" rel="noopener noreferrer" style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  background: '#bb25a6', color: '#fff', borderRadius: 50, padding: '14px 24px',
-                  fontFamily: "'Poppins',sans-serif", fontWeight: 700, fontSize: 15,
-                  textDecoration: 'none', boxShadow: '0 4px 20px rgba(187,37,166,0.4)',
-                }}>
-                  Quero ser Beta Consultor →
-                </a>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Frase de urgência */}
-          <Reveal delay={0.3}>
-            <p style={{ textAlign: 'center', fontSize: 14, color: 'rgba(255,255,255,0.45)' }}>
-              ⚡ Vagas limitadas para lojistas e consultores. Garanta a sua agora.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      {/* ══════ BETA — Tabs Consultor / Lojista / Vendedor ══════ */}
+      <BetaSection />
 
       {/* ══════ FOOTER — só Logo Bag ══════ */}
       <footer style={S.footer}>
@@ -929,13 +1015,13 @@ const S = {
 
   bentoGrid: {
     display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16,
-    maxWidth: 680, margin: '0 auto',
+    maxWidth: 900, margin: '0 auto',
   },
   bentoCard: {
     background: '#fff', borderRadius: 20, padding: '28px 22px',
     boxShadow: '0 2px 12px rgba(47,13,81,0.06)',
     display: 'flex', flexDirection: 'column', alignItems: 'center',
-    textAlign: 'center', position: 'relative', height: 320,
+    textAlign: 'center', position: 'relative', minHeight: 320,
     justifyContent: 'center',
   },
   bentoStep: {
